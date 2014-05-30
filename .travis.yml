@@ -1,0 +1,8 @@
+# http://docs.travis-ci.com/user/languages/go/
+language: go
+
+go:
+  - 1.0
+  - 1.1
+  - 1.2
+  - tip

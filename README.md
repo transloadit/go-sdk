@@ -1,3 +1,5 @@
+[![Build Status](https://magnum.travis-ci.com/transloadit/go-sdk.svg?token=ktBsd2yamBEKxsEAgmGK)](https://magnum.travis-ci.com/transloadit/go-sdk)
+
 go-sdk
 ======
 
