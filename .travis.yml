@@ -1,8 +1,13 @@
-# http://docs.travis-ci.com/user/languages/go/
 language: go
-
 go:
-  - 1.0
-  - 1.1
-  - 1.2
-  - tip
+- 1.0
+- 1.1
+- 1.2
+- tip
+notifications:
+  email: false
+  campfire:
+    rooms:
+      secure: "P9z4l2QY/L/yBqjNJQr13DHFzG8IYNHn2zk21FF5wMn07hcIcBC8vGv+rLHXMt7TiuVB8oMWJIRt0f23HeXobfd1qd0e00L/n/2gFcii8WNoReyKA4ROQiYErt0Ry70I32vIen9T6RtD5meARqqmZK/QnMhrKGKcGzfLI6paUwM="
+    on_failure: always
+    on_success: always
