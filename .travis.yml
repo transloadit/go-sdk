@@ -4,6 +4,8 @@ go:
 - 1.1
 - 1.2
 - tip
+
+# travis encrypt [subdomain]:[api token]@[room id]
 notifications:
   email: false
   campfire:
