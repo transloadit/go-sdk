@@ -40,7 +40,7 @@ func NewInstance(apikey, secret string) (instance *Instance, err error) {
 	instance = &Instance{
 		apikey:   apikey,
 		secret:   secret,
-		endpoint: "https://api2.transloadit.com/assemblies",
+		endpoint: "http://api2.transloadit.com/assemblies",
 	}
 	return instance, nil
 }
@@ -51,7 +51,7 @@ func (self *Instance) SendRequest(p Params, filepath string) (*bytes.Buffer, err
 		return nil, err
 	}
 
-	request, err := newfileUploadRequest(self.endpoint, string(result), filepath)
+	request, err := newfileUploadRequest(self.endpoint, result, filepath)
 	if err != nil {
 		return nil, err
 	}
@@ -78,22 +78,27 @@ func (self *Instance) SendRequest(p Params, filepath string) (*bytes.Buffer, err
 	}
 }
 
-func newfileUploadRequest(uri string, params string, path string) (*http.Request, error) {
+func newfileUploadRequest(uri string, params []byte, path string) (*http.Request, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
+	//body := &bytes.Buffer{}
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
 	part, err := writer.CreateFormFile("file", filepath.Base(path))
 	if err != nil {
 		return nil, err
 	}
-	_, err = io.Copy(part, file)
 
-	err = writer.WriteField("params", params)
+	_, err = io.Copy(part, file)
+	if err != nil {
+		return nil, err
+	}
+
+	err = writer.WriteField("params", string(params))
 	if err != nil {
 		return nil, err
 	}
@@ -103,5 +108,10 @@ func newfileUploadRequest(uri string, params string, path string) (*http.Request
 		return nil, err
 	}
 
-	return http.NewRequest("POST", uri, body)
+	request, err := http.NewRequest("POST", uri, &body)
+	if err != nil {
+		return nil, err
+	}
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+	return request, nil
 }
