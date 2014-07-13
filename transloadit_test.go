@@ -3,8 +3,8 @@ package transloadit
 import "testing"
 
 var (
-	apikey = "foo"
-	secret = "bar"
+	apikey = "b3a87350e97a11e380176daba9afca9d"
+	secret = "91e76a7b699e5590268917c4bbdc65141471e40b"
 )
 
 func TestRequest(t *testing.T) {
@@ -12,10 +12,10 @@ func TestRequest(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	//fmt.Print(i)
 	p := Params{
 		Auth: Auth{
 			Key: i.apikey,
-			//Expires: "+2 hours",
 		},
 		Steps: map[string]interface{}{
 			"resize": map[string]interface{}{
@@ -26,8 +26,10 @@ func TestRequest(t *testing.T) {
 			},
 		},
 	}
-	filepath := "/Users/slowpoke/Pictures/aface.png"
-	_, err = i.SendRequest(p, filepath)
+	p.Init()
+	//fmt.Print(p)
+	filepath := "/Users/slowpoke/Pictures/test/aface.png"
+	_, err = i.CreateAssembly(p, filepath)
 	if err != nil {
 		t.Fatal(err)
 	}

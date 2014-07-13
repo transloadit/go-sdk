@@ -2,14 +2,18 @@ package transloadit
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 type Instance struct {
@@ -33,25 +37,57 @@ type Params struct {
 
 type Auth struct {
 	Key     string `json:"key"`
-	Expires string `json:"expires,omitempty"`
+	Expires string `json:"expires"`
+}
+
+func (self *Params) Init() {
+	const layout = "2006/01/02 15:04:05+00:00"
+	t := time.Now().AddDate(0, 0, 1)
+	self.Auth.Expires = t.Format(layout)
 }
 
 func NewInstance(apikey, secret string) (instance *Instance, err error) {
 	instance = &Instance{
 		apikey:   apikey,
 		secret:   secret,
-		endpoint: "http://api2.transloadit.com/assemblies",
+		endpoint: "https://api2.transloadit.com",
 	}
+	url, err := instance.getBoredInstance()
+	if err != nil {
+		return nil, err
+	}
+	instance.endpoint = "https://" + url
 	return instance, nil
 }
 
-func (self *Instance) SendRequest(p Params, filepath string) (*bytes.Buffer, error) {
+func (self *Instance) getBoredInstance() (string, error) {
+	res, err := http.Get(self.endpoint + "/instances/bored")
+	if err != nil {
+		return "", err
+	}
+	j, err := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+	if err != nil {
+		return "", err
+	}
+	var decoded map[string]string
+	json.Unmarshal(j, &decoded)
+
+	return decoded["api2_host"], nil
+}
+
+func (self *Instance) CreateAssembly(p Params, filepath string) (*bytes.Buffer, error) {
 	result, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
 	}
 
-	request, err := newfileUploadRequest(self.endpoint, result, filepath)
+	sig, err := newSignature(p, self.secret)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := newfileUploadRequest(self.endpoint+"/assemblies", result, filepath, string(sig))
 	if err != nil {
 		return nil, err
 	}
@@ -78,14 +114,24 @@ func (self *Instance) SendRequest(p Params, filepath string) (*bytes.Buffer, err
 	}
 }
 
-func newfileUploadRequest(uri string, params []byte, path string) (*http.Request, error) {
+func newSignature(p Params, secret string) ([]byte, error) {
+	e, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+	mac := hmac.New(sha1.New, []byte(secret))
+	mac.Write(e)
+	s := mac.Sum(nil)
+	return s, nil
+}
+
+func newfileUploadRequest(uri string, params []byte, path string, sig string) (*http.Request, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	//body := &bytes.Buffer{}
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)
 	part, err := writer.CreateFormFile("file", filepath.Base(path))
@@ -99,6 +145,11 @@ func newfileUploadRequest(uri string, params []byte, path string) (*http.Request
 	}
 
 	err = writer.WriteField("params", string(params))
+	if err != nil {
+		return nil, err
+	}
+
+	err = writer.WriteField("signature", sig)
 	if err != nil {
 		return nil, err
 	}
