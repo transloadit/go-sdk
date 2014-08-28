@@ -19,7 +19,7 @@ func TestAssembly(t *testing.T) {
 
 	assembly := client.CreateAssembly()
 
-	file, err := os.Open("./test-files/lol_cat.jpg")
+	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +58,7 @@ func TestAssemblyFail(t *testing.T) {
 
 	assembly := client.CreateAssembly()
 
-	file, err := os.Open("./test-files/lol_cat.jpg")
+	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
 		t.Fatal(err)
 	}
