@@ -50,7 +50,7 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
-	url := "http://api2." + bored + "/assemblies"
+	url := "http://api2-" + bored + "/assemblies"
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
