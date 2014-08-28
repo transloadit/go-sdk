@@ -53,8 +53,7 @@ func NewClient(config *Config) (*Client, error) {
 func (client *Client) sign(params map[string]interface{}) (string, string, error) {
 
 	// Expires in 1 hour
-	expires := time.Now().UTC()
-	expires.Add(time.Hour)
+	expires := time.Now().UTC().Add(time.Hour)
 	expiresStr := fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d+00:00", expires.Year(), expires.Month(), expires.Day(), expires.Hour(), expires.Minute(), expires.Second())
 
 	params["auth"] = map[string]string{
