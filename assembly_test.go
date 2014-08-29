@@ -10,14 +10,7 @@ var assemblyId string
 
 func TestAssembly(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
-
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := setup(t)
 
 	assembly := client.CreateAssembly()
 
@@ -99,14 +92,7 @@ func TestAssemblyFail(t *testing.T) {
 
 func TestGetAssembly(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = "does not exist"
-	config.AuthSecret = "does not matter"
-
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := setup(t)
 
 	assembly, err := client.GetAssembly(assemblyId)
 	if err != nil {
@@ -121,14 +107,7 @@ func TestGetAssembly(t *testing.T) {
 
 func TestReplayAssembly(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
-
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := setup(t)
 
 	assembly := client.ReplayAssembly(assemblyId)
 

@@ -1,7 +1,6 @@
 package transloadit
 
 import (
-	"os"
 	"testing"
 )
 
@@ -9,14 +8,7 @@ var templateId string
 
 func TestCreateTemplate(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
-
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := setup(t)
 
 	template := NewTemplate("go-sdk-test")
 
@@ -47,14 +39,7 @@ func TestCreateTemplate(t *testing.T) {
 
 func TestGetTemplate(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
-
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := setup(t)
 
 	template, err := client.GetTemplate(templateId)
 	if err != nil {
@@ -73,16 +58,9 @@ func TestGetTemplate(t *testing.T) {
 
 func TestDeleteTemplate(t *testing.T) {
 
-	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
+	client := setup(t)
 
-	client, err := NewClient(&config)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if err = client.DeleteTemplate(templateId); err != nil {
+	if err := client.DeleteTemplate(templateId); err != nil {
 		t.Fatal(err)
 	}
 }

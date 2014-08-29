@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -38,5 +39,20 @@ func TestCreateClient(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
+
+}
+
+func setup(t *testing.T) *Client {
+
+	config := DefaultConfig
+	config.AuthKey = os.Getenv("AUTH_KEY")
+	config.AuthSecret = os.Getenv("AUTH_SECRET")
+
+	client, err := NewClient(&config)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return client
 
 }
