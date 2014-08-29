@@ -6,6 +6,8 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 type Assembly struct {
@@ -16,7 +18,13 @@ type Assembly struct {
 	readers    map[string]io.Reader
 }
 
-type AssemblyResponse map[string]interface{}
+type AssemblyReplay struct {
+	assemblyId      string
+	client          *Client
+	NotifyUrl       string
+	reparseTemplate bool
+	steps           map[string]map[string]interface{}
+}
 
 func (client *Client) CreateAssembly() *Assembly {
 	return &Assembly{
@@ -113,5 +121,55 @@ func (client *Client) GetAssembly(assemblyId string) (Response, error) {
 	}
 
 	return client.doRequest(req)
+
+}
+
+func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
+	return &AssemblyReplay{
+		client:     client,
+		steps:      make(map[string]map[string]interface{}),
+		assemblyId: assemblyId,
+	}
+}
+
+func (assembly *AssemblyReplay) AddStep(name string, details map[string]interface{}) {
+	assembly.steps[name] = details
+}
+
+func (assembly *AssemblyReplay) ReparseTemplate() {
+	assembly.reparseTemplate = true
+}
+
+func (assembly *AssemblyReplay) Start() (Response, error) {
+
+	uri := assembly.client.config.Endpoint + "/assemblies/" + assemblyId + "/replay"
+
+	options := map[string]interface{}{
+		"steps": assembly.steps,
+	}
+
+	if assembly.reparseTemplate {
+		options["reparse_template"] = 1
+	}
+
+	params, signature, err := assembly.client.sign(options)
+	if err != nil {
+		return nil, fmt.Errorf("unable to replay assembly: %s", err)
+	}
+
+	// Encode request body
+	v := url.Values{}
+	v.Set("params", params)
+	v.Set("signature", signature)
+
+	req, err := http.NewRequest("POST", uri, strings.NewReader(v.Encode()))
+	if err != nil {
+		return nil, fmt.Errorf("unable to get assembly: %s", err)
+	}
+
+	// Add content type header
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	return assembly.client.doRequest(req)
 
 }

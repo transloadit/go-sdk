@@ -113,3 +113,27 @@ func TestGetAssembly(t *testing.T) {
 	}
 
 }
+
+func TestReplayAssembly(t *testing.T) {
+
+	config := DefaultConfig
+	config.AuthKey = os.Getenv("AUTH_KEY")
+	config.AuthSecret = os.Getenv("AUTH_SECRET")
+
+	client, err := NewClient(&config)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assembly := client.ReplayAssembly(assemblyId)
+
+	res, err := assembly.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res["ok"] != "ASSEMBLY_REPLAYING" {
+		t.Fatal("wrong status code returned")
+	}
+
+}
