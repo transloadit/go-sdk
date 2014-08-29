@@ -77,9 +77,15 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		}
 	}
 
-	params, signature, err := assembly.client.sign(map[string]interface{}{
+	options := map[string]interface{}{
 		"steps": assembly.steps,
-	})
+	}
+
+	if assembly.NotifyUrl != "" {
+		options["notify_url"] = assembly.NotifyUrl
+	}
+
+	params, signature, err := assembly.client.sign(options)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
@@ -150,6 +156,10 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 
 	if assembly.reparseTemplate {
 		options["reparse_template"] = 1
+	}
+
+	if assembly.NotifyUrl != "" {
+		options["notify_url"] = assembly.NotifyUrl
 	}
 
 	params, signature, err := assembly.client.sign(options)

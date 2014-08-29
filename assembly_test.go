@@ -36,6 +36,8 @@ func TestAssembly(t *testing.T) {
 		"background":      "#000000",
 	})
 
+	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
+
 	res, err := assembly.Upload()
 	if err != nil {
 		t.Fatal(err)
@@ -45,8 +47,11 @@ func TestAssembly(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_id")
 	}
 
-	assemblyId = res["assembly_id"].(string)
+	if res["notify_url"] != "http://requestb.in/1kwp6lx1" {
+		t.Fatal("wrong notify url")
+	}
 
+	assemblyId = res["assembly_id"].(string)
 }
 
 func TestAssemblyFail(t *testing.T) {
@@ -126,6 +131,8 @@ func TestReplayAssembly(t *testing.T) {
 	}
 
 	assembly := client.ReplayAssembly(assemblyId)
+
+	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 
 	res, err := assembly.Start()
 	if err != nil {
