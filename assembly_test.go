@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+var assemblyId string
+
 func TestAssembly(t *testing.T) {
 
 	config := DefaultConfig
@@ -42,6 +44,8 @@ func TestAssembly(t *testing.T) {
 	if res["assembly_id"] == nil {
 		t.Fatal("response doesn't contain assembly_id")
 	}
+
+	assemblyId = res["assembly_id"].(string)
 
 }
 
@@ -84,6 +88,28 @@ func TestAssemblyFail(t *testing.T) {
 
 	if res["error"] != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
 		t.Fatal("reponse doesn't contain error message")
+	}
+
+}
+
+func TestGetAssembly(t *testing.T) {
+
+	config := DefaultConfig
+	config.AuthKey = "does not exist"
+	config.AuthSecret = "does not matter"
+
+	client, err := NewClient(&config)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assembly, err := client.GetAssembly(assemblyId)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if assembly["assembly_id"] != assemblyId {
+		t.Fatal("assembly ids don't match")
 	}
 
 }

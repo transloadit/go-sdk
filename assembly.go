@@ -103,3 +103,15 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 	return req, nil
 
 }
+
+func (client *Client) GetAssembly(assemblyId string) (Response, error) {
+
+	url := client.config.Endpoint + "/assemblies/" + assemblyId
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get assembly: %s", err)
+	}
+
+	return client.doRequest(req)
+
+}
