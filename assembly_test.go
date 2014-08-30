@@ -7,6 +7,7 @@ import (
 )
 
 var assemblyId string
+var assemblyUrl string
 
 func TestAssembly(t *testing.T) {
 
@@ -55,6 +56,7 @@ func TestAssembly(t *testing.T) {
 	}
 
 	assemblyId = res["assembly_id"].(string)
+	assemblyUrl = res["assembly_url"].(string)
 }
 
 func TestAssemblyFail(t *testing.T) {
@@ -104,13 +106,13 @@ func TestGetAssembly(t *testing.T) {
 
 	client := setup(t)
 
-	assembly, err := client.GetAssembly(assemblyId)
+	assembly, err := client.GetAssembly(assemblyUrl)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if assembly["assembly_id"] != assemblyId {
-		t.Fatal("assembly ids don't match")
+	if assembly["assembly_url"] != assemblyUrl {
+		t.Fatal("assembly urls don't match")
 	}
 
 }

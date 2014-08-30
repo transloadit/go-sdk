@@ -122,9 +122,9 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 
 }
 
-func (client *Client) GetAssembly(assemblyId string) (Response, error) {
+func (client *Client) GetAssembly(assemblyUrl string) (Response, error) {
 
-	return client.request("GET", "assemblies/"+assemblyId, nil)
+	return client.request("GET", assemblyUrl, nil)
 
 }
 
