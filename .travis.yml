@@ -14,7 +14,7 @@ notifications:
   email: false
   campfire:
     rooms:
-      secure: "CnAd9SmsrogIQ7CKL0nAun6qgJS7TGdB/GcVz1r9bThszpe9HdAkVsNn699St9MUBAWPMetZnm/j2yJ7WJCR3e8oDygDmJcd6Rekg5UwwdL7esbcguCDMiD9XNuFldr2ZS+htVF8NSYognn/9wgki6LDNKM/pY+uYZce83Y2aMs="
+      secure: "FM/6haW5DUjQD1IpPH3glFk075cnS0foazoiPHCHV+Rk1+WgMoxh4cIbXJnOnYLOUlt9l+8NyqG4P48Ia7Kn1RpqAWKbcPHCB4R1v7dug8tZCv2lt7YOenfmykXSbkK6d4uqIPredQK4MT6jhog0CG05bOhkOinxiZbM2wCftbM="
     on_failure: always
     on_success: always
 env:
