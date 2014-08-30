@@ -19,7 +19,13 @@ func TestAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	file2, err := os.Open("./fixtures/mona_lisa.jpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	assembly.AddReader("image", file)
+	assembly.AddReader("image2", file2)
 
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
@@ -42,6 +48,10 @@ func TestAssembly(t *testing.T) {
 
 	if res["notify_url"] != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
+	}
+
+	if len(res["uploads"].([]interface{})) != 2 {
+		t.Fatal("wrong number of uploads")
 	}
 
 	assemblyId = res["assembly_id"].(string)
