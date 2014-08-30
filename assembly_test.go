@@ -134,3 +134,25 @@ func TestReplayAssembly(t *testing.T) {
 	}
 
 }
+
+func TestAssemblyUsingTemplate(t *testing.T) {
+
+	client := setup(t)
+
+	assembly := client.CreateAssembly()
+
+	assembly.TemplateId = "64c11b20308811e4b5548d4f316c150f"
+
+	res, err := assembly.Upload()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res["assembly_id"] == nil {
+		t.Fatal("response doesn't contain assembly_id")
+	}
+
+	if !strings.Contains(res["params"].(string), "64c11b20308811e4b5548d4f316c150f") {
+		t.Fatal("template id not as parameter submitted")
+	}
+}

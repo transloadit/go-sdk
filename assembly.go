@@ -75,8 +75,14 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		}
 	}
 
-	options := map[string]interface{}{
-		"steps": assembly.steps,
+	options := make(map[string]interface{})
+
+	if len(assembly.steps) != 0 {
+		options["steps"] = assembly.steps
+	}
+
+	if assembly.TemplateId != "" {
+		options["template_id"] = assembly.TemplateId
 	}
 
 	if assembly.NotifyUrl != "" {
