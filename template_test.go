@@ -56,6 +56,34 @@ func TestGetTemplate(t *testing.T) {
 	}
 }
 
+func TestEditTemplate(t *testing.T) {
+
+	client := setup(t)
+
+	template := NewTemplate("go-sdk-test-new")
+
+	template.AddStep("bar", map[string]interface{}{})
+	template.AddStep("baz", map[string]interface{}{})
+
+	err := client.EditTemplate(templateId, template)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if template.Name != "go-sdk-test-new" {
+		t.Fatal("wrong template name")
+	}
+	if _, found := template.Steps["resize"]; found {
+		t.Fatal("resize step not removed")
+	}
+	if _, found := template.Steps["bar"]; !found {
+		t.Fatal("bar step missing")
+	}
+	if _, found := template.Steps["baz"]; !found {
+		t.Fatal("baz step missing")
+	}
+}
+
 func TestDeleteTemplate(t *testing.T) {
 
 	client := setup(t)

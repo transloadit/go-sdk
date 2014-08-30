@@ -66,3 +66,16 @@ func (client *Client) DeleteTemplate(templateId string) error {
 
 	return nil
 }
+
+func (client *Client) EditTemplate(templateId string, newTemplate *Template) error {
+
+	// Create signature
+	content := map[string]interface{}{
+		"name":     newTemplate.Name,
+		"template": newTemplate.Steps,
+	}
+
+	_, err := client.request("PUT", "templates/"+templateId, content)
+	return err
+
+}
