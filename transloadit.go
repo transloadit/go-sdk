@@ -102,7 +102,11 @@ func (client *Client) doRequest(req *http.Request) (Response, error) {
 
 func (client *Client) request(method string, path string, content map[string]interface{}) (Response, error) {
 
-	uri := client.config.Endpoint + "/" + path
+	uri := path
+	// Don't add host for absolute urls
+	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
+		uri = client.config.Endpoint + "/" + path
+	}
 
 	// Ensure content is a map
 	if content == nil {
