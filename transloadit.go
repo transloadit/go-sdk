@@ -7,8 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -95,4 +98,42 @@ func (client *Client) doRequest(req *http.Request) (Response, error) {
 	}
 
 	return obj, nil
+}
+
+func (client *Client) request(method string, path string, content map[string]interface{}) (Response, error) {
+
+	uri := client.config.Endpoint + "/" + path
+
+	// Ensure content is a map
+	if content == nil {
+		content = make(map[string]interface{})
+	}
+
+	// Create signature
+	params, signature, err := client.sign(content)
+	if err != nil {
+		return nil, fmt.Errorf("request: %s", err)
+	}
+
+	v := url.Values{}
+	v.Set("params", params)
+	v.Set("signature", signature)
+
+	var body io.Reader
+	if method == "GET" {
+		uri += "?" + v.Encode()
+	} else {
+		body = strings.NewReader(v.Encode())
+	}
+	req, err := http.NewRequest(method, uri, body)
+	if err != nil {
+		return nil, fmt.Errorf("request: %s", err)
+	}
+
+	if method != "GET" {
+		// Add content type header
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
+	return client.doRequest(req)
 }

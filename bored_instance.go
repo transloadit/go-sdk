@@ -2,17 +2,11 @@ package transloadit
 
 import (
 	"fmt"
-	"net/http"
 )
 
 func (client *Client) getBoredInstance() (string, error) {
 
-	req, err := http.NewRequest("GET", client.config.Endpoint+"/instances/bored", nil)
-	if err != nil {
-		return "", fmt.Errorf("failed to get bored instance: %s", err)
-	}
-
-	obj, err := client.doRequest(req)
+	obj, err := client.request("GET", "instances/bored", nil)
 	if err != nil {
 		return "", fmt.Errorf("failed to get bored instance: %s", err)
 	}
