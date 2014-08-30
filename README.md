@@ -1,4 +1,4 @@
-[![Build Status](https://magnum.travis-ci.com/transloadit/go-sdk.svg?token=ktBsd2yamBEKxsEAgmGK)](https://magnum.travis-ci.com/transloadit/go-sdk)
+[![Build Status](https://travis-ci.org/transloadit/go-sdk.svg)](https://travis-ci.org/transloadit/go-sdk)
 
 ## go-sdk
 
