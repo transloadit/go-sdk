@@ -8,11 +8,13 @@ go:
 matrix:
   allow_failures:
     - go: tip
+
+# travis encrypt [subdomain]:[api token]@[room id]
 notifications:
   email: false
   campfire:
     rooms:
-      secure: P9z4l2QY/L/yBqjNJQr13DHFzG8IYNHn2zk21FF5wMn07hcIcBC8vGv+rLHXMt7TiuVB8oMWJIRt0f23HeXobfd1qd0e00L/n/2gFcii8WNoReyKA4ROQiYErt0Ry70I32vIen9T6RtD5meARqqmZK/QnMhrKGKcGzfLI6paUwM=
+      secure: "FM/6haW5DUjQD1IpPH3glFk075cnS0foazoiPHCHV+Rk1+WgMoxh4cIbXJnOnYLOUlt9l+8NyqG4P48Ia7Kn1RpqAWKbcPHCB4R1v7dug8tZCv2lt7YOenfmykXSbkK6d4uqIPredQK4MT6jhog0CG05bOhkOinxiZbM2wCftbM="
     on_failure: always
     on_success: always
 env:
