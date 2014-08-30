@@ -156,3 +156,30 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 		t.Fatal("template id not as parameter submitted")
 	}
 }
+
+func TestCancelAssembly(t *testing.T) {
+
+	client := setup(t)
+
+	assembly := client.CreateAssembly()
+
+	assembly.AddStep("import", map[string]interface{}{
+		"robot": "/http/import",
+		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
+	})
+
+	res, err := assembly.Upload()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res["assembly_url"] == nil {
+		t.Fatal("response doesn't contain assembly_url")
+	}
+
+	res, err = client.CancelAssembly(res["assembly_url"].(string))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}

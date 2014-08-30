@@ -128,6 +128,12 @@ func (client *Client) GetAssembly(assemblyId string) (Response, error) {
 
 }
 
+func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
+
+	return client.request("DELETE", assemblyUrl, nil)
+
+}
+
 func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
 	return &AssemblyReplay{
 		client:     client,
