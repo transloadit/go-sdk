@@ -6,8 +6,8 @@ import (
 )
 
 type Template struct {
-	Name  string
-	Steps map[string]map[string]interface{}
+	Name  string                            `json:"template_name"`
+	Steps map[string]map[string]interface{} `json:"template_content"`
 }
 
 type TemplateList struct {
@@ -47,22 +47,13 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
 
-	res, err := client.request("GET", "templates/"+templateId, nil, nil)
+	var template Template
+	_, err := client.request("GET", "templates/"+templateId, nil, &template)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get template: %s", err)
 	}
 
-	steps := make(map[string]map[string]interface{})
-	stepsRaw := res["template_content"].(map[string]interface{})
-	for key, value := range stepsRaw {
-		steps[key] = value.(map[string]interface{})
-	}
-
-	return &Template{
-		Name:  res["template_name"].(string),
-		Steps: steps,
-	}, nil
-
+	return &template, nil
 }
 
 func (template *Template) AddStep(name string, step map[string]interface{}) {
