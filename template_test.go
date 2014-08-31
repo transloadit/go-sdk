@@ -92,3 +92,28 @@ func TestDeleteTemplate(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestListTemplates(t *testing.T) {
+
+	client := setup(t)
+
+	templates, err := client.ListTemplates(&ListOptions{
+		PageSize: 3,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(templates.Templates) < 3 {
+		t.Fatal("wrong number of templates")
+	}
+
+	if templates.Count == 0 {
+		t.Fatal("wrong count")
+	}
+
+	if templates.Templates[0].Name == "" {
+		t.Fatal("wrong template name")
+	}
+
+}

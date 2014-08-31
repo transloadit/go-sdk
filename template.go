@@ -1,12 +1,24 @@
 package transloadit
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
 type Template struct {
 	Name  string
 	Steps map[string]map[string]interface{}
+}
+
+type TemplateList struct {
+	Templates []TemplateListItem `json:"items"`
+	Count     int                `json:"count"`
+}
+
+type TemplateListItem struct {
+	Id    string                            `json:"id"`
+	Name  string                            `json:"name"`
+	Steps map[string]map[string]interface{} `json:"json"`
 }
 
 func NewTemplate(name string) *Template {
@@ -78,4 +90,19 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 	_, err := client.request("PUT", "templates/"+templateId, content)
 	return err
 
+}
+
+func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
+	body, err := client.listRequest("templates", options)
+	if err != nil {
+		return nil, fmt.Errorf("unable to list templates: %s", err)
+	}
+
+	var templates TemplateList
+	err = json.Unmarshal(body, &templates)
+	if err != nil {
+		return nil, fmt.Errorf("unable to list templates: %s", err)
+	}
+
+	return &templates, nil
 }
