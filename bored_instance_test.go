@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestNewClient(t *testing.T) {
+func TestGetBoredInstance(t *testing.T) {
 
 	client := setup(t)
 
@@ -17,3 +17,4 @@ func TestNewClient(t *testing.T) {
 		t.Fatal("no bored instance provided")
 	}
 }
+
