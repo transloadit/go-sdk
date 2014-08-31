@@ -185,3 +185,28 @@ func TestCancelAssembly(t *testing.T) {
 	}
 
 }
+
+func TestListAssemblies(t *testing.T) {
+
+	client := setup(t)
+
+	assemblies, err := client.ListAssemblies(&ListOptions{
+		PageSize: 3,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(assemblies.Assemblies) < 3 {
+		t.Fatal("wrong number of assemblies")
+	}
+
+	if assemblies.Count == 0 {
+		t.Fatal("wrong count")
+	}
+
+	if assemblies.Assemblies[0].Id == "" {
+		t.Fatal("wrong template name")
+	}
+
+}

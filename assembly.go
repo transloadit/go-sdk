@@ -2,10 +2,12 @@ package transloadit
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"time"
 )
 
 type Assembly struct {
@@ -22,6 +24,26 @@ type AssemblyReplay struct {
 	NotifyUrl       string
 	reparseTemplate bool
 	steps           map[string]map[string]interface{}
+}
+
+type AssemblyList struct {
+	Assemblies []*AssemblyListItem `json:"items"`
+	Count      int                 `json:"count"`
+}
+
+type AssemblyListItem struct {
+	Id                string    `json:"id"`
+	AccountId         string    `json:"account_id"`
+	TemplateId        string    `json:"template_id"`
+	Instance          string    `json:"instance"`
+	NotifyUrl         string    `json:"notify_url"`
+	RedirectUrl       string    `json:"redirect_url"`
+	ExecutionDuration float32   `json:"execution_duration"`
+	ExecutionStart    time.Time `json:"execution_start"`
+	Created           time.Time `json:"created"`
+	Ok                string    `json:"ok"`
+	Error             string    `json:"error"`
+	Files             string    `json:"files"`
 }
 
 func (client *Client) CreateAssembly() *Assembly {
@@ -166,4 +188,20 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 
 	return assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options)
 
+}
+
+func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
+
+	body, err := client.listRequest("assemblies", options)
+	if err != nil {
+		return nil, fmt.Errorf("unable to list assemblies: %s", err)
+	}
+
+	var assemblies AssemblyList
+	err = json.Unmarshal(body, &assemblies)
+	if err != nil {
+		return nil, fmt.Errorf("unable to list assemblies: %s", err)
+	}
+
+	return &assemblies, nil
 }
