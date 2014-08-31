@@ -2,7 +2,6 @@ package transloadit
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -248,16 +247,7 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 
 func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
 
-	body, err := client.listRequest("assemblies", options)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list assemblies: %s", err)
-	}
-
 	var assemblies AssemblyList
-	err = json.Unmarshal(body, &assemblies)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list assemblies: %s", err)
-	}
-
-	return &assemblies, nil
+	_, err := client.listRequest("assemblies", options, &assemblies)
+	return &assemblies, err
 }

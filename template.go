@@ -1,7 +1,6 @@
 package transloadit
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -84,16 +83,9 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 }
 
 func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
-	body, err := client.listRequest("templates", options)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list templates: %s", err)
-	}
 
 	var templates TemplateList
-	err = json.Unmarshal(body, &templates)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list templates: %s", err)
-	}
+	_, err := client.listRequest("templates", options, &templates)
+	return &templates, err
 
-	return &templates, nil
 }

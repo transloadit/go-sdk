@@ -160,7 +160,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	return client.doRequest(req, result)
 }
 
-func (client *Client) listRequest(path string, options *ListOptions) ([]byte, error) {
+func (client *Client) listRequest(path string, options *ListOptions, result interface{}) (Response, error) {
 
 	uri := client.config.Endpoint + "/" + path
 
@@ -194,12 +194,7 @@ func (client *Client) listRequest(path string, options *ListOptions) ([]byte, er
 		return nil, fmt.Errorf("request: %s", err)
 	}
 
-	res, err := client.httpClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
-	}
-
-	return ioutil.ReadAll(res.Body)
+	return client.doRequest(req, result)
 
 }
 

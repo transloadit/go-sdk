@@ -1,8 +1,6 @@
 package transloadit
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -25,18 +23,10 @@ type NotificationListItem struct {
 
 func (client *Client) ListNotifications(options *ListOptions) (*NotificationList, error) {
 
-	body, err := client.listRequest("assembly_notifications", options)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list notification: %s", err)
-	}
+	var notifications NotificationList
+	_, err := client.listRequest("assembly_notifications", options, &notifications)
+	return &notifications, err
 
-	var notification NotificationList
-	err = json.Unmarshal(body, &notification)
-	if err != nil {
-		return nil, fmt.Errorf("unable to list notification: %s", err)
-	}
-
-	return &notification, nil
 }
 
 func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (Response, error) {
