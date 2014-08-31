@@ -111,7 +111,7 @@ func TestGetAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if assembly["assembly_url"] != assemblyUrl {
+	if assembly.AssemblyUrl != assemblyUrl {
 		t.Fatal("assembly urls don't match")
 	}
 

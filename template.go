@@ -36,7 +36,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 		"template": template.Steps,
 	}
 
-	res, err := client.request("POST", "templates", content)
+	res, err := client.request("POST", "templates", content, nil)
 	if err != nil {
 		return "", fmt.Errorf("unable to create template: %s", err)
 	}
@@ -47,7 +47,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
 
-	res, err := client.request("GET", "templates/"+templateId, nil)
+	res, err := client.request("GET", "templates/"+templateId, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get template: %s", err)
 	}
@@ -71,7 +71,7 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 
 func (client *Client) DeleteTemplate(templateId string) error {
 
-	_, err := client.request("DELETE", "templates/"+templateId, nil)
+	_, err := client.request("DELETE", "templates/"+templateId, nil, nil)
 	if err != nil {
 		return fmt.Errorf("unable to delete template: %s", err)
 	}
@@ -87,7 +87,7 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 		"template": newTemplate.Steps,
 	}
 
-	_, err := client.request("PUT", "templates/"+templateId, content)
+	_, err := client.request("PUT", "templates/"+templateId, content, nil)
 	return err
 
 }

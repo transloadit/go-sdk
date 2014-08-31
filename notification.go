@@ -47,6 +47,6 @@ func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (R
 		params["notify_url"] = notifyUrl
 	}
 
-	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params)
+	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
 
 }

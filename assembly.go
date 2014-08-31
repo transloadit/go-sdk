@@ -46,6 +46,60 @@ type AssemblyListItem struct {
 	Files             string    `json:"files"`
 }
 
+type AssemblyInfo struct {
+	Id                     string                 `json:"id"`
+	ParentId               string                 `json:"parent_id"`
+	AssemblyUrl            string                 `json:"assembly_url"`
+	AssemblySslUrl         string                 `json:"assembly_ssl_url"`
+	BytesReceived          int                    `json:"bytes_received"`
+	BytesExpected          int                    `json:"bytes_expected"`
+	ClientAgent            string                 `json:"client_agent"`
+	ClientIp               string                 `json:"client_ip"`
+	ClientReferer          string                 `json:"client_referer"`
+	StartDate              string                 `json:"start_date"`
+	IsInfinite             bool                   `json:"is_infinite"`
+	HasDupeJobs            bool                   `json:"has_dupe_jobs"`
+	UploadDuration         float32                `json:"upload_duration"`
+	NotifyUrl              string                 `json:"notify_url"`
+	NotifyStart            string                 `json:"notify_start"`
+	NotifyStatus           string                 `json:"notify_status"`
+	NotifyDuation          float32                `json:"notify_duration"`
+	LastJobCompleted       string                 `json:"last_job_completed"`
+	ExecutionDuration      float32                `json:"execution_duration"`
+	ExecutionStart         string                 `json:"execution_start"`
+	Created                string                 `json:"created"`
+	Ok                     string                 `json:"ok"`
+	Message                string                 `json:"message"`
+	Files                  string                 `json:"files"`
+	Fields                 map[string]interface{} `json:"fields"`
+	BytesUsage             int                    `json:"bytes_usage"`
+	FilesToStoreOnS3       int                    `json:"files_to_store_on_s3"`
+	QueuedFilesToStoreOnS3 int                    `json:"queued_files_to_store_on_s3"`
+	ExecutingJobs          []interface{}          `json:"executing_jobs"`
+	StartedJobs            []interface{}          `json:"started_jobs"`
+	ParentAssemblyStatus   string                 `json:"parent_assembly_status"`
+	Uploads                []*FileInfo            `json:"uploads"`
+	Resuts                 map[string][]*FileInfo `json:"results"`
+}
+
+type FileInfo struct {
+	Id               string                 `json:"id"`
+	Name             string                 `json:"name"`
+	Basename         string                 `json:"basename"`
+	Ext              string                 `json:"ext"`
+	Size             int                    `json:"size"`
+	Mime             string                 `json:"mime"`
+	Type             string                 `json:"type"`
+	Field            string                 `json:"field"`
+	Md5Hash          string                 `json:"md5hash"`
+	OriginalMd5Hash  string                 `json:"original_md5hash"`
+	OriginalId       string                 `json:"original_id"`
+	OriginalBasename string                 `json:"original_basename"`
+	Url              string                 `json:"url"`
+	SslUrl           string                 `json:"ssl_url"`
+	Meta             map[string]interface{} `json:"meta"`
+}
+
 func (client *Client) CreateAssembly() *Assembly {
 	return &Assembly{
 		client:  client,
@@ -68,7 +122,7 @@ func (assembly *Assembly) Upload() (Response, error) {
 		return nil, fmt.Errorf("failed to create assembly: %s", err)
 	}
 
-	return assembly.client.doRequest(req)
+	return assembly.client.doRequest(req, nil)
 }
 
 func (assembly *Assembly) makeRequest() (*http.Request, error) {
@@ -144,15 +198,17 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 
 }
 
-func (client *Client) GetAssembly(assemblyUrl string) (Response, error) {
+func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 
-	return client.request("GET", assemblyUrl, nil)
+	var info AssemblyInfo
+	_, err := client.request("GET", assemblyUrl, nil, &info)
+	return &info, err
 
 }
 
 func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
 
-	return client.request("DELETE", assemblyUrl, nil)
+	return client.request("DELETE", assemblyUrl, nil, nil)
 
 }
 
@@ -186,7 +242,7 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 		options["notify_url"] = assembly.NotifyUrl
 	}
 
-	return assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options)
+	return assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, nil)
 
 }
 

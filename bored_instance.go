@@ -6,7 +6,7 @@ import (
 
 func (client *Client) getBoredInstance() (string, error) {
 
-	obj, err := client.request("GET", "instances/bored", nil)
+	obj, err := client.request("GET", "instances/bored", nil, nil)
 	if err != nil {
 		return "", fmt.Errorf("failed to get bored instance: %s", err)
 	}

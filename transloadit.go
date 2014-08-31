@@ -88,7 +88,7 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 
 }
 
-func (client *Client) doRequest(req *http.Request) (Response, error) {
+func (client *Client) doRequest(req *http.Request, result interface{}) (Response, error) {
 
 	res, err := client.httpClient.Do(req)
 	if err != nil {
@@ -100,20 +100,25 @@ func (client *Client) doRequest(req *http.Request) (Response, error) {
 		return nil, fmt.Errorf("failed execute http request: %s", err)
 	}
 
-	var obj Response
-	err = json.Unmarshal(body, &obj)
-	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
-	}
+	if result == nil {
+		var obj Response
+		err = json.Unmarshal(body, &obj)
+		if err != nil {
+			return nil, fmt.Errorf("failed execute http request: %s", err)
+		}
 
-	if res.StatusCode != 200 {
-		return obj, fmt.Errorf("failed execute http request: server responded with %s", obj["error"])
-	}
+		if res.StatusCode != 200 {
+			return obj, fmt.Errorf("failed execute http request: server responded with %s", obj["error"])
+		}
 
-	return obj, nil
+		return obj, nil
+	} else {
+		err = json.Unmarshal(body, result)
+		return nil, err
+	}
 }
 
-func (client *Client) request(method string, path string, content map[string]interface{}) (Response, error) {
+func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) (Response, error) {
 
 	uri := path
 	// Don't add host for absolute urls
@@ -152,7 +157,7 @@ func (client *Client) request(method string, path string, content map[string]int
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 
-	return client.doRequest(req)
+	return client.doRequest(req, result)
 }
 
 func (client *Client) listRequest(path string, options *ListOptions) ([]byte, error) {
