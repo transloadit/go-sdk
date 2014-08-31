@@ -4,6 +4,8 @@ import (
 	"testing"
 )
 
+var notificationAssemblyId string
+
 func TestListNotifications(t *testing.T) {
 
 	client := setup(t)
@@ -27,4 +29,19 @@ func TestListNotifications(t *testing.T) {
 		t.Fatal("wrong notification name")
 	}
 
+	notificationAssemblyId = notification.Notifications[0].AssemblyId
+}
+
+func TestReplayNotification(t *testing.T) {
+
+	client := setup(t)
+
+	res, err := client.ReplayNotification(notificationAssemblyId, "http://google.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res["ok"].(string) != "ASSEMBLY_NOTIFICATION_REPLAYED" {
+		t.Fatal("wrong status code returned")
+	}
 }

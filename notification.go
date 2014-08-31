@@ -13,6 +13,7 @@ type NotificationList struct {
 
 type NotificationListItem struct {
 	Id           string    `json:"id"`
+	AssemblyId   string    `json:"assembly_id"`
 	AccountId    string    `json:"account_id"`
 	Url          string    `json:"url"`
 	ResponseCode int       `json:"response_code"`
@@ -36,4 +37,16 @@ func (client *Client) ListNotifications(options *ListOptions) (*NotificationList
 	}
 
 	return &notification, nil
+}
+
+func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (Response, error) {
+
+	params := make(map[string]interface{})
+
+	if notifyUrl != "" {
+		params["notify_url"] = notifyUrl
+	}
+
+	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params)
+
 }
