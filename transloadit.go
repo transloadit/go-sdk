@@ -202,7 +202,7 @@ func getExpireString() string {
 
 	// Expires in 1 hour
 	expires := time.Now().UTC().Add(time.Hour)
-	expiresStr, _ := expires.MarshalText()
+	expiresStr := fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d+00:00", expires.Year(), expires.Month(), expires.Day(), expires.Hour(), expires.Minute(), expires.Second())
 	return string(expiresStr)
 
 }
