@@ -9,11 +9,11 @@ matrix:
     - go: tip
 
 before_install:
-- go get github.com/axw/gocov/gocov
-- go get github.com/mattn/goveralls
-- go get code.google.com/p/go.tools/cmd/cover
+- go get github.com/axw/gocov/gocov || true
+- go get github.com/mattn/goveralls || true
+- go get code.google.com/p/go.tools/cmd/cover || true
 script:
-- $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN
+- $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || true
 
 # travis encrypt [subdomain]:[api token]@[room id]
 notifications:
