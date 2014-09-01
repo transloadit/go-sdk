@@ -13,7 +13,7 @@ before_install:
 - go get github.com/mattn/goveralls || true
 - go get code.google.com/p/go.tools/cmd/cover || true
 script:
-- $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || true
+- $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || make test
 
 # travis encrypt [subdomain]:[api token]@[room id]
 notifications:
