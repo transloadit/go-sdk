@@ -98,6 +98,47 @@ func TestAssemblyFail(t *testing.T) {
 
 }
 
+func TestAssemblyBlocking(t *testing.T) {
+
+	client := setup(t)
+
+	assembly := client.CreateAssembly()
+
+	file, err := os.Open("./fixtures/lol_cat.jpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assembly.AddReader("image", file)
+
+	assembly.AddStep("resize", map[string]interface{}{
+		"robot":           "/image/resize",
+		"width":           75,
+		"height":          75,
+		"resize_strategy": "pad",
+		"background":      "#000000",
+	})
+
+	assembly.Blocking = true
+
+	info, err := assembly.Upload()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.Ok != "ASSEMBLY_COMPLETED" {
+		t.Fatal("wrong assembly status")
+	}
+
+	if info.AssemblyId == "" {
+		t.Fatal("response doesn't contain assembly_id")
+	}
+
+	if len(info.Uploads) != 1 {
+		t.Fatal("wrong number of uploads")
+	}
+}
+
 func TestGetAssembly(t *testing.T) {
 
 	client := setup(t)
@@ -132,6 +173,25 @@ func TestReplayAssembly(t *testing.T) {
 	}
 
 	if info.Ok != "ASSEMBLY_REPLAYING" {
+		t.Fatal("wrong status code returned")
+	}
+
+}
+
+func TestReplayAssemblyBlocking(t *testing.T) {
+
+	client := setup(t)
+
+	assembly := client.ReplayAssembly(assemblyId)
+
+	assembly.Blocking = true
+
+	info, err := assembly.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.Ok != "ASSEMBLY_COMPLETED" {
 		t.Fatal("wrong status code returned")
 	}
 

@@ -13,6 +13,7 @@ type Assembly struct {
 	client     *Client
 	NotifyUrl  string
 	TemplateId string
+	Blocking   bool
 	steps      map[string]map[string]interface{}
 	readers    map[string]io.Reader
 }
@@ -21,6 +22,7 @@ type AssemblyReplay struct {
 	assemblyId      string
 	client          *Client
 	NotifyUrl       string
+	Blocking        bool
 	reparseTemplate bool
 	steps           map[string]map[string]interface{}
 }
@@ -76,7 +78,7 @@ type AssemblyInfo struct {
 	QueuedFilesToStoreOnS3 int                    `json:"queued_files_to_store_on_s3"`
 	ExecutingJobs          []interface{}          `json:"executing_jobs"`
 	StartedJobs            []interface{}          `json:"started_jobs"`
-	ParentAssemblyStatus   string                 `json:"parent_assembly_status"`
+	ParentAssemblyStatus   *AssemblyInfo          `json:"parent_assembly_status"`
 	Uploads                []*FileInfo            `json:"uploads"`
 	Resuts                 map[string][]*FileInfo `json:"results"`
 	Params                 string                 `json:"params"`
@@ -129,7 +131,22 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 
 	var info AssemblyInfo
 	_, err = assembly.client.doRequest(req, &info)
-	return &info, err
+
+	if !assembly.Blocking {
+		return &info, err
+	}
+
+	watcher := assembly.client.WaitForAssembly(info.AssemblyUrl)
+
+	select {
+	case res := <-watcher.Response:
+		// Assembly completed
+		return res, nil
+	case err := <-watcher.Error:
+		// Error appeared
+		return nil, err
+	}
+
 }
 
 func (assembly *Assembly) makeRequest() (*http.Request, error) {
@@ -257,7 +274,24 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 
 	var info AssemblyInfo
 	_, err := assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, &info)
-	return &info, err
+
+	if !assembly.Blocking {
+		return &info, err
+	}
+
+	// Assembly replay response doesn't contains assembly url
+	assemblyUrl := assembly.client.config.Endpoint + "/assemblies/" + info.AssemblyId
+
+	watcher := assembly.client.WaitForAssembly(assemblyUrl)
+
+	select {
+	case res := <-watcher.Response:
+		// Assembly completed
+		return res, nil
+	case err := <-watcher.Error:
+		// Error appeared
+		return nil, err
+	}
 
 }
 
