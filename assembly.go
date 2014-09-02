@@ -31,7 +31,7 @@ type AssemblyList struct {
 }
 
 type AssemblyListItem struct {
-	Id                string    `json:"id"`
+	AssemblyId        string    `json:"id"`
 	AccountId         string    `json:"account_id"`
 	TemplateId        string    `json:"template_id"`
 	Instance          string    `json:"instance"`
@@ -46,7 +46,7 @@ type AssemblyListItem struct {
 }
 
 type AssemblyInfo struct {
-	Id                     string                 `json:"id"`
+	AssemblyId             string                 `json:"assembly_id"`
 	ParentId               string                 `json:"parent_id"`
 	AssemblyUrl            string                 `json:"assembly_url"`
 	AssemblySslUrl         string                 `json:"assembly_ssl_url"`
@@ -79,6 +79,8 @@ type AssemblyInfo struct {
 	ParentAssemblyStatus   string                 `json:"parent_assembly_status"`
 	Uploads                []*FileInfo            `json:"uploads"`
 	Resuts                 map[string][]*FileInfo `json:"results"`
+	Params                 string                 `json:"params"`
+	Error                  string                 `json:"error"`
 }
 
 type FileInfo struct {
@@ -119,13 +121,15 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 }
 
 // Start the assembly and upload all files.
-func (assembly *Assembly) Upload() (Response, error) {
+func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 	req, err := assembly.makeRequest()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create assembly: %s", err)
 	}
 
-	return assembly.client.doRequest(req, nil)
+	var info AssemblyInfo
+	_, err = assembly.client.doRequest(req, &info)
+	return &info, err
 }
 
 func (assembly *Assembly) makeRequest() (*http.Request, error) {
@@ -237,7 +241,7 @@ func (assembly *AssemblyReplay) ReparseTemplate() {
 }
 
 // Start the assembly replay.
-func (assembly *AssemblyReplay) Start() (Response, error) {
+func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 
 	options := map[string]interface{}{
 		"steps": assembly.steps,
@@ -251,7 +255,9 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 		options["notify_url"] = assembly.NotifyUrl
 	}
 
-	return assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, nil)
+	var info AssemblyInfo
+	_, err := assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, &info)
+	return &info, err
 
 }
 
