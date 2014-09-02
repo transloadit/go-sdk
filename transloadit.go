@@ -118,8 +118,6 @@ func (client *Client) doRequest(req *http.Request, result interface{}) (Response
 		err = json.Unmarshal(body, result)
 		return nil, err
 	}
-
-	return nil, nil
 }
 
 func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) (Response, error) {
