@@ -99,6 +99,7 @@ type FileInfo struct {
 	Meta             map[string]interface{} `json:"meta"`
 }
 
+// Create a new assembly instance which can be executed later.
 func (client *Client) CreateAssembly() *Assembly {
 	return &Assembly{
 		client:  client,
@@ -107,14 +108,17 @@ func (client *Client) CreateAssembly() *Assembly {
 	}
 }
 
+// Add another reader to upload later.
 func (assembly *Assembly) AddReader(name string, reader io.Reader) {
 	assembly.readers[name] = reader
 }
 
+// Add a step to the assembly.
 func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
+// Start the assembly and upload all files.
 func (assembly *Assembly) Upload() (Response, error) {
 	req, err := assembly.makeRequest()
 	if err != nil {
@@ -197,6 +201,7 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 
 }
 
+// Get information about an assembly using its url.
 func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 
 	var info AssemblyInfo
@@ -205,12 +210,14 @@ func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 
 }
 
+// Cancel an assembly using its url.
 func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
 
 	return client.request("DELETE", assemblyUrl, nil, nil)
 
 }
 
+// Create a new AssemblyReplay instance.
 func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
 	return &AssemblyReplay{
 		client:     client,
@@ -219,14 +226,17 @@ func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
 	}
 }
 
+// Add a step to override the original ones.
 func (assembly *AssemblyReplay) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
+// Reparse the template when replaying. Useful if the template has changed since the orignal assembly was created.
 func (assembly *AssemblyReplay) ReparseTemplate() {
 	assembly.reparseTemplate = true
 }
 
+// Start the assembly replay.
 func (assembly *AssemblyReplay) Start() (Response, error) {
 
 	options := map[string]interface{}{
@@ -245,6 +255,7 @@ func (assembly *AssemblyReplay) Start() (Response, error) {
 
 }
 
+// List all assemblies matching the criterias.
 func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
 
 	var assemblies AssemblyList

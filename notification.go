@@ -21,6 +21,7 @@ type NotificationListItem struct {
 	Error        string    `json:"error"`
 }
 
+// List all notificaions matching the criterias.
 func (client *Client) ListNotifications(options *ListOptions) (*NotificationList, error) {
 
 	var notifications NotificationList
@@ -29,6 +30,8 @@ func (client *Client) ListNotifications(options *ListOptions) (*NotificationList
 
 }
 
+// Replay a notification which was trigger by assembly defined using the assemblyId.
+// If notifyUrl is not empty it will override the original notify url.
 func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (Response, error) {
 
 	params := make(map[string]interface{})

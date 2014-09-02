@@ -20,6 +20,7 @@ type TemplateListItem struct {
 	Steps map[string]map[string]interface{} `json:"json"`
 }
 
+// Creates a new template instance which can be saved to transloadit.
 func NewTemplate(name string) *Template {
 	return &Template{
 		Name:  name,
@@ -27,6 +28,7 @@ func NewTemplate(name string) *Template {
 	}
 }
 
+// Save the template.
 func (client *Client) CreateTemplate(template *Template) (string, error) {
 
 	// Create signature
@@ -44,6 +46,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 
 }
 
+// Get information about a template using its id.
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
 
 	var template Template
@@ -55,10 +58,12 @@ func (client *Client) GetTemplate(templateId string) (*Template, error) {
 	return &template, nil
 }
 
+// Add another step to the template.
 func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Steps[name] = step
 }
 
+// Delete a template from the list.
 func (client *Client) DeleteTemplate(templateId string) error {
 
 	_, err := client.request("DELETE", "templates/"+templateId, nil, nil)
@@ -69,6 +74,7 @@ func (client *Client) DeleteTemplate(templateId string) error {
 	return nil
 }
 
+// Update the name and content of the template defined using the id.
 func (client *Client) EditTemplate(templateId string, newTemplate *Template) error {
 
 	// Create signature
@@ -82,6 +88,7 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 
 }
 
+// List all templates matching the criterias.
 func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
 
 	var templates TemplateList

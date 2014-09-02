@@ -51,6 +51,8 @@ type ListOptions struct {
 	} `json:"auth"`
 }
 
+// Create a new client using the provided configuration object.
+// An error will be returned if no AuthKey or AuthSecret is found in config.
 func NewClient(config *Config) (*Client, error) {
 
 	if config.AuthKey == "" {
