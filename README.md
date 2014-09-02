@@ -5,6 +5,10 @@
 
 A Go SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
 
+## Documentation
+
+See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
+
 ## License
 
 [MIT Licensed](LICENSE)
