@@ -176,6 +176,10 @@ func TestReplayAssembly(t *testing.T) {
 		t.Fatal("wrong status code returned")
 	}
 
+	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+		t.Fatal("wrong notify url")
+	}
+
 }
 
 func TestReplayAssemblyBlocking(t *testing.T) {
