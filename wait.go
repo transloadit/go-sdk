@@ -12,6 +12,7 @@ type AssemblyWatcher struct {
 	client      *Client
 }
 
+// Wait until the status of an assembly is either completed, canceled or aborted.
 func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
 
 	watcher := &AssemblyWatcher{
@@ -22,13 +23,13 @@ func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
 		client:      client,
 	}
 
-	watcher.Start()
+	watcher.start()
 
 	return watcher
 
 }
 
-func (watcher *AssemblyWatcher) Start() {
+func (watcher *AssemblyWatcher) start() {
 
 	go func() {
 
@@ -49,6 +50,7 @@ func (watcher *AssemblyWatcher) Start() {
 
 }
 
+// Stop the watcher and close all channels.
 func (watcher *AssemblyWatcher) Stop() {
 	watcher.stopped = true
 }
