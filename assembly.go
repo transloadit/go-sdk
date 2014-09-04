@@ -15,7 +15,13 @@ type Assembly struct {
 	TemplateId string
 	Blocking   bool
 	steps      map[string]map[string]interface{}
-	readers    map[string]io.Reader
+	readers    []*upload
+}
+
+type upload struct {
+	Field  string
+	Name   string
+	Reader io.Reader
 }
 
 type AssemblyReplay struct {
@@ -108,13 +114,17 @@ func (client *Client) CreateAssembly() *Assembly {
 	return &Assembly{
 		client:  client,
 		steps:   make(map[string]map[string]interface{}),
-		readers: make(map[string]io.Reader),
+		readers: make([]*upload, 0),
 	}
 }
 
 // Add another reader to upload later.
-func (assembly *Assembly) AddReader(name string, reader io.Reader) {
-	assembly.readers[name] = reader
+func (assembly *Assembly) AddReader(field, name string, reader io.Reader) {
+	assembly.readers = append(assembly.readers, &upload{
+		Field:  field,
+		Name:   name,
+		Reader: reader,
+	})
 }
 
 // Add a step to the assembly.
@@ -166,14 +176,14 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 	writer := multipart.NewWriter(body)
 
 	// Add files to upload
-	for index, reader := range assembly.readers {
+	for _, reader := range assembly.readers {
 
-		part, err := writer.CreateFormFile(index, index)
+		part, err := writer.CreateFormFile(reader.Field, reader.Name)
 		if err != nil {
 			return nil, fmt.Errorf("unable to create upload request: %s", err)
 		}
 
-		_, err = io.Copy(part, reader)
+		_, err = io.Copy(part, reader.Reader)
 		if err != nil {
 			return nil, fmt.Errorf("unable to create upload request: %s", err)
 		}

@@ -25,8 +25,8 @@ func TestAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assembly.AddReader("image", file)
-	assembly.AddReader("image2", file2)
+	assembly.AddReader("image", "lol_cat.jpg", file)
+	assembly.AddReader("image2", "mona_lisa.jpg", file2)
 
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
@@ -55,6 +55,18 @@ func TestAssembly(t *testing.T) {
 		t.Fatal("wrong number of uploads")
 	}
 
+	if info.Uploads[0].Name == "lol_cat.jpg" {
+		if info.Uploads[0].Field != "image" {
+			t.Fatal("wrong field name")
+		}
+	} else if info.Uploads[1].Name == "lol_cat.jpg" {
+				if info.Uploads[1].Field != "image" {
+			t.Fatal("wrong field name")
+		}
+	} else {
+		t.Fatal("lol_cat.jpg not found in uploads")
+	}
+
 	assemblyId = info.AssemblyId
 	assemblyUrl = info.AssemblyUrl
 }
@@ -77,7 +89,7 @@ func TestAssemblyFail(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assembly.AddReader("image", file)
+	assembly.AddReader("image", "lol_cat.jpg", file)
 
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
@@ -109,7 +121,7 @@ func TestAssemblyBlocking(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assembly.AddReader("image", file)
+	assembly.AddReader("image", "lol_cat.jpg", file)
 
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
