@@ -80,7 +80,7 @@ type AssemblyInfo struct {
 	StartedJobs            []interface{}          `json:"started_jobs"`
 	ParentAssemblyStatus   *AssemblyInfo          `json:"parent_assembly_status"`
 	Uploads                []*FileInfo            `json:"uploads"`
-	Resuts                 map[string][]*FileInfo `json:"results"`
+	Results                map[string][]*FileInfo `json:"results"`
 	Params                 string                 `json:"params"`
 	Error                  string                 `json:"error"`
 }
@@ -131,6 +131,10 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 
 	var info AssemblyInfo
 	_, err = assembly.client.doRequest(req, &info)
+
+	if info.Error != "" {
+		return &info, nil
+	}
 
 	if !assembly.Blocking {
 		return &info, err
@@ -274,6 +278,10 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 
 	var info AssemblyInfo
 	_, err := assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, &info)
+
+	if info.Error != "" {
+		return &info, nil
+	}
 
 	if !assembly.Blocking {
 		return &info, err
