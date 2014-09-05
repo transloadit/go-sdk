@@ -60,7 +60,7 @@ func TestAssembly(t *testing.T) {
 			t.Fatal("wrong field name")
 		}
 	} else if info.Uploads[1].Name == "lol_cat.jpg" {
-				if info.Uploads[1].Field != "image" {
+		if info.Uploads[1].Field != "image" {
 			t.Fatal("wrong field name")
 		}
 	} else {
