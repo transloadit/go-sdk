@@ -287,7 +287,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	_, err := assembly.client.request("POST", "assemblies/"+assemblyId+"/replay", options, &info)
+	_, err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
 
 	if info.Error != "" {
 		return &info, nil
