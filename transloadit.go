@@ -92,6 +92,8 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 
 func (client *Client) doRequest(req *http.Request, result interface{}) (Response, error) {
 
+	req.Header.Set("User-Agent", "Transloadit Go SDK v1")
+
 	res, err := client.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed execute http request: %s", err)

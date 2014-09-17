@@ -67,6 +67,10 @@ func TestAssembly(t *testing.T) {
 		t.Fatal("lol_cat.jpg not found in uploads")
 	}
 
+	if info.ClientAgent != "Transloadit Go SDK v1" {
+		t.Fatal("wrong user agent")
+	}
+
 	assemblyId = info.AssemblyId
 	assemblyUrl = info.AssemblyUrl
 }
