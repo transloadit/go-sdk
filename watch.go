@@ -24,26 +24,28 @@ type WatchOptions struct {
 }
 
 type Watcher struct {
-	client     *Client
-	options    *WatchOptions
-	stopped    bool
-	Error      chan error
-	Done       chan *AssemblyInfo
-	Change     chan string
-	end        chan bool
-	lastEvents map[string]time.Time
+	client          *Client
+	options         *WatchOptions
+	stopped         bool
+	Error           chan error
+	Done            chan *AssemblyInfo
+	Change          chan string
+	end             chan bool
+	lastEvents      map[string]time.Time
+	processingFiles map[string]bool
 }
 
 func (client *Client) Watch(options *WatchOptions) *Watcher {
 
 	watcher := &Watcher{
-		client:     client,
-		options:    options,
-		Error:      make(chan error),
-		Done:       make(chan *AssemblyInfo),
-		Change:     make(chan string),
-		end:        make(chan bool),
-		lastEvents: make(map[string]time.Time),
+		client:          client,
+		options:         options,
+		Error:           make(chan error),
+		Done:            make(chan *AssemblyInfo),
+		Change:          make(chan string),
+		end:             make(chan bool),
+		lastEvents:      make(map[string]time.Time),
+		processingFiles: make(map[string]bool),
 	}
 
 	watcher.start()
@@ -103,6 +105,9 @@ func (watcher *Watcher) processFile(name string) {
 		return
 	}
 
+	// Add file to blacklist
+	watcher.processingFiles[name] = true
+
 	assembly := watcher.client.CreateAssembly()
 
 	if watcher.options.TemplateId != "" {
@@ -137,6 +142,7 @@ func (watcher *Watcher) processFile(name string) {
 			go func() {
 				watcher.downloadResult(stepName, index, result)
 				watcher.handleOriginalFile(name)
+				delete(watcher.processingFiles, name)
 				watcher.Done <- info
 			}()
 		}
@@ -208,6 +214,10 @@ func (watcher *Watcher) startWatcher() {
 		case err := <-fsWatcher.Errors:
 			watcher.error(err)
 		case evt := <-fsWatcher.Events:
+			// Ignore the event if the file is currently processed
+			if _, ok := watcher.processingFiles[evt.Name]; ok {
+				return
+			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
 				watcher.lastEvents[evt.Name] = time.Now()
 			}
