@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/transloadit/go-sdk"
 	"log"
+	"os"
 )
 
 var AuthKey string
@@ -23,6 +24,14 @@ func init() {
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
 
 	flag.Parse()
+
+	if env := os.Getenv("TRANSLOADIT_KEY"); AuthKey == "" {
+		AuthKey = env
+	}
+
+	if env := os.Getenv("TRANSLOADIT_SECRET"); AuthSecret == "" {
+		AuthSecret = env
+	}
 
 }
 
