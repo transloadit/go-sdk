@@ -10,4 +10,4 @@ install:
 	go get ./transloadify/
 
 .PHONY: \
-	test build
+	test build install
