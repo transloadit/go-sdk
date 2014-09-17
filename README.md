@@ -66,7 +66,7 @@ See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
 
 ## Command line interface
 
-The `transloadify` command provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) in the command line for simple watching and automated uploading and processing of files:
+As a **bonus** we ship a commonad line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it 
 
 ```sh
 # Use -h for more help
@@ -75,8 +75,13 @@ transloadify -h
 # Upload all files from ./input and process them using the steps defined in the template with the id 'tpl123id'.
 # Download the results and put them into ./output.
 # Watch the input directory to automatically upload all new files.
-transloadify -key=$AUTH_KEY -secret=$AUTH_SECRET \
-  -input="./input" -output="./output" -template="tpl123id" -watch
+TRANSLOADIT_KEY=abc123 \
+TRANSLOADIT_SECRET=abc123efg \
+./transloadify \
+  -input="./input" \
+  -output="./output" \
+  -template="tpl123id" \
+  -watch
 ```
 
 ### Installation
