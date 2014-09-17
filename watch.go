@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -19,6 +20,7 @@ type WatchOptions struct {
 	TemplateId string
 	NotifyUrl  string
 	Steps      map[string]map[string]interface{}
+	Preserve   bool
 }
 
 type Watcher struct {
@@ -134,6 +136,7 @@ func (watcher *Watcher) processFile(name string) {
 		for index, result := range results {
 			go func() {
 				watcher.downloadResult(stepName, index, result)
+				watcher.handleOriginalFile(name)
 				watcher.Done <- info
 			}()
 		}
@@ -205,12 +208,35 @@ func (watcher *Watcher) startWatcher() {
 		case err := <-fsWatcher.Errors:
 			watcher.error(err)
 		case evt := <-fsWatcher.Events:
-			watcher.lastEvents[evt.Name] = time.Now()
+			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
+				watcher.lastEvents[evt.Name] = time.Now()
+			}
 		}
+	}
+
+}
+
+func (watcher *Watcher) handleOriginalFile(name string) {
+
+	var err error
+	if watcher.options.Preserve {
+		_, file := path.Split(name)
+		err = os.Rename(name, watcher.options.Output+"/-original_0_"+basename(file))
+	} else {
+		err = os.Remove(name)
+	}
+
+	if err != nil {
+		watcher.error(err)
 	}
 
 }
 
 func (watcher *Watcher) error(err error) {
 	watcher.Error <- err
+}
+
+func basename(name string) string {
+	i := strings.LastIndex(name, string(os.PathSeparator))
+	return name[i+1:]
 }

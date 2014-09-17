@@ -23,6 +23,4 @@ _testmain.go
 *.test
 
 // Test files
-fixtures/output/resize_0_lol_cat.jpg
-fixtures/output/resize_0_mona_lisa.jpg
-fixtures/input/mona_lisa.jpg
+fixtures/**/*.jpg

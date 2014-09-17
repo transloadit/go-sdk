@@ -10,9 +10,13 @@ import (
 func TestWatch(t *testing.T) {
 
 	// Clean up testing environment
+	remove("./fixtures/input/lol_cat.jpg")
 	remove("./fixtures/input/mona_lisa.jpg")
 	remove("./fixtures/output/resize_0_lol_cat.jpg")
+	remove("./fixtures/output/-original_0_lol_cat.jpg")
 	remove("./fixtures/output/resize_0_mona_lisa.jpg")
+	remove("./fixtures/output/-original_0_mona_lisa.jpg")
+	copyFile("./fixtures/lol_cat.jpg", "./fixtures/input/lol_cat.jpg")
 
 	client := setup(t)
 
@@ -22,6 +26,7 @@ func TestWatch(t *testing.T) {
 		Output:     "./fixtures/output",
 		Steps:      make(map[string]map[string]interface{}),
 		Watch:      true,
+		Preserve:   true,
 	}
 
 	watcher := client.Watch(options)
@@ -43,6 +48,14 @@ func TestWatch(t *testing.T) {
 		t.Fatal("output file resize_0_lol_cat.jpg not created")
 	}
 
+	if !exists("./fixtures/output/-original_0_lol_cat.jpg") {
+		t.Fatal("output file -original_0_lol_cat.jpg not created")
+	}
+
+	if exists("./fixtures/input/lol_cat.jpg") {
+		t.Fatal("output file lol_cat.jpg not deleted")
+	}
+
 	go copyFile("./fixtures/mona_lisa.jpg", "./fixtures/input/mona_lisa.jpg")
 
 	changedFile := <-watcher.Change
@@ -57,6 +70,14 @@ func TestWatch(t *testing.T) {
 
 	if !exists("./fixtures/output/resize_0_mona_lisa.jpg") {
 		t.Fatal("output file resize_0_mona_lisa.jpg not created")
+	}
+
+	if !exists("./fixtures/output/-original_0_mona_lisa.jpg") {
+		t.Fatal("output file -original_0_mona_lisa.jpg not created")
+	}
+
+	if exists("./fixtures/input/mona_lisa.jpg") {
+		t.Fatal("output file mona_lisa.jpg not deleted")
 	}
 
 	watcher.Stop()
