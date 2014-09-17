@@ -27,6 +27,7 @@ type Watcher struct {
 	stopped    bool
 	Error      chan error
 	Done       chan *AssemblyInfo
+	Change     chan string
 	end        chan bool
 	lastEvents map[string]time.Time
 }
@@ -38,6 +39,7 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 		options:    options,
 		Error:      make(chan error),
 		Done:       make(chan *AssemblyInfo),
+		Change:     make(chan string),
 		end:        make(chan bool),
 		lastEvents: make(map[string]time.Time),
 	}
@@ -69,6 +71,7 @@ func (watcher *Watcher) Stop() {
 	watcher.end <- true
 	close(watcher.Done)
 	close(watcher.Error)
+	close(watcher.Change)
 	close(watcher.end)
 }
 
@@ -187,6 +190,7 @@ func (watcher *Watcher) startWatcher() {
 			for name, lastEvent := range watcher.lastEvents {
 				diff := now.Sub(lastEvent)
 				if diff > (time.Millisecond * 500) {
+					watcher.Change <- name
 					watcher.processFile(name)
 				}
 			}

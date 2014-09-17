@@ -3,6 +3,7 @@ package transloadit
 import (
 	"io"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -43,6 +44,11 @@ func TestWatch(t *testing.T) {
 	}
 
 	go copyFile("./fixtures/mona_lisa.jpg", "./fixtures/input/mona_lisa.jpg")
+
+	changedFile := <-watcher.Change
+	if changedFile == filepath.ToSlash("fixtures/input/mona_lisa.jpg") {
+		t.Fatal("wrong changed file name")
+	}
 
 	info = <-watcher.Done
 	if info.Uploads[0].Name != "mona_lisa.jpg" {
