@@ -13,6 +13,7 @@ var Input string
 var Output string
 var TemplateId string
 var Watch bool
+var Preserve bool
 
 func init() {
 
@@ -22,6 +23,7 @@ func init() {
 	flag.StringVar(&Output, "output", "", "Output directory")
 	flag.StringVar(&TemplateId, "template", "", "Template's id to create assemblies with")
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
+	flag.BoolVar(&Preserve, "preserve", true, "Move input file as original into output directory")
 
 	flag.Parse()
 
@@ -73,6 +75,7 @@ func main() {
 		Output:     Output,
 		Watch:      Watch,
 		TemplateId: TemplateId,
+		Preserve:   Preserve,
 	}
 
 	watcher := client.Watch(options)
