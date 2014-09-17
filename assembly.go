@@ -21,7 +21,7 @@ type Assembly struct {
 type upload struct {
 	Field  string
 	Name   string
-	Reader io.Reader
+	Reader io.ReadCloser
 }
 
 type AssemblyReplay struct {
@@ -119,7 +119,7 @@ func (client *Client) CreateAssembly() *Assembly {
 }
 
 // Add another reader to upload later.
-func (assembly *Assembly) AddReader(field, name string, reader io.Reader) {
+func (assembly *Assembly) AddReader(field, name string, reader io.ReadCloser) {
 	assembly.readers = append(assembly.readers, &upload{
 		Field:  field,
 		Name:   name,
@@ -184,6 +184,11 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		}
 
 		_, err = io.Copy(part, reader.Reader)
+		if err != nil {
+			return nil, fmt.Errorf("unable to create upload request: %s", err)
+		}
+
+		err = reader.Reader.Close()
 		if err != nil {
 			return nil, fmt.Errorf("unable to create upload request: %s", err)
 		}
