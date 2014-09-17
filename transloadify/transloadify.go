@@ -83,7 +83,7 @@ func main() {
 	for {
 		select {
 		case err := <-watcher.Error:
-			log.Fatal(err)
+			log.Printf("error: %s", err)
 		case file := <-watcher.Change:
 			log.Printf("Detected change for '%s'. Starting conversion...", file)
 		case info := <-watcher.Done:
