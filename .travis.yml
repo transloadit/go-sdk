@@ -30,6 +30,9 @@ notifications:
 
 env:
   global:
-  - secure: gyhp4hcFDjTlPw2sFv7lK8szAMklF7YE1MOZBuwIfQJBiT2VlQ1IpQe+oC+lcEMdoL9ZomD1BfBQaA1s0QLXkcbHEaB/LCWn5/vLheJgqANJwO4Wllymzcws4+hC0s2xx0E16K8eLkmxA7s+ybwfjZdT+5ZbVc8/wTT/yC5Yfew=
-  - secure: jGgQwD5gfeVx6o4k7SJMGJZNkN7KMvYlnclBhzNdEJUtk433T4FfKCt23A/sfCuqtX49EulryKufYwe3gbWpan2nXJny8QdJq7YizdZ5qULcYm0cMqg4u5kuQ2nUwEj94dpWwEn7isLck38+j4jWCtKmeNa3rJfKG4J4r9tjaXA=
-  - secure: wGKrsYBSuI4NhxcveqjQGCuY1Jcrh6iF59FEZS8ipWVSIqp2sMQU3K7LqgeUVnyCqXT0LsuLFMPhKDHc8My+aFno85jrmkJo7+gvBnCQC/f5/7Ee3r4LdEgmv4dIRrsItYir/ez/KIQ2BtynWEdLk8/afgNCOF9IjvtX6XneDYg=
+    # COVERALLS_TOKEN
+    - secure: wGKrsYBSuI4NhxcveqjQGCuY1Jcrh6iF59FEZS8ipWVSIqp2sMQU3K7LqgeUVnyCqXT0LsuLFMPhKDHc8My+aFno85jrmkJo7+gvBnCQC/f5/7Ee3r4LdEgmv4dIRrsItYir/ez/KIQ2BtynWEdLk8/afgNCOF9IjvtX6XneDYg=
+    # TRANSLOADIT_KEY
+    - secure: chRxpyqy+3MH98lIo+StQAsSHtAirQfD5yguOmmUet2gXeQmW1r4/Bfyvd3VN15DVGMgWlB6I5oKEwVNJp28DWrlBhXM+U80fQGiUwVVuvXUnnDFJGbp7WJSYJs5XX4vHtWN148kv6lQSOHBVRE0HBn9vTmOIYYJqcUNOfZNlJQ=
+    # TRANSLOADIT_SECRET
+    - secure: GfSX6bizEA+D8S6kEDbm5uZNvDQc1KEEvqZ5E0a8erNUWwswf7vTzLHIq6qcY80i+FlmBIEZ5rEQxaWi73bSyjb4oPnaOKkyzMPqTVNxScwBLDOXUeSHzROVYCBjIfZw43gr4fzcezPtzy5wgFtcqEClImO1pLN5mUGcSTsyQzI=
