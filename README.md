@@ -14,7 +14,7 @@ options.AuthKey = "AUTH_KEY"
 options.AuthSecret = "AUTH_SECRET"
 client, err := transloadit.NewClient(&options)
 if err != nil {
-	panic(err)
+    panic(err)
 }
 
 // Initialize new assembly
@@ -22,7 +22,7 @@ assembly := client.CreateAssembly()
 
 file, err := os.Open("../../fixtures/lol_cat.jpg")
 if err != nil {
-	panic(err)
+    panic(err)
 }
 
 // Add an io.Reader to upload
@@ -30,11 +30,11 @@ assembly.AddReader("image", "lol_cat.jpg", file)
 
 // Add instructions, e.g. resize image to 75x75px
 assembly.AddStep("resize", map[string]interface{}{
-	"robot":           "/image/resize",
-	"width":           75,
-	"height":          75,
-	"resize_strategy": "pad",
-	"background":      "#000000",
+    "robot":           "/image/resize",
+    "width":           75,
+    "height":          75,
+    "resize_strategy": "pad",
+    "background":      "#000000",
 })
 
 // Wait until transloadit is done processing all uploads
@@ -44,7 +44,7 @@ assembly.Blocking = true
 // Start the upload
 info, err := assembly.Upload()
 if err != nil {
-	panic(err)
+    panic(err)
 }
 
 fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
@@ -54,7 +54,7 @@ For more example, take a look at [`examples/`](https://github.com/transloadit/go
 
 ## Installation
 
-```sh
+```bash
 go get github.com/transloadit/go-sdk
 ```
 
@@ -68,7 +68,7 @@ See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
 
 As a **bonus** we ship a commonad line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it 
 
-```sh
+```bash
 # Use -h for more help
 transloadify -h
 
@@ -94,19 +94,44 @@ Use [gobuild.io](http://gobuild.io/download/github.com/transloadit/go-sdk/transl
 
 **go get**
 
-```sh
+```bash
 go get github.com/transloadit/go-sdk/transloadify
 
 # Use the binary
 $GOPATH/bin/transloadify -h
 ```
 
-**Github**
+## Development
 
-```sh
-git clone https://github.com/transloadit/go-sdk.git
-cd go-sdk
-make build
+If you want to get into Transloadit Go SDK or Transloadify development, here are the steps:
+
+### Set up Go
+
+If you haven't already, [download Go](http://golang.org/dl/) for your platform.
+
+### Paths
+
+You [don't need GOROOT](http://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-)
+
+```bash
+unset GOROOT
+```
+
+Set `GOPATH` to your projects directory, e.g.:
+
+```bash
+export GOPATH=~/go
+```
+
+### Get the SDK & Dependencies
+
+```bash
+mkdir -p $GOPATH/src/github.com/transloadit && \
+cd $_ && \
+git clone https://github.com/transloadit/go-sdk.git && \
+cd go-sdk && \
+go get github.com/transloadit/go-sdk/transloadify && \
+make build && \
 ./transloadify -h
 ```
 
