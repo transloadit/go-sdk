@@ -25,28 +25,28 @@ type WatchOptions struct {
 }
 
 type Watcher struct {
-	client     *Client
-	options    *WatchOptions
-	stopped    bool
-	Error      chan error
-	Done       chan *AssemblyInfo
-	Change     chan string
-	end        chan bool
-	lastEvents map[string]time.Time
-	blacklist  map[string]bool
+	client       *Client
+	options      *WatchOptions
+	stopped      bool
+	Error        chan error
+	Done         chan *AssemblyInfo
+	Change       chan string
+	end          chan bool
+	recentWrites map[string]time.Time
+	blacklist    map[string]bool
 }
 
 func (client *Client) Watch(options *WatchOptions) *Watcher {
 
 	watcher := &Watcher{
-		client:     client,
-		options:    options,
-		Error:      make(chan error),
-		Done:       make(chan *AssemblyInfo),
-		Change:     make(chan string),
-		end:        make(chan bool),
-		lastEvents: make(map[string]time.Time),
-		blacklist:  make(map[string]bool),
+		client:       client,
+		options:      options,
+		Error:        make(chan error),
+		Done:         make(chan *AssemblyInfo),
+		Change:       make(chan string),
+		end:          make(chan bool),
+		recentWrites: make(map[string]time.Time),
+		blacklist:    make(map[string]bool),
 	}
 
 	watcher.start()
@@ -199,10 +199,10 @@ func (watcher *Watcher) startWatcher() {
 			time.Sleep(time.Second)
 			now := time.Now()
 
-			for name, lastEvent := range watcher.lastEvents {
+			for name, lastEvent := range watcher.recentWrites {
 				diff := now.Sub(lastEvent)
 				if diff > (time.Millisecond * 500) {
-					delete(watcher.lastEvents, name)
+					delete(watcher.recentWrites, name)
 					watcher.Change <- name
 					watcher.processFile(name)
 				}
@@ -224,7 +224,7 @@ func (watcher *Watcher) startWatcher() {
 				return
 			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
-				watcher.lastEvents[evt.Name] = time.Now()
+				watcher.recentWrites[evt.Name] = time.Now()
 			}
 		}
 	}
