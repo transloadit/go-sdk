@@ -10,8 +10,8 @@ func main() {
 
 	// Create client
 	options := transloadit.DefaultConfig
-	options.AuthKey = "AUTH_KEY"
-	options.AuthSecret = "AUTH_SECRET"
+	options.AuthKey = "TRANSLOADIT_KEY"
+	options.AuthSecret = "TRANSLOADIT_SECRET"
 	client, err := transloadit.NewClient(&options)
 	if err != nil {
 		panic(err)

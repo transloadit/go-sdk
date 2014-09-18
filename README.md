@@ -10,8 +10,8 @@ A Go SDK to make it easy to talk to the [Transloadit](https://transloadit.com) R
 ```go
 // Create client
 options := transloadit.DefaultConfig
-options.AuthKey = "AUTH_KEY"
-options.AuthSecret = "AUTH_SECRET"
+options.AuthKey = "TRANSLOADIT_KEY"
+options.AuthSecret = "TRANSLOADIT_SECRET"
 client, err := transloadit.NewClient(&options)
 if err != nil {
     panic(err)

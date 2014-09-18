@@ -45,8 +45,8 @@ func TestCreateClient(t *testing.T) {
 func setup(t *testing.T) *Client {
 
 	config := DefaultConfig
-	config.AuthKey = os.Getenv("AUTH_KEY")
-	config.AuthSecret = os.Getenv("AUTH_SECRET")
+	config.AuthKey = os.Getenv("TRANSLOADIT_KEY")
+	config.AuthSecret = os.Getenv("TRANSLOADIT_SECRET")
 
 	client, err := NewClient(&config)
 	if err != nil {
