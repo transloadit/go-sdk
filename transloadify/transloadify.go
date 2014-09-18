@@ -40,11 +40,11 @@ func init() {
 func main() {
 
 	if AuthKey == "" {
-		log.Fatal("No authKey defined")
+		log.Fatal("No authKey defined. Visit https://transloadit.com/accounts/credentials and set the TRANSLOADIT_KEY environment variable")
 	}
 
 	if AuthSecret == "" {
-		log.Fatal("No authSecret defined")
+		log.Fatal("No authSecret defined. Visit https://transloadit.com/accounts/credentials and set the TRANSLOADIT_SECRET environment variable")
 	}
 
 	if Output == "" {
