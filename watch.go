@@ -25,28 +25,28 @@ type WatchOptions struct {
 }
 
 type Watcher struct {
-	client          *Client
-	options         *WatchOptions
-	stopped         bool
-	Error           chan error
-	Done            chan *AssemblyInfo
-	Change          chan string
-	end             chan bool
-	lastEvents      map[string]time.Time
-	processingFiles map[string]bool
+	client     *Client
+	options    *WatchOptions
+	stopped    bool
+	Error      chan error
+	Done       chan *AssemblyInfo
+	Change     chan string
+	end        chan bool
+	lastEvents map[string]time.Time
+	blacklist  map[string]bool
 }
 
 func (client *Client) Watch(options *WatchOptions) *Watcher {
 
 	watcher := &Watcher{
-		client:          client,
-		options:         options,
-		Error:           make(chan error),
-		Done:            make(chan *AssemblyInfo),
-		Change:          make(chan string),
-		end:             make(chan bool),
-		lastEvents:      make(map[string]time.Time),
-		processingFiles: make(map[string]bool),
+		client:     client,
+		options:    options,
+		Error:      make(chan error),
+		Done:       make(chan *AssemblyInfo),
+		Change:     make(chan string),
+		end:        make(chan bool),
+		lastEvents: make(map[string]time.Time),
+		blacklist:  make(map[string]bool),
 	}
 
 	watcher.start()
@@ -108,7 +108,7 @@ func (watcher *Watcher) processFile(name string) {
 
 	// Add file to blacklist
 	log.Printf("Adding to blacklist: '%s'", name)
-	watcher.processingFiles[name] = true
+	watcher.blacklist[name] = true
 
 	assembly := watcher.client.CreateAssembly()
 
@@ -145,7 +145,7 @@ func (watcher *Watcher) processFile(name string) {
 				watcher.downloadResult(stepName, index, result)
 				watcher.handleOriginalFile(name)
 				log.Printf("Removing from blacklist: '%s'", name)
-				delete(watcher.processingFiles, name)
+				delete(watcher.blacklist, name)
 				watcher.Done <- info
 			}()
 		}
@@ -220,7 +220,7 @@ func (watcher *Watcher) startWatcher() {
 		case evt := <-fsWatcher.Events:
 			// Ignore the event if the file is currently processed
 			log.Printf("Checking blacklist: '%s'", evt.Name)
-			if _, ok := watcher.processingFiles[evt.Name]; ok == true {
+			if _, ok := watcher.blacklist[evt.Name]; ok == true {
 				return
 			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
