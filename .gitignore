@@ -26,3 +26,5 @@ bin/
 
 // Test files
 fixtures/**/*.jpg
+
+debug.sh
