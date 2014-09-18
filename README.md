@@ -130,9 +130,19 @@ mkdir -p $GOPATH/src/github.com/transloadit && \
 cd $_ && \
 git clone https://github.com/transloadit/go-sdk.git && \
 cd go-sdk && \
-go get github.com/transloadit/go-sdk/transloadify && \
-make build && \
-./transloadify -h
+go get github.com/transloadit/go-sdk/transloadify
+```
+
+### Run transloadify in debug mode
+
+```bash
+go run transloadify/transloadify.go -h
+```
+
+### Build
+
+```bash
+make build
 ```
 
 ## License
