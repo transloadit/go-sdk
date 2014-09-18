@@ -204,7 +204,7 @@ func (watcher *Watcher) startWatcher() {
 				if diff > (time.Millisecond * 500) {
 					delete(watcher.recentWrites, name)
 					watcher.Change <- name
-					watcher.processFile(name)
+					go watcher.processFile(name)
 				}
 			}
 
