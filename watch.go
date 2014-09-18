@@ -199,6 +199,7 @@ func (watcher *Watcher) startWatcher() {
 			for name, lastEvent := range watcher.lastEvents {
 				diff := now.Sub(lastEvent)
 				if diff > (time.Millisecond * 500) {
+					delete(watcher.lastEvents, name)
 					watcher.Change <- name
 					watcher.processFile(name)
 				}
