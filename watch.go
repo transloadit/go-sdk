@@ -6,6 +6,7 @@ import (
 	"gopkg.in/fsnotify.v1"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -106,6 +107,7 @@ func (watcher *Watcher) processFile(name string) {
 	}
 
 	// Add file to blacklist
+	log.Printf("Adding to blacklist: '%s'", name)
 	watcher.processingFiles[name] = true
 
 	assembly := watcher.client.CreateAssembly()
@@ -142,6 +144,7 @@ func (watcher *Watcher) processFile(name string) {
 			go func() {
 				watcher.downloadResult(stepName, index, result)
 				watcher.handleOriginalFile(name)
+				log.Printf("Removing from blacklist: '%s'", name)
 				delete(watcher.processingFiles, name)
 				watcher.Done <- info
 			}()
@@ -216,7 +219,8 @@ func (watcher *Watcher) startWatcher() {
 			watcher.error(err)
 		case evt := <-fsWatcher.Events:
 			// Ignore the event if the file is currently processed
-			if _, ok := watcher.processingFiles[evt.Name]; ok {
+			log.Printf("Checking blacklist: '%s'", evt.Name)
+			if _, ok := watcher.processingFiles[evt.Name]; ok == true {
 				return
 			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
