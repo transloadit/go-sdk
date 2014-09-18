@@ -66,7 +66,7 @@ See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
 
 ## Command line interface
 
-As a **bonus** we ship a commonad line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it 
+As a **bonus** we ship a commonad line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it
 
 ```bash
 # Use -h for more help
@@ -144,6 +144,28 @@ go run transloadify/transloadify.go -h
 ```bash
 make build
 ```
+
+### Release
+
+Depending on semver impact, any of the following will release a new version
+
+```bash
+make release bump=major
+make release bump=minor
+make release bump=patch
+```
+
+This means:
+
+ - Aborts unless working tree is clean
+ - Build to `./bin`
+ - Test
+ - Bumps specified semver part in `./VERSION`
+ - Commits the file with msg "Release v<version>"
+ - Creates a Git tag with this version
+ - Pushes commit & tag to GitHub
+ - Runs gobuild on this tag for *most* platforms, saving to `./builds`
+ - **TODO** Saves them to S3 as `transloadify-<paltform>-<arch>-<version>`
 
 ## License
 

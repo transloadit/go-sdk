@@ -7,11 +7,15 @@ build:
 	go build -o bin/transloadify transloadify/transloadify.go
 	bin/transloadify -h || true
 
-release: build test
-	#@todo Needs logic for semver tagging. Will now just use current tag
+release:
+	$(MAKE) build
+	$(MAKE) test
 	git status && echo "--> Please first commit your work" && false
-	git push || true
-	curl -L http://gobuild.io/github.com/transloadit/go-sdk/transloadify/$$(git describe --tags)/darwin/amd64 -o transloadify-darwin-amd64-$$(git describe --tags).zip
+	./scripts/bump.sh ./VERSION $(bump)
+	git commit ./VERSION -m "Release $$(cat VERSION)"
+	git tag $$(cat VERSION)
+	git push --tags || true
+	curl -L http://gobuild.io/github.com/transloadit/go-sdk/transloadify/$$(git describe --tags)/darwin/amd64 -o ./builds/transloadify-darwin-amd64-$$(git describe --tags).zip
 
 install:
 	go get ./transloadify/
