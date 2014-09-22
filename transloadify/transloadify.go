@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"github.com/transloadit/go-sdk"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -12,6 +14,7 @@ var AuthSecret string
 var Input string
 var Output string
 var TemplateId string
+var TemplateFile string
 var Watch bool
 var Preserve bool
 
@@ -22,6 +25,7 @@ func init() {
 	flag.StringVar(&Input, "input", ".", "Input directory")
 	flag.StringVar(&Output, "output", "", "Output directory")
 	flag.StringVar(&TemplateId, "template", "", "Template's id to create assemblies with")
+	flag.StringVar(&TemplateFile, "template-file", "", "Path to local file containing template JSON")
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
 	flag.BoolVar(&Preserve, "preserve", true, "Move input file as original into output directory")
 
@@ -51,11 +55,19 @@ func main() {
 		log.Fatal("No output directory defined")
 	}
 
-	if TemplateId == "" {
-		log.Fatal("No template id defined")
+	if TemplateId == "" && TemplateFile == "" {
+		log.Fatal("No template id or template file defined")
 	}
 
-	log.Printf("Converting all files in '%s' using template '%s' and putting the result into '%s'.", Input, TemplateId, Output)
+	log.Printf("Converting all files in '%s' and putting the result into '%s'.", Input, Output)
+
+	var steps map[string]map[string]interface{}
+	if TemplateId != "" {
+		log.Printf("Using template with id '%s'.", TemplateId)
+	} else if TemplateFile != "" {
+		steps = readJson(TemplateFile)
+		log.Printf("Using template file '%s' (read %d steps).", TemplateFile, len(steps))
+	}
 
 	if Watch {
 		log.Printf("Watching directory '%s' for changes...", Input)
@@ -76,6 +88,7 @@ func main() {
 		Watch:      Watch,
 		TemplateId: TemplateId,
 		Preserve:   Preserve,
+		Steps:      steps,
 	}
 
 	watcher := client.Watch(options)
@@ -90,5 +103,23 @@ func main() {
 			log.Printf("Successfully converted '%s'.", info.Uploads[0].Name)
 		}
 	}
+
+}
+
+func readJson(file string) map[string]map[string]interface{} {
+
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		log.Fatalf("Error reading template file: %s", err)
+	}
+
+	steps := make(map[string]map[string]interface{})
+
+	err = json.Unmarshal(content, &steps)
+	if err != nil {
+		log.Fatalf("Error parsing template file: %s", err)
+	}
+
+	return steps
 
 }

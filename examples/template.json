@@ -1,0 +1,13 @@
+{
+	"optimize": {
+		"png_tool": "optipng",
+		"robot": "/image/optimize"
+	},
+	"resize": {
+		"background": "#ff0000",
+		"height": 175,
+		"resize_strategy": "pad",
+		"robot": "/image/resize",
+		"width": 175
+	}
+}

@@ -84,6 +84,17 @@ TRANSLOADIT_SECRET=abc123efg \
   -watch
 ```
 
+Instead of using a template id you can also load the steps from a local template file using the `template-file` option (see [`examples/template.json`](examples/template.json`), for example):
+```bash
+TRANSLOADIT_KEY=abc123 \
+TRANSLOADIT_SECRET=abc123efg \
+./transloadify \
+  -input="./input" \
+  -output="./output" \
+  -template-file="./examples/template.json" \
+  -watch
+```
+
 ### Installation
 
 There are multiple way to obtain the `transloadify` binary:
