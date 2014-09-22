@@ -66,7 +66,7 @@ See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
 
 ## Command line interface
 
-As a **bonus** we ship a commonad line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it
+As a **bonus** we ship a command line tool: `transloadify` which provides the functionality of [`Client.Watch`](http://godoc.org/github.com/transloadit/go-sdk#Client.Watch) for simple watching and automated uploading and processing of files. This way you don't have to write a single line of code to get an existing folder converted, even when new files get added to it
 
 ```bash
 # Use -h for more help
