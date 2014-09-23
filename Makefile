@@ -7,7 +7,7 @@ build:
 	go build -o bin/transloadify transloadify/transloadify.go
 	bin/transloadify -h || true
 
-release:
+bump:
 	$(MAKE) build
 	$(MAKE) test
 	git status && echo "--> Please first commit your work" && false
@@ -15,7 +15,12 @@ release:
 	git commit ./VERSION -m "Release $$(cat VERSION)"
 	git tag $$(cat VERSION)
 	git push --tags || true
-	curl -L http://gobuild.io/github.com/transloadit/go-sdk/transloadify/$$(git describe --tags)/darwin/amd64 -o ./builds/transloadify-darwin-amd64-$$(git describe --tags).zip
+
+release:
+	cd build && rm *.zip || true
+	wget http://gobuild.io/github.com/transloadit/go-sdk/transloadify/$$(cat VERSION)/darwin/amd64 -O ./builds/transloadify-darwin-amd64-$$(cat VERSION).zip
+	cd builds && unzip -o *.zip && rm *.zip
+	aws s3 cp --acl public-read builds/transloadify s3://transloadify/transloadify-darwin-amd64-$$(cat VERSION)
 
 install:
 	go get ./transloadify/
@@ -23,5 +28,6 @@ install:
 .PHONY: \
 	test \
 	build \
+	bump \
 	release \
 	install

@@ -158,7 +158,10 @@ make build
 
 ### Release
 
-Depending on semver impact, any of the following will release a new version
+Releasing requires the [AWS Command Line Interface
+](http://aws.amazon.com/cli/) and write access to the `transloadify` S3 bucket, hence this can only be done by Transloadit's staff.
+
+Depending on [SemVer](http://semver.org/) impact, any of the following will release a new version
 
 ```bash
 make release bump=major
@@ -171,12 +174,13 @@ This means:
  - Aborts unless working tree is clean
  - Build to `./bin`
  - Test
- - Bumps specified semver part in `./VERSION`
+ - Bumps specified SemVer part in `./VERSION`
  - Commits the file with msg "Release v<version>"
  - Creates a Git tag with this version
  - Pushes commit & tag to GitHub
- - Runs gobuild on this tag for *most* platforms, saving to `./builds`
- - **TODO** Saves them to S3 as `transloadify-<paltform>-<arch>-<version>`
+ - Runs gobuild.io on this tag for *most* platforms, saving to `./builds`
+ - Saves them to S3 as `s3://transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://transloadify.s3.amazonaws.com/transloadify-darwin-amd64-v0.1.0
+ - Clears the `./builds` directory
 
 ## License
 
