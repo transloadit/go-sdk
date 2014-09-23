@@ -5,7 +5,8 @@ import (
 )
 
 type Template struct {
-	Name  string                            `json:"template_name"`
+	Name string `json:"template_name"`
+	// See AddStep for simple usage.
 	Steps map[string]map[string]interface{} `json:"template_content"`
 }
 

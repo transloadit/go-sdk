@@ -34,6 +34,10 @@ type Client struct {
 
 type Response map[string]interface{}
 
+// Options when retrieving a list.
+// Look at the documentation which properties are accepted
+// and to see their meaining, e.g. https://transloadit.com/docs/api-docs#retrieve-assembly-list
+// for listing assemblies.
 type ListOptions struct {
 	Page       int        `json:"page,omitempty"`
 	PageSize   int        `json:"pagesize,omitempty"`
@@ -45,7 +49,8 @@ type ListOptions struct {
 	AssemblyId string     `json:"assembly_id,omitempty"`
 	FromDate   *time.Time `json:"fromdate,omitempty"`
 	ToDate     *time.Time `json:"todate,omitempty"`
-	Auth       struct {
+	// For internal use only!
+	Auth struct {
 		Key     string `json:"key"`
 		Expires string `json:"expires"`
 	} `json:"auth"`

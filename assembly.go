@@ -10,12 +10,16 @@ import (
 )
 
 type Assembly struct {
-	client     *Client
-	NotifyUrl  string
+	client *Client
+	// Notify url to send a request to once the assembly finishes.
+	// See https://transloadit.com/docs#notifications.
+	NotifyUrl string
+	// Optional template id to use instead of adding steps.
 	TemplateId string
-	Blocking   bool
-	steps      map[string]map[string]interface{}
-	readers    []*upload
+	// Wait until the assembly completes (or is canceled).
+	Blocking bool
+	steps    map[string]map[string]interface{}
+	readers  []*upload
 }
 
 type upload struct {
@@ -25,9 +29,12 @@ type upload struct {
 }
 
 type AssemblyReplay struct {
-	assemblyId      string
-	client          *Client
-	NotifyUrl       string
+	assemblyId string
+	client     *Client
+	// Notify url to send a request to once the assembly finishes.
+	// See https://transloadit.com/docs#notifications.
+	NotifyUrl string
+	// Wait until the assembly completes (or is canceled).
 	Blocking        bool
 	reparseTemplate bool
 	steps           map[string]map[string]interface{}

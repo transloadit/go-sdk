@@ -15,27 +15,42 @@ import (
 )
 
 type WatchOptions struct {
-	Input      string
-	Output     string
-	Watch      bool
+	// Directory to watch files in (only if Watch is true)
+	Input string
+	// Directoy to put result files in
+	Output string
+	// Watch the input directory or just compile files in input directory
+	Watch bool
+	// Template id to convert files with
 	TemplateId string
-	NotifyUrl  string
-	Steps      map[string]map[string]interface{}
-	Preserve   bool
+	// Optional notify url for each assembly.
+	NotifyUrl string
+	// Instead of using templates you can define steps
+	Steps map[string]map[string]interface{}
+	// If true the original files will be copied in the output directoy with `-original_0_` prefix.
+	// If false input files will be deleted.
+	Preserve bool
 }
 
 type Watcher struct {
-	client       *Client
-	options      *WatchOptions
-	stopped      bool
-	Error        chan error
-	Done         chan *AssemblyInfo
+	client  *Client
+	options *WatchOptions
+	stopped bool
+	// Listen for errors
+	Error chan error
+	// Listen for completed assemblies
+	Done chan *AssemblyInfo
+	// Listen for file changes (only if Watch == true)
 	Change       chan string
 	end          chan bool
 	recentWrites map[string]time.Time
 	blacklist    map[string]bool
 }
 
+// Watch a directory for changes and convert all changes files and download the result.
+// It will create a new assembly for each file.
+// If the directory already contains some they are all converted.
+// See WatchOptions for possible configuration.
 func (client *Client) Watch(options *WatchOptions) *Watcher {
 
 	watcher := &Watcher{
@@ -65,6 +80,7 @@ func (watcher *Watcher) start() {
 
 }
 
+// Stop the watcher.
 func (watcher *Watcher) Stop() {
 
 	if watcher.stopped {
