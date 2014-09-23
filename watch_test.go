@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"fmt"
 )
 
 func TestWatch(t *testing.T) {
@@ -30,7 +31,7 @@ func TestWatch(t *testing.T) {
 	}
 
 	watcher := client.Watch(options)
-
+	fmt.Println(1)
 	go func() {
 		err, more := <-watcher.Error
 		if !more {
@@ -38,50 +39,50 @@ func TestWatch(t *testing.T) {
 		}
 		t.Fatal(err)
 	}()
-
+	fmt.Println(2)
 	info := <-watcher.Done
 	if info.Uploads[0].Name != "lol_cat.jpg" {
 		t.Fatal("wrong file uploaded")
 	}
-
+	fmt.Println(3)
 	if !exists("./fixtures/output/resize_0_lol_cat.jpg") {
 		t.Fatal("output file resize_0_lol_cat.jpg not created")
 	}
-
+	fmt.Println(4)
 	if !exists("./fixtures/output/-original_0_lol_cat.jpg") {
 		t.Fatal("output file -original_0_lol_cat.jpg not created")
 	}
-
+	fmt.Println(5)
 	if exists("./fixtures/input/lol_cat.jpg") {
 		t.Fatal("output file lol_cat.jpg not deleted")
 	}
-
+	fmt.Println(6)
 	go copyFile("./fixtures/mona_lisa.jpg", "./fixtures/input/mona_lisa.jpg")
-
+	fmt.Println(7)
 	changedFile := <-watcher.Change
 	if filepath.ToSlash(changedFile) != "fixtures/input/mona_lisa.jpg" {
 		t.Fatal("wrong changed file name")
 	}
-
+	fmt.Println(8)
 	info = <-watcher.Done
 	if info.Uploads[0].Name != "mona_lisa.jpg" {
 		t.Fatal("wrong file uploaded")
 	}
-
+	fmt.Println(9)
 	if !exists("./fixtures/output/resize_0_mona_lisa.jpg") {
 		t.Fatal("output file resize_0_mona_lisa.jpg not created")
 	}
-
+	fmt.Println(10)
 	if !exists("./fixtures/output/-original_0_mona_lisa.jpg") {
 		t.Fatal("output file -original_0_mona_lisa.jpg not created")
 	}
-
+	fmt.Println(11)
 	if exists("./fixtures/input/mona_lisa.jpg") {
 		t.Fatal("output file mona_lisa.jpg not deleted")
 	}
-
+	fmt.Println(12)
 	watcher.Stop()
-
+	fmt.Println(13)
 }
 
 func exists(filename string) bool {
