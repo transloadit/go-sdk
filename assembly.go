@@ -302,7 +302,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	_, err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
 
 	if info.Error != "" {
-		return &info, nil
+		return &info, fmt.Errorf("failed to start assembly replay: %s", info.Error)
 	}
 
 	if !assembly.Blocking {
