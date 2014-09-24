@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -231,7 +232,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 	}
 
 	if info.AssemblyId == "" {
-		t.Fatal("response doesn't contain assembly_id")
+		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
 	}
 
 	if !strings.Contains(info.Params, "64c11b20308811e4b5548d4f316c150f") {
