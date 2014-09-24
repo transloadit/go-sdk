@@ -237,7 +237,7 @@ func (watcher *Watcher) startWatcher() {
 			// Ignore the event if the file is currently processed
 			log.Printf("Checking blacklist: '%s'", evt.Name)
 			if _, ok := watcher.blacklist[evt.Name]; ok == true {
-				return
+				continue
 			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
 				watcher.recentWrites[evt.Name] = time.Now()
