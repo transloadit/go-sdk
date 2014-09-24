@@ -167,24 +167,21 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 		// Error appeared
 		return nil, err
 	}
-
 }
 
 func (assembly *Assembly) makeRequest() (*http.Request, error) {
-
 	// Get bored instance to upload files to
 	bored, err := assembly.client.getBoredInstance()
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
-	url := "http://api2-" + bored + "/assemblies"
 
+	url := "http://api2-" + bored + "/assemblies"
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
 	// Add files to upload
 	for _, reader := range assembly.readers {
-
 		part, err := writer.CreateFormFile(reader.Field, reader.Name)
 		if err != nil {
 			return nil, fmt.Errorf("unable to create upload request: %s", err)
@@ -245,23 +242,19 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	return req, nil
-
 }
 
 // Get information about an assembly using its url.
 func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
-
 	var info AssemblyInfo
 	_, err := client.request("GET", assemblyUrl, nil, &info)
-	return &info, err
 
+	return &info, err
 }
 
 // Cancel an assembly using its url.
 func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
-
 	return client.request("DELETE", assemblyUrl, nil, nil)
-
 }
 
 // Create a new AssemblyReplay instance.
@@ -285,7 +278,6 @@ func (assembly *AssemblyReplay) ReparseTemplate() {
 
 // Start the assembly replay.
 func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
-
 	options := map[string]interface{}{
 		"steps": assembly.steps,
 	}
@@ -311,7 +303,6 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 
 	// Assembly replay response doesn't contains assembly url
 	assemblyUrl := assembly.client.config.Endpoint + "/assemblies/" + info.AssemblyId
-
 	watcher := assembly.client.WaitForAssembly(assemblyUrl)
 
 	select {
@@ -322,13 +313,12 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 		// Error appeared
 		return nil, err
 	}
-
 }
 
 // List all assemblies matching the criterias.
 func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
-
 	var assemblies AssemblyList
 	_, err := client.listRequest("assemblies", options, &assemblies)
+
 	return &assemblies, err
 }
