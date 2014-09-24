@@ -11,9 +11,7 @@ var assemblyId string
 var assemblyUrl string
 
 func TestAssembly(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.CreateAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
@@ -77,7 +75,6 @@ func TestAssembly(t *testing.T) {
 }
 
 func TestAssemblyFail(t *testing.T) {
-
 	config := DefaultConfig
 	config.AuthKey = "does not exist"
 	config.AuthSecret = "does not matter"
@@ -112,9 +109,7 @@ func TestAssemblyFail(t *testing.T) {
 }
 
 func TestAssemblyBlocking(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.CreateAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
@@ -153,9 +148,7 @@ func TestAssemblyBlocking(t *testing.T) {
 }
 
 func TestGetAssembly(t *testing.T) {
-
 	client := setup(t)
-
 	assembly, err := client.GetAssembly(assemblyUrl)
 	if err != nil {
 		t.Fatal(err)
@@ -168,13 +161,10 @@ func TestGetAssembly(t *testing.T) {
 	if assembly.AssemblyUrl != assemblyUrl {
 		t.Fatal("assembly urls don't match")
 	}
-
 }
 
 func TestReplayAssembly(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.ReplayAssembly(assemblyId)
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
@@ -192,13 +182,10 @@ func TestReplayAssembly(t *testing.T) {
 	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
 	}
-
 }
 
 func TestReplayAssemblyBlocking(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.ReplayAssembly(assemblyId)
 
 	assembly.Blocking = true
@@ -211,13 +198,10 @@ func TestReplayAssemblyBlocking(t *testing.T) {
 	if info.Ok != "ASSEMBLY_COMPLETED" {
 		t.Fatal("wrong status code returned")
 	}
-
 }
 
 func TestAssemblyUsingTemplate(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.CreateAssembly()
 
 	assembly.TemplateId = "64c11b20308811e4b5548d4f316c150f"
@@ -237,9 +221,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 }
 
 func TestCancelAssembly(t *testing.T) {
-
 	client := setup(t)
-
 	assembly := client.CreateAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
@@ -260,11 +242,9 @@ func TestCancelAssembly(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 }
 
 func TestListAssemblies(t *testing.T) {
-
 	client := setup(t)
 
 	assemblies, err := client.ListAssemblies(&ListOptions{
@@ -285,5 +265,4 @@ func TestListAssemblies(t *testing.T) {
 	if assemblies.Assemblies[0].AssemblyId == "" {
 		t.Fatal("wrong template name")
 	}
-
 }
