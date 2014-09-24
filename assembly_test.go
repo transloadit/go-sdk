@@ -104,15 +104,11 @@ func TestAssemblyFail(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	info, err := assembly.Upload()
-	if err != nil {
-		t.Fatal(err)
+	_, err = assembly.Upload()
+	if fmt.Sprintf("%s", err) != "failed to create assembly: GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
+		fmt.Printf("%v", err)
+		t.Fatal("reponse doesn't contain the error message GET_ACCOUNT_UNKNOWN_AUTH_KEY")
 	}
-
-	if info.Error != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
-		t.Fatal("reponse doesn't contain error message")
-	}
-
 }
 
 func TestAssemblyBlocking(t *testing.T) {
