@@ -10,6 +10,13 @@ type Template struct {
 	Steps map[string]map[string]interface{} `json:"template_content"`
 }
 
+type templateGetResponse struct {
+	Name    string `json:"template_name"`
+	Content struct {
+		Steps map[string]map[string]interface{} `json:"steps"`
+	} `json:"template_content"`
+}
+
 type TemplateList struct {
 	Templates []TemplateListItem `json:"items"`
 	Count     int                `json:"count"`
@@ -32,10 +39,11 @@ func NewTemplate(name string) *Template {
 // Save the template.
 func (client *Client) CreateTemplate(template *Template) (string, error) {
 
-	// Create signature
 	content := map[string]interface{}{
-		"name":     template.Name,
-		"template": template.Steps,
+		"name": template.Name,
+		"template": map[string]interface{}{
+			"steps": template.Steps,
+		},
 	}
 
 	res, err := client.request("POST", "templates", content, nil)
@@ -50,11 +58,15 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 // Get information about a template using its id.
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
 
-	var template Template
-	_, err := client.request("GET", "templates/"+templateId, nil, &template)
+	var templateGet templateGetResponse
+	_, err := client.request("GET", "templates/"+templateId, nil, &templateGet)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get template: %s", err)
 	}
+
+	var template Template
+	template.Name = templateGet.Name
+	template.Steps = templateGet.Content.Steps
 
 	return &template, nil
 }
@@ -80,8 +92,10 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 
 	// Create signature
 	content := map[string]interface{}{
-		"name":     newTemplate.Name,
-		"template": newTemplate.Steps,
+		"name": newTemplate.Name,
+		"template": map[string]interface{}{
+			"steps": newTemplate.Steps,
+		},
 	}
 
 	_, err := client.request("PUT", "templates/"+templateId, content, nil)
