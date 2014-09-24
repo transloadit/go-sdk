@@ -143,14 +143,14 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 	req, err := assembly.makeRequest()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create assembly: %s", err)
+		return nil, fmt.Errorf("failed to create assembly request: %s", err)
 	}
 
 	var info AssemblyInfo
 	_, err = assembly.client.doRequest(req, &info)
 
 	if info.Error != "" {
-		return &info, nil
+		return &info, fmt.Errorf("failed to create assembly: %s", info.Error)
 	}
 
 	if !assembly.Blocking {
