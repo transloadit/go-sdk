@@ -105,8 +105,8 @@ func TestAssemblyFail(t *testing.T) {
 	})
 
 	info, err := assembly.Upload()
-	if err != nil {
-		t.Fatal(err)
+	if err == nil {
+		t.Fatal("no error returned")
 	}
 
 	if info.Error != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
