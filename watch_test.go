@@ -1,11 +1,11 @@
 package transloadit
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"testing"
-	"fmt"
 )
 
 func TestWatch(t *testing.T) {
