@@ -201,10 +201,11 @@ func TestReplayAssemblyBlocking(t *testing.T) {
 }
 
 func TestAssemblyUsingTemplate(t *testing.T) {
+	setupTemplates(t)
 	client := setup(t)
 	assembly := client.CreateAssembly()
 
-	assembly.TemplateId = "64c11b20308811e4b5548d4f316c150f"
+	assembly.TemplateId = templateIdOptimizeResize
 
 	info, err := assembly.Upload()
 	if err != nil {
@@ -215,7 +216,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
 	}
 
-	if !strings.Contains(info.Params, "64c11b20308811e4b5548d4f316c150f") {
+	if !strings.Contains(info.Params, templateIdOptimizeResize) {
 		t.Fatal("template id not as parameter submitted")
 	}
 }

@@ -10,7 +10,7 @@ func TestCreateTemplate(t *testing.T) {
 
 	client := setup(t)
 
-	template := NewTemplate("go-sdk-test")
+	template := NewTemplate("go-sdk-test-create-template")
 
 	template.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
@@ -45,7 +45,8 @@ func TestGetTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if template.Name != "go-sdk-test" {
+
+	if template.Name != "go-sdk-test-create-template" {
 		t.Fatal("wrong template name")
 	}
 	if _, found := template.Steps["resize"]; !found {
@@ -95,6 +96,7 @@ func TestDeleteTemplate(t *testing.T) {
 
 func TestListTemplates(t *testing.T) {
 
+	setupTemplates(t)
 	client := setup(t)
 
 	templates, err := client.ListTemplates(&ListOptions{
@@ -104,7 +106,7 @@ func TestListTemplates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(templates.Templates) < 3 {
+	if len(templates.Templates) == 0 {
 		t.Fatal("wrong number of templates")
 	}
 

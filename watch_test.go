@@ -19,10 +19,11 @@ func TestWatch(t *testing.T) {
 	remove("./fixtures/output/-original_0_mona_lisa.jpg")
 	copyFile("./fixtures/lol_cat.jpg", "./fixtures/input/lol_cat.jpg")
 
+	setupTemplates(t)
 	client := setup(t)
 
 	options := &WatchOptions{
-		TemplateId: "68302e702fbd11e4b5fb01f025693443",
+		TemplateId: templateIdOptimizeResize,
 		Input:      "./fixtures/input",
 		Output:     "./fixtures/output",
 		Steps:      make(map[string]map[string]interface{}),
