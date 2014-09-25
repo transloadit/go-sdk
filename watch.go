@@ -9,9 +9,12 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 	"time"
 )
+
+var sanitizeRe = regexp.MustCompile(`[^a-zA-Z0-9\-\_\.]`)
 
 type WatchOptions struct {
 	// Directory to watch files in (only if Watch is true)
@@ -167,7 +170,7 @@ func (watcher *Watcher) processFile(name string) {
 
 func (watcher *Watcher) downloadResult(stepName string, index int, result *FileInfo) {
 
-	fileName := fmt.Sprintf("%s_%d_%s", stepName, index, result.Name)
+	fileName := sanitizeRe.ReplaceAllString(fmt.Sprintf("%s_%d_%s", stepName, index, result.Name), "-")
 
 	resp, err := http.Get(result.Url)
 	if err != nil {

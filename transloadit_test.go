@@ -74,13 +74,15 @@ func setupTemplates(t *testing.T) {
 	template.AddStep("optimize", map[string]interface{}{
 		"png_tool": "optipng",
 		"robot":    "/image/optimize",
+		"use":      ":original",
 	})
-	template.AddStep("resize", map[string]interface{}{
+	template.AddStep("image/resize", map[string]interface{}{
 		"background":      "#000000",
 		"height":          75,
 		"resize_strategy": "pad",
 		"robot":           "/image/resize",
 		"width":           75,
+		"use":             "optimize",
 	})
 
 	id, err := client.CreateTemplate(template)

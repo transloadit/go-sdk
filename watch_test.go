@@ -12,9 +12,9 @@ func TestWatch(t *testing.T) {
 	// Clean up testing environment
 	remove("./fixtures/input/lol_cat.jpg")
 	remove("./fixtures/input/mona_lisa.jpg")
-	remove("./fixtures/output/resize_0_lol_cat.jpg")
+	remove("./fixtures/output/image-resize_0_lol_cat.jpg")
 	remove("./fixtures/output/-original_0_lol_cat.jpg")
-	remove("./fixtures/output/resize_0_mona_lisa.jpg")
+	remove("./fixtures/output/image-resize_0_mona_lisa.jpg")
 	remove("./fixtures/output/-original_0_mona_lisa.jpg")
 	copyFile("./fixtures/lol_cat.jpg", "./fixtures/input/lol_cat.jpg")
 
@@ -45,8 +45,8 @@ func TestWatch(t *testing.T) {
 		t.Fatal("wrong file uploaded")
 	}
 
-	if !exists("./fixtures/output/resize_0_lol_cat.jpg") {
-		t.Fatal("output file resize_0_lol_cat.jpg not created")
+	if !exists("./fixtures/output/image-resize_0_lol_cat.jpg") {
+		t.Fatal("output file image-resize_0_lol_cat.jpg not created")
 	}
 
 	if !exists("./fixtures/output/-original_0_lol_cat.jpg") {
@@ -69,8 +69,8 @@ func TestWatch(t *testing.T) {
 		t.Fatal("wrong file uploaded")
 	}
 
-	if !exists("./fixtures/output/resize_0_mona_lisa.jpg") {
-		t.Fatal("output file resize_0_mona_lisa.jpg not created")
+	if !exists("./fixtures/output/image-resize_0_mona_lisa.jpg") {
+		t.Fatal("output file image-resize_0_mona_lisa.jpg not created")
 	}
 
 	if !exists("./fixtures/output/-original_0_mona_lisa.jpg") {
