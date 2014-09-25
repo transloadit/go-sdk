@@ -3,6 +3,7 @@ package transloadit
 import (
 	"errors"
 	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"gopkg.in/fsnotify.v1"
 	"io"
 	"io/ioutil"
@@ -54,6 +55,18 @@ type Watcher struct {
 // If the directory already contains some they are all converted.
 // See WatchOptions for possible configuration.
 func (client *Client) Watch(options *WatchOptions) *Watcher {
+
+	input, err := homedir.Expand(options.Input)
+	if err != nil {
+		panic(err)
+	}
+	options.Input = input
+
+	output, err := homedir.Expand(options.Output)
+	if err != nil {
+		panic(err)
+	}
+	options.Output = output
 
 	watcher := &Watcher{
 		client:       client,
