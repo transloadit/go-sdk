@@ -3,15 +3,12 @@
 #
 # This file:
 #
-#  - Releases the latest ./VERSION to the public
+#  - Compiles the latest ./VERSION for all platforms
+#  - Uploads them to S3
 #
 # Run as:
 #
-#  ./release.sh
-#
-# Returns:
-#
-#  OK
+#  ./release.sh # typically done by Makefile
 #
 # Authors:
 #
@@ -25,7 +22,7 @@ set -o nounset
 # Set magic variables for current FILE & DIR
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)"
-__file="${__dir}/$(basename "${0}")"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 
 
