@@ -128,10 +128,16 @@ TRANSLOADIT_SECRET=abc123efg \
 Transloadify will now start on boot, and you can control it like so:
 
 ```bash
-sudo stop transloadify
 sudo start transloadify
 sudo restart transloadify
+sudo stop transloadify
 sudo status transloadify
+```
+
+Logs will be written to syslog under the `transloadify` tag so you can redirect them using e.g. rsyslog, but by default they're accessible in the mail `syslog`
+
+```bash
+sudo tail -f /var/log/syslog
 ```
 
 ## Development
