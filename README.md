@@ -97,18 +97,15 @@ TRANSLOADIT_SECRET=abc123efg \
 
 ### Installation
 
-There are multiple way to obtain the `transloadify` binary:
-
-**Gobuild**
-
-Use [gobuild.io](http://gobuild.io/download/github.com/transloadit/go-sdk/transloadify) to select your OS and download a zipped version of the ready-to-use binary.
-
-**go get**
+Download the tranloadify binary
 
 ```bash
-go get github.com/transloadit/go-sdk/transloadify
+curl http://releases.transloadit.com/transloadify/transloadify-linux-amd64-latest \
+  -o ./transloadify && chmod 755 $_
+```
 
-# Use the binary
+```bash
+Use the binary
 $GOPATH/bin/transloadify -h
 ```
 
@@ -179,7 +176,7 @@ This means:
  - Creates a Git tag with this version
  - Pushes commit & tag to GitHub
  - Runs gobuild.io on this tag for *most* platforms, saving to `./builds`
- - Saves them to S3 as `s3://transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://transloadify.s3.amazonaws.com/transloadify-darwin-amd64-v0.1.0
+ - Saves them to S3 as `s3://releases.transloadit.com/transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-v0.1.0 and http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-latest
  - Clears the `./builds` directory
 
 ## License
