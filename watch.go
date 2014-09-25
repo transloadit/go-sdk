@@ -55,10 +55,10 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 	watcher := &Watcher{
 		client:       client,
 		options:      options,
-		Error:        make(chan error),
+		Error:        make(chan error, 1),
 		Done:         make(chan *AssemblyInfo),
 		Change:       make(chan string),
-		end:          make(chan bool),
+		end:          make(chan bool, 1),
 		recentWrites: make(map[string]time.Time),
 		blacklist:    make(map[string]bool),
 	}
@@ -194,12 +194,14 @@ func (watcher *Watcher) startWatcher() {
 	fsWatcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		watcher.error(err)
+		return
 	}
 
 	defer fsWatcher.Close()
 
 	if err = fsWatcher.Add(watcher.options.Input); err != nil {
 		watcher.error(err)
+		return
 	}
 
 	go func() {
