@@ -109,6 +109,25 @@ Use the binary
 $GOPATH/bin/transloadify -h
 ```
 
+### Daemonize
+
+To run transloadify in the background as a daemon on Linux, continuously monitoring a directory for new media, and converting it according to your wishes, you can use [systemd](http://blog.jorgenschaefer.de/2014/07/why-systemd.html).
+
+Systemd is going to replace SysV init scripts and Upstart, and all major Linux distributions either have already adopted it (RedHat) or are working on it (Debian/Ubuntu).
+
+Ubuntu is planning to ship systemd with 14.10, so until that time, please [manually install](https://wiki.ubuntu.com/systemd#systemd_-_An_alternative_boot_manager) it:
+
+```bash
+apt-get -qq install python-software-properties
+add-apt-repository ppa:pitti/systemd
+apt-get -qq update
+apt-get install systemd libpam-systemd systemd-ui
+
+
+```
+
+
+
 ## Development
 
 If you want to get into Transloadit Go SDK or Transloadify development, here are the steps:
