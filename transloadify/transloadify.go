@@ -3,10 +3,13 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"github.com/transloadit/go-sdk"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"text/template"
 )
 
@@ -50,19 +53,27 @@ func main() {
 		log.Fatal("No TRANSLOADIT_SECRET defined. Visit https://transloadit.com/accounts/credentials")
 	}
 
-	if Upstart {
-		upstartFile()
-		return
+	if Input == "" {
+		log.Fatal("No input directory defined")
 	}
+	Input = expandPath(Input)
 
 	if Output == "" {
 		log.Fatal("No output directory defined")
 	}
+	Output = expandPath(Output)
 
 	if TemplateId == "" && TemplateFile == "" {
 		log.Fatal("No template id or template file defined")
 	}
+	if TemplateFile != "" {
+		TemplateFile = expandPath(TemplateFile)
+	}
 
+	if Upstart {
+		upstartFile()
+		return
+	}
 	log.Printf("Converting all files in '%s' and putting the result into '%s'.", Input, Output)
 
 	var steps map[string]map[string]interface{}
@@ -133,6 +144,20 @@ type DaemonVars struct {
 	Secret   string
 }
 
+func expandPath(str string) string {
+	expanded, err := homedir.Expand(str)
+	if err != nil {
+		panic(err)
+	}
+
+	expanded, err = filepath.Abs(expanded)
+	if err != nil {
+		panic(err)
+	}
+
+	return expanded
+}
+
 func upstartFile() {
 	var buf string
 
@@ -160,17 +185,31 @@ script
   {{ .Cmd }} 2>&1"
 end script`
 
-	// log.Printf("%s", buf)
+	cmd := os.Args[0]
+	if Input != "" {
+		cmd += fmt.Sprintf(" -input \"%s\"", Input)
+	}
+	if Output != "" {
+		cmd += fmt.Sprintf(" -output \"%s\"", Output)
+	}
+	if TemplateId != "" {
+		cmd += fmt.Sprintf(" -template \"%s\"", TemplateId)
+	}
+	if TemplateFile != "" {
+		cmd += fmt.Sprintf(" -template-file \"%s\"", TemplateFile)
+	}
+	// Always use watch, otherwise a daemon makes no sense
+	cmd += fmt.Sprintf(" -watch")
 
 	t := template.New("upstart")
 	t, _ = t.Parse(buf)
 	daemonVars := DaemonVars{
 		Unixname: "transloadify",
 		Username: os.Getenv("USER"),
-		Cmd:      os.Args[0],
+		Cmd:      cmd,
 		Path:     os.Getenv("PATH"),
-		Key:      os.Getenv("TRANSLOADIT_KEY"),
-		Secret:   os.Getenv("TRANSLOADIT_SECRET"),
+		Key:      AuthKey,
+		Secret:   AuthSecret,
 	}
 
 	t.Execute(os.Stdout, daemonVars)
