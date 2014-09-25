@@ -111,22 +111,28 @@ $GOPATH/bin/transloadify -h
 
 ### Daemonize
 
-To run transloadify in the background as a daemon on Linux, continuously monitoring a directory for new media, and converting it according to your wishes, you can use [systemd](http://blog.jorgenschaefer.de/2014/07/why-systemd.html).
-
-Systemd is going to replace SysV init scripts and Upstart, and all major Linux distributions either have already adopted it (RedHat) or are working on it (Debian/Ubuntu).
-
-Ubuntu is planning to ship systemd with 14.10, so until that time, please [manually install](https://wiki.ubuntu.com/systemd#systemd_-_An_alternative_boot_manager) it:
+To run transloadify in the background as a daemon on Linux, continuously monitoring a directory for new media, and converting it according to your wishes, you can use a convenience argument that generates an [Upstart](http://upstart.ubuntu.com/) file:
 
 ```bash
-apt-get -qq install python-software-properties
-add-apt-repository ppa:pitti/systemd
-apt-get -qq update
-apt-get install systemd libpam-systemd systemd-ui
-
-
+TRANSLOADIT_KEY=abc123 \
+TRANSLOADIT_SECRET=abc123efg \
+./transloadify \
+  -input="./input" \
+  -output="./output" \
+  -template-file="./examples/imgresize.json" \
+  -watch \
+  -upstart \
+|sudo tee /etc/init/transloadify.conf
 ```
 
+Transloadify will now start on boot, and you can control it like so:
 
+```bash
+sudo stop transloadify
+sudo start transloadify
+sudo restart transloadify
+sudo status transloadify
+```
 
 ## Development
 
