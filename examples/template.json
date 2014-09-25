@@ -1,13 +1,15 @@
 {
 	"optimize": {
-		"png_tool": "optipng",
-		"robot": "/image/optimize"
+		"robot"   : "/image/optimize",
+		"use"     : ":original",
+		"png_tool": "pngquant"
 	},
 	"resize": {
-		"background": "#ff0000",
-		"height": 175,
+		"robot"          : "/image/resize",
+		"use"            : "optimize",
+		"background"     : "#ff0000",
+		"height"         : 175,
 		"resize_strategy": "pad",
-		"robot": "/image/resize",
-		"width": 175
+		"width"          : 175
 	}
 }
