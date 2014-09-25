@@ -21,7 +21,6 @@ var Preserve bool
 var Upstart bool
 
 func init() {
-
 	flag.StringVar(&AuthKey, "key", "", "Auth key")
 	flag.StringVar(&AuthSecret, "secret", "", "Auth secret")
 	flag.StringVar(&Input, "input", ".", "Input directory")
@@ -31,7 +30,6 @@ func init() {
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
 	flag.BoolVar(&Preserve, "preserve", true, "Move input file as original into output directory")
 	flag.BoolVar(&Upstart, "upstart", false, "Show an Upstart script for the specified config and exit")
-
 	flag.Parse()
 
 	if env := os.Getenv("TRANSLOADIT_KEY"); AuthKey == "" {
@@ -41,11 +39,9 @@ func init() {
 	if env := os.Getenv("TRANSLOADIT_SECRET"); AuthSecret == "" {
 		AuthSecret = env
 	}
-
 }
 
 func main() {
-
 	if AuthKey == "" {
 		log.Fatal("No TRANSLOADIT_KEY defined. Visit https://transloadit.com/accounts/credentials")
 	}
@@ -98,7 +94,6 @@ func main() {
 		Preserve:   Preserve,
 		Steps:      steps,
 	}
-
 	watcher := client.Watch(options)
 
 	for {
@@ -111,11 +106,9 @@ func main() {
 			log.Printf("Successfully converted '%s'.", info.Uploads[0].Name)
 		}
 	}
-
 }
 
 func readJson(file string) map[string]map[string]interface{} {
-
 	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatalf("Error reading template file: %s", err)
@@ -129,7 +122,6 @@ func readJson(file string) map[string]map[string]interface{} {
 	}
 
 	return steps
-
 }
 
 type DaemonVars struct {
