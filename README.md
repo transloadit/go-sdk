@@ -84,33 +84,49 @@ TRANSLOADIT_SECRET=abc123efg \
   -watch
 ```
 
-Instead of using a template id you can also load the steps from a local template file using the `template-file` option (see [`examples/template.json`](examples/template.json), for example):
+Instead of using a template id you can also load the steps from a local template file using the `template-file` option (see [`examples/imgresize.json`](examples/imgresize.json), for example):
 ```bash
 TRANSLOADIT_KEY=abc123 \
 TRANSLOADIT_SECRET=abc123efg \
 ./transloadify \
   -input="./input" \
   -output="./output" \
-  -template-file="./examples/template.json" \
+  -template-file="./examples/imgresize.json" \
   -watch
 ```
 
 ### Installation
 
-There are multiple way to obtain the `transloadify` binary:
-
-**Gobuild**
-
-Use [gobuild.io](http://gobuild.io/download/github.com/transloadit/go-sdk/transloadify) to select your OS and download a zipped version of the ready-to-use binary.
-
-**go get**
+Download the tranloadify binary
 
 ```bash
-go get github.com/transloadit/go-sdk/transloadify
+curl http://releases.transloadit.com/transloadify/transloadify-linux-amd64-latest \
+  -o ./transloadify && chmod 755 $_
+```
 
-# Use the binary
+```bash
+Use the binary
 $GOPATH/bin/transloadify -h
 ```
+
+### Daemonize
+
+To run transloadify in the background as a daemon on Linux, continuously monitoring a directory for new media, and converting it according to your wishes, you can use [systemd](http://blog.jorgenschaefer.de/2014/07/why-systemd.html).
+
+Systemd is going to replace SysV init scripts and Upstart, and all major Linux distributions either have already adopted it (RedHat) or are working on it (Debian/Ubuntu).
+
+Ubuntu is planning to ship systemd with 14.10, so until that time, please [manually install](https://wiki.ubuntu.com/systemd#systemd_-_An_alternative_boot_manager) it:
+
+```bash
+apt-get -qq install python-software-properties
+add-apt-repository ppa:pitti/systemd
+apt-get -qq update
+apt-get install systemd libpam-systemd systemd-ui
+
+
+```
+
+
 
 ## Development
 
@@ -179,7 +195,7 @@ This means:
  - Creates a Git tag with this version
  - Pushes commit & tag to GitHub
  - Runs gobuild.io on this tag for *most* platforms, saving to `./builds`
- - Saves them to S3 as `s3://transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://transloadify.s3.amazonaws.com/transloadify-darwin-amd64-v0.1.0
+ - Saves them to S3 as `s3://releases.transloadit.com/transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-v0.1.0 and http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-latest
  - Clears the `./builds` directory
 
 ## License

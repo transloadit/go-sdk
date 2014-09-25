@@ -7,7 +7,7 @@
 #
 # Run as:
 #
-#  ./bump.sh 0.0.0 patch
+#  ./bump.sh 0.0.0 patch # typically done by Makefile
 #
 # Returns:
 #
@@ -25,7 +25,7 @@ set -o nounset
 # Set magic variables for current FILE & DIR
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)"
-__file="${__dir}/$(basename "${0}")"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 
 
