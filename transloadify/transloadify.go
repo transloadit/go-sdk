@@ -30,7 +30,7 @@ func init() {
 	flag.StringVar(&TemplateFile, "template-file", "", "Path to local file containing template JSON")
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
 	flag.BoolVar(&Preserve, "preserve", true, "Move input file as original into output directory")
-	flag.BoolVar(&Upstart, "upstart", true, "Show an Upstart script for the specified config and exit")
+	flag.BoolVar(&Upstart, "upstart", false, "Show an Upstart script for the specified config and exit")
 
 	flag.Parse()
 
