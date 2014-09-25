@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"text/template"
 )
 
 var AuthKey string
@@ -17,6 +18,7 @@ var TemplateId string
 var TemplateFile string
 var Watch bool
 var Preserve bool
+var Upstart bool
 
 func init() {
 
@@ -28,6 +30,7 @@ func init() {
 	flag.StringVar(&TemplateFile, "template-file", "", "Path to local file containing template JSON")
 	flag.BoolVar(&Watch, "watch", false, "Watch input directory for changes")
 	flag.BoolVar(&Preserve, "preserve", true, "Move input file as original into output directory")
+	flag.BoolVar(&Upstart, "upstart", true, "Show an Upstart script for the specified config and exit")
 
 	flag.Parse()
 
@@ -44,11 +47,16 @@ func init() {
 func main() {
 
 	if AuthKey == "" {
-		log.Fatal("No authKey defined. Visit https://transloadit.com/accounts/credentials and set the TRANSLOADIT_KEY environment variable")
+		log.Fatal("No TRANSLOADIT_KEY defined. Visit https://transloadit.com/accounts/credentials")
 	}
 
 	if AuthSecret == "" {
-		log.Fatal("No authSecret defined. Visit https://transloadit.com/accounts/credentials and set the TRANSLOADIT_SECRET environment variable")
+		log.Fatal("No TRANSLOADIT_SECRET defined. Visit https://transloadit.com/accounts/credentials")
+	}
+
+	if Upstart {
+		upstartFile()
+		return
 	}
 
 	if Output == "" {
@@ -122,4 +130,56 @@ func readJson(file string) map[string]map[string]interface{} {
 
 	return steps
 
+}
+
+type DaemonVars struct {
+	Unixname string
+	Username string
+	Cmd      string
+	Path     string
+	Key      string
+	Secret   string
+}
+
+func upstartFile() {
+	var buf string
+
+	buf = `description {{ .Unixname }}
+author      "kvz.io"
+
+start on (local-filesystems and net-device-up IFACE!=lo)
+stop on shutdown
+respawn
+respawn limit 20 5
+
+// Max open files are @ 1024 by default. Bit few.
+limit nofile 32768 32768
+
+script
+  set -e
+  mkfifo /tmp/{{ .Unixname }}-log-fifo
+  ( logger -t {{ .Unixname }} </tmp/{{ .Unixname }}-log-fifo & )
+  exec >/tmp/{{ .Unixname }}-log-fifo
+  rm /tmp/{{ .Unixname }}-log-fifo
+  exec bash -c "exec sudo -HEu{{ .Username }} env \
+    PATH={{ .Path }} \
+    TRANSLOADIT_KEY={{ .Key }} \
+    TRANSLOADIT_SECRET={{ .Secret }} \
+  {{ .Cmd }} 2>&1"
+end script`
+
+	// log.Printf("%s", buf)
+
+	t := template.New("upstart")
+	t, _ = t.Parse(buf)
+	daemonVars := DaemonVars{
+		Unixname: "transloadify",
+		Username: os.Getenv("USER"),
+		Cmd:      os.Args[0],
+		Path:     os.Getenv("PATH"),
+		Key:      os.Getenv("TRANSLOADIT_KEY"),
+		Secret:   os.Getenv("TRANSLOADIT_SECRET"),
+	}
+
+	t.Execute(os.Stdout, daemonVars)
 }
