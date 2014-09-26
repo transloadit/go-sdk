@@ -8,7 +8,6 @@ import (
 )
 
 func TestWatch(t *testing.T) {
-
 	// Clean up testing environment
 	remove("./fixtures/input/lol_cat.jpg")
 	remove("./fixtures/input/mona_lisa.jpg")
@@ -82,7 +81,6 @@ func TestWatch(t *testing.T) {
 	}
 
 	watcher.Stop()
-
 }
 
 func exists(filename string) bool {
@@ -97,7 +95,6 @@ func exists(filename string) bool {
 }
 
 func copyFile(src, dst string) {
-
 	in, err := os.Open(src)
 	if err != nil {
 		panic(err)
@@ -115,9 +112,7 @@ func copyFile(src, dst string) {
 }
 
 func remove(filename string) {
-
 	if err := os.RemoveAll(filename); err != nil {
 		panic(err)
 	}
-
 }

@@ -5,7 +5,6 @@ import (
 )
 
 func TestGetBoredInstance(t *testing.T) {
-
 	client := setup(t)
 
 	bored, err := client.getBoredInstance()
@@ -19,7 +18,6 @@ func TestGetBoredInstance(t *testing.T) {
 }
 
 func TestGetBoredInstanceFallback(t *testing.T) {
-
 	config := DefaultConfig
 	config.AuthKey = "auth_key"
 	config.AuthSecret = "auth_secret"

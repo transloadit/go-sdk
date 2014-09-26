@@ -7,7 +7,6 @@ import (
 var templateId string
 
 func TestCreateTemplate(t *testing.T) {
-
 	client := setup(t)
 
 	template := NewTemplate("go-sdk-test-create-template")
@@ -34,11 +33,9 @@ func TestCreateTemplate(t *testing.T) {
 	}
 
 	templateId = id
-
 }
 
 func TestGetTemplate(t *testing.T) {
-
 	client := setup(t)
 
 	template, err := client.GetTemplate(templateId)
@@ -58,7 +55,6 @@ func TestGetTemplate(t *testing.T) {
 }
 
 func TestEditTemplate(t *testing.T) {
-
 	client := setup(t)
 
 	template := NewTemplate("go-sdk-test-new")
@@ -86,7 +82,6 @@ func TestEditTemplate(t *testing.T) {
 }
 
 func TestDeleteTemplate(t *testing.T) {
-
 	client := setup(t)
 
 	if err := client.DeleteTemplate(templateId); err != nil {
@@ -95,7 +90,6 @@ func TestDeleteTemplate(t *testing.T) {
 }
 
 func TestListTemplates(t *testing.T) {
-
 	setupTemplates(t)
 	client := setup(t)
 
@@ -117,5 +111,4 @@ func TestListTemplates(t *testing.T) {
 	if templates.Templates[0].Name == "" {
 		t.Fatal("wrong template name")
 	}
-
 }

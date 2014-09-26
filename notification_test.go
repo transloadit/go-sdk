@@ -7,7 +7,6 @@ import (
 var notificationAssemblyId string
 
 func TestListNotifications(t *testing.T) {
-
 	client := setup(t)
 
 	notification, err := client.ListNotifications(&ListOptions{
@@ -33,7 +32,6 @@ func TestListNotifications(t *testing.T) {
 }
 
 func TestReplayNotification(t *testing.T) {
-
 	client := setup(t)
 
 	res, err := client.ReplayNotification(notificationAssemblyId, "http://google.com")

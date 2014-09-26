@@ -59,7 +59,6 @@ type ListOptions struct {
 // Create a new client using the provided configuration object.
 // An error will be returned if no AuthKey or AuthSecret is found in config.
 func NewClient(config *Config) (*Client, error) {
-
 	if config.AuthKey == "" {
 		return nil, errors.New("failed to create client: missing AuthKey")
 	}
@@ -74,11 +73,9 @@ func NewClient(config *Config) (*Client, error) {
 	}
 
 	return client, nil
-
 }
 
 func (client *Client) sign(params map[string]interface{}) (string, string, error) {
-
 	params["auth"] = map[string]string{
 		"key":     client.config.AuthKey,
 		"expires": getExpireString(),
@@ -92,11 +89,9 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 	hash := hmac.New(sha1.New, []byte(client.config.AuthSecret))
 	hash.Write(b)
 	return string(b), hex.EncodeToString(hash.Sum(nil)), nil
-
 }
 
 func (client *Client) doRequest(req *http.Request, result interface{}) (Response, error) {
-
 	req.Header.Set("User-Agent", "Transloadit Go SDK v1")
 
 	res, err := client.httpClient.Do(req)
@@ -128,7 +123,6 @@ func (client *Client) doRequest(req *http.Request, result interface{}) (Response
 }
 
 func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) (Response, error) {
-
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -170,7 +164,6 @@ func (client *Client) request(method string, path string, content map[string]int
 }
 
 func (client *Client) listRequest(path string, options *ListOptions, result interface{}) (Response, error) {
-
 	uri := client.config.Endpoint + "/" + path
 
 	options.Auth = struct {
@@ -204,14 +197,11 @@ func (client *Client) listRequest(path string, options *ListOptions, result inte
 	}
 
 	return client.doRequest(req, result)
-
 }
 
 func getExpireString() string {
-
 	// Expires in 1 hour
 	expires := time.Now().UTC().Add(time.Hour)
 	expiresStr := fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d+00:00", expires.Year(), expires.Month(), expires.Day(), expires.Hour(), expires.Minute(), expires.Second())
 	return string(expiresStr)
-
 }

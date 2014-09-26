@@ -11,7 +11,6 @@ var templatesSetup bool
 var templateIdOptimizeResize string
 
 func TestCreateClient(t *testing.T) {
-
 	client, err := NewClient(&DefaultConfig)
 	if client != nil {
 		t.Fatal("client should be nil")
@@ -43,11 +42,9 @@ func TestCreateClient(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-
 }
 
 func setup(t *testing.T) *Client {
-
 	config := DefaultConfig
 	config.AuthKey = os.Getenv("TRANSLOADIT_KEY")
 	config.AuthSecret = os.Getenv("TRANSLOADIT_SECRET")
@@ -58,11 +55,9 @@ func setup(t *testing.T) *Client {
 	}
 
 	return client
-
 }
 
 func setupTemplates(t *testing.T) {
-
 	if templatesSetup {
 		return
 	}
@@ -95,5 +90,4 @@ func setupTemplates(t *testing.T) {
 	templateIdOptimizeResize = id
 
 	templatesSetup = true
-
 }

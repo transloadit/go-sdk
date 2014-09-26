@@ -38,7 +38,6 @@ func NewTemplate(name string) *Template {
 
 // Save the template.
 func (client *Client) CreateTemplate(template *Template) (string, error) {
-
 	content := map[string]interface{}{
 		"name": template.Name,
 		"template": map[string]interface{}{
@@ -52,12 +51,10 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 	}
 
 	return res["template_id"].(string), nil
-
 }
 
 // Get information about a template using its id.
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
-
 	var templateGet templateGetResponse
 	_, err := client.request("GET", "templates/"+templateId, nil, &templateGet)
 	if err != nil {
@@ -78,7 +75,6 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 
 // Delete a template from the list.
 func (client *Client) DeleteTemplate(templateId string) error {
-
 	_, err := client.request("DELETE", "templates/"+templateId, nil, nil)
 	if err != nil {
 		return fmt.Errorf("unable to delete template: %s", err)
@@ -89,7 +85,6 @@ func (client *Client) DeleteTemplate(templateId string) error {
 
 // Update the name and content of the template defined using the id.
 func (client *Client) EditTemplate(templateId string, newTemplate *Template) error {
-
 	// Create signature
 	content := map[string]interface{}{
 		"name": newTemplate.Name,
@@ -100,14 +95,11 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 
 	_, err := client.request("PUT", "templates/"+templateId, content, nil)
 	return err
-
 }
 
 // List all templates matching the criterias.
 func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
-
 	var templates TemplateList
 	_, err := client.listRequest("templates", options, &templates)
 	return &templates, err
-
 }

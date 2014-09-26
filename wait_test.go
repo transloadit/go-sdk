@@ -5,7 +5,6 @@ import (
 )
 
 func TestWait(t *testing.T) {
-
 	client := setup(t)
 
 	assembly := client.CreateAssembly()
@@ -36,5 +35,4 @@ func TestWait(t *testing.T) {
 		// Error appeared
 		t.Fatal(err)
 	}
-
 }

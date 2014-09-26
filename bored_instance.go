@@ -7,7 +7,6 @@ import (
 )
 
 func (client *Client) getBoredInstance() (string, error) {
-
 	obj, err := client.request("GET", "instances/bored", nil, nil)
 	if err != nil {
 		return client.getCachedBoredInstance()
@@ -18,11 +17,9 @@ func (client *Client) getBoredInstance() (string, error) {
 	}
 
 	return obj["api2_host"].(string), nil
-
 }
 
 func (client *Client) getCachedBoredInstance() (string, error) {
-
 	obj, err := client.request("GET", "http://infra-"+client.config.Region+".transloadit.com.s3.amazonaws.com/cached_instances.json", nil, nil)
 	if err != nil {
 		return "", fmt.Errorf("failed to get cached bored instance: %s", err)
@@ -39,5 +36,4 @@ func (client *Client) getCachedBoredInstance() (string, error) {
 	}
 
 	return uploaders[index.Sign()].(string), nil
-
 }

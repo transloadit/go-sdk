@@ -3,10 +3,14 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"github.com/transloadit/go-sdk"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -50,19 +54,40 @@ func main() {
 		log.Fatal("No TRANSLOADIT_SECRET defined. Visit https://transloadit.com/accounts/credentials")
 	}
 
-	if Upstart {
-		upstartFile()
-		return
+	if Input == "" {
+		log.Fatal("No input directory defined")
+	}
+	Input = expandPath(Input)
+	if _, err := os.Stat(Input); os.IsNotExist(err) {
+		log.Fatal(fmt.Sprintf("Input directory does not exist: %s", Input))
 	}
 
 	if Output == "" {
 		log.Fatal("No output directory defined")
 	}
+	Output = expandPath(Output)
+	if _, err := os.Stat(Output); os.IsNotExist(err) {
+		log.Fatal(fmt.Sprintf("Output directory does not exist: %s", Output))
+	}
+
+	if Input == Output {
+		log.Fatal(fmt.Sprintf("Input and output directory are both: %s", Output))
+	}
 
 	if TemplateId == "" && TemplateFile == "" {
 		log.Fatal("No template id or template file defined")
 	}
+	if TemplateFile != "" {
+		TemplateFile = expandPath(TemplateFile)
+		if _, err := os.Stat(TemplateFile); os.IsNotExist(err) {
+			log.Fatal(fmt.Sprintf("Template file does not exist: %s", TemplateFile))
+		}
+	}
 
+	if Upstart {
+		upstartFile()
+		return
+	}
 	log.Printf("Converting all files in '%s' and putting the result into '%s'.", Input, Output)
 
 	var steps map[string]map[string]interface{}
@@ -129,8 +154,23 @@ type DaemonVars struct {
 	Username string
 	Cmd      string
 	Path     string
+	Gopath   string
 	Key      string
 	Secret   string
+}
+
+func expandPath(str string) string {
+	expanded, err := homedir.Expand(str)
+	if err != nil {
+		panic(err)
+	}
+
+	expanded, err = filepath.Abs(expanded)
+	if err != nil {
+		panic(err)
+	}
+
+	return expanded
 }
 
 func upstartFile() {
@@ -144,7 +184,7 @@ stop on shutdown
 respawn
 respawn limit 20 5
 
-// Max open files are @ 1024 by default. Bit few.
+# Max open files are @ 1024 by default. Bit few.
 limit nofile 32768 32768
 
 script
@@ -154,23 +194,44 @@ script
   exec >/tmp/{{ .Unixname }}-log-fifo
   rm /tmp/{{ .Unixname }}-log-fifo
   exec bash -c "exec sudo -HEu{{ .Username }} env \
-    PATH={{ .Path }} \
-    TRANSLOADIT_KEY={{ .Key }} \
-    TRANSLOADIT_SECRET={{ .Secret }} \
+  	GOPATH={{ .Gopath }} \
+  	PATH={{ .Path }} \
+  	TRANSLOADIT_KEY={{ .Key }} \
+  	TRANSLOADIT_SECRET={{ .Secret }} \
   {{ .Cmd }} 2>&1"
 end script`
 
-	// log.Printf("%s", buf)
+	cmd := os.Args[0]
+
+	if strings.HasPrefix(cmd, "/tmp/go-build") {
+		cmd = "go run /usr/src/go-sdk/transloadify/transloadify.go"
+	}
+
+	if Input != "" {
+		cmd += fmt.Sprintf(" -input \\\"%s\\\"", Input)
+	}
+	if Output != "" {
+		cmd += fmt.Sprintf(" -output \\\"%s\\\"", Output)
+	}
+	if TemplateId != "" {
+		cmd += fmt.Sprintf(" -template \\\"%s\\\"", TemplateId)
+	}
+	if TemplateFile != "" {
+		cmd += fmt.Sprintf(" -template-file \\\"%s\\\"", TemplateFile)
+	}
+	// Always use watch, otherwise a daemon makes no sense
+	cmd += fmt.Sprintf(" -watch")
 
 	t := template.New("upstart")
 	t, _ = t.Parse(buf)
 	daemonVars := DaemonVars{
 		Unixname: "transloadify",
 		Username: os.Getenv("USER"),
-		Cmd:      os.Args[0],
+		Cmd:      cmd,
 		Path:     os.Getenv("PATH"),
-		Key:      os.Getenv("TRANSLOADIT_KEY"),
-		Secret:   os.Getenv("TRANSLOADIT_SECRET"),
+		Gopath:   os.Getenv("GOPATH"),
+		Key:      AuthKey,
+		Secret:   AuthSecret,
 	}
 
 	t.Execute(os.Stdout, daemonVars)
