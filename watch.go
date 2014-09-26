@@ -55,7 +55,6 @@ type Watcher struct {
 // If the directory already contains some they are all converted.
 // See WatchOptions for possible configuration.
 func (client *Client) Watch(options *WatchOptions) *Watcher {
-
 	input, err := homedir.Expand(options.Input)
 	if err != nil {
 		panic(err)
@@ -82,22 +81,18 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 	watcher.start()
 
 	return watcher
-
 }
 
 func (watcher *Watcher) start() {
-
 	watcher.processDir()
 
 	if watcher.options.Watch {
 		go watcher.startWatcher()
 	}
-
 }
 
 // Stop the watcher.
 func (watcher *Watcher) Stop() {
-
 	if watcher.stopped {
 		return
 	}
@@ -112,7 +107,6 @@ func (watcher *Watcher) Stop() {
 }
 
 func (watcher *Watcher) processDir() {
-
 	files, err := ioutil.ReadDir(watcher.options.Input)
 	if err != nil {
 		watcher.error(err)
@@ -126,11 +120,9 @@ func (watcher *Watcher) processDir() {
 			go watcher.processFile(path.Join(input, file.Name()))
 		}
 	}
-
 }
 
 func (watcher *Watcher) processFile(name string) {
-
 	file, err := os.Open(name)
 	if err != nil {
 		watcher.error(err)
@@ -182,7 +174,6 @@ func (watcher *Watcher) processFile(name string) {
 }
 
 func (watcher *Watcher) downloadResult(stepName string, index int, result *FileInfo) {
-
 	fileName := sanitizeRe.ReplaceAllString(fmt.Sprintf("%s_%d_%s", stepName, index, result.Name), "-")
 
 	resp, err := http.Get(result.Url)
@@ -202,11 +193,9 @@ func (watcher *Watcher) downloadResult(stepName string, index int, result *FileI
 	defer out.Close()
 
 	io.Copy(out, resp.Body)
-
 }
 
 func (watcher *Watcher) startWatcher() {
-
 	fsWatcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		watcher.error(err)
@@ -238,7 +227,6 @@ func (watcher *Watcher) startWatcher() {
 					go watcher.processFile(name)
 				}
 			}
-
 		}
 	}()
 
@@ -258,11 +246,9 @@ func (watcher *Watcher) startWatcher() {
 			}
 		}
 	}
-
 }
 
 func (watcher *Watcher) handleOriginalFile(name string) {
-
 	var err error
 	if watcher.options.Preserve {
 		_, file := path.Split(name)
@@ -274,7 +260,6 @@ func (watcher *Watcher) handleOriginalFile(name string) {
 	if err != nil {
 		watcher.error(err)
 	}
-
 }
 
 func (watcher *Watcher) error(err error) {
