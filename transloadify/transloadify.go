@@ -1,15 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"github.com/transloadit/go-sdk"
-	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 	"text/template"
 )
@@ -23,6 +19,7 @@ var TemplateFile string
 var Watch bool
 var Preserve bool
 var Upstart bool
+var watcher *transloadit.Watcher
 
 func init() {
 	flag.StringVar(&AuthKey, "key", "", "Auth key")
@@ -57,49 +54,13 @@ func main() {
 	if Input == "" {
 		log.Fatal("No input directory defined")
 	}
-	Input = expandPath(Input)
-	if _, err := os.Stat(Input); os.IsNotExist(err) {
-		log.Fatal(fmt.Sprintf("Input directory does not exist: %s", Input))
-	}
 
 	if Output == "" {
 		log.Fatal("No output directory defined")
 	}
-	Output = expandPath(Output)
-	if _, err := os.Stat(Output); os.IsNotExist(err) {
-		log.Fatal(fmt.Sprintf("Output directory does not exist: %s", Output))
-	}
-
-	if Input == Output {
-		log.Fatal(fmt.Sprintf("Input and output directory are both: %s", Output))
-	}
 
 	if TemplateId == "" && TemplateFile == "" {
 		log.Fatal("No template id or template file defined")
-	}
-	if TemplateFile != "" {
-		TemplateFile = expandPath(TemplateFile)
-		if _, err := os.Stat(TemplateFile); os.IsNotExist(err) {
-			log.Fatal(fmt.Sprintf("Template file does not exist: %s", TemplateFile))
-		}
-	}
-
-	if Upstart {
-		upstartFile()
-		return
-	}
-	log.Printf("Converting all files in '%s' and putting the result into '%s'.", Input, Output)
-
-	var steps map[string]map[string]interface{}
-	if TemplateId != "" {
-		log.Printf("Using template with id '%s'.", TemplateId)
-	} else if TemplateFile != "" {
-		steps = readJson(TemplateFile)
-		log.Printf("Using template file '%s' (read %d steps).", TemplateFile, len(steps))
-	}
-
-	if Watch {
-		log.Printf("Watching directory '%s' for changes...", Input)
 	}
 
 	config := transloadit.DefaultConfig
@@ -112,14 +73,32 @@ func main() {
 	}
 
 	options := &transloadit.WatchOptions{
-		Input:      Input,
-		Output:     Output,
-		Watch:      Watch,
-		TemplateId: TemplateId,
-		Preserve:   Preserve,
-		Steps:      steps,
+		Input:          Input,
+		Output:         Output,
+		Watch:          Watch,
+		TemplateId:     TemplateId,
+		Preserve:       Preserve,
+		DontProcessDir: Upstart,
+		TemplateFile:   TemplateFile,
 	}
-	watcher := client.Watch(options)
+	watcher = client.Watch(options)
+
+	if Upstart {
+		upstartFile()
+		return
+	} else {
+		log.Printf("Converting all files in '%s' and putting the result into '%s'.", watcher.Options.Input, watcher.Options.Output)
+
+		if Watch {
+			log.Printf("Watching directory '%s' for changes...", watcher.Options.Input)
+		}
+
+		if TemplateId != "" {
+			log.Printf("Using template with id '%s'.", TemplateId)
+		} else if TemplateFile != "" {
+			log.Printf("Using template file '%s' (read %d steps).", watcher.Options.TemplateFile, len(watcher.Options.Steps))
+		}
+	}
 
 	for {
 		select {
@@ -133,22 +112,6 @@ func main() {
 	}
 }
 
-func readJson(file string) map[string]map[string]interface{} {
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Fatalf("Error reading template file: %s", err)
-	}
-
-	steps := make(map[string]map[string]interface{})
-
-	err = json.Unmarshal(content, &steps)
-	if err != nil {
-		log.Fatalf("Error parsing template file: %s", err)
-	}
-
-	return steps
-}
-
 type DaemonVars struct {
 	Unixname string
 	Username string
@@ -157,20 +120,6 @@ type DaemonVars struct {
 	Gopath   string
 	Key      string
 	Secret   string
-}
-
-func expandPath(str string) string {
-	expanded, err := homedir.Expand(str)
-	if err != nil {
-		panic(err)
-	}
-
-	expanded, err = filepath.Abs(expanded)
-	if err != nil {
-		panic(err)
-	}
-
-	return expanded
 }
 
 func upstartFile() {
@@ -188,17 +137,17 @@ respawn limit 20 5
 limit nofile 32768 32768
 
 script
-  set -e
-  mkfifo /tmp/{{ .Unixname }}-log-fifo
-  ( logger -t {{ .Unixname }} </tmp/{{ .Unixname }}-log-fifo & )
-  exec >/tmp/{{ .Unixname }}-log-fifo
-  rm /tmp/{{ .Unixname }}-log-fifo
-  exec bash -c "exec sudo -HEu{{ .Username }} env \
-  	GOPATH={{ .Gopath }} \
-  	PATH={{ .Path }} \
-  	TRANSLOADIT_KEY={{ .Key }} \
-  	TRANSLOADIT_SECRET={{ .Secret }} \
-  {{ .Cmd }} 2>&1"
+set -e
+mkfifo /tmp/{{ .Unixname }}-log-fifo
+( logger -t {{ .Unixname }} </tmp/{{ .Unixname }}-log-fifo & )
+exec >/tmp/{{ .Unixname }}-log-fifo
+rm /tmp/{{ .Unixname }}-log-fifo
+exec bash -c "exec sudo -HEu{{ .Username }} env \
+GOPATH={{ .Gopath }} \
+PATH={{ .Path }} \
+TRANSLOADIT_KEY={{ .Key }} \
+TRANSLOADIT_SECRET={{ .Secret }} \
+{{ .Cmd }} 2>&1"
 end script`
 
 	cmd := os.Args[0]
@@ -208,16 +157,16 @@ end script`
 	}
 
 	if Input != "" {
-		cmd += fmt.Sprintf(" -input \\\"%s\\\"", Input)
+		cmd += fmt.Sprintf(" -input \\\"%s\\\"", watcher.Options.Input)
 	}
 	if Output != "" {
-		cmd += fmt.Sprintf(" -output \\\"%s\\\"", Output)
+		cmd += fmt.Sprintf(" -output \\\"%s\\\"", watcher.Options.Output)
 	}
 	if TemplateId != "" {
 		cmd += fmt.Sprintf(" -template \\\"%s\\\"", TemplateId)
 	}
 	if TemplateFile != "" {
-		cmd += fmt.Sprintf(" -template-file \\\"%s\\\"", TemplateFile)
+		cmd += fmt.Sprintf(" -template-file \\\"%s\\\"", watcher.Options.TemplateFile)
 	}
 	// Always use watch, otherwise a daemon makes no sense
 	cmd += fmt.Sprintf(" -watch")

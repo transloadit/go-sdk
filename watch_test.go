@@ -59,7 +59,11 @@ func TestWatch(t *testing.T) {
 	go copyFile("./fixtures/mona_lisa.jpg", "./fixtures/input/mona_lisa.jpg")
 
 	changedFile := <-watcher.Change
-	if filepath.ToSlash(changedFile) != "fixtures/input/mona_lisa.jpg" {
+	moneLisa, err := filepath.Abs("./fixtures/input/mona_lisa.jpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if filepath.ToSlash(changedFile) != moneLisa {
 		t.Fatal("wrong changed file name")
 	}
 

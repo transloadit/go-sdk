@@ -1,14 +1,17 @@
 package transloadit
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"gopkg.in/fsnotify.v1"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -32,11 +35,18 @@ type WatchOptions struct {
 	// If true the original files will be copied in the output directoy with `-original_0_` prefix.
 	// If false input files will be deleted.
 	Preserve bool
+	// Read template from JSON file. See exmaples for information about the format.
+	TemplateFile string
+	// If true file which are already in the directory won't be compiled.
+	DontProcessDir bool
 }
 
 type Watcher struct {
-	client  *Client
-	options *WatchOptions
+	client *Client
+	// Original options passed to Client.Watch.
+	// If Input or Output are relative to the home directory
+	// they will be extended (~/input -> /home/user/input)
+	Options *WatchOptions
 	stopped bool
 	// Listen for errors
 	Error chan error
@@ -54,9 +64,29 @@ type Watcher struct {
 // If the directory already contains some they are all converted.
 // See WatchOptions for possible configuration.
 func (client *Client) Watch(options *WatchOptions) *Watcher {
+	options.Input = expandPath(options.Input)
+	options.Output = expandPath(options.Output)
+
+	if options.TemplateFile != "" {
+		options.TemplateFile = expandPath(options.TemplateFile)
+		options.Steps = readJson(options.TemplateFile)
+	}
+
+	if _, err := os.Stat(options.Input); os.IsNotExist(err) {
+		panic(fmt.Errorf("Input directory does not exist: %s", options.Input))
+	}
+
+	if _, err := os.Stat(options.Output); os.IsNotExist(err) {
+		panic(fmt.Errorf("Output directory does not exist: %s", options.Output))
+	}
+
+	if options.Input == options.Output {
+		panic(fmt.Errorf("Input and output directory are both: %s", options.Output))
+	}
+
 	watcher := &Watcher{
 		client:       client,
-		options:      options,
+		Options:      options,
 		Error:        make(chan error, 1),
 		Done:         make(chan *AssemblyInfo),
 		Change:       make(chan string),
@@ -71,9 +101,11 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 }
 
 func (watcher *Watcher) start() {
-	watcher.processDir()
+	if !watcher.Options.DontProcessDir {
+		watcher.processDir()
+	}
 
-	if watcher.options.Watch {
+	if watcher.Options.Watch {
 		go watcher.startWatcher()
 	}
 }
@@ -94,13 +126,13 @@ func (watcher *Watcher) Stop() {
 }
 
 func (watcher *Watcher) processDir() {
-	files, err := ioutil.ReadDir(watcher.options.Input)
+	files, err := ioutil.ReadDir(watcher.Options.Input)
 	if err != nil {
 		watcher.error(err)
 		return
 	}
 
-	input := watcher.options.Input
+	input := watcher.Options.Input
 
 	for _, file := range files {
 		if !file.IsDir() {
@@ -121,15 +153,15 @@ func (watcher *Watcher) processFile(name string) {
 
 	assembly := watcher.client.CreateAssembly()
 
-	if watcher.options.TemplateId != "" {
-		assembly.TemplateId = watcher.options.TemplateId
+	if watcher.Options.TemplateId != "" {
+		assembly.TemplateId = watcher.Options.TemplateId
 	}
 
-	if watcher.options.NotifyUrl != "" {
-		assembly.NotifyUrl = watcher.options.NotifyUrl
+	if watcher.Options.NotifyUrl != "" {
+		assembly.NotifyUrl = watcher.Options.NotifyUrl
 	}
 
-	for name, step := range watcher.options.Steps {
+	for name, step := range watcher.Options.Steps {
 		assembly.AddStep(name, step)
 	}
 
@@ -171,7 +203,7 @@ func (watcher *Watcher) downloadResult(stepName string, index int, result *FileI
 
 	defer resp.Body.Close()
 
-	out, err := os.Create(path.Join(watcher.options.Output, fileName))
+	out, err := os.Create(path.Join(watcher.Options.Output, fileName))
 	if err != nil {
 		watcher.error(err)
 		return
@@ -191,7 +223,7 @@ func (watcher *Watcher) startWatcher() {
 
 	defer fsWatcher.Close()
 
-	if err = fsWatcher.Add(watcher.options.Input); err != nil {
+	if err = fsWatcher.Add(watcher.Options.Input); err != nil {
 		watcher.error(err)
 		return
 	}
@@ -237,9 +269,9 @@ func (watcher *Watcher) startWatcher() {
 
 func (watcher *Watcher) handleOriginalFile(name string) {
 	var err error
-	if watcher.options.Preserve {
+	if watcher.Options.Preserve {
 		_, file := path.Split(name)
-		err = os.Rename(name, watcher.options.Output+"/-original_0_"+basename(file))
+		err = os.Rename(name, watcher.Options.Output+"/-original_0_"+basename(file))
 	} else {
 		err = os.Remove(name)
 	}
@@ -256,4 +288,34 @@ func (watcher *Watcher) error(err error) {
 func basename(name string) string {
 	i := strings.LastIndex(name, string(os.PathSeparator))
 	return name[i+1:]
+}
+
+func expandPath(str string) string {
+	expanded, err := homedir.Expand(str)
+	if err != nil {
+		panic(err)
+	}
+
+	expanded, err = filepath.Abs(expanded)
+	if err != nil {
+		panic(err)
+	}
+
+	return expanded
+}
+
+func readJson(file string) map[string]map[string]interface{} {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		panic(fmt.Errorf("Error reading template file: %s", err))
+	}
+
+	steps := make(map[string]map[string]interface{})
+
+	err = json.Unmarshal(content, &steps)
+	if err != nil {
+		panic(fmt.Errorf("Error parsing template file: %s", err))
+	}
+
+	return steps
 }
