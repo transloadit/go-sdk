@@ -137,17 +137,17 @@ respawn limit 20 5
 limit nofile 32768 32768
 
 script
-set -e
-mkfifo /tmp/{{ .Unixname }}-log-fifo
-( logger -t {{ .Unixname }} </tmp/{{ .Unixname }}-log-fifo & )
-exec >/tmp/{{ .Unixname }}-log-fifo
-rm /tmp/{{ .Unixname }}-log-fifo
-exec bash -c "exec sudo -HEu{{ .Username }} env \
-GOPATH={{ .Gopath }} \
-PATH={{ .Path }} \
-TRANSLOADIT_KEY={{ .Key }} \
-TRANSLOADIT_SECRET={{ .Secret }} \
-{{ .Cmd }} 2>&1"
+  set -e
+  mkfifo /tmp/{{ .Unixname }}-log-fifo
+  ( logger -t {{ .Unixname }} </tmp/{{ .Unixname }}-log-fifo & )
+  exec >/tmp/{{ .Unixname }}-log-fifo
+  rm /tmp/{{ .Unixname }}-log-fifo
+  exec bash -c "exec sudo -HEu{{ .Username }} env \
+  	GOPATH={{ .Gopath }} \
+  	PATH={{ .Path }} \
+  	TRANSLOADIT_KEY={{ .Key }} \
+  	TRANSLOADIT_SECRET={{ .Secret }} \
+  {{ .Cmd }} 2>&1"
 end script`
 
 	cmd := os.Args[0]
