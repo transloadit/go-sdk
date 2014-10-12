@@ -208,7 +208,7 @@ This means:
  - Creates a Git tag with this version
  - Pushes commit & tag to GitHub
  - Runs gobuild.io on this tag for *most* platforms, saving to `./builds`
- - Saves them to S3 as `s3://releases.transloadit.com/transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-v0.1.0 and http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-latest
+ - Uploads them to S3 as `s3://releases.transloadit.com/transloadify/transloadify-<platform>-<arch>-<version>` with `public-read` access, making the file accessible as e.g. http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-v0.1.0 and http://releases.transloadit.com/transloadify/transloadify-darwin-amd64-latest
  - Clears the `./builds` directory
 
 ## License
