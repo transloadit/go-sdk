@@ -104,9 +104,10 @@ curl http://releases.transloadit.com/transloadify/transloadify-linux-amd64-lates
   -o ./transloadify && chmod 755 $_
 ```
 
-```bash
 Use the binary
-$GOPATH/bin/transloadify -h
+
+```bash
+./transloadify -h
 ```
 
 ### Daemonize
@@ -140,9 +141,9 @@ Logs will be written to syslog under the `transloadify` tag so you can redirect 
 sudo tail -f /var/log/syslog
 ```
 
-## Development
+## Contribute
 
-If you want to get into Transloadit Go SDK or Transloadify development, here are the steps:
+If you want to get into Transloadit Go SDK or `transloadify` development, here are the steps:
 
 ### Set up Go
 
