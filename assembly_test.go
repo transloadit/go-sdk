@@ -19,13 +19,8 @@ func TestAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	file2, err := os.Open("./fixtures/mona_lisa.jpg")
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	assembly.AddReader("image", "lol_cat.jpg", file)
-	assembly.AddReader("image2", "mona_lisa.jpg", file2)
+	assembly.AddFile("image2", "./fixtures/mona_lisa.jpg")
 
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",

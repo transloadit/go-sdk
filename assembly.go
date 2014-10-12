@@ -6,6 +6,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -132,6 +133,17 @@ func (assembly *Assembly) AddReader(field, name string, reader io.ReadCloser) {
 		Name:   name,
 		Reader: reader,
 	})
+}
+
+// Add another file to upload later.
+func (assembly *Assembly) AddFile(field, name string) error {
+	file, err := os.Open(name)
+	if err != nil {
+		return err
+	}
+
+	assembly.AddReader(field, name, file)
+	return nil
 }
 
 // Add a step to the assembly.
