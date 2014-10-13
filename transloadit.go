@@ -111,9 +111,10 @@ func (client *Client) doRequest(req *http.Request, result interface{}) (Response
 	if err != nil {
 		return nil, fmt.Errorf("failed execute http request: %s", err)
 	}
+	defer res.Body.Close()
 
 	// Limit response to 128MB
-	reader := io.LimitReader(res.Body, 128 * 1024 * 1024)
+	reader := io.LimitReader(res.Body, 128*1024*1024)
 	body, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, fmt.Errorf("failed execute http request: %s", err)
