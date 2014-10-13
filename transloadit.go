@@ -34,9 +34,6 @@ type Client struct {
 
 type Response map[string]interface{}
 
-// Go SDK's version
-var Version string
-
 // Options when retrieving a list.
 // Look at the documentation which properties are accepted
 // and to see their meaining, e.g. https://transloadit.com/docs/api-docs#retrieve-assembly-list
@@ -57,16 +54,6 @@ type ListOptions struct {
 		Key     string `json:"key"`
 		Expires string `json:"expires"`
 	} `json:"auth"`
-}
-
-func init() {
-	// Read version
-	b, err := ioutil.ReadFile("VERSION")
-	if err != nil {
-		Version = "unknown"
-	} else {
-		Version = strings.Trim(string(b), " \r\n")
-	}
 }
 
 // Create a new client using the provided configuration object.
