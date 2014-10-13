@@ -5,6 +5,8 @@
 
 A Go SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
 
+We also offer [transloadify](https://github.com/transloadit/transloadify) that bundles much of the technology inside this SDK as a commandline utility.
+
 ## Example
 
 ```go
