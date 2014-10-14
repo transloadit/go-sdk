@@ -28,7 +28,7 @@ var DefaultConfig = Config{
 }
 
 type Client struct {
-	config     *Config
+	config     Config
 	httpClient *http.Client
 }
 
@@ -58,7 +58,7 @@ type ListOptions struct {
 
 // Create a new client using the provided configuration object.
 // An error will be returned if no AuthKey or AuthSecret is found in config.
-func NewClient(config *Config) (*Client, error) {
+func NewClient(config Config) (*Client, error) {
 	if config.AuthKey == "" {
 		return nil, errors.New("failed to create client: missing AuthKey")
 	}
