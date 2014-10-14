@@ -54,7 +54,7 @@ type Watcher struct {
 	Done chan *AssemblyInfo
 	// Listen for file changes (only if Watch == true)
 	Change       chan string
-	end          chan bool
+	stop         chan bool
 	recentWrites map[string]time.Time
 	blacklist    map[string]bool
 }
@@ -90,7 +90,7 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 		Error:        make(chan error, 1),
 		Done:         make(chan *AssemblyInfo),
 		Change:       make(chan string),
-		end:          make(chan bool, 1),
+		stop:         make(chan bool, 1),
 		recentWrites: make(map[string]time.Time),
 		blacklist:    make(map[string]bool),
 	}
@@ -118,11 +118,10 @@ func (watcher *Watcher) Stop() {
 
 	watcher.stopped = true
 
-	watcher.end <- true
 	close(watcher.Done)
 	close(watcher.Error)
 	close(watcher.Change)
-	close(watcher.end)
+	close(watcher.stop)
 }
 
 func (watcher *Watcher) processDir() {
@@ -231,19 +230,23 @@ func (watcher *Watcher) startWatcher() {
 	go func() {
 		for {
 
-			if watcher.stopped {
-				return
-			}
+			select {
+			case _, more := <-watcher.stop:
+				if !more {
+					return
+				}
+			default:
 
-			time.Sleep(time.Second)
-			now := time.Now()
+				time.Sleep(time.Second)
+				now := time.Now()
 
-			for name, lastEvent := range watcher.recentWrites {
-				diff := now.Sub(lastEvent)
-				if diff > (time.Millisecond * 500) {
-					delete(watcher.recentWrites, name)
-					watcher.Change <- name
-					go watcher.processFile(name)
+				for name, lastEvent := range watcher.recentWrites {
+					diff := now.Sub(lastEvent)
+					if diff > (time.Millisecond * 500) {
+						delete(watcher.recentWrites, name)
+						watcher.Change <- name
+						go watcher.processFile(name)
+					}
 				}
 			}
 		}
@@ -251,8 +254,10 @@ func (watcher *Watcher) startWatcher() {
 
 	for {
 		select {
-		case <-watcher.end:
-			return
+		case _, more := <-watcher.stop:
+			if !more {
+				return
+			}
 		case err := <-fsWatcher.Errors:
 			watcher.error(err)
 		case evt := <-fsWatcher.Events:
