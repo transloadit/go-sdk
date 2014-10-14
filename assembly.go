@@ -152,6 +152,16 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 }
 
 // Start the assembly and upload all files.
+// When an error is returned you should also check AssemblyInfo.Error for more
+// information about the error. This happens when there is an error returned by
+// the Transloadit API:
+//  info, err := assembly.Upload()
+//  if err != nil {
+//  	if info != nil && info.Error != "" {
+//  		// See info.Error
+//  	}
+//  	panic(err)
+//  }
 func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 	req, err := assembly.makeRequest()
 	if err != nil {
