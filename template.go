@@ -23,9 +23,9 @@ type TemplateList struct {
 }
 
 type TemplateListItem struct {
-	Id    string                            `json:"id"`
-	Name  string                            `json:"name"`
-	Steps map[string]map[string]interface{} `json:"json"`
+	Id    string                 `json:"id"`
+	Name  string                 `json:"name"`
+	Steps map[string]interface{} `json:"json"`
 }
 
 // Creates a new template instance which can be saved to transloadit.
