@@ -227,31 +227,6 @@ func (watcher *Watcher) startWatcher() {
 		return
 	}
 
-	go func() {
-		for {
-
-			select {
-			case _, more := <-watcher.stop:
-				if !more {
-					return
-				}
-			default:
-
-				time.Sleep(time.Second)
-				now := time.Now()
-
-				for name, lastEvent := range watcher.recentWrites {
-					diff := now.Sub(lastEvent)
-					if diff > (time.Millisecond * 500) {
-						delete(watcher.recentWrites, name)
-						watcher.Change <- name
-						go watcher.processFile(name)
-					}
-				}
-			}
-		}
-	}()
-
 	for {
 		select {
 		case _, more := <-watcher.stop:
@@ -267,6 +242,17 @@ func (watcher *Watcher) startWatcher() {
 			}
 			if evt.Op&fsnotify.Create == fsnotify.Create || evt.Op&fsnotify.Write == fsnotify.Write {
 				watcher.recentWrites[evt.Name] = time.Now()
+			}
+		case <-time.Tick(1 * time.Second):
+			now := time.Now()
+
+			for name, lastEvent := range watcher.recentWrites {
+				diff := now.Sub(lastEvent)
+				if diff > (time.Millisecond * 500) {
+					delete(watcher.recentWrites, name)
+					watcher.Change <- name
+					go watcher.processFile(name)
+				}
 			}
 		}
 	}
