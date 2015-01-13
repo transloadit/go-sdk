@@ -14,7 +14,7 @@ We also offer [transloadify](https://github.com/transloadit/transloadify) that b
 options := transloadit.DefaultConfig
 options.AuthKey = "TRANSLOADIT_KEY"
 options.AuthSecret = "TRANSLOADIT_SECRET"
-client, err := transloadit.NewClient(&options)
+client, err := transloadit.NewClient(options)
 if err != nil {
     panic(err)
 }
