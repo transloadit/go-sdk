@@ -47,7 +47,7 @@ if err != nil {
 fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
 ```
 
-For more example, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
+For examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
 
 ## Installation
 
