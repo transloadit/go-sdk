@@ -23,7 +23,7 @@ func TestGetBoredInstanceFallback(t *testing.T) {
 	config.AuthSecret = "auth_secret"
 	config.Endpoint = "http://doesnotexists/"
 
-	client, err := NewClient(&config)
+	client, err := NewClient(config)
 	if err != nil {
 		t.Fatal(err)
 	}

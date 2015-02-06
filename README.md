@@ -14,7 +14,7 @@ We also offer [transloadify](https://github.com/transloadit/transloadify) that b
 options := transloadit.DefaultConfig
 options.AuthKey = "TRANSLOADIT_KEY"
 options.AuthSecret = "TRANSLOADIT_SECRET"
-client, err := transloadit.NewClient(&options)
+client, err := transloadit.NewClient(options)
 if err != nil {
     panic(err)
 }
@@ -47,7 +47,7 @@ if err != nil {
 fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
 ```
 
-For more example, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
+For examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
 
 ## Installation
 

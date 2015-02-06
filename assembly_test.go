@@ -75,7 +75,7 @@ func TestAssemblyFail(t *testing.T) {
 	config.AuthKey = "does not exist"
 	config.AuthSecret = "does not matter"
 
-	client, err := NewClient(&config)
+	client, err := NewClient(config)
 	if err != nil {
 		t.Fatal(err)
 	}

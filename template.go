@@ -5,16 +5,16 @@ import (
 )
 
 type Template struct {
-	Name string `json:"template_name"`
+	Name string `json:"name"`
 	// See AddStep for simple usage.
-	Steps map[string]map[string]interface{} `json:"template_content"`
+	Steps map[string]map[string]interface{} `json:"content"`
 }
 
 type templateGetResponse struct {
-	Name    string `json:"template_name"`
+	Name    string `json:"name"`
 	Content struct {
 		Steps map[string]map[string]interface{} `json:"steps"`
-	} `json:"template_content"`
+	} `json:"content"`
 }
 
 type TemplateList struct {
@@ -23,9 +23,9 @@ type TemplateList struct {
 }
 
 type TemplateListItem struct {
-	Id    string                            `json:"id"`
-	Name  string                            `json:"name"`
-	Steps map[string]map[string]interface{} `json:"json"`
+	Id    string                 `json:"id"`
+	Name  string                 `json:"name"`
+	Steps map[string]interface{} `json:"json"`
 }
 
 // Creates a new template instance which can be saved to transloadit.

@@ -7,6 +7,7 @@ import (
 type AssemblyWatcher struct {
 	Response    chan *AssemblyInfo
 	Error       chan error
+	stop        chan bool
 	assemblyUrl string
 	stopped     bool
 	client      *Client
@@ -17,6 +18,7 @@ func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
 	watcher := &AssemblyWatcher{
 		Response:    make(chan *AssemblyInfo),
 		Error:       make(chan error),
+		stop:        make(chan bool, 1),
 		assemblyUrl: assemblyUrl,
 		stopped:     false,
 		client:      client,
@@ -30,23 +32,21 @@ func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
 func (watcher *AssemblyWatcher) start() {
 	go func() {
 		for {
-
-			if watcher.stopped {
+			select {
+			case <-watcher.stop:
 				watcher.closeChannels()
-				break
+				return
+			default:
+				watcher.poll()
+				time.Sleep(time.Second)
 			}
-
-			watcher.poll()
-
-			time.Sleep(time.Second)
-
 		}
 	}()
 }
 
 // Stop the watcher and close all channels.
 func (watcher *AssemblyWatcher) Stop() {
-	watcher.stopped = true
+	watcher.stop <- true
 }
 
 func (watcher *AssemblyWatcher) closeChannels() {
