@@ -1,38 +1,30 @@
 language: go
-
 go:
 - 1.1
 - 1.2
 - 1.3
 - tip
-
 matrix:
   allow_failures:
-    - go: tip
-
+  - go: tip
 before_install:
 - go get github.com/axw/gocov/gocov || true
 - go get github.com/mattn/goveralls || true
 - go get code.google.com/p/go.tools/cmd/cover || true
 - go get .
-
 script:
 - $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || make test
-
-# travis encrypt [subdomain]:[api token]@[room id]
 notifications:
   email: false
   campfire:
     rooms:
-      secure: "ZD1CNctKh8bFaeXVrTYaPeEkupKkPe9pQ0SOdGIC5qOBVK95WHiQr/C+3QIs6YCY/IBU0HFhV04jv8MzWl69u5aoIxO+KxF6VY+k1MwdsSzmmea7DcUbq3h/NFVh8llZJ0UKi+24z0OvZuqZ/xaRaWI3KBZ5XAGxckaD1yqJ0xU="
+      secure: ZD1CNctKh8bFaeXVrTYaPeEkupKkPe9pQ0SOdGIC5qOBVK95WHiQr/C+3QIs6YCY/IBU0HFhV04jv8MzWl69u5aoIxO+KxF6VY+k1MwdsSzmmea7DcUbq3h/NFVh8llZJ0UKi+24z0OvZuqZ/xaRaWI3KBZ5XAGxckaD1yqJ0xU=
     on_failure: always
     on_success: always
-
+  slack:
+    secure: U+RtmtVJEzEoZf+/VVuon9qNC4GXKzXoTqdYThP57ZTzqoDAJDnuZ/qUrMGrMYpYg38ikxtK3qJhBMfffzHXc3KS9hcA7Ay/yPz4QiCBMy3M9EBPWt8iGP6n2T3KUw4WG/hSBUtnJqmwPdzRfVUIqOMgchiN9eWwEbEmSYTvOqA=
 env:
   global:
-    # COVERALLS_TOKEN
-    - secure: wGKrsYBSuI4NhxcveqjQGCuY1Jcrh6iF59FEZS8ipWVSIqp2sMQU3K7LqgeUVnyCqXT0LsuLFMPhKDHc8My+aFno85jrmkJo7+gvBnCQC/f5/7Ee3r4LdEgmv4dIRrsItYir/ez/KIQ2BtynWEdLk8/afgNCOF9IjvtX6XneDYg=
-    # TRANSLOADIT_KEY
-    - secure: chRxpyqy+3MH98lIo+StQAsSHtAirQfD5yguOmmUet2gXeQmW1r4/Bfyvd3VN15DVGMgWlB6I5oKEwVNJp28DWrlBhXM+U80fQGiUwVVuvXUnnDFJGbp7WJSYJs5XX4vHtWN148kv6lQSOHBVRE0HBn9vTmOIYYJqcUNOfZNlJQ=
-    # TRANSLOADIT_SECRET
-    - secure: GfSX6bizEA+D8S6kEDbm5uZNvDQc1KEEvqZ5E0a8erNUWwswf7vTzLHIq6qcY80i+FlmBIEZ5rEQxaWi73bSyjb4oPnaOKkyzMPqTVNxScwBLDOXUeSHzROVYCBjIfZw43gr4fzcezPtzy5wgFtcqEClImO1pLN5mUGcSTsyQzI=
+  - secure: wGKrsYBSuI4NhxcveqjQGCuY1Jcrh6iF59FEZS8ipWVSIqp2sMQU3K7LqgeUVnyCqXT0LsuLFMPhKDHc8My+aFno85jrmkJo7+gvBnCQC/f5/7Ee3r4LdEgmv4dIRrsItYir/ez/KIQ2BtynWEdLk8/afgNCOF9IjvtX6XneDYg=
+  - secure: chRxpyqy+3MH98lIo+StQAsSHtAirQfD5yguOmmUet2gXeQmW1r4/Bfyvd3VN15DVGMgWlB6I5oKEwVNJp28DWrlBhXM+U80fQGiUwVVuvXUnnDFJGbp7WJSYJs5XX4vHtWN148kv6lQSOHBVRE0HBn9vTmOIYYJqcUNOfZNlJQ=
+  - secure: GfSX6bizEA+D8S6kEDbm5uZNvDQc1KEEvqZ5E0a8erNUWwswf7vTzLHIq6qcY80i+FlmBIEZ5rEQxaWi73bSyjb4oPnaOKkyzMPqTVNxScwBLDOXUeSHzROVYCBjIfZw43gr4fzcezPtzy5wgFtcqEClImO1pLN5mUGcSTsyQzI=
