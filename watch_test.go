@@ -9,12 +9,8 @@ import (
 
 func TestWatch(t *testing.T) {
 	// Clean up testing environment
-	remove("./fixtures/input/lol_cat.jpg")
-	remove("./fixtures/input/mona_lisa.jpg")
-	remove("./fixtures/output/image-resize_0_lol_cat.jpg")
-	remove("./fixtures/output/-original_0_lol_cat.jpg")
-	remove("./fixtures/output/image-resize_0_mona_lisa.jpg")
-	remove("./fixtures/output/-original_0_mona_lisa.jpg")
+	emptyDir("./fixtures/input/")
+	emptyDir("./fixtures/output")
 	copyFile("./fixtures/lol_cat.jpg", "./fixtures/input/lol_cat.jpg")
 
 	setupTemplates(t)
@@ -115,8 +111,12 @@ func copyFile(src, dst string) {
 	}
 }
 
-func remove(filename string) {
-	if err := os.RemoveAll(filename); err != nil {
+func emptyDir(path string) {
+	if err := os.RemoveAll(path); err != nil {
+		panic(err)
+	}
+
+	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		panic(err)
 	}
 }
