@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -101,12 +102,18 @@ func (client *Client) Watch(options *WatchOptions) *Watcher {
 }
 
 func (watcher *Watcher) start() {
-	if !watcher.Options.DontProcessDir {
-		watcher.processDir()
-	}
-
 	if watcher.Options.Watch {
 		go watcher.startWatcher()
+	}
+
+	if !watcher.Options.DontProcessDir {
+		go watcher.processDir()
+	}
+
+	// If we have nothing to do (neither processing the input directory nor
+	// watching it for changes) stop everything again
+	if !watcher.Options.Watch && watcher.Options.DontProcessDir {
+		watcher.Stop()
 	}
 }
 
@@ -132,11 +139,24 @@ func (watcher *Watcher) processDir() {
 	}
 
 	input := watcher.Options.Input
+	var wg sync.WaitGroup
 
 	for _, file := range files {
 		if !file.IsDir() {
-			go watcher.processFile(path.Join(input, file.Name()))
+			wg.Add(1)
+			go func(file os.FileInfo) {
+				watcher.processFile(path.Join(input, file.Name()))
+				wg.Done()
+			}(file)
 		}
+	}
+
+	wg.Wait()
+
+	// If watching is not enabled, stop and close all channels to avoid a
+	// deadlock since we are done with everything.
+	if !watcher.Options.Watch {
+		watcher.Stop()
 	}
 }
 
@@ -179,15 +199,25 @@ func (watcher *Watcher) processFile(name string) {
 		return
 	}
 
+	var wg sync.WaitGroup
+
 	for stepName, results := range info.Results {
 		for index, result := range results {
+			wg.Add(1)
 			go func() {
 				watcher.downloadResult(stepName, index, result)
 				watcher.handleOriginalFile(name)
 				delete(watcher.blacklist, name)
 				watcher.Done <- info
+				wg.Done()
 			}()
 		}
+	}
+
+	wg.Wait()
+
+	if !watcher.Options.Watch {
+		watcher.Stop()
 	}
 }
 
