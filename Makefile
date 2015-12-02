@@ -4,7 +4,7 @@ test:
 	go test
 
 release:
-	$(MAKE) build
+	#$(MAKE) build
 	$(MAKE) test
 	git diff --quiet HEAD || (echo "--> Please first commit your work" && false)
 	./scripts/bump.sh ./version.go $(bump)
