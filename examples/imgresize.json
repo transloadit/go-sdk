@@ -1,8 +1,7 @@
 {
 	"optimize": {
 		"robot"   : "/image/optimize",
-		"use"     : ":original",
-		"png_tool": "pngquant"
+		"use"     : ":original"
 	},
 	"resize": {
 		"robot"          : "/image/resize",

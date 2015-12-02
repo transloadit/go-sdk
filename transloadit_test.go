@@ -67,7 +67,6 @@ func setupTemplates(t *testing.T) {
 	template := NewTemplate("go-sdk-test")
 
 	template.AddStep("optimize", map[string]interface{}{
-		"png_tool": "optipng",
 		"robot":    "/image/optimize",
 		"use":      ":original",
 	})

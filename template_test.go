@@ -21,7 +21,6 @@ func TestCreateTemplate(t *testing.T) {
 
 	template.AddStep("optimize", map[string]interface{}{
 		"robot":    "/image/optimize",
-		"png_tool": "optipng",
 	})
 
 	id, err := client.CreateTemplate(template)
