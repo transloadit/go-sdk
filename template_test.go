@@ -1,8 +1,6 @@
 package transloadit
 
-import (
-	"testing"
-)
+import "testing"
 
 var templateId string
 

@@ -11,6 +11,7 @@ type Template struct {
 }
 
 type templateGetResponse struct {
+	Id      string `json:"id"`
 	Name    string `json:"name"`
 	Content struct {
 		Steps map[string]map[string]interface{} `json:"steps"`
@@ -45,12 +46,13 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 		},
 	}
 
-	res, err := client.request("POST", "templates", content, nil)
+	var res templateGetResponse
+	_, err := client.request("POST", "templates", content, &res)
 	if err != nil {
 		return "", fmt.Errorf("unable to create template: %s", err)
 	}
 
-	return res["id"].(string), nil
+	return res.Id, nil
 }
 
 // Get information about a template using its id.
