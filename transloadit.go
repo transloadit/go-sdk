@@ -50,6 +50,11 @@ type ListOptions struct {
 	AssemblyId string     `json:"assembly_id,omitempty"`
 	FromDate   *time.Time `json:"fromdate,omitempty"`
 	ToDate     *time.Time `json:"todate,omitempty"`
+}
+
+type authListOptions struct {
+	*ListOptions
+
 	// For internal use only!
 	Auth struct {
 		Key     string `json:"key"`
@@ -167,15 +172,18 @@ func (client *Client) request(method string, path string, content map[string]int
 	return client.doRequest(req, result)
 }
 
-func (client *Client) listRequest(path string, options *ListOptions, result interface{}) (Response, error) {
+func (client *Client) listRequest(path string, listOptions *ListOptions, result interface{}) (Response, error) {
 	uri := client.config.Endpoint + "/" + path
 
-	options.Auth = struct {
-		Key     string `json:"key"`
-		Expires string `json:"expires"`
-	}{
-		Key:     client.config.AuthKey,
-		Expires: getExpireString(),
+	options := authListOptions{
+		ListOptions: listOptions,
+		Auth: struct {
+			Key     string `json:"key"`
+			Expires string `json:"expires"`
+		}{
+			Key:     client.config.AuthKey,
+			Expires: getExpireString(),
+		},
 	}
 
 	b, err := json.Marshal(options)

@@ -97,7 +97,7 @@ func TestListTemplates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(templates.Templates) == 0 {
+	if len(templates.Templates) != 3 {
 		t.Fatal("wrong number of templates")
 	}
 
