@@ -65,9 +65,6 @@ func TestAssembly(t *testing.T) {
 	if info.ClientAgent[:len(expectedAgent)] != expectedAgent {
 		t.Fatal("wrong user agent")
 	}
-
-	assemblyId = info.AssemblyId
-	assemblyUrl = info.AssemblyUrl
 }
 
 func TestAssemblyFail(t *testing.T) {
@@ -141,6 +138,9 @@ func TestAssemblyBlocking(t *testing.T) {
 	if len(info.Uploads) != 1 {
 		t.Fatal("wrong number of uploads")
 	}
+
+	assemblyId = info.AssemblyId
+	assemblyUrl = info.AssemblyUrl
 }
 
 func TestGetAssembly(t *testing.T) {
