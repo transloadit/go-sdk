@@ -8,6 +8,7 @@ go:
 matrix:
   allow_failures:
   - go: tip
+sudo: false
 before_install:
 - go get github.com/axw/gocov/gocov || true
 - go get github.com/mattn/goveralls || true
