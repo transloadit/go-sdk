@@ -235,9 +235,13 @@ func TestCancelAssembly(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	_, err = client.CancelAssembly(info.AssemblyUrl)
+	info, err = client.CancelAssembly(info.AssemblyUrl)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if info.Ok != "ASSEMBLY_CANCELED" {
+		t.Fatal("incorrect assembly status")
 	}
 }
 

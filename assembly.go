@@ -90,8 +90,8 @@ type AssemblyInfo struct {
 	BytesUsage             int                    `json:"bytes_usage"`
 	FilesToStoreOnS3       int                    `json:"files_to_store_on_s3"`
 	QueuedFilesToStoreOnS3 int                    `json:"queued_files_to_store_on_s3"`
-	ExecutingJobs          []interface{}          `json:"executing_jobs"`
-	StartedJobs            []interface{}          `json:"started_jobs"`
+	ExecutingJobs          []string               `json:"executing_jobs"`
+	StartedJobs            []string               `json:"started_jobs"`
 	ParentAssemblyStatus   *AssemblyInfo          `json:"parent_assembly_status"`
 	Uploads                []*FileInfo            `json:"uploads"`
 	Results                map[string][]*FileInfo `json:"results"`
@@ -274,9 +274,13 @@ func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 	return &info, err
 }
 
-// Cancel an assembly using its url.
-func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
-	return client.request("DELETE", assemblyUrl, nil, nil)
+// Cancel an assembly using its URL. This function will return the updated
+// information about the assembly after the cancelation.
+func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) {
+	var info AssemblyInfo
+	_, err := client.request("DELETE", assemblyUrl, nil, &info)
+
+	return &info, err
 }
 
 // Create a new AssemblyReplay instance.
