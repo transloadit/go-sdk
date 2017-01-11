@@ -50,7 +50,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 		return "", fmt.Errorf("unable to create template: %s", err)
 	}
 
-	return res["template_id"].(string), nil
+	return res["id"].(string), nil
 }
 
 // Get information about a template using its id.
