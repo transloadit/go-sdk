@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/transloadit/go-sdk"
 )
@@ -42,6 +41,5 @@ func main() {
 	assembly := <-waiter.Response
 
 	fmt.Printf("You can view the result at: %s\n", assembly.Results["resize"][0].Url)
-
 
 }

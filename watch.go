@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mitchellh/go-homedir"
-	"gopkg.in/fsnotify.v1"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -16,6 +14,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/mitchellh/go-homedir"
+	"gopkg.in/fsnotify.v1"
 )
 
 var sanitizeRe = regexp.MustCompile(`[^a-zA-Z0-9\-\_\.]`)

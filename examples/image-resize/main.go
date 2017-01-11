@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/transloadit/go-sdk"
 	"os"
+
+	"github.com/transloadit/go-sdk"
 )
 
 func main() {

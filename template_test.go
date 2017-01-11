@@ -20,7 +20,7 @@ func TestCreateTemplate(t *testing.T) {
 	})
 
 	template.AddStep("optimize", map[string]interface{}{
-		"robot":    "/image/optimize",
+		"robot": "/image/optimize",
 	})
 
 	id, err := client.CreateTemplate(template)
