@@ -36,8 +36,10 @@ type AssemblyReplay struct {
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
 	// Wait until the assembly completes (or is canceled).
-	Blocking        bool
-	reparseTemplate bool
+	Blocking bool
+	// Reparse the template when replaying. Useful if the template has changed
+	// since the orignal assembly was created.
+	ReparseTemplate bool
 	steps           map[string]map[string]interface{}
 }
 
@@ -297,18 +299,13 @@ func (assembly *AssemblyReplay) AddStep(name string, details map[string]interfac
 	assembly.steps[name] = details
 }
 
-// Reparse the template when replaying. Useful if the template has changed since the orignal assembly was created.
-func (assembly *AssemblyReplay) ReparseTemplate() {
-	assembly.reparseTemplate = true
-}
-
 // Start the assembly replay.
 func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	options := map[string]interface{}{
 		"steps": assembly.steps,
 	}
 
-	if assembly.reparseTemplate {
+	if assembly.ReparseTemplate {
 		options["reparse_template"] = 1
 	}
 

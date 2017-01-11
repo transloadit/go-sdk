@@ -164,7 +164,7 @@ func TestReplayAssembly(t *testing.T) {
 	assembly := client.ReplayAssembly(assemblyId)
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
-	assembly.ReparseTemplate()
+	assembly.ReparseTemplate = true
 
 	info, err := assembly.Start()
 	if err != nil {
