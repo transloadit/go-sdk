@@ -32,6 +32,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
+// TODO: Remove
 type Response map[string]interface{}
 
 // Options when retrieving a list.

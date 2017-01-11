@@ -275,7 +275,7 @@ func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 }
 
 // Cancel an assembly using its URL. This function will return the updated
-// information about the assembly after the cancelation.
+// information about the assembly after the cancellation.
 func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
 	_, err := client.request("DELETE", assemblyUrl, nil, &info)

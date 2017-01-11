@@ -15,7 +15,7 @@ type NotificationListItem struct {
 	AccountId    string    `json:"account_id"`
 	Url          string    `json:"url"`
 	ResponseCode int       `json:"response_code"`
-	RespandeData string    `json:"response_data"`
+	ResponseData string    `json:"response_data"`
 	Duration     float32   `json:"duration"`
 	Created      time.Time `json:"created"`
 	Error        string    `json:"error"`
