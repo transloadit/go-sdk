@@ -16,12 +16,6 @@ before_install:
 script:
 - $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || make test
 notifications:
-  email: false
-  campfire:
-    rooms:
-      secure: ZD1CNctKh8bFaeXVrTYaPeEkupKkPe9pQ0SOdGIC5qOBVK95WHiQr/C+3QIs6YCY/IBU0HFhV04jv8MzWl69u5aoIxO+KxF6VY+k1MwdsSzmmea7DcUbq3h/NFVh8llZJ0UKi+24z0OvZuqZ/xaRaWI3KBZ5XAGxckaD1yqJ0xU=
-    on_failure: always
-    on_success: always
   slack:
     secure: U+RtmtVJEzEoZf+/VVuon9qNC4GXKzXoTqdYThP57ZTzqoDAJDnuZ/qUrMGrMYpYg38ikxtK3qJhBMfffzHXc3KS9hcA7Ay/yPz4QiCBMy3M9EBPWt8iGP6n2T3KUw4WG/hSBUtnJqmwPdzRfVUIqOMgchiN9eWwEbEmSYTvOqA=
 env:
