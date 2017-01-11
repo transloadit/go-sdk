@@ -32,7 +32,7 @@ func (client *Client) ListNotifications(options *ListOptions) (*NotificationList
 
 // Replay a notification which was trigger by assembly defined using the assemblyId.
 // If notifyUrl is not empty it will override the original notify url.
-func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (Response, error) {
+func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) error {
 
 	params := make(map[string]interface{})
 
@@ -40,6 +40,7 @@ func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (R
 		params["notify_url"] = notifyUrl
 	}
 
-	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
-
+	// TODO: Examine response for error details
+	_, err := client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
+	return err
 }

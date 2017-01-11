@@ -34,12 +34,8 @@ func TestListNotifications(t *testing.T) {
 func TestReplayNotification(t *testing.T) {
 	client := setup(t)
 
-	res, err := client.ReplayNotification(notificationAssemblyId, "http://jsfiddle.net/echo/json/")
+	err := client.ReplayNotification(notificationAssemblyId, "http://jsfiddle.net/echo/json/")
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if res["ok"].(string) != "ASSEMBLY_NOTIFICATION_REPLAYED" {
-		t.Fatal("wrong status code returned")
 	}
 }
