@@ -13,7 +13,7 @@ func main() {
 	options := transloadit.DefaultConfig
 	options.AuthKey = "TRANSLOADIT_KEY"
 	options.AuthSecret = "TRANSLOADIT_SECRET"
-	client, err := transloadit.NewClient(&options)
+	client, err := transloadit.NewClient(options)
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +38,7 @@ func main() {
 		"background":      "#000000",
 	})
 
-	// Wait until transloadit is done processing all uploads
+	// Wait until Transloadit is done processing all uploads
 	// and is ready to download the results
 	assembly.Blocking = true
 
