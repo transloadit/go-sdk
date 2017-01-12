@@ -59,10 +59,13 @@ type authListOptions struct {
 	} `json:"auth"`
 }
 
-type errorResponse struct {
-	Error   string
-	Reason  string
-	Message string
+type RequestError struct {
+	Code    string `json:"error"`
+	Message string `json:"message"`
+}
+
+func (err RequestError) Error() string {
+	return fmt.Sprintf("request failed due to %s: %s", err.Code, err.Message)
 }
 
 // Create a new client using the provided configuration object.
@@ -117,12 +120,12 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	}
 
 	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
-		var response errorResponse
-		if err := json.Unmarshal(body, &response); err != nil {
+		var reqErr RequestError
+		if err := json.Unmarshal(body, &reqErr); err != nil {
 			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 
-		return fmt.Errorf("failed execute http request: server responded with %d (%s)", res.StatusCode, response.Error)
+		return reqErr
 	}
 
 	if result != nil {

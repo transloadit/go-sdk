@@ -95,9 +95,12 @@ func TestAssemblyFail(t *testing.T) {
 	})
 
 	_, err = assembly.Upload()
-	if err.Error() != "failed execute http request: server responded with 400 (GET_ACCOUNT_UNKNOWN_AUTH_KEY)" {
-		fmt.Printf("%v", err)
-		t.Fatal("reponse doesn't contain the error message GET_ACCOUNT_UNKNOWN_AUTH_KEY")
+	reqErr := err.(RequestError)
+	if reqErr.Code != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
+		t.Fatal("wrong error code in response")
+	}
+	if reqErr.Message == "" {
+		t.Fatal("error message should not be empty")
 	}
 }
 
