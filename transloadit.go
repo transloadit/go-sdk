@@ -32,9 +32,6 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// TODO: Remove
-type Response map[string]interface{}
-
 // Options when retrieving a list.
 // Look at the documentation which properties are accepted
 // and to see their meaining, e.g. https://transloadit.com/docs/api-docs#retrieve-assembly-list
@@ -60,6 +57,12 @@ type authListOptions struct {
 		Key     string `json:"key"`
 		Expires string `json:"expires"`
 	} `json:"auth"`
+}
+
+type errorResponse struct {
+	Error   string
+	Reason  string
+	Message string
 }
 
 // Create a new client using the provided configuration object.
@@ -97,12 +100,12 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 	return string(b), hex.EncodeToString(hash.Sum(nil)), nil
 }
 
-func (client *Client) doRequest(req *http.Request, result interface{}) (Response, error) {
+func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	req.Header.Set("User-Agent", "Transloadit Go SDK "+Version)
 
 	res, err := client.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
+		return fmt.Errorf("failed execute http request: %s", err)
 	}
 	defer res.Body.Close()
 
@@ -110,28 +113,26 @@ func (client *Client) doRequest(req *http.Request, result interface{}) (Response
 	reader := io.LimitReader(res.Body, 128*1024*1024)
 	body, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
+		return fmt.Errorf("failed execute http request: %s", err)
 	}
 
-	if result == nil {
-		var obj Response
-		err = json.Unmarshal(body, &obj)
-		if err != nil {
-			return nil, fmt.Errorf("failed execute http request: %s", err)
+	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
+		var response errorResponse
+		if err := json.Unmarshal(body, &response); err != nil {
+			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 
-		if res.StatusCode != 200 {
-			return obj, fmt.Errorf("failed execute http request: server responded with %s", obj["error"])
-		}
+		return fmt.Errorf("failed execute http request: server responded with %d (%s)", res.StatusCode, response.Error)
+	}
 
-		return obj, nil
-	} else {
+	if result != nil {
 		err = json.Unmarshal(body, result)
-		return nil, err
 	}
+
+	return err
 }
 
-func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) (Response, error) {
+func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) error {
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -146,7 +147,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	// Create signature
 	params, signature, err := client.sign(content)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
 
 	v := url.Values{}
@@ -161,7 +162,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	}
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
 
 	if method != "GET" {
@@ -172,7 +173,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	return client.doRequest(req, result)
 }
 
-func (client *Client) listRequest(path string, listOptions *ListOptions, result interface{}) (Response, error) {
+func (client *Client) listRequest(path string, listOptions *ListOptions, result interface{}) error {
 	uri := client.config.Endpoint + "/" + path
 
 	options := authListOptions{
@@ -188,7 +189,7 @@ func (client *Client) listRequest(path string, listOptions *ListOptions, result 
 
 	b, err := json.Marshal(options)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create signature: %s", err)
+		return fmt.Errorf("unable to create signature: %s", err)
 	}
 
 	hash := hmac.New(sha1.New, []byte(client.config.AuthSecret))
@@ -205,7 +206,7 @@ func (client *Client) listRequest(path string, listOptions *ListOptions, result 
 
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
 
 	return client.doRequest(req, result)

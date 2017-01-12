@@ -47,7 +47,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 	}
 
 	var res templateGetResponse
-	_, err := client.request("POST", "templates", content, &res)
+	err := client.request("POST", "templates", content, &res)
 	if err != nil {
 		return "", fmt.Errorf("unable to create template: %s", err)
 	}
@@ -58,7 +58,7 @@ func (client *Client) CreateTemplate(template *Template) (string, error) {
 // Get information about a template using its id.
 func (client *Client) GetTemplate(templateId string) (*Template, error) {
 	var templateGet templateGetResponse
-	_, err := client.request("GET", "templates/"+templateId, nil, &templateGet)
+	err := client.request("GET", "templates/"+templateId, nil, &templateGet)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get template: %s", err)
 	}
@@ -77,7 +77,7 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 
 // Delete a template from the list.
 func (client *Client) DeleteTemplate(templateId string) error {
-	_, err := client.request("DELETE", "templates/"+templateId, nil, nil)
+	err := client.request("DELETE", "templates/"+templateId, nil, nil)
 	if err != nil {
 		return fmt.Errorf("unable to delete template: %s", err)
 	}
@@ -95,13 +95,12 @@ func (client *Client) EditTemplate(templateId string, newTemplate *Template) err
 		},
 	}
 
-	_, err := client.request("PUT", "templates/"+templateId, content, nil)
-	return err
+	return client.request("PUT", "templates/"+templateId, content, nil)
 }
 
 // List all templates matching the criterias.
 func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
 	var templates TemplateList
-	_, err := client.listRequest("templates", options, &templates)
+	err := client.listRequest("templates", options, &templates)
 	return &templates, err
 }

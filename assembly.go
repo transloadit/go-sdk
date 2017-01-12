@@ -171,7 +171,8 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	_, err = assembly.client.doRequest(req, &info)
+	// TODO: error handling
+	err = assembly.client.doRequest(req, &info)
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to create assembly: %s", info.Error)
@@ -200,6 +201,7 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
+	// TODO: test with huge files
 	url := "http://api2-" + bored + "/assemblies"
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -271,7 +273,7 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 // Get information about an assembly using its url.
 func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	_, err := client.request("GET", assemblyUrl, nil, &info)
+	err := client.request("GET", assemblyUrl, nil, &info)
 
 	return &info, err
 }
@@ -280,7 +282,7 @@ func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 // information about the assembly after the cancellation.
 func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	_, err := client.request("DELETE", assemblyUrl, nil, &info)
+	err := client.request("DELETE", assemblyUrl, nil, &info)
 
 	return &info, err
 }
@@ -314,7 +316,8 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	_, err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
+	// TODO: error handling
+	err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to start assembly replay: %s", info.Error)
@@ -341,7 +344,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 // List all assemblies matching the criterias.
 func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
 	var assemblies AssemblyList
-	_, err := client.listRequest("assemblies", options, &assemblies)
+	err := client.listRequest("assemblies", options, &assemblies)
 
 	return &assemblies, err
 }

@@ -95,7 +95,7 @@ func TestAssemblyFail(t *testing.T) {
 	})
 
 	_, err = assembly.Upload()
-	if fmt.Sprintf("%s", err) != "failed to create assembly: GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
+	if err.Error() != "failed execute http request: server responded with 400 (GET_ACCOUNT_UNKNOWN_AUTH_KEY)" {
 		fmt.Printf("%v", err)
 		t.Fatal("reponse doesn't contain the error message GET_ACCOUNT_UNKNOWN_AUTH_KEY")
 	}

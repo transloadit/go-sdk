@@ -23,9 +23,8 @@ type NotificationListItem struct {
 
 // List all notificaions matching the criterias.
 func (client *Client) ListNotifications(options *ListOptions) (*NotificationList, error) {
-
 	var notifications NotificationList
-	_, err := client.listRequest("assembly_notifications", options, &notifications)
+	err := client.listRequest("assembly_notifications", options, &notifications)
 	return &notifications, err
 
 }
@@ -33,7 +32,6 @@ func (client *Client) ListNotifications(options *ListOptions) (*NotificationList
 // Replay a notification which was trigger by assembly defined using the assemblyId.
 // If notifyUrl is not empty it will override the original notify url.
 func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) error {
-
 	params := make(map[string]interface{})
 
 	if notifyUrl != "" {
@@ -41,6 +39,6 @@ func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) er
 	}
 
 	// TODO: Examine response for error details
-	_, err := client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
+	err := client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, &struct{}{})
 	return err
 }
