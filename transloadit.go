@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -114,14 +113,11 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 
 	// Limit response to 128MB
 	reader := io.LimitReader(res.Body, 128*1024*1024)
-	body, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return fmt.Errorf("failed execute http request: %s", err)
-	}
+	decoder := json.NewDecoder(reader)
 
 	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
 		var reqErr RequestError
-		if err := json.Unmarshal(body, &reqErr); err != nil {
+		if err := decoder.Decode(&reqErr); err != nil {
 			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 
@@ -129,10 +125,12 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	}
 
 	if result != nil {
-		err = json.Unmarshal(body, result)
+		if err := decoder.Decode(result); err != nil {
+			return fmt.Errorf("failed unmarshal http request: %s", err)
+		}
 	}
 
-	return err
+	return nil
 }
 
 func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) error {
