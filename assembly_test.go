@@ -163,6 +163,7 @@ func TestGetAssembly(t *testing.T) {
 }
 
 func TestReplayAssembly(t *testing.T) {
+	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
 	assembly := client.ReplayAssembly(assemblyId)
 
@@ -184,6 +185,7 @@ func TestReplayAssembly(t *testing.T) {
 }
 
 func TestReplayAssemblyBlocking(t *testing.T) {
+	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
 	assembly := client.ReplayAssembly(assemblyId)
 
