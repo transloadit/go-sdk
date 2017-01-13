@@ -162,10 +162,10 @@ func TestGetAssembly(t *testing.T) {
 	}
 }
 
-func TestReplayAssembly(t *testing.T) {
+func TestAssemblyReplay(t *testing.T) {
 	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
-	assembly := client.ReplayAssembly(assemblyId)
+	assembly := client.NewAssemblyReplay(assemblyId)
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
@@ -184,10 +184,10 @@ func TestReplayAssembly(t *testing.T) {
 	}
 }
 
-func TestReplayAssemblyBlocking(t *testing.T) {
+func TestAssemblyReplayBlocking(t *testing.T) {
 	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
-	assembly := client.ReplayAssembly(assemblyId)
+	assembly := client.NewAssemblyReplay(assemblyId)
 
 	assembly.Blocking = true
 

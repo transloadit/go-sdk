@@ -300,7 +300,7 @@ func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) 
 }
 
 // Create a new AssemblyReplay instance.
-func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
+func (client *Client) NewAssemblyReplay(assemblyId string) *AssemblyReplay {
 	return &AssemblyReplay{
 		client:     client,
 		steps:      make(map[string]map[string]interface{}),
