@@ -52,14 +52,14 @@ For examples on how to use templates, non-blocking processing and more, take a l
 ## Installation
 
 ```bash
-go get github.com/transloadit/go-sdk
+go get gopkg.in/transloadit/go-sdk.v1
 ```
 
 The Go SDK requires Go 1.1 or higher.
 
 ## Documentation
 
-See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
+See [Godoc](http://godoc.org/gopkg.in/transloadit/go-sdk.v1).
 
 ## License
 
