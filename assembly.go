@@ -2,6 +2,7 @@ package transloadit
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -56,11 +57,23 @@ type AssemblyListItem struct {
 	NotifyUrl         string    `json:"notify_url"`
 	RedirectUrl       string    `json:"redirect_url"`
 	ExecutionDuration float32   `json:"execution_duration"`
-	ExecutionStart    time.Time `json:"execution_start"`
+	ExecutionStart    *Time     `json:"execution_start"`
 	Created           time.Time `json:"created"`
 	Ok                string    `json:"ok"`
 	Error             string    `json:"error"`
 	Files             string    `json:"files"`
+}
+
+type Time struct {
+	*time.Time
+}
+
+func (t *Time) UnmarshalJSON(b []byte) error {
+	// The error is ignored intentionally, as the date returned by Transloadit
+	// may be invalid, e.g. "0000-00-00". This invalid date value actually
+	// represents the absence of a date and we therefore make t.Time as nil-pointer.
+	_ = json.Unmarshal(b, &t.Time)
+	return nil
 }
 
 type AssemblyInfo struct {
