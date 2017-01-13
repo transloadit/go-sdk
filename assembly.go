@@ -1,7 +1,6 @@
 package transloadit
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -218,26 +217,8 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 
 	// TODO: test with huge files
 	url := "http://api2-" + bored + "/assemblies"
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-
-	// Add files to upload
-	for _, reader := range assembly.readers {
-		part, err := writer.CreateFormFile(reader.Field, reader.Name)
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-
-		_, err = io.Copy(part, reader.Reader)
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-
-		err = reader.Reader.Close()
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-	}
+	bodyReader, bodyWriter := io.Pipe()
+	multiWriter := multipart.NewWriter(bodyWriter)
 
 	options := make(map[string]interface{})
 
@@ -258,29 +239,45 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
-	// Add additional keys and values
-	err = writer.WriteField("params", params)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
-	err = writer.WriteField("signature", signature)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
+	// All writes to the multipart.Writer multiWriter _must_ happen inside this
+	// goroutine because the writer is connected to the HTTP requst using an
+	// in-memory pipe. Therefore a write to the multipart.Writer will block until
+	// a corresponding read is happening from the HTTP request. The gist is that
+	// the writes and reads must not occur sequentially but in parallel.
+	go func() {
+		defer bodyWriter.Close()
+		defer multiWriter.Close()
+		// Add additional keys and values
 
-	// Close multipart writer
-	err = writer.Close()
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
+		if err := multiWriter.WriteField("params", params); err != nil {
+			fmt.Println(fmt.Errorf("unable to write params field: %s", err))
+		}
+		if err := multiWriter.WriteField("signature", signature); err != nil {
+			fmt.Println(fmt.Errorf("unable to write signature field: %s", err))
+		}
+
+		// Add files to upload
+		for _, reader := range assembly.readers {
+			defer reader.Reader.Close()
+
+			part, err := multiWriter.CreateFormFile(reader.Field, reader.Name)
+			if err != nil {
+				fmt.Println(fmt.Errorf("unable to create form field: %s", err))
+			}
+
+			if _, err := io.Copy(part, reader.Reader); err != nil {
+				fmt.Println(fmt.Errorf("unable to create upload request: %s", err))
+			}
+		}
+	}()
 
 	// Create HTTP request
-	req, err := http.NewRequest("POST", url, body)
+	req, err := http.NewRequest("POST", url, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
-	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
 	return req, nil
 }
