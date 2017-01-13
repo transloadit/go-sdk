@@ -7,7 +7,7 @@ import (
 func TestWait(t *testing.T) {
 	client := setup(t)
 
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",

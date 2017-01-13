@@ -20,7 +20,7 @@ if err != nil {
 }
 
 // Initialize new assembly
-assembly := client.CreateAssembly()
+assembly := client.NewAssembly()
 
 // Add input file to upload
 assembly.AddFile("myimage", "./lol_cat.jpg")

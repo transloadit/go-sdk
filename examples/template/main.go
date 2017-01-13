@@ -18,7 +18,7 @@ func main() {
 	}
 
 	// Initialize new assembly
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	// Add an file to upload
 	assembly.AddFile("image", "../../fixtures/lol_cat.jpg")

@@ -12,7 +12,7 @@ var assemblyUrl string
 
 func TestAssembly(t *testing.T) {
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -77,7 +77,7 @@ func TestAssemblyFail(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -106,7 +106,7 @@ func TestAssemblyFail(t *testing.T) {
 
 func TestAssemblyBlocking(t *testing.T) {
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -204,7 +204,7 @@ func TestReplayAssemblyBlocking(t *testing.T) {
 func TestAssemblyUsingTemplate(t *testing.T) {
 	setupTemplates(t)
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	assembly.TemplateId = templateIdOptimizeResize
 
@@ -224,7 +224,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 
 func TestCancelAssembly(t *testing.T) {
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",

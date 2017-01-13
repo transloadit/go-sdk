@@ -132,7 +132,7 @@ type FileInfo struct {
 }
 
 // Create a new assembly instance which can be executed later.
-func (client *Client) CreateAssembly() *Assembly {
+func (client *Client) NewAssembly() *Assembly {
 	return &Assembly{
 		client:  client,
 		steps:   make(map[string]map[string]interface{}),

@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// Initialize new assembly
-	assembly := client.CreateAssembly()
+	assembly := client.NewAssembly()
 
 	file, err := os.Open("../../fixtures/lol_cat.jpg")
 	if err != nil {
