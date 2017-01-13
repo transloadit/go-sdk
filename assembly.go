@@ -171,8 +171,10 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	// TODO: error handling
-	err = assembly.client.doRequest(req, &info)
+	// TODO: add context.Context
+	if err = assembly.client.doRequest(req, &info); err != nil {
+		return nil, err
+	}
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to create assembly: %s", info.Error)
@@ -316,15 +318,17 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	// TODO: error handling
 	err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
+	if err != nil {
+		return nil, err
+	}
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to start assembly replay: %s", info.Error)
 	}
 
 	if !assembly.Blocking {
-		return &info, err
+		return &info, nil
 	}
 
 	// Assembly replay response doesn't contains assembly url
