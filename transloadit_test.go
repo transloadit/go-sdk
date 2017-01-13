@@ -64,7 +64,8 @@ func setupTemplates(t *testing.T) {
 
 	client := setup(t)
 
-	template := NewTemplate("go-sdk-test")
+	template := NewTemplate()
+	template.Name = "go-sdk-test"
 
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",
