@@ -196,13 +196,13 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 		return &info, err
 	}
 
-	watcher := assembly.client.WaitForAssembly(info.AssemblyUrl)
+	waiter := assembly.client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
-	case res := <-watcher.Response:
+	case res := <-waiter.Response:
 		// Assembly completed
 		return res, nil
-	case err := <-watcher.Error:
+	case err := <-waiter.Error:
 		// Error appeared
 		return nil, err
 	}
@@ -341,13 +341,13 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 		return &info, nil
 	}
 
-	watcher := assembly.client.WaitForAssembly(info.AssemblyUrl)
+	waiter := assembly.client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
-	case res := <-watcher.Response:
+	case res := <-waiter.Response:
 		// Assembly completed
 		return res, nil
-	case err := <-watcher.Error:
+	case err := <-waiter.Error:
 		// Error appeared
 		return nil, err
 	}

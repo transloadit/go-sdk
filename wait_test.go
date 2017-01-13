@@ -23,15 +23,15 @@ func TestWait(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	watcher := client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
-	case res := <-watcher.Response:
+	case res := <-waiter.Response:
 		// Assembly completed
 		if res.AssemblyId != info.AssemblyId {
 			t.Fatal("unmatching assembly ids")
 		}
-	case err := <-watcher.Error:
+	case err := <-waiter.Error:
 		// Error appeared
 		t.Fatal(err)
 	}

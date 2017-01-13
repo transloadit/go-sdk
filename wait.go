@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type AssemblyWatcher struct {
+type AssemblyWaiter struct {
 	Response    chan *AssemblyInfo
 	Error       chan error
 	stop        chan bool
@@ -14,8 +14,8 @@ type AssemblyWatcher struct {
 }
 
 // Wait until the status of an assembly is either completed, canceled or aborted.
-func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
-	watcher := &AssemblyWatcher{
+func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWaiter {
+	waiter := &AssemblyWaiter{
 		Response:    make(chan *AssemblyInfo),
 		Error:       make(chan error),
 		stop:        make(chan bool, 1),
@@ -24,46 +24,46 @@ func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWatcher {
 		client:      client,
 	}
 
-	watcher.start()
+	waiter.start()
 
-	return watcher
+	return waiter
 }
 
-func (watcher *AssemblyWatcher) start() {
+func (waiter *AssemblyWaiter) start() {
 	go func() {
 		for {
 			select {
-			case <-watcher.stop:
-				watcher.closeChannels()
+			case <-waiter.stop:
+				waiter.closeChannels()
 				return
 			default:
-				watcher.poll()
+				waiter.poll()
 				time.Sleep(time.Second)
 			}
 		}
 	}()
 }
 
-// Stop the watcher and close all channels.
-func (watcher *AssemblyWatcher) Stop() {
-	watcher.stop <- true
+// Stop the waiter and close all channels.
+func (waiter *AssemblyWaiter) Stop() {
+	waiter.stop <- true
 }
 
-func (watcher *AssemblyWatcher) closeChannels() {
-	close(watcher.Response)
-	close(watcher.Error)
+func (waiter *AssemblyWaiter) closeChannels() {
+	close(waiter.Response)
+	close(waiter.Error)
 }
 
-func (watcher *AssemblyWatcher) poll() {
-	res, err := watcher.client.GetAssembly(watcher.assemblyUrl)
+func (waiter *AssemblyWaiter) poll() {
+	res, err := waiter.client.GetAssembly(waiter.assemblyUrl)
 	if err != nil {
-		watcher.Error <- err
-		watcher.Response <- res
-		watcher.Stop()
+		waiter.Error <- err
+		waiter.Response <- res
+		waiter.Stop()
 	}
 
 	if res.Ok == "ASSEMBLY_COMPLETED" || res.Ok == "ASSEMBLY_CANCELED" || res.Ok == "REQUEST_ABORTED" {
-		watcher.Response <- res
-		watcher.Stop()
+		waiter.Response <- res
+		waiter.Stop()
 	}
 }
