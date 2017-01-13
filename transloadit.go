@@ -48,14 +48,16 @@ type ListOptions struct {
 	ToDate     *time.Time `json:"todate,omitempty"`
 }
 
+type authParams struct {
+	Key     string `json:"key"`
+	Expires string `json:"expires"`
+}
+
 type authListOptions struct {
 	*ListOptions
 
 	// For internal use only!
-	Auth struct {
-		Key     string `json:"key"`
-		Expires string `json:"expires"`
-	} `json:"auth"`
+	Auth authParams `json:"auth"`
 }
 
 type RequestError struct {
@@ -87,9 +89,9 @@ func NewClient(config Config) (*Client, error) {
 }
 
 func (client *Client) sign(params map[string]interface{}) (string, string, error) {
-	params["auth"] = map[string]string{
-		"key":     client.config.AuthKey,
-		"expires": getExpireString(),
+	params["auth"] = authParams{
+		Key:     client.config.AuthKey,
+		Expires: getExpireString(),
 	}
 
 	b, err := json.Marshal(params)
@@ -179,10 +181,7 @@ func (client *Client) listRequest(path string, listOptions *ListOptions, result 
 
 	options := authListOptions{
 		ListOptions: listOptions,
-		Auth: struct {
-			Key     string `json:"key"`
-			Expires string `json:"expires"`
-		}{
+		Auth: authParams{
 			Key:     client.config.AuthKey,
 			Expires: getExpireString(),
 		},
