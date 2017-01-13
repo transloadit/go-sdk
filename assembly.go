@@ -344,9 +344,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 		return &info, nil
 	}
 
-	// Assembly replay response doesn't contains assembly url
-	assemblyUrl := assembly.client.config.Endpoint + "/assemblies/" + info.AssemblyId
-	watcher := assembly.client.WaitForAssembly(assemblyUrl)
+	watcher := assembly.client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
 	case res := <-watcher.Response:
