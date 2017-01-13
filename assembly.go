@@ -30,8 +30,8 @@ type upload struct {
 }
 
 type AssemblyReplay struct {
-	assemblyId string
-	client     *Client
+	assemblyUrl string
+	client      *Client
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
@@ -300,11 +300,11 @@ func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) 
 }
 
 // Create a new AssemblyReplay instance.
-func (client *Client) NewAssemblyReplay(assemblyId string) *AssemblyReplay {
+func (client *Client) NewAssemblyReplay(assemblyUrl string) *AssemblyReplay {
 	return &AssemblyReplay{
-		client:     client,
-		steps:      make(map[string]map[string]interface{}),
-		assemblyId: assemblyId,
+		client:      client,
+		steps:       make(map[string]map[string]interface{}),
+		assemblyUrl: assemblyUrl,
 	}
 }
 
@@ -328,7 +328,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
+	err := assembly.client.request("POST", assembly.assemblyUrl+"/replay", options, &info)
 	if err != nil {
 		return nil, err
 	}

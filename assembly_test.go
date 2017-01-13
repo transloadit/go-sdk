@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-var assemblyId string
 var assemblyUrl string
 
 func TestAssembly(t *testing.T) {
@@ -142,7 +141,6 @@ func TestAssemblyBlocking(t *testing.T) {
 		t.Fatal("wrong number of uploads")
 	}
 
-	assemblyId = info.AssemblyId
 	assemblyUrl = info.AssemblyUrl
 }
 
@@ -163,9 +161,8 @@ func TestGetAssembly(t *testing.T) {
 }
 
 func TestAssemblyReplay(t *testing.T) {
-	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
-	assembly := client.NewAssemblyReplay(assemblyId)
+	assembly := client.NewAssemblyReplay(assemblyUrl)
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
@@ -185,9 +182,8 @@ func TestAssemblyReplay(t *testing.T) {
 }
 
 func TestAssemblyReplayBlocking(t *testing.T) {
-	fmt.Println("Replaying assembly:", assemblyId, assemblyUrl)
 	client := setup(t)
-	assembly := client.NewAssemblyReplay(assemblyId)
+	assembly := client.NewAssemblyReplay(assemblyUrl)
 
 	assembly.Blocking = true
 
