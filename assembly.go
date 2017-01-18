@@ -1,7 +1,6 @@
 package transloadit
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -49,30 +48,18 @@ type AssemblyList struct {
 }
 
 type AssemblyListItem struct {
-	AssemblyId        string    `json:"id"`
-	AccountId         string    `json:"account_id"`
-	TemplateId        string    `json:"template_id"`
-	Instance          string    `json:"instance"`
-	NotifyUrl         string    `json:"notify_url"`
-	RedirectUrl       string    `json:"redirect_url"`
-	ExecutionDuration float32   `json:"execution_duration"`
-	ExecutionStart    *Time     `json:"execution_start"`
-	Created           time.Time `json:"created"`
-	Ok                string    `json:"ok"`
-	Error             string    `json:"error"`
-	Files             string    `json:"files"`
-}
-
-type Time struct {
-	*time.Time
-}
-
-func (t *Time) UnmarshalJSON(b []byte) error {
-	// The error is ignored intentionally, as the date returned by Transloadit
-	// may be invalid, e.g. "0000-00-00". This invalid date value actually
-	// represents the absence of a date and we therefore make t.Time as nil-pointer.
-	_ = json.Unmarshal(b, &t.Time)
-	return nil
+	AssemblyId        string     `json:"id"`
+	AccountId         string     `json:"account_id"`
+	TemplateId        string     `json:"template_id"`
+	Instance          string     `json:"instance"`
+	NotifyUrl         string     `json:"notify_url"`
+	RedirectUrl       string     `json:"redirect_url"`
+	ExecutionDuration float32    `json:"execution_duration"`
+	ExecutionStart    *time.Time `json:"execution_start"`
+	Created           time.Time  `json:"created"`
+	Ok                string     `json:"ok"`
+	Error             string     `json:"error"`
+	Files             string     `json:"files"`
 }
 
 type AssemblyInfo struct {
