@@ -331,9 +331,9 @@ func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInf
 }
 
 // List all assemblies matching the criterias.
-func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
+func (client *Client) ListAssemblies(options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
 	err := client.listRequest("assemblies", options, &assemblies)
 
-	return &assemblies, err
+	return assemblies, err
 }
