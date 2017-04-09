@@ -11,7 +11,7 @@ before_install:
 - go get github.com/mattn/goveralls
 - go get .
 script:
-- $HOME/gopath/bin/goveralls -v -repotoken $COVERALLS_TOKEN || make test
+- make test
 notifications:
   slack:
     secure: U+RtmtVJEzEoZf+/VVuon9qNC4GXKzXoTqdYThP57ZTzqoDAJDnuZ/qUrMGrMYpYg38ikxtK3qJhBMfffzHXc3KS9hcA7Ay/yPz4QiCBMy3M9EBPWt8iGP6n2T3KUw4WG/hSBUtnJqmwPdzRfVUIqOMgchiN9eWwEbEmSYTvOqA=
