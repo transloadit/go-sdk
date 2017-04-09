@@ -41,7 +41,7 @@ func main () {
   assembly := client.CreateAssembly()
 
   // Add input file to upload
-  assembly.AddFile("myimage", "./lol_cat.jpg")
+  assembly.AddFile("myimage", "/PATH/TO/FILE.jpg")
 
   // Add instructions, e.g. resize image to 75x75px
   assembly.AddStep("resize", map[string]interface{}{
