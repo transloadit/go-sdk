@@ -16,7 +16,7 @@ type TemplateList struct {
 }
 
 // NewTemplate returns a new Template struct with initialized values. This
-// template will not be saved to Transloadit. Do to so, please use the
+// template will not be saved to Transloadit. To do so, please use the
 // Client.CreateTemplate function.
 func NewTemplate() Template {
 	return Template{
@@ -72,7 +72,7 @@ func (client *Client) UpdateTemplate(templateId string, newTemplate Template) er
 	return client.request("PUT", "templates/"+templateId, content, nil)
 }
 
-// GetTemplate will retrieve all templates matching the criteria.
+// ListTemplate will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(options *ListOptions) (list TemplateList, err error) {
 	err = client.listRequest("templates", options, &list)
 	return list, err
