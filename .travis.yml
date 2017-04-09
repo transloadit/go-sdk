@@ -4,10 +4,7 @@ go:
 - 1.5
 - 1.6
 - 1.7
-- tip
-matrix:
-  allow_failures:
-  - go: tip
+- 1.8
 sudo: false
 before_install:
 - go get github.com/axw/gocov/gocov
