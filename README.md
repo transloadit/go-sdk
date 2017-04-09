@@ -26,7 +26,7 @@ package main
 
 import (
     "fmt"
-    "go get gopkg.in/transloadit/go-sdk.v1"
+    "gopkg.in/transloadit/go-sdk.v1"
 )
 
 func main () {
