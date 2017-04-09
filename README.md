@@ -40,7 +40,7 @@ func main () {
     }
 
     // Initialize new assembly
-    assembly := client.CreateAssembly()
+    assembly := transloadit.NewAssembly()
 
     // Add input file to upload
     assembly.AddFile("myimage", "/PATH/TO/FILE.jpg")
@@ -59,7 +59,7 @@ func main () {
     assembly.Blocking = true
 
     // Start the upload
-    info, err := assembly.Start()
+    info, err := client.StartAssembly(assembly)
     if err != nil {
         panic(err)
     }
