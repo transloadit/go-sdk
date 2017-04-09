@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/transloadit/go-sdk"
-	"os"
 )
 
 func main() {
@@ -12,7 +11,7 @@ func main() {
 	options := transloadit.DefaultConfig
 	options.AuthKey = "TRANSLOADIT_KEY"
 	options.AuthSecret = "TRANSLOADIT_SECRET"
-	client, err := transloadit.NewClient(&options)
+	client, err := transloadit.NewClient(options)
 	if err != nil {
 		panic(err)
 	}
@@ -20,13 +19,8 @@ func main() {
 	// Initialize new assembly
 	assembly := client.CreateAssembly()
 
-	file, err := os.Open("../../fixtures/lol_cat.jpg")
-	if err != nil {
-		panic(err)
-	}
-
-	// Add an io.Reader to upload
-	assembly.AddReader("image", "lol_cat.jpg", file)
+	// Add a file to upload
+	assembly.AddFile("image", "../../fixtures/lol_cat.jpg")
 
 	// Add instructions, e.g. resize image to 75x75px
 	assembly.AddStep("resize", map[string]interface{}{
