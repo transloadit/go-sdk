@@ -33,7 +33,7 @@ func main() {
 	})
 
 	// Start the upload
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		panic(err)
 	}

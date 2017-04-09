@@ -31,7 +31,7 @@ func TestAssembly(t *testing.T) {
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -93,7 +93,7 @@ func TestAssemblyFail(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	_, err = assembly.Upload()
+	_, err = assembly.Start()
 	reqErr := err.(RequestError)
 	if reqErr.Code != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
 		t.Fatal("wrong error code in response")
@@ -124,7 +124,7 @@ func TestAssemblyBlocking(t *testing.T) {
 
 	assembly.Blocking = true
 
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -204,7 +204,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 
 	assembly.TemplateId = templateIdOptimizeResize
 
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -227,7 +227,7 @@ func TestCancelAssembly(t *testing.T) {
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
 	})
 
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		t.Fatal(err)
 	}

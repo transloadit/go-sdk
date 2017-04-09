@@ -14,7 +14,7 @@ func TestWait(t *testing.T) {
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/100mb.bin",
 	})
 
-	info, err := assembly.Upload()
+	info, err := assembly.Start()
 	if err != nil {
 		t.Fatal(err)
 	}

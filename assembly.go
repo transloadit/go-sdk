@@ -163,7 +163,7 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 //  	}
 //  	panic(err)
 //  }
-func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
+func (assembly *Assembly) Start() (*AssemblyInfo, error) {
 	req, err := assembly.makeRequest()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create assembly request: %s", err)
