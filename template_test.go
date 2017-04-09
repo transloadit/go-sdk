@@ -47,8 +47,8 @@ func TestTemplate(t *testing.T) {
 	template.AddStep("bar", map[string]interface{}{})
 	template.AddStep("baz", map[string]interface{}{})
 
-	// Step 3: Edit previously created template
-	if err := client.EditTemplate(id, template); err != nil {
+	// Step 3: Update previously created template
+	if err := client.UpdateTemplate(id, template); err != nil {
 		t.Fatal(err)
 	}
 

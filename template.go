@@ -15,7 +15,9 @@ type TemplateList struct {
 	Count     int        `json:"count"`
 }
 
-// Creates a new template instance which can be saved to transloadit.
+// NewTemplate returns a new Template struct with initialized values. This
+// template will not be saved to Transloadit. Do to so, please use the
+// Client.CreateTemplate function.
 func NewTemplate() Template {
 	return Template{
 		Content: TemplateContent{
@@ -24,11 +26,13 @@ func NewTemplate() Template {
 	}
 }
 
+// AddStep will add the provided step to the Template.Content.Steps map.
 func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
-// Save the template.
+// CreateTemplate will save the provided template sturct as a new template
+// and return the ID of the new template.
 func (client *Client) CreateTemplate(template Template) (string, error) {
 	content := map[string]interface{}{
 		"name":     template.Name,
@@ -42,19 +46,23 @@ func (client *Client) CreateTemplate(template Template) (string, error) {
 	return template.Id, nil
 }
 
-// Get information about a template using its id.
+// GetTemplate will retrieve details about the template associated with the
+// provided template ID.
 func (client *Client) GetTemplate(templateId string) (template Template, err error) {
 	err = client.request("GET", "templates/"+templateId, nil, &template)
 	return template, err
 }
 
-// Delete a template from the list.
+// DeleteTemplate will delete the template associated with the provided
+// template ID.
 func (client *Client) DeleteTemplate(templateId string) error {
 	return client.request("DELETE", "templates/"+templateId, nil, nil)
 }
 
-// Update the name and content of the template defined using the id.
-func (client *Client) EditTemplate(templateId string, newTemplate Template) error {
+// UpdateTemplate will update the template associated with the provided
+// template ID to match the new name and  new content. Please be aware that you
+// are not able to change a template's ID.
+func (client *Client) UpdateTemplate(templateId string, newTemplate Template) error {
 	// Create signature
 	content := map[string]interface{}{
 		"name":     newTemplate.Name,
@@ -64,7 +72,7 @@ func (client *Client) EditTemplate(templateId string, newTemplate Template) erro
 	return client.request("PUT", "templates/"+templateId, content, nil)
 }
 
-// List all templates matching the criterias.
+// GetTemplate will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(options *ListOptions) (list TemplateList, err error) {
 	err = client.listRequest("templates", options, &list)
 	return list, err
