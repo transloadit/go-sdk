@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/transloadit/go-sdk"
 )
 
@@ -13,7 +11,7 @@ func main() {
 	options := transloadit.DefaultConfig
 	options.AuthKey = "TRANSLOADIT_KEY"
 	options.AuthSecret = "TRANSLOADIT_SECRET"
-	client, err := transloadit.NewClient(&options)
+	client, err := transloadit.NewClient(options)
 	if err != nil {
 		panic(err)
 	}
@@ -21,12 +19,17 @@ func main() {
 	// Initialize new assembly
 	assembly := client.CreateAssembly()
 
-	// Add an file to upload
-	assembly.AddReader("image", "../../fixtures/lol_cat.jpg")
+	// Add a file to upload
+	assembly.AddFile("image", "../../fixtures/lol_cat.jpg")
 
-	// Instructions will be read from the template
-	// `02a8693053cd11e49b9ba916b58830db` stored on Transloadit's servers.
-	assembly.TemplateId = "02a8693053cd11e49b9ba916b58830db"
+	// Add instructions, e.g. resize image to 75x75px
+	assembly.AddStep("resize", map[string]interface{}{
+		"robot":           "/image/resize",
+		"width":           75,
+		"height":          75,
+		"resize_strategy": "pad",
+		"background":      "#000000",
+	})
 
 	// Start the upload
 	info, err := assembly.Upload()
@@ -39,9 +42,8 @@ func main() {
 	// The AssemblyWatcher provides functionality for polling until the assembly
 	// has ended.
 	waiter := client.WaitForAssembly(info.AssemblyUrl)
-	assembly := <-waiter.Response
+	info = <-waiter.Response
 
-	fmt.Printf("You can view the result at: %s\n", assembly.Results["resize"][0].Url)
-
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
 
 }
