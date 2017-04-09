@@ -196,14 +196,8 @@ func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
 }
 
 func (assembly *Assembly) makeRequest() (*http.Request, error) {
-	// Get bored instance to upload files to
-	bored, err := assembly.client.getBoredInstance()
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
-
 	// TODO: test with huge files
-	url := "http://api2-" + bored + "/assemblies"
+	url := assembly.client.config.Endpoint + "/assemblies"
 	bodyReader, bodyWriter := io.Pipe()
 	multiWriter := multipart.NewWriter(bodyWriter)
 
