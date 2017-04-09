@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/transloadit/go-sdk"
 )
@@ -21,13 +20,8 @@ func main() {
 	// Initialize new assembly
 	assembly := client.NewAssembly()
 
-	file, err := os.Open("../../fixtures/lol_cat.jpg")
-	if err != nil {
-		panic(err)
-	}
-
-	// Add an io.Reader to upload
-	assembly.AddReader("image", "lol_cat.jpg", file)
+	// Add a file to upload
+	assembly.AddFile("image", "../../fixtures/lol_cat.jpg")
 
 	// Add instructions, e.g. resize image to 75x75px
 	assembly.AddStep("resize", map[string]interface{}{
