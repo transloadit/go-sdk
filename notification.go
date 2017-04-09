@@ -5,11 +5,11 @@ import (
 )
 
 type NotificationList struct {
-	Notifications []*NotificationListItem `json:"items"`
-	Count         int                     `json:"count"`
+	Notifications []Notification `json:"items"`
+	Count         int            `json:"count"`
 }
 
-type NotificationListItem struct {
+type Notification struct {
 	Id           string    `json:"id"`
 	AssemblyId   string    `json:"assembly_id"`
 	AccountId    string    `json:"account_id"`
@@ -21,12 +21,11 @@ type NotificationListItem struct {
 	Error        string    `json:"error"`
 }
 
-// List all notificaions matching the criterias.
-func (client *Client) ListNotifications(options *ListOptions) (*NotificationList, error) {
-	var notifications NotificationList
-	err := client.listRequest("assembly_notifications", options, &notifications)
-	return &notifications, err
-
+// ListNotification will return a slice containing all notifications matching
+// the criteria defined using the ListOptions structure.
+func (client *Client) ListNotifications(options *ListOptions) (list NotificationList, err error) {
+	err = client.listRequest("assembly_notifications", options, &list)
+	return list, err
 }
 
 // Replay a notification which was trigger by assembly defined using the assemblyId.
@@ -38,7 +37,5 @@ func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) er
 		params["notify_url"] = notifyUrl
 	}
 
-	// TODO: Examine response for error details
-	err := client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, &struct{}{})
-	return err
+	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
 }
