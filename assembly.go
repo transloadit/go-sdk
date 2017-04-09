@@ -10,7 +10,6 @@ import (
 )
 
 type Assembly struct {
-	client *Client
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
@@ -30,7 +29,6 @@ type upload struct {
 
 type AssemblyReplay struct {
 	assemblyUrl string
-	client      *Client
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
@@ -119,9 +117,8 @@ type FileInfo struct {
 }
 
 // Create a new assembly instance which can be executed later.
-func (client *Client) NewAssembly() *Assembly {
-	return &Assembly{
-		client:  client,
+func NewAssembly() Assembly {
+	return Assembly{
 		steps:   make(map[string]map[string]interface{}),
 		readers: make([]*upload, 0),
 	}
@@ -163,15 +160,15 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 //  	}
 //  	panic(err)
 //  }
-func (assembly *Assembly) Start() (*AssemblyInfo, error) {
-	req, err := assembly.makeRequest()
+func (client *Client) StartAssembly(assembly Assembly) (*AssemblyInfo, error) {
+	req, err := assembly.makeRequest(client)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create assembly request: %s", err)
 	}
 
 	var info AssemblyInfo
 	// TODO: add context.Context
-	if err = assembly.client.doRequest(req, &info); err != nil {
+	if err = client.doRequest(req, &info); err != nil {
 		return nil, err
 	}
 
@@ -183,7 +180,7 @@ func (assembly *Assembly) Start() (*AssemblyInfo, error) {
 		return &info, err
 	}
 
-	waiter := assembly.client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
 	case res := <-waiter.Response:
@@ -195,9 +192,9 @@ func (assembly *Assembly) Start() (*AssemblyInfo, error) {
 	}
 }
 
-func (assembly *Assembly) makeRequest() (*http.Request, error) {
+func (assembly *Assembly) makeRequest(client *Client) (*http.Request, error) {
 	// TODO: test with huge files
-	url := assembly.client.config.Endpoint + "/assemblies"
+	url := client.config.Endpoint + "/assemblies"
 	bodyReader, bodyWriter := io.Pipe()
 	multiWriter := multipart.NewWriter(bodyWriter)
 
@@ -215,7 +212,7 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		options["notify_url"] = assembly.NotifyUrl
 	}
 
-	params, signature, err := assembly.client.sign(options)
+	params, signature, err := client.sign(options)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
@@ -281,9 +278,8 @@ func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) 
 }
 
 // Create a new AssemblyReplay instance.
-func (client *Client) NewAssemblyReplay(assemblyUrl string) *AssemblyReplay {
-	return &AssemblyReplay{
-		client:      client,
+func NewAssemblyReplay(assemblyUrl string) AssemblyReplay {
+	return AssemblyReplay{
 		steps:       make(map[string]map[string]interface{}),
 		assemblyUrl: assemblyUrl,
 	}
@@ -295,7 +291,7 @@ func (assembly *AssemblyReplay) AddStep(name string, details map[string]interfac
 }
 
 // Start the assembly replay.
-func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
+func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInfo, error) {
 	options := map[string]interface{}{
 		"steps": assembly.steps,
 	}
@@ -309,7 +305,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 	}
 
 	var info AssemblyInfo
-	err := assembly.client.request("POST", assembly.assemblyUrl+"/replay", options, &info)
+	err := client.request("POST", assembly.assemblyUrl+"/replay", options, &info)
 	if err != nil {
 		return nil, err
 	}
@@ -322,7 +318,7 @@ func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
 		return &info, nil
 	}
 
-	waiter := assembly.client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(info.AssemblyUrl)
 
 	select {
 	case res := <-waiter.Response:

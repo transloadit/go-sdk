@@ -11,7 +11,7 @@ var assemblyUrl string
 
 func TestAssembly(t *testing.T) {
 	client := setup(t)
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -31,7 +31,7 @@ func TestAssembly(t *testing.T) {
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 
-	info, err := assembly.Start()
+	info, err := client.StartAssembly(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,7 +76,7 @@ func TestAssemblyFail(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -93,7 +93,7 @@ func TestAssemblyFail(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	_, err = assembly.Start()
+	_, err = client.StartAssembly(assembly)
 	reqErr := err.(RequestError)
 	if reqErr.Code != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
 		t.Fatal("wrong error code in response")
@@ -105,7 +105,7 @@ func TestAssemblyFail(t *testing.T) {
 
 func TestAssemblyBlocking(t *testing.T) {
 	client := setup(t)
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -124,7 +124,7 @@ func TestAssemblyBlocking(t *testing.T) {
 
 	assembly.Blocking = true
 
-	info, err := assembly.Start()
+	info, err := client.StartAssembly(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -162,12 +162,12 @@ func TestGetAssembly(t *testing.T) {
 
 func TestAssemblyReplay(t *testing.T) {
 	client := setup(t)
-	assembly := client.NewAssemblyReplay(assemblyUrl)
+	assembly := NewAssemblyReplay(assemblyUrl)
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
 
-	info, err := assembly.Start()
+	info, err := client.StartAssemblyReplay(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -183,11 +183,11 @@ func TestAssemblyReplay(t *testing.T) {
 
 func TestAssemblyReplayBlocking(t *testing.T) {
 	client := setup(t)
-	assembly := client.NewAssemblyReplay(assemblyUrl)
+	assembly := NewAssemblyReplay(assemblyUrl)
 
 	assembly.Blocking = true
 
-	info, err := assembly.Start()
+	info, err := client.StartAssemblyReplay(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -200,11 +200,11 @@ func TestAssemblyReplayBlocking(t *testing.T) {
 func TestAssemblyUsingTemplate(t *testing.T) {
 	setupTemplates(t)
 	client := setup(t)
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	assembly.TemplateId = templateIdOptimizeResize
 
-	info, err := assembly.Start()
+	info, err := client.StartAssembly(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -220,14 +220,14 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 
 func TestCancelAssembly(t *testing.T) {
 	client := setup(t)
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
 	})
 
-	info, err := assembly.Start()
+	info, err := client.StartAssembly(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}

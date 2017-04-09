@@ -7,14 +7,14 @@ import (
 func TestWait(t *testing.T) {
 	client := setup(t)
 
-	assembly := client.NewAssembly()
+	assembly := NewAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/100mb.bin",
 	})
 
-	info, err := assembly.Start()
+	info, err := client.StartAssembly(assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
