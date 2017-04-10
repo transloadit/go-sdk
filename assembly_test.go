@@ -9,7 +9,7 @@ import (
 
 var assemblyUrl string
 
-func TestAssembly(t *testing.T) {
+func TestStartAssembly_Success(t *testing.T) {
 	client := setup(t)
 	assembly := NewAssembly()
 
@@ -68,7 +68,7 @@ func TestAssembly(t *testing.T) {
 	assemblyUrl = info.AssemblyUrl
 }
 
-func TestAssemblyFail(t *testing.T) {
+func TestStartAssembly_Failure(t *testing.T) {
 	config := DefaultConfig
 	config.AuthKey = "does not exist"
 	config.AuthSecret = "does not matter"
@@ -102,44 +102,7 @@ func TestAssemblyFail(t *testing.T) {
 	}
 }
 
-func TestGetAssembly(t *testing.T) {
-	client := setup(t)
-	assembly, err := client.GetAssembly(ctx, assemblyUrl)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if assembly.AssemblyId == "" {
-		t.Fatal("assembly id not contained")
-	}
-
-	if assembly.AssemblyUrl != assemblyUrl {
-		t.Fatal("assembly urls don't match")
-	}
-}
-
-func TestAssemblyReplay(t *testing.T) {
-	client := setup(t)
-	assembly := NewAssemblyReplay(assemblyUrl)
-
-	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
-	assembly.ReparseTemplate = true
-
-	info, err := client.StartAssemblyReplay(ctx, assembly)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if info.Ok != "ASSEMBLY_REPLAYING" {
-		t.Fatal("wrong status code returned")
-	}
-
-	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
-		t.Fatal("wrong notify url")
-	}
-}
-
-func TestAssemblyUsingTemplate(t *testing.T) {
+func TestStartAssembly_Template(t *testing.T) {
 	setupTemplates(t)
 	client := setup(t)
 	assembly := NewAssembly()
@@ -157,6 +120,43 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 
 	if !strings.Contains(info.Params, templateIdOptimizeResize) {
 		t.Fatal("template id not as parameter submitted")
+	}
+}
+
+func TestGetAssembly(t *testing.T) {
+	client := setup(t)
+	assembly, err := client.GetAssembly(ctx, assemblyUrl)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if assembly.AssemblyId == "" {
+		t.Fatal("assembly id not contained")
+	}
+
+	if assembly.AssemblyUrl != assemblyUrl {
+		t.Fatal("assembly urls don't match")
+	}
+}
+
+func TestStartAssemblyReplay(t *testing.T) {
+	client := setup(t)
+	assembly := NewAssemblyReplay(assemblyUrl)
+
+	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
+	assembly.ReparseTemplate = true
+
+	info, err := client.StartAssemblyReplay(ctx, assembly)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.Ok != "ASSEMBLY_REPLAYING" {
+		t.Fatal("wrong status code returned")
+	}
+
+	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+		t.Fatal("wrong notify url")
 	}
 }
 

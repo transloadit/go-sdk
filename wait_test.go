@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestWait(t *testing.T) {
+func TestWaitForAssembly(t *testing.T) {
 	client := setup(t)
 
 	assembly := NewAssembly()
