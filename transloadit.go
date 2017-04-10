@@ -18,12 +18,10 @@ import (
 type Config struct {
 	AuthKey    string
 	AuthSecret string
-	Region     string
 	Endpoint   string
 }
 
 var DefaultConfig = Config{
-	Region:   "us-east-1",
 	Endpoint: "http://api2.transloadit.com",
 }
 
