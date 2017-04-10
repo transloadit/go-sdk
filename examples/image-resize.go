@@ -32,16 +32,18 @@ func main() {
 		"background":      "#000000",
 	})
 
-	// Wait until Transloadit is done processing all uploads
-	// and is ready to download the results
-	assembly.Blocking = true
-
 	// Start the upload
 	info, err := client.StartAssembly(context.Background(), assembly)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
+	// All files have now been uploaded and the assembly has started but no
+	// results are available yet since the conversion has not finished.
+	// The AssemblyWatcher provides functionality for polling until the assembly
+	// has ended.
+	waiter := client.WaitForAssembly(context.Background(), info.AssemblyUrl)
+	info = <-waiter.Response
 
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
 }

@@ -16,10 +16,8 @@ type Assembly struct {
 	NotifyUrl string
 	// Optional template id to use instead of adding steps.
 	TemplateId string
-	// Wait until the assembly completes (or is canceled).
-	Blocking bool
-	steps    map[string]map[string]interface{}
-	readers  []*upload
+	steps      map[string]map[string]interface{}
+	readers    []*upload
 }
 
 type upload struct {
@@ -33,8 +31,6 @@ type AssemblyReplay struct {
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
-	// Wait until the assembly completes (or is canceled).
-	Blocking bool
 	// Reparse the template when replaying. Useful if the template has changed
 	// since the orignal assembly was created.
 	ReparseTemplate bool
@@ -177,20 +173,7 @@ func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*As
 		return &info, fmt.Errorf("failed to create assembly: %s", info.Error)
 	}
 
-	if !assembly.Blocking {
-		return &info, err
-	}
-
-	waiter := client.WaitForAssembly(ctx, info.AssemblyUrl)
-
-	select {
-	case res := <-waiter.Response:
-		// Assembly completed
-		return res, nil
-	case err := <-waiter.Error:
-		// Error appeared
-		return nil, err
-	}
+	return &info, err
 }
 
 func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
@@ -316,20 +299,7 @@ func (client *Client) StartAssemblyReplay(ctx context.Context, assembly Assembly
 		return &info, fmt.Errorf("failed to start assembly replay: %s", info.Error)
 	}
 
-	if !assembly.Blocking {
-		return &info, nil
-	}
-
-	waiter := client.WaitForAssembly(ctx, info.AssemblyUrl)
-
-	select {
-	case res := <-waiter.Response:
-		// Assembly completed
-		return res, nil
-	case err := <-waiter.Error:
-		// Error appeared
-		return nil, err
-	}
+	return &info, nil
 }
 
 // List all assemblies matching the criterias.

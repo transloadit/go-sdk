@@ -64,6 +64,8 @@ func TestAssembly(t *testing.T) {
 	if info.ClientAgent[:len(expectedAgent)] != expectedAgent {
 		t.Fatal("wrong user agent")
 	}
+
+	assemblyUrl = info.AssemblyUrl
 }
 
 func TestAssemblyFail(t *testing.T) {
@@ -103,47 +105,6 @@ func TestAssemblyFail(t *testing.T) {
 	}
 }
 
-func TestAssemblyBlocking(t *testing.T) {
-	client := setup(t)
-	assembly := NewAssembly()
-
-	file, err := os.Open("./fixtures/lol_cat.jpg")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assembly.AddReader("image", "lol_cat.jpg", file)
-
-	assembly.AddStep("resize", map[string]interface{}{
-		"robot":           "/image/resize",
-		"width":           75,
-		"height":          75,
-		"resize_strategy": "pad",
-		"background":      "#000000",
-	})
-
-	assembly.Blocking = true
-
-	info, err := client.StartAssembly(ctx, assembly)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if info.Ok != "ASSEMBLY_COMPLETED" {
-		t.Fatal("wrong assembly status")
-	}
-
-	if info.AssemblyId == "" {
-		t.Fatal("response doesn't contain assembly_id")
-	}
-
-	if len(info.Uploads) != 1 {
-		t.Fatal("wrong number of uploads")
-	}
-
-	assemblyUrl = info.AssemblyUrl
-}
-
 func TestGetAssembly(t *testing.T) {
 	client := setup(t)
 	assembly, err := client.GetAssembly(ctx, assemblyUrl)
@@ -178,22 +139,6 @@ func TestAssemblyReplay(t *testing.T) {
 
 	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
-	}
-}
-
-func TestAssemblyReplayBlocking(t *testing.T) {
-	client := setup(t)
-	assembly := NewAssemblyReplay(assemblyUrl)
-
-	assembly.Blocking = true
-
-	info, err := client.StartAssemblyReplay(ctx, assembly)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if info.Ok != "ASSEMBLY_COMPLETED" {
-		t.Fatal("wrong status code returned")
 	}
 }
 
