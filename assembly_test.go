@@ -146,6 +146,11 @@ func TestStartAssemblyReplay(t *testing.T) {
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
 
+	assembly.AddStep("import", map[string]interface{}{
+		"robot": "/http/import",
+		"url":   "http://mirror.nl.leaseweb.net/speedtest/10mb.bin",
+	})
+
 	info, err := client.StartAssemblyReplay(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
