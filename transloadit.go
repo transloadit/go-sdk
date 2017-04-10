@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
@@ -135,7 +136,7 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	return nil
 }
 
-func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) error {
+func (client *Client) request(ctx context.Context, method string, path string, content map[string]interface{}, result interface{}) error {
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -167,6 +168,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	if err != nil {
 		return fmt.Errorf("request: %s", err)
 	}
+	req = req.WithContext(ctx)
 
 	if method != "GET" {
 		// Add content type header
@@ -176,7 +178,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	return client.doRequest(req, result)
 }
 
-func (client *Client) listRequest(path string, listOptions *ListOptions, result interface{}) error {
+func (client *Client) listRequest(ctx context.Context, path string, listOptions *ListOptions, result interface{}) error {
 	uri := client.config.Endpoint + "/" + path
 
 	options := authListOptions{
@@ -208,6 +210,7 @@ func (client *Client) listRequest(path string, listOptions *ListOptions, result 
 	if err != nil {
 		return fmt.Errorf("request: %s", err)
 	}
+	req = req.WithContext(ctx)
 
 	return client.doRequest(req, result)
 }

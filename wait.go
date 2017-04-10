@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"context"
 	"time"
 )
 
@@ -14,7 +15,7 @@ type AssemblyWaiter struct {
 }
 
 // Wait until the status of an assembly is either completed, canceled or aborted.
-func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWaiter {
+func (client *Client) WaitForAssembly(ctx context.Context, assemblyUrl string) *AssemblyWaiter {
 	waiter := &AssemblyWaiter{
 		Response:    make(chan *AssemblyInfo),
 		Error:       make(chan error),
@@ -24,12 +25,12 @@ func (client *Client) WaitForAssembly(assemblyUrl string) *AssemblyWaiter {
 		client:      client,
 	}
 
-	waiter.start()
+	waiter.start(ctx)
 
 	return waiter
 }
 
-func (waiter *AssemblyWaiter) start() {
+func (waiter *AssemblyWaiter) start(ctx context.Context) {
 	go func() {
 		for {
 			select {
@@ -37,7 +38,7 @@ func (waiter *AssemblyWaiter) start() {
 				waiter.closeChannels()
 				return
 			default:
-				waiter.poll()
+				waiter.poll(ctx)
 				time.Sleep(time.Second)
 			}
 		}
@@ -54,8 +55,8 @@ func (waiter *AssemblyWaiter) closeChannels() {
 	close(waiter.Error)
 }
 
-func (waiter *AssemblyWaiter) poll() {
-	res, err := waiter.client.GetAssembly(waiter.assemblyUrl)
+func (waiter *AssemblyWaiter) poll(ctx context.Context) {
+	res, err := waiter.client.GetAssembly(ctx, waiter.assemblyUrl)
 	if err != nil {
 		waiter.Error <- err
 		waiter.Response <- res

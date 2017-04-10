@@ -31,7 +31,7 @@ func TestAssembly(t *testing.T) {
 
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -93,7 +93,7 @@ func TestAssemblyFail(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	_, err = client.StartAssembly(assembly)
+	_, err = client.StartAssembly(ctx, assembly)
 	reqErr := err.(RequestError)
 	if reqErr.Code != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
 		t.Fatal("wrong error code in response")
@@ -124,7 +124,7 @@ func TestAssemblyBlocking(t *testing.T) {
 
 	assembly.Blocking = true
 
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -146,7 +146,7 @@ func TestAssemblyBlocking(t *testing.T) {
 
 func TestGetAssembly(t *testing.T) {
 	client := setup(t)
-	assembly, err := client.GetAssembly(assemblyUrl)
+	assembly, err := client.GetAssembly(ctx, assemblyUrl)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -167,7 +167,7 @@ func TestAssemblyReplay(t *testing.T) {
 	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
 
-	info, err := client.StartAssemblyReplay(assembly)
+	info, err := client.StartAssemblyReplay(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -187,7 +187,7 @@ func TestAssemblyReplayBlocking(t *testing.T) {
 
 	assembly.Blocking = true
 
-	info, err := client.StartAssemblyReplay(assembly)
+	info, err := client.StartAssemblyReplay(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -204,7 +204,7 @@ func TestAssemblyUsingTemplate(t *testing.T) {
 
 	assembly.TemplateId = templateIdOptimizeResize
 
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -227,7 +227,7 @@ func TestCancelAssembly(t *testing.T) {
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
 	})
 
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -236,7 +236,7 @@ func TestCancelAssembly(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	info, err = client.CancelAssembly(info.AssemblyUrl)
+	info, err = client.CancelAssembly(ctx, info.AssemblyUrl)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -249,7 +249,7 @@ func TestCancelAssembly(t *testing.T) {
 func TestListAssemblies(t *testing.T) {
 	client := setup(t)
 
-	assemblies, err := client.ListAssemblies(&ListOptions{
+	assemblies, err := client.ListAssemblies(ctx, &ListOptions{
 		PageSize: 3,
 	})
 	if err != nil {

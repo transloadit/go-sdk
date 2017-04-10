@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/transloadit/go-sdk"
@@ -32,7 +33,7 @@ func main() {
 	assembly.Blocking = true
 
 	// Start the upload
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(context.Background(), assembly)
 	if err != nil {
 		panic(err)
 	}

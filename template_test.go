@@ -19,7 +19,7 @@ func TestTemplate(t *testing.T) {
 	})
 
 	// Step 1: Create a brand new template
-	id, err := client.CreateTemplate(template)
+	id, err := client.CreateTemplate(ctx, template)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +28,7 @@ func TestTemplate(t *testing.T) {
 	}
 
 	// Step 2: Retrieve new template and assert it's properties
-	if template, err = client.GetTemplate(id); err != nil {
+	if template, err = client.GetTemplate(ctx, id); err != nil {
 		t.Fatal(err)
 	}
 
@@ -48,12 +48,12 @@ func TestTemplate(t *testing.T) {
 	template.AddStep("baz", map[string]interface{}{})
 
 	// Step 3: Update previously created template
-	if err := client.UpdateTemplate(id, template); err != nil {
+	if err := client.UpdateTemplate(ctx, id, template); err != nil {
 		t.Fatal(err)
 	}
 
 	// Step 4: Retrieve template again and assert edited properties
-	if template, err = client.GetTemplate(id); err != nil {
+	if template, err = client.GetTemplate(ctx, id); err != nil {
 		t.Fatal(err)
 	}
 
@@ -71,12 +71,12 @@ func TestTemplate(t *testing.T) {
 	}
 
 	// Step 5: Delete template
-	if err := client.DeleteTemplate(id); err != nil {
+	if err := client.DeleteTemplate(ctx, id); err != nil {
 		t.Fatal(err)
 	}
 
 	// Step 6: Assert template has been deleted
-	_, err = client.GetTemplate(id)
+	_, err = client.GetTemplate(ctx, id)
 	if err.(RequestError).Code != "TEMPLATE_NOT_FOUND" {
 		t.Error("template has not been deleted")
 	}
@@ -85,7 +85,7 @@ func TestTemplate(t *testing.T) {
 func TestListTemplates(t *testing.T) {
 	client := setup(t)
 
-	templates, err := client.ListTemplates(&ListOptions{
+	templates, err := client.ListTemplates(ctx, &ListOptions{
 		PageSize: 3,
 	})
 	if err != nil {

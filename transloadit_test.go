@@ -1,12 +1,14 @@
 package transloadit
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
 )
 
+var ctx = context.Background()
 var templatesSetup bool
 var templateIdOptimizeResize string
 
@@ -80,7 +82,7 @@ func setupTemplates(t *testing.T) {
 		"use":             "optimize",
 	})
 
-	id, err := client.CreateTemplate(template)
+	id, err := client.CreateTemplate(ctx, template)
 	if err != nil {
 		t.Fatal(err)
 	}

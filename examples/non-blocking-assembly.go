@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/transloadit/go-sdk"
@@ -33,7 +34,7 @@ func main() {
 	})
 
 	// Start the upload
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(context.Background(), assembly)
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +43,7 @@ func main() {
 	// results are available yet since the conversion has not finished.
 	// The AssemblyWatcher provides functionality for polling until the assembly
 	// has ended.
-	waiter := client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(context.Background(), info.AssemblyUrl)
 	info = <-waiter.Response
 
 	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)

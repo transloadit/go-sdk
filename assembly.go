@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -160,8 +161,8 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 //  	}
 //  	panic(err)
 //  }
-func (client *Client) StartAssembly(assembly Assembly) (*AssemblyInfo, error) {
-	req, err := assembly.makeRequest(client)
+func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*AssemblyInfo, error) {
+	req, err := assembly.makeRequest(ctx, client)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create assembly request: %s", err)
 	}
@@ -180,7 +181,7 @@ func (client *Client) StartAssembly(assembly Assembly) (*AssemblyInfo, error) {
 		return &info, err
 	}
 
-	waiter := client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(ctx, info.AssemblyUrl)
 
 	select {
 	case res := <-waiter.Response:
@@ -192,7 +193,7 @@ func (client *Client) StartAssembly(assembly Assembly) (*AssemblyInfo, error) {
 	}
 }
 
-func (assembly *Assembly) makeRequest(client *Client) (*http.Request, error) {
+func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
 	// TODO: test with huge files
 	url := client.config.Endpoint + "/assemblies"
 	bodyReader, bodyWriter := io.Pipe()
@@ -255,24 +256,25 @@ func (assembly *Assembly) makeRequest(client *Client) (*http.Request, error) {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
+	req = req.WithContext(ctx)
 	req.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
 	return req, nil
 }
 
 // Get information about an assembly using its url.
-func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
+func (client *Client) GetAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request("GET", assemblyUrl, nil, &info)
+	err := client.request(ctx, "GET", assemblyUrl, nil, &info)
 
 	return &info, err
 }
 
 // Cancel an assembly using its URL. This function will return the updated
 // information about the assembly after the cancellation.
-func (client *Client) CancelAssembly(assemblyUrl string) (*AssemblyInfo, error) {
+func (client *Client) CancelAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request("DELETE", assemblyUrl, nil, &info)
+	err := client.request(ctx, "DELETE", assemblyUrl, nil, &info)
 
 	return &info, err
 }
@@ -291,7 +293,7 @@ func (assembly *AssemblyReplay) AddStep(name string, details map[string]interfac
 }
 
 // Start the assembly replay.
-func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInfo, error) {
+func (client *Client) StartAssemblyReplay(ctx context.Context, assembly AssemblyReplay) (*AssemblyInfo, error) {
 	options := map[string]interface{}{
 		"steps": assembly.steps,
 	}
@@ -305,7 +307,7 @@ func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInf
 	}
 
 	var info AssemblyInfo
-	err := client.request("POST", assembly.assemblyUrl+"/replay", options, &info)
+	err := client.request(ctx, "POST", assembly.assemblyUrl+"/replay", options, &info)
 	if err != nil {
 		return nil, err
 	}
@@ -318,7 +320,7 @@ func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInf
 		return &info, nil
 	}
 
-	waiter := client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(ctx, info.AssemblyUrl)
 
 	select {
 	case res := <-waiter.Response:
@@ -331,9 +333,9 @@ func (client *Client) StartAssemblyReplay(assembly AssemblyReplay) (*AssemblyInf
 }
 
 // List all assemblies matching the criterias.
-func (client *Client) ListAssemblies(options *ListOptions) (AssemblyList, error) {
+func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
-	err := client.listRequest("assemblies", options, &assemblies)
+	err := client.listRequest(ctx, "assemblies", options, &assemblies)
 
 	return assemblies, err
 }

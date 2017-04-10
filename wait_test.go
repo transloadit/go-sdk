@@ -14,7 +14,7 @@ func TestWait(t *testing.T) {
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/100mb.bin",
 	})
 
-	info, err := client.StartAssembly(assembly)
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func TestWait(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	waiter := client.WaitForAssembly(info.AssemblyUrl)
+	waiter := client.WaitForAssembly(ctx, info.AssemblyUrl)
 
 	select {
 	case res := <-waiter.Response:

@@ -9,7 +9,7 @@ var notificationAssemblyId string
 func TestListNotifications(t *testing.T) {
 	client := setup(t)
 
-	notification, err := client.ListNotifications(&ListOptions{
+	notification, err := client.ListNotifications(ctx, &ListOptions{
 		PageSize: 3,
 	})
 	if err != nil {
@@ -34,7 +34,7 @@ func TestListNotifications(t *testing.T) {
 func TestReplayNotification(t *testing.T) {
 	client := setup(t)
 
-	err := client.ReplayNotification(notificationAssemblyId, "http://jsfiddle.net/echo/json/")
+	err := client.ReplayNotification(ctx, notificationAssemblyId, "http://jsfiddle.net/echo/json/")
 	if err != nil {
 		t.Fatal(err)
 	}
