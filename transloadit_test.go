@@ -13,6 +13,8 @@ var templatesSetup bool
 var templateIdOptimizeResize string
 
 func TestNewClient_MissingAuthKey(t *testing.T) {
+	t.Parallel()
+
 	defer func() {
 		err := recover().(string)
 		if !strings.Contains(err, "missing AuthKey") {
@@ -24,6 +26,8 @@ func TestNewClient_MissingAuthKey(t *testing.T) {
 }
 
 func TestNewClient_MissingAuthSecret(t *testing.T) {
+	t.Parallel()
+
 	defer func() {
 		err := recover().(string)
 		if !strings.Contains(err, "missing AuthSecret") {
@@ -37,6 +41,8 @@ func TestNewClient_MissingAuthSecret(t *testing.T) {
 }
 
 func TestNewClient_Success(t *testing.T) {
+	t.Parallel()
+
 	config := DefaultConfig
 	config.AuthKey = "fooo"
 	config.AuthSecret = "bar"

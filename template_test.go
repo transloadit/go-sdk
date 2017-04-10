@@ -3,6 +3,8 @@ package transloadit
 import "testing"
 
 func TestTemplate(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 
 	template := NewTemplate()
@@ -83,6 +85,8 @@ func TestTemplate(t *testing.T) {
 }
 
 func TestListTemplates(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 
 	templates, err := client.ListTemplates(ctx, &ListOptions{

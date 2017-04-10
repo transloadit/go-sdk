@@ -69,6 +69,8 @@ func TestStartAssembly_Success(t *testing.T) {
 }
 
 func TestStartAssembly_Failure(t *testing.T) {
+	t.Parallel()
+
 	config := DefaultConfig
 	config.AuthKey = "does not exist"
 	config.AuthSecret = "does not matter"
@@ -140,6 +142,8 @@ func TestGetAssembly(t *testing.T) {
 }
 
 func TestStartAssemblyReplay(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 	assembly := NewAssemblyReplay(assemblyUrl)
 
@@ -166,6 +170,8 @@ func TestStartAssemblyReplay(t *testing.T) {
 }
 
 func TestCancelAssembly(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 	assembly := NewAssembly()
 
@@ -194,6 +200,8 @@ func TestCancelAssembly(t *testing.T) {
 }
 
 func TestListAssemblies(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 
 	assemblies, err := client.ListAssemblies(ctx, &ListOptions{

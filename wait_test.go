@@ -5,6 +5,8 @@ import (
 )
 
 func TestWaitForAssembly(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 
 	assembly := NewAssembly()
