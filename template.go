@@ -2,16 +2,19 @@ package transloadit
 
 import "context"
 
+// Template contains details about a single template.
 type Template struct {
 	Id      string          `json:"id"`
 	Name    string          `json:"name"`
 	Content TemplateContent `json:"content"`
 }
 
+// TemplateContent contains details about the content of a single template.
 type TemplateContent struct {
 	Steps map[string]interface{} `json:"steps"`
 }
 
+// TemplateList contains a list of templates.
 type TemplateList struct {
 	Templates []Template `json:"items"`
 	Count     int        `json:"count"`
@@ -33,7 +36,7 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
-// CreateTemplate will save the provided template sturct as a new template
+// CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
 	content := map[string]interface{}{

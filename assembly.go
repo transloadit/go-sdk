@@ -10,14 +10,16 @@ import (
 	"time"
 )
 
+// Assembly contains instructions used for starting assemblies.
 type Assembly struct {
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
 	// Optional template id to use instead of adding steps.
 	TemplateId string
-	steps      map[string]map[string]interface{}
-	readers    []*upload
+
+	steps   map[string]map[string]interface{}
+	readers []*upload
 }
 
 type upload struct {
@@ -26,23 +28,33 @@ type upload struct {
 	Reader io.ReadCloser
 }
 
+// AssemblyReplay contains instructions used for replaying assemblies.
 type AssemblyReplay struct {
-	assemblyUrl string
-	// Notify url to send a request to once the assembly finishes.
+	// NotifiyUrl specifies a URL to which a request will be sent once the
+	// assembly finishes. This overwrites the notify url from the original
+	// assembly instructions.
 	// See https://transloadit.com/docs#notifications.
 	NotifyUrl string
-	// Reparse the template when replaying. Useful if the template has changed
-	// since the orignal assembly was created.
+	// ReparseTemplate specifies whether the template should be fetched again
+	// before the assembly is replayed. This can be used if the template has
+	// changed since the original assembly was created.
 	ReparseTemplate bool
-	steps           map[string]map[string]interface{}
+
+	assemblyUrl string
+	steps       map[string]map[string]interface{}
 }
 
+// AssemblyList contains a list of assemblies.
 type AssemblyList struct {
 	Assemblies []*AssemblyListItem `json:"items"`
 	Count      int                 `json:"count"`
 }
 
+// AssemblyListItem contains reduced details about an assembly.
 type AssemblyListItem struct {
+	Ok    string `json:"ok"`
+	Error string `json:"error"`
+
 	AssemblyId        string     `json:"id"`
 	AccountId         string     `json:"account_id"`
 	TemplateId        string     `json:"template_id"`
@@ -52,12 +64,16 @@ type AssemblyListItem struct {
 	ExecutionDuration float32    `json:"execution_duration"`
 	ExecutionStart    *time.Time `json:"execution_start"`
 	Created           time.Time  `json:"created"`
-	Ok                string     `json:"ok"`
-	Error             string     `json:"error"`
 	Files             string     `json:"files"`
 }
 
+// AssemblyInfo contains details about an assemblies current status. Details
+// about each value can be found at https://transloadit.com/docs/api-docs/#assembly-status-response
 type AssemblyInfo struct {
+	Ok      string `json:"ok"`
+	Error   string `json:"error"`
+	Message string `json:"message"`
+
 	AssemblyId             string                 `json:"assembly_id"`
 	ParentId               string                 `json:"parent_id"`
 	AssemblyUrl            string                 `json:"assembly_url"`
@@ -79,8 +95,6 @@ type AssemblyInfo struct {
 	ExecutionDuration      float32                `json:"execution_duration"`
 	ExecutionStart         string                 `json:"execution_start"`
 	Created                string                 `json:"created"`
-	Ok                     string                 `json:"ok"`
-	Message                string                 `json:"message"`
 	Files                  string                 `json:"files"`
 	Fields                 map[string]interface{} `json:"fields"`
 	BytesUsage             int                    `json:"bytes_usage"`
@@ -92,9 +106,10 @@ type AssemblyInfo struct {
 	Uploads                []*FileInfo            `json:"uploads"`
 	Results                map[string][]*FileInfo `json:"results"`
 	Params                 string                 `json:"params"`
-	Error                  string                 `json:"error"`
 }
 
+// FileInfo contains details about a file which was either uploaded or is the
+// result of an executed assembly.
 type FileInfo struct {
 	Id               string                 `json:"id"`
 	Name             string                 `json:"name"`
@@ -113,7 +128,8 @@ type FileInfo struct {
 	Meta             map[string]interface{} `json:"meta"`
 }
 
-// Create a new assembly instance which can be executed later.
+// NewAssembly will create a new Assembly struct which can be used to start
+// an assembly using Client.StartAssembly.
 func NewAssembly() Assembly {
 	return Assembly{
 		steps:   make(map[string]map[string]interface{}),
@@ -121,35 +137,44 @@ func NewAssembly() Assembly {
 	}
 }
 
-// Add another reader to upload later.
-func (assembly *Assembly) AddReader(field, name string, reader io.ReadCloser) {
+// AddReader will add the provided io.Reader to the list which will be uploaded
+// once Client.StartAssembly is invoked. The corresponding field name can be
+// used to reference the file in the assembly instructions.
+func (assembly *Assembly) AddReader(fieldname, filename string, reader io.ReadCloser) {
 	assembly.readers = append(assembly.readers, &upload{
-		Field:  field,
-		Name:   name,
+		Field:  fieldname,
+		Name:   filename,
 		Reader: reader,
 	})
 }
 
-// Add another file to upload later.
-func (assembly *Assembly) AddFile(field, name string) error {
-	file, err := os.Open(name)
+// AddFile will open the provided file path and add it to the list which will be
+// uploaded once Client.StartAssembly is invoked. The corresponding field name
+// can be used to reference the file in the assembly instructions.
+func (assembly *Assembly) AddFile(fieldname, filepath string) error {
+	file, err := os.Open(filepath)
 	if err != nil {
 		return err
 	}
 
-	assembly.AddReader(field, name, file)
+	assembly.AddReader(fieldname, filepath, file)
 	return nil
 }
 
-// Add a step to the assembly.
+// AddStep will add the provided step to the assembly instructions. Details
+// about possible values can be found at https://transloadit.com/docs/#14-assembly-instructions
 func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
-// Start the assembly and upload all files.
+// StartAssembly will upload all provided files and instruct the endpoint to
+// start executing it. The function will return after all uploads complete and
+// the remote server received the instructions (or the provided context times
+// out). It won't wait until the execution has finished and results are
+// available, which can be achieved using WaitForAssembly.
+//
 // When an error is returned you should also check AssemblyInfo.Error for more
-// information about the error. This happens when there is an error returned by
-// the Transloadit API:
+// information about the error sent by the Transloadit API:
 //  info, err := assembly.Upload()
 //  if err != nil {
 //  	if info != nil && info.Error != "" {
@@ -245,7 +270,9 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 	return req, nil
 }
 
-// Get information about an assembly using its url.
+// GetAssembly fetches the full assembly status from the provided URL.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) GetAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
 	err := client.request(ctx, "GET", assemblyUrl, nil, &info)
@@ -253,8 +280,11 @@ func (client *Client) GetAssembly(ctx context.Context, assemblyUrl string) (*Ass
 	return &info, err
 }
 
-// Cancel an assembly using its URL. This function will return the updated
-// information about the assembly after the cancellation.
+// CancelAssembly cancels an assembly which will result in all corresponding
+// uploads and encoding jobs to be aborted. Finally, the updated assembly
+// information after the cancellation will be returned.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) CancelAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
 	err := client.request(ctx, "DELETE", assemblyUrl, nil, &info)
@@ -262,7 +292,10 @@ func (client *Client) CancelAssembly(ctx context.Context, assemblyUrl string) (*
 	return &info, err
 }
 
-// Create a new AssemblyReplay instance.
+// NewAssemblyReplay will create a new AssemblyReplay struct which can be used
+// to replay an assemblie's execution using Client.StartAssemblyReplay.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func NewAssemblyReplay(assemblyUrl string) AssemblyReplay {
 	return AssemblyReplay{
 		steps:       make(map[string]map[string]interface{}),
@@ -270,12 +303,16 @@ func NewAssemblyReplay(assemblyUrl string) AssemblyReplay {
 	}
 }
 
-// Add a step to override the original ones.
+// AddStep will add the provided step to the new assembly instructions. When the
+// assembly is replayed, those new steps will be used instead of the original
+// ones. Details about possible values can be found at
+// https://transloadit.com/docs/#14-assembly-instructions.
 func (assembly *AssemblyReplay) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
-// Start the assembly replay.
+// StartAssemblyReplay will instruct the endpoint to replay the entire assembly
+// execution.
 func (client *Client) StartAssemblyReplay(ctx context.Context, assembly AssemblyReplay) (*AssemblyInfo, error) {
 	options := map[string]interface{}{
 		"steps": assembly.steps,
@@ -302,7 +339,7 @@ func (client *Client) StartAssemblyReplay(ctx context.Context, assembly Assembly
 	return &info, nil
 }
 
-// List all assemblies matching the criterias.
+// ListAssemblies will fetch all assemblies matching the provided criteria.
 func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
 	err := client.listRequest(ctx, "assemblies", options, &assemblies)

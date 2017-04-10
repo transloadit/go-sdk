@@ -14,25 +14,27 @@ import (
 	"time"
 )
 
+// Config defines the configuration options for a client.
 type Config struct {
 	AuthKey    string
 	AuthSecret string
 	Endpoint   string
 }
 
+// DefaultConfig is the recommended base configuration.
 var DefaultConfig = Config{
 	Endpoint: "http://api2.transloadit.com",
 }
 
+// Client provides an interface to the Transloadit REST API bound to a specific
+// account.
 type Client struct {
 	config     Config
 	httpClient *http.Client
 }
 
-// Options when retrieving a list.
-// Look at the documentation which properties are accepted
-// and to see their meaining, e.g. https://transloadit.com/docs/api-docs#retrieve-assembly-list
-// for listing assemblies.
+// ListOptions defines criteria used when a list is being retrieved. Details
+// about each property can be found at https://transloadit.com/docs/api-docs#retrieve-assembly-list.
 type ListOptions struct {
 	Page       int        `json:"page,omitempty"`
 	PageSize   int        `json:"pagesize,omitempty"`
@@ -58,17 +60,20 @@ type authListOptions struct {
 	Auth authParams `json:"auth"`
 }
 
+// RequestError represents an error returned by the Transloadit API alongside
+// additional service-specific information.
 type RequestError struct {
 	Code    string `json:"error"`
 	Message string `json:"message"`
 }
 
+// Error return a formatted message describing the error.
 func (err RequestError) Error() string {
 	return fmt.Sprintf("request failed due to %s: %s", err.Code, err.Message)
 }
 
-// Create a new client using the provided configuration object.
-// An error will be returned if no AuthKey or AuthSecret is found in config.
+// NewClient creates a new client using the provided configuration struct.
+// It will panic if no Config.AuthKey or Config.AuthSecret are empty.
 func NewClient(config Config) Client {
 	if config.AuthKey == "" {
 		panic("failed to create Transloadit client: missing AuthKey")
