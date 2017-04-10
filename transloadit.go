@@ -6,7 +6,6 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -70,21 +69,21 @@ func (err RequestError) Error() string {
 
 // Create a new client using the provided configuration object.
 // An error will be returned if no AuthKey or AuthSecret is found in config.
-func NewClient(config Config) (*Client, error) {
+func NewClient(config Config) Client {
 	if config.AuthKey == "" {
-		return nil, errors.New("failed to create client: missing AuthKey")
+		panic("failed to create Transloadit client: missing AuthKey")
 	}
 
 	if config.AuthSecret == "" {
-		return nil, errors.New("failed to create client: missing AuthSecret")
+		panic("failed to create Transloadit client: missing AuthSecret")
 	}
 
-	client := &Client{
+	client := Client{
 		config:     config,
 		httpClient: &http.Client{},
 	}
 
-	return client, nil
+	return client
 }
 
 func (client *Client) sign(params map[string]interface{}) (string, string, error) {

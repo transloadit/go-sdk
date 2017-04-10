@@ -12,49 +12,43 @@ var ctx = context.Background()
 var templatesSetup bool
 var templateIdOptimizeResize string
 
-func TestCreateClient(t *testing.T) {
-	client, err := NewClient(DefaultConfig)
-	if client != nil {
-		t.Fatal("client should be nil")
-	}
+func TestNewClient_MissingAuthKey(t *testing.T) {
+	defer func() {
+		err := recover().(string)
+		if !strings.Contains(err, "missing AuthKey") {
+			t.Fatal("error should contain message")
+		}
+	}()
 
-	if !strings.Contains(err.Error(), "missing AuthKey") {
-		t.Fatal("error should contain message")
-	}
+	_ = NewClient(DefaultConfig)
+}
+
+func TestNewClient_MissingAuthSecret(t *testing.T) {
+	defer func() {
+		err := recover().(string)
+		if !strings.Contains(err, "missing AuthSecret") {
+			t.Fatal("error should contain message")
+		}
+	}()
 
 	config := DefaultConfig
 	config.AuthKey = "fooo"
-	client, err = NewClient(config)
-	if client != nil {
-		t.Fatal("client should be nil")
-	}
-
-	if !strings.Contains(err.Error(), "missing AuthSecret") {
-		t.Fatal("error should contain message")
-	}
-
-	config = DefaultConfig
-	config.AuthKey = "fooo"
-	config.AuthSecret = "bar"
-	client, err = NewClient(config)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if client == nil {
-		t.Fatal("client should not be nil")
-	}
+	_ = NewClient(config)
 }
 
-func setup(t *testing.T) *Client {
+func TestNewClient_Success(t *testing.T) {
+	config := DefaultConfig
+	config.AuthKey = "fooo"
+	config.AuthSecret = "bar"
+	_ = NewClient(config)
+}
+
+func setup(t *testing.T) Client {
 	config := DefaultConfig
 	config.AuthKey = os.Getenv("TRANSLOADIT_KEY")
 	config.AuthSecret = os.Getenv("TRANSLOADIT_SECRET")
 
-	client, err := NewClient(config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := NewClient(config)
 
 	return client
 }

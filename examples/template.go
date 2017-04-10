@@ -13,10 +13,7 @@ func main() {
 	options := transloadit.DefaultConfig
 	options.AuthKey = "TRANSLOADIT_KEY"
 	options.AuthSecret = "TRANSLOADIT_SECRET"
-	client, err := transloadit.NewClient(options)
-	if err != nil {
-		panic(err)
-	}
+	client := transloadit.NewClient(options)
 
 	// Initialize new assembly
 	assembly := transloadit.NewAssembly()
