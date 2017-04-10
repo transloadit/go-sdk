@@ -24,7 +24,7 @@ type Notification struct {
 	Error        string    `json:"error"`
 }
 
-// ListNotification will return a list containing all notifications matching
+// ListNotifications will return a list containing all notifications matching
 // the criteria defined using the ListOptions structure.
 func (client *Client) ListNotifications(ctx context.Context, options *ListOptions) (list NotificationList, err error) {
 	err = client.listRequest(ctx, "assembly_notifications", options, &list)

@@ -77,7 +77,7 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateId string, new
 	return client.request(ctx, "PUT", "templates/"+templateId, content, nil)
 }
 
-// ListTemplate will retrieve all templates matching the criteria.
+// ListTemplates will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(ctx context.Context, options *ListOptions) (list TemplateList, err error) {
 	err = client.listRequest(ctx, "templates", options, &list)
 	return list, err
