@@ -36,10 +36,12 @@ func main() {
 
 	// All files have now been uploaded and the assembly has started but no
 	// results are available yet since the conversion has not finished.
-	// The AssemblyWatcher provides functionality for polling until the assembly
+	// WaitForAssembly provides functionality for polling until the assembly
 	// has ended.
-	waiter := client.WaitForAssembly(context.Background(), info.AssemblyUrl)
-	info = <-waiter.Response
+	info, err = client.WaitForAssembly(context.Background(), info.AssemblyUrl)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
 }
