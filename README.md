@@ -17,7 +17,7 @@ This is a **Go** SDK to make it easy to talk to the [Transloadit](https://transl
 go get gopkg.in/transloadit/go-sdk.v1
 ```
 
-The Go SDK requires Go 1.1 or higher.
+The Go SDK requires Go 1.7 or higher.
 
 ## Usage
 
