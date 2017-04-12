@@ -68,7 +68,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SslUrl)
 }
 ```
 
@@ -78,7 +78,7 @@ For fully working examples on how to use templates, non-blocking processing and 
 
 ## Documentation
 
-See [Godoc](http://godoc.org/gopkg.in/transloadit/go-sdk.v1).
+See [Godoc](https://godoc.org/gopkg.in/transloadit/go-sdk.v1).
 
 ## License
 

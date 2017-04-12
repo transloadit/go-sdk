@@ -23,7 +23,7 @@ type Config struct {
 
 // DefaultConfig is the recommended base configuration.
 var DefaultConfig = Config{
-	Endpoint: "http://api2.transloadit.com",
+	Endpoint: "https://api2.transloadit.com",
 }
 
 // Client provides an interface to the Transloadit REST API bound to a specific
