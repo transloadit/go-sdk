@@ -44,5 +44,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SslURL)
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SSLURL)
 }

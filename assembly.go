@@ -77,7 +77,7 @@ type AssemblyInfo struct {
 	AssemblyID             string                 `json:"assembly_id"`
 	ParentID               string                 `json:"parent_id"`
 	AssemblyURL            string                 `json:"assembly_url"`
-	AssemblySslURL         string                 `json:"assembly_ssl_url"`
+	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          int                    `json:"bytes_expected"`
 	ClientAgent            string                 `json:"client_agent"`
@@ -124,7 +124,7 @@ type FileInfo struct {
 	OriginalID       string                 `json:"original_id"`
 	OriginalBasename string                 `json:"original_basename"`
 	URL              string                 `json:"url"`
-	SslURL           string                 `json:"ssl_url"`
+	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
 }
 
