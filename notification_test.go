@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-var notificationAssemblyId string
+var notificationAssemblyID string
 
 func TestListNotifications(t *testing.T) {
 	client := setup(t)
@@ -24,17 +24,17 @@ func TestListNotifications(t *testing.T) {
 		t.Fatal("wrong count")
 	}
 
-	if notification.Notifications[0].Id == "" {
+	if notification.Notifications[0].ID == "" {
 		t.Fatal("wrong notification name")
 	}
 
-	notificationAssemblyId = notification.Notifications[0].AssemblyId
+	notificationAssemblyID = notification.Notifications[0].AssemblyID
 }
 
 func TestReplayNotification(t *testing.T) {
 	client := setup(t)
 
-	err := client.ReplayNotification(ctx, notificationAssemblyId, "http://jsfiddle.net/echo/json/")
+	err := client.ReplayNotification(ctx, notificationAssemblyID, "http://jsfiddle.net/echo/json/")
 	if err != nil {
 		t.Fatal(err)
 	}

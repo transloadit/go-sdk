@@ -13,10 +13,10 @@ type NotificationList struct {
 
 // Notification contains details about a notification.
 type Notification struct {
-	Id           string    `json:"id"`
-	AssemblyId   string    `json:"assembly_id"`
-	AccountId    string    `json:"account_id"`
-	Url          string    `json:"url"`
+	ID           string    `json:"id"`
+	AssemblyID   string    `json:"assembly_id"`
+	AccountID    string    `json:"account_id"`
+	URL          string    `json:"url"`
 	ResponseCode int       `json:"response_code"`
 	ResponseData string    `json:"response_data"`
 	Duration     float32   `json:"duration"`
@@ -33,14 +33,14 @@ func (client *Client) ListNotifications(ctx context.Context, options *ListOption
 
 // ReplayNotification instructs the endpoint to replay the notification
 // corresponding to the provided assembly ID.
-// If notifyUrl is not empty it will override the notify URL used in the
+// If notifyURL is not empty it will override the notify URL used in the
 // assembly instructions.
-func (client *Client) ReplayNotification(ctx context.Context, assemblyId string, notifyUrl string) error {
+func (client *Client) ReplayNotification(ctx context.Context, assemblyID string, notifyURL string) error {
 	params := make(map[string]interface{})
 
-	if notifyUrl != "" {
-		params["notify_url"] = notifyUrl
+	if notifyURL != "" {
+		params["notify_url"] = notifyURL
 	}
 
-	return client.request(ctx, "POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
+	return client.request(ctx, "POST", "assembly_notifications/"+assemblyID+"/replay", params, nil)
 }

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var assemblyUrl string
+var assemblyURL string
 
 func TestStartAssembly_Success(t *testing.T) {
 	client := setup(t)
@@ -29,18 +29,18 @@ func TestStartAssembly_Success(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
+	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
 
 	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyId == "" {
+	if info.AssemblyID == "" {
 		t.Fatal("response doesn't contain assembly_id")
 	}
 
-	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
 	}
 
@@ -65,7 +65,7 @@ func TestStartAssembly_Success(t *testing.T) {
 		t.Fatal("wrong user agent")
 	}
 
-	assemblyUrl = info.AssemblyUrl
+	assemblyURL = info.AssemblyURL
 }
 
 func TestStartAssembly_Failure(t *testing.T) {
@@ -109,34 +109,34 @@ func TestStartAssembly_Template(t *testing.T) {
 	client := setup(t)
 	assembly := NewAssembly()
 
-	assembly.TemplateId = templateIdOptimizeResize
+	assembly.TemplateID = templateIDOptimizeResize
 
 	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyId == "" {
+	if info.AssemblyID == "" {
 		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
 	}
 
-	if !strings.Contains(info.Params, templateIdOptimizeResize) {
+	if !strings.Contains(info.Params, templateIDOptimizeResize) {
 		t.Fatal("template id not as parameter submitted")
 	}
 }
 
 func TestGetAssembly(t *testing.T) {
 	client := setup(t)
-	assembly, err := client.GetAssembly(ctx, assemblyUrl)
+	assembly, err := client.GetAssembly(ctx, assemblyURL)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if assembly.AssemblyId == "" {
+	if assembly.AssemblyID == "" {
 		t.Fatal("assembly id not contained")
 	}
 
-	if assembly.AssemblyUrl != assemblyUrl {
+	if assembly.AssemblyURL != assemblyURL {
 		t.Fatal("assembly urls don't match")
 	}
 }
@@ -145,9 +145,9 @@ func TestStartAssemblyReplay(t *testing.T) {
 	t.Parallel()
 
 	client := setup(t)
-	assembly := NewAssemblyReplay(assemblyUrl)
+	assembly := NewAssemblyReplay(assemblyURL)
 
-	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
+	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
 	assembly.ReparseTemplate = true
 
 	assembly.AddStep("import", map[string]interface{}{
@@ -164,7 +164,7 @@ func TestStartAssemblyReplay(t *testing.T) {
 		t.Fatal("wrong status code returned")
 	}
 
-	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
 	}
 }
@@ -185,11 +185,11 @@ func TestCancelAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyUrl == "" {
+	if info.AssemblyURL == "" {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	info, err = client.CancelAssembly(ctx, info.AssemblyUrl)
+	info, err = client.CancelAssembly(ctx, info.AssemblyURL)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -219,7 +219,7 @@ func TestListAssemblies(t *testing.T) {
 		t.Fatal("wrong count")
 	}
 
-	if assemblies.Assemblies[0].AssemblyId == "" {
+	if assemblies.Assemblies[0].AssemblyID == "" {
 		t.Fatal("wrong template name")
 	}
 }

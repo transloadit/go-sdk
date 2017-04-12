@@ -21,7 +21,7 @@ func TestWaitForAssembly(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyUrl == "" {
+	if info.AssemblyURL == "" {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
@@ -31,7 +31,7 @@ func TestWaitForAssembly(t *testing.T) {
 	}
 
 	// Assembly completed
-	if finishedInfo.AssemblyId != info.AssemblyId {
+	if finishedInfo.AssemblyID != info.AssemblyID {
 		t.Fatal("unmatching assembly ids")
 	}
 }

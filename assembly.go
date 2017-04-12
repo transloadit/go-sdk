@@ -14,9 +14,9 @@ import (
 type Assembly struct {
 	// Notify url to send a request to once the assembly finishes.
 	// See https://transloadit.com/docs#notifications.
-	NotifyUrl string
+	NotifyURL string
 	// Optional template id to use instead of adding steps.
-	TemplateId string
+	TemplateID string
 
 	steps   map[string]map[string]interface{}
 	readers []*upload
@@ -30,17 +30,17 @@ type upload struct {
 
 // AssemblyReplay contains instructions used for replaying assemblies.
 type AssemblyReplay struct {
-	// NotifiyUrl specifies a URL to which a request will be sent once the
+	// NotifiyURL specifies a URL to which a request will be sent once the
 	// assembly finishes. This overwrites the notify url from the original
 	// assembly instructions.
 	// See https://transloadit.com/docs#notifications.
-	NotifyUrl string
+	NotifyURL string
 	// ReparseTemplate specifies whether the template should be fetched again
 	// before the assembly is replayed. This can be used if the template has
 	// changed since the original assembly was created.
 	ReparseTemplate bool
 
-	assemblyUrl string
+	assemblyURL string
 	steps       map[string]map[string]interface{}
 }
 
@@ -55,12 +55,12 @@ type AssemblyListItem struct {
 	Ok    string `json:"ok"`
 	Error string `json:"error"`
 
-	AssemblyId        string     `json:"id"`
-	AccountId         string     `json:"account_id"`
-	TemplateId        string     `json:"template_id"`
+	AssemblyID        string     `json:"id"`
+	AccountID         string     `json:"account_id"`
+	TemplateID        string     `json:"template_id"`
 	Instance          string     `json:"instance"`
-	NotifyUrl         string     `json:"notify_url"`
-	RedirectUrl       string     `json:"redirect_url"`
+	NotifyURL         string     `json:"notify_url"`
+	RedirectURL       string     `json:"redirect_url"`
 	ExecutionDuration float32    `json:"execution_duration"`
 	ExecutionStart    *time.Time `json:"execution_start"`
 	Created           time.Time  `json:"created"`
@@ -74,10 +74,10 @@ type AssemblyInfo struct {
 	Error   string `json:"error"`
 	Message string `json:"message"`
 
-	AssemblyId             string                 `json:"assembly_id"`
-	ParentId               string                 `json:"parent_id"`
-	AssemblyUrl            string                 `json:"assembly_url"`
-	AssemblySslUrl         string                 `json:"assembly_ssl_url"`
+	AssemblyID             string                 `json:"assembly_id"`
+	ParentID               string                 `json:"parent_id"`
+	AssemblyURL            string                 `json:"assembly_url"`
+	AssemblySslURL         string                 `json:"assembly_ssl_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          int                    `json:"bytes_expected"`
 	ClientAgent            string                 `json:"client_agent"`
@@ -87,7 +87,7 @@ type AssemblyInfo struct {
 	IsInfinite             bool                   `json:"is_infinite"`
 	HasDupeJobs            bool                   `json:"has_dupe_jobs"`
 	UploadDuration         float32                `json:"upload_duration"`
-	NotifyUrl              string                 `json:"notify_url"`
+	NotifyURL              string                 `json:"notify_url"`
 	NotifyStart            string                 `json:"notify_start"`
 	NotifyStatus           string                 `json:"notify_status"`
 	NotifyDuation          float32                `json:"notify_duration"`
@@ -111,7 +111,7 @@ type AssemblyInfo struct {
 // FileInfo contains details about a file which was either uploaded or is the
 // result of an executed assembly.
 type FileInfo struct {
-	Id               string                 `json:"id"`
+	ID               string                 `json:"id"`
 	Name             string                 `json:"name"`
 	Basename         string                 `json:"basename"`
 	Ext              string                 `json:"ext"`
@@ -121,10 +121,10 @@ type FileInfo struct {
 	Field            string                 `json:"field"`
 	Md5Hash          string                 `json:"md5hash"`
 	OriginalMd5Hash  string                 `json:"original_md5hash"`
-	OriginalId       string                 `json:"original_id"`
+	OriginalID       string                 `json:"original_id"`
 	OriginalBasename string                 `json:"original_basename"`
-	Url              string                 `json:"url"`
-	SslUrl           string                 `json:"ssl_url"`
+	URL              string                 `json:"url"`
+	SslURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
 }
 
@@ -213,12 +213,12 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 		options["steps"] = assembly.steps
 	}
 
-	if assembly.TemplateId != "" {
-		options["template_id"] = assembly.TemplateId
+	if assembly.TemplateID != "" {
+		options["template_id"] = assembly.TemplateID
 	}
 
-	if assembly.NotifyUrl != "" {
-		options["notify_url"] = assembly.NotifyUrl
+	if assembly.NotifyURL != "" {
+		options["notify_url"] = assembly.NotifyURL
 	}
 
 	params, signature, err := client.sign(options)
@@ -273,9 +273,9 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 // GetAssembly fetches the full assembly status from the provided URL.
 // The assembly URL must be absolute, for example:
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
-func (client *Client) GetAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
+func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "GET", assemblyUrl, nil, &info)
+	err := client.request(ctx, "GET", assemblyURL, nil, &info)
 
 	return &info, err
 }
@@ -285,9 +285,9 @@ func (client *Client) GetAssembly(ctx context.Context, assemblyUrl string) (*Ass
 // information after the cancellation will be returned.
 // The assembly URL must be absolute, for example:
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
-func (client *Client) CancelAssembly(ctx context.Context, assemblyUrl string) (*AssemblyInfo, error) {
+func (client *Client) CancelAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "DELETE", assemblyUrl, nil, &info)
+	err := client.request(ctx, "DELETE", assemblyURL, nil, &info)
 
 	return &info, err
 }
@@ -296,10 +296,10 @@ func (client *Client) CancelAssembly(ctx context.Context, assemblyUrl string) (*
 // to replay an assemblie's execution using Client.StartAssemblyReplay.
 // The assembly URL must be absolute, for example:
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
-func NewAssemblyReplay(assemblyUrl string) AssemblyReplay {
+func NewAssemblyReplay(assemblyURL string) AssemblyReplay {
 	return AssemblyReplay{
 		steps:       make(map[string]map[string]interface{}),
-		assemblyUrl: assemblyUrl,
+		assemblyURL: assemblyURL,
 	}
 }
 
@@ -322,12 +322,12 @@ func (client *Client) StartAssemblyReplay(ctx context.Context, assembly Assembly
 		options["reparse_template"] = 1
 	}
 
-	if assembly.NotifyUrl != "" {
-		options["notify_url"] = assembly.NotifyUrl
+	if assembly.NotifyURL != "" {
+		options["notify_url"] = assembly.NotifyURL
 	}
 
 	var info AssemblyInfo
-	err := client.request(ctx, "POST", assembly.assemblyUrl+"/replay", options, &info)
+	err := client.request(ctx, "POST", assembly.assemblyURL+"/replay", options, &info)
 	if err != nil {
 		return nil, err
 	}

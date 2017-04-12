@@ -23,7 +23,7 @@ func main() {
 
 	// Instructions will be read from the template
 	// with specified id stored on Transloadit's servers.
-	assembly.TemplateId = "TRANSLOADIT_TEMPLATE_ID"
+	assembly.TemplateID = "TRANSLOADIT_TEMPLATE_ID"
 
 	// Start the upload
 	info, err := client.StartAssembly(context.Background(), assembly)
@@ -40,5 +40,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SslUrl)
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SslURL)
 }

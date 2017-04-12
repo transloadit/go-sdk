@@ -8,7 +8,7 @@ import "context"
 // the supplied context.
 func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInfo) (*AssemblyInfo, error) {
 	for {
-		res, err := client.GetAssembly(ctx, assembly.AssemblySslUrl)
+		res, err := client.GetAssembly(ctx, assembly.AssemblySslURL)
 		if err != nil {
 			return nil, err
 		}

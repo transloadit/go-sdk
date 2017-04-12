@@ -43,7 +43,7 @@ type ListOptions struct {
 	Fields     []string   `json:"fields,omitempty"`
 	Type       string     `json:"type,omitempty"`
 	Keywords   []string   `json:"keyword,omitempty"`
-	AssemblyId string     `json:"assembly_id,omitempty"`
+	AssemblyID string     `json:"assembly_id,omitempty"`
 	FromDate   *time.Time `json:"fromdate,omitempty"`
 	ToDate     *time.Time `json:"todate,omitempty"`
 }

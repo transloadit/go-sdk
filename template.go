@@ -4,7 +4,7 @@ import "context"
 
 // Template contains details about a single template.
 type Template struct {
-	Id      string          `json:"id"`
+	ID      string          `json:"id"`
 	Name    string          `json:"name"`
 	Content TemplateContent `json:"content"`
 }
@@ -48,33 +48,33 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 		return "", err
 	}
 
-	return template.Id, nil
+	return template.ID, nil
 }
 
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
-func (client *Client) GetTemplate(ctx context.Context, templateId string) (template Template, err error) {
-	err = client.request(ctx, "GET", "templates/"+templateId, nil, &template)
+func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
+	err = client.request(ctx, "GET", "templates/"+templateID, nil, &template)
 	return template, err
 }
 
 // DeleteTemplate will delete the template associated with the provided
 // template ID.
-func (client *Client) DeleteTemplate(ctx context.Context, templateId string) error {
-	return client.request(ctx, "DELETE", "templates/"+templateId, nil, nil)
+func (client *Client) DeleteTemplate(ctx context.Context, templateID string) error {
+	return client.request(ctx, "DELETE", "templates/"+templateID, nil, nil)
 }
 
 // UpdateTemplate will update the template associated with the provided
 // template ID to match the new name and  new content. Please be aware that you
 // are not able to change a template's ID.
-func (client *Client) UpdateTemplate(ctx context.Context, templateId string, newTemplate Template) error {
+func (client *Client) UpdateTemplate(ctx context.Context, templateID string, newTemplate Template) error {
 	// Create signature
 	content := map[string]interface{}{
 		"name":     newTemplate.Name,
 		"template": newTemplate.Content,
 	}
 
-	return client.request(ctx, "PUT", "templates/"+templateId, content, nil)
+	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
 }
 
 // ListTemplates will retrieve all templates matching the criteria.

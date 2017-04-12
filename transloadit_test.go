@@ -10,7 +10,7 @@ import (
 
 var ctx = context.Background()
 var templatesSetup bool
-var templateIdOptimizeResize string
+var templateIDOptimizeResize string
 
 func TestNewClient_MissingAuthKey(t *testing.T) {
 	t.Parallel()
@@ -89,7 +89,7 @@ func setupTemplates(t *testing.T) {
 
 	fmt.Printf("Created template 'go-sdk-test' (%s) for testing.\n", id)
 
-	templateIdOptimizeResize = id
+	templateIDOptimizeResize = id
 
 	templatesSetup = true
 }
