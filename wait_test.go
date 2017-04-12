@@ -25,7 +25,7 @@ func TestWaitForAssembly(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	finishedInfo, err := client.WaitForAssembly(ctx, info.AssemblyUrl)
+	finishedInfo, err := client.WaitForAssembly(ctx, info)
 	if err != nil {
 		t.Fatal(err)
 	}

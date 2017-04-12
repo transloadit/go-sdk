@@ -63,7 +63,7 @@ func main() {
 	// results are available yet since the conversion has not finished.
 	// WaitForAssembly provides functionality for polling until the assembly
 	// has ended.
-	info, err = client.WaitForAssembly(context.Background(), info.AssemblyUrl)
+	info, err = client.WaitForAssembly(context.Background(), info)
 	if err != nil {
 		panic(err)
 	}
