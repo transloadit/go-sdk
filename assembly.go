@@ -12,10 +12,13 @@ import (
 
 // Assembly contains instructions used for starting assemblies.
 type Assembly struct {
-	// Notify url to send a request to once the assembly finishes.
+	// NotifiyURL specifies a URL to which a request will be sent once the
+	// assembly finishes.
 	// See https://transloadit.com/docs#notifications.
 	NotifyURL string
-	// Optional template id to use instead of adding steps.
+	// TemplateID specifies a optional template from which the encoding
+	// instructions will be fetched.
+	// See https://transloadit.com/docs/#15-templates
 	TemplateID string
 
 	steps   map[string]map[string]interface{}

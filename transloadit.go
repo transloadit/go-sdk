@@ -1,3 +1,4 @@
+// Package transloadit provides a client to interact with the Transloadt API.
 package transloadit
 
 import (
