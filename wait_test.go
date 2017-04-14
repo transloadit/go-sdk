@@ -49,7 +49,9 @@ func TestWaitForAssembly_Cancel(t *testing.T) {
 	_, err := client.WaitForAssembly(ctx, &AssemblyInfo{
 		AssemblySSLURL: "https://api2.transloadit.com/assemblies/foo",
 	})
-	if !strings.Contains(err.Error(), "context deadline exceeded") {
-		t.Fatal("operation's deadline should be exceeded")
+	// Go 1.8 and Go 1.7 have different error messages if a request get canceled.
+	// Therefore we test for both cases.
+	if !strings.Contains(err.Error(), "context deadline exceeded") && !strings.Contains(err.Error(), "request canceled") {
+		t.Fatalf("operation's deadline should be exceeded: %s", err)
 	}
 }
