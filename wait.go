@@ -1,6 +1,9 @@
 package transloadit
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 // WaitForAssembly fetches continuously the assembly status until is either
 // completed (ASSEMBLY_COMPLETED), canceled (ASSEMBLY_CANCELED) or aborted
@@ -15,6 +18,13 @@ func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInf
 
 		if res.Ok == "ASSEMBLY_COMPLETED" || res.Ok == "ASSEMBLY_CANCELED" || res.Ok == "REQUEST_ABORTED" {
 			return res, nil
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(time.Second):
+			continue
 		}
 	}
 }

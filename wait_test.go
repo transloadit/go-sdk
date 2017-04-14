@@ -1,7 +1,10 @@
 package transloadit
 
 import (
+	"context"
+	"strings"
 	"testing"
+	"time"
 )
 
 func TestWaitForAssembly(t *testing.T) {
@@ -33,5 +36,20 @@ func TestWaitForAssembly(t *testing.T) {
 	// Assembly completed
 	if finishedInfo.AssemblyID != info.AssemblyID {
 		t.Fatal("unmatching assembly ids")
+	}
+}
+
+func TestWaitForAssembly_Cancel(t *testing.T) {
+	t.Parallel()
+	client := setup(t)
+
+	ctx, cancel := context.WithTimeout(ctx, time.Millisecond)
+	defer cancel()
+
+	_, err := client.WaitForAssembly(ctx, &AssemblyInfo{
+		AssemblySSLURL: "https://api2.transloadit.com/assemblies/foo",
+	})
+	if !strings.Contains(err.Error(), "context deadline exceeded") {
+		t.Fatal("operation's deadline should be exceeded")
 	}
 }
