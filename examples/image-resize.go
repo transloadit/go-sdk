@@ -1,23 +1,21 @@
 package main
 
 import (
+	"context"
 	"fmt"
+
 	"github.com/transloadit/go-sdk"
 )
 
 func main() {
-
 	// Create client
 	options := transloadit.DefaultConfig
 	options.AuthKey = "TRANSLOADIT_KEY"
 	options.AuthSecret = "TRANSLOADIT_SECRET"
-	client, err := transloadit.NewClient(options)
-	if err != nil {
-		panic(err)
-	}
+	client := transloadit.NewClient(options)
 
 	// Initialize new assembly
-	assembly := client.CreateAssembly()
+	assembly := transloadit.NewAssembly()
 
 	// Add a file to upload
 	assembly.AddFile("image", "../../fixtures/lol_cat.jpg")
@@ -32,18 +30,19 @@ func main() {
 	})
 
 	// Start the upload
-	info, err := assembly.Upload()
+	info, err := client.StartAssembly(context.Background(), assembly)
 	if err != nil {
 		panic(err)
 	}
 
 	// All files have now been uploaded and the assembly has started but no
 	// results are available yet since the conversion has not finished.
-	// The AssemblyWatcher provides functionality for polling until the assembly
+	// WaitForAssembly provides functionality for polling until the assembly
 	// has ended.
-	waiter := client.WaitForAssembly(info.AssemblyUrl)
-	info = <-waiter.Response
+	info, err = client.WaitForAssembly(context.Background(), info)
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
-
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SSLURL)
 }

@@ -1,16 +1,14 @@
 package transloadit
 
-import (
-	"testing"
-)
+import "testing"
 
-var templateId string
+func TestTemplate(t *testing.T) {
+	t.Parallel()
 
-func TestCreateTemplate(t *testing.T) {
 	client := setup(t)
 
-	template := NewTemplate("go-sdk-test-create-template")
-
+	template := NewTemplate()
+	template.Name = "go-sdk-test-create-template"
 	template.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
 		"width":           75,
@@ -18,88 +16,87 @@ func TestCreateTemplate(t *testing.T) {
 		"resize_strategy": "pad",
 		"background":      "#000000",
 	})
-
 	template.AddStep("optimize", map[string]interface{}{
-		"robot":    "/image/optimize",
+		"robot": "/image/optimize",
 	})
 
-	id, err := client.CreateTemplate(template)
+	// Step 1: Create a brand new template
+	id, err := client.CreateTemplate(ctx, template)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if id == "" {
-		t.Fatal("no template id returned")
+		t.Error("no template id returned")
 	}
 
-	templateId = id
-}
-
-func TestGetTemplate(t *testing.T) {
-	client := setup(t)
-
-	template, err := client.GetTemplate(templateId)
-	if err != nil {
+	// Step 2: Retrieve new template and assert it's properties
+	if template, err = client.GetTemplate(ctx, id); err != nil {
 		t.Fatal(err)
 	}
 
 	if template.Name != "go-sdk-test-create-template" {
-		t.Fatal("wrong template name")
+		t.Error("wrong template name")
 	}
-	if _, found := template.Steps["resize"]; !found {
-		t.Fatal("resize step missing")
+	if _, found := template.Content.Steps["resize"]; !found {
+		t.Error("resize step missing")
 	}
-	if _, found := template.Steps["optimize"]; !found {
-		t.Fatal("optimize step missing")
+	if _, found := template.Content.Steps["optimize"]; !found {
+		t.Error("optimize step missing")
 	}
-}
 
-func TestEditTemplate(t *testing.T) {
-	client := setup(t)
-
-	template := NewTemplate("go-sdk-test-new")
-
+	template = NewTemplate()
+	template.Name = "go-sdk-test-new"
 	template.AddStep("bar", map[string]interface{}{})
 	template.AddStep("baz", map[string]interface{}{})
 
-	err := client.EditTemplate(templateId, template)
-	if err != nil {
+	// Step 3: Update previously created template
+	if err := client.UpdateTemplate(ctx, id, template); err != nil {
+		t.Fatal(err)
+	}
+
+	// Step 4: Retrieve template again and assert edited properties
+	if template, err = client.GetTemplate(ctx, id); err != nil {
 		t.Fatal(err)
 	}
 
 	if template.Name != "go-sdk-test-new" {
-		t.Fatal("wrong template name")
+		t.Error("wrong template name")
 	}
-	if _, found := template.Steps["resize"]; found {
-		t.Fatal("resize step not removed")
+	if _, found := template.Content.Steps["resize"]; found {
+		t.Error("resize step not removed")
 	}
-	if _, found := template.Steps["bar"]; !found {
-		t.Fatal("bar step missing")
+	if _, found := template.Content.Steps["bar"]; !found {
+		t.Error("bar step missing")
 	}
-	if _, found := template.Steps["baz"]; !found {
-		t.Fatal("baz step missing")
+	if _, found := template.Content.Steps["baz"]; !found {
+		t.Error("baz step missing")
 	}
-}
 
-func TestDeleteTemplate(t *testing.T) {
-	client := setup(t)
-
-	if err := client.DeleteTemplate(templateId); err != nil {
+	// Step 5: Delete template
+	if err := client.DeleteTemplate(ctx, id); err != nil {
 		t.Fatal(err)
+	}
+
+	// Step 6: Assert template has been deleted
+	_, err = client.GetTemplate(ctx, id)
+	if err.(RequestError).Code != "TEMPLATE_NOT_FOUND" {
+		t.Error("template has not been deleted")
 	}
 }
 
 func TestListTemplates(t *testing.T) {
-	setupTemplates(t)
+	t.Parallel()
+
 	client := setup(t)
 
-	templates, err := client.ListTemplates(&ListOptions{
+	templates, err := client.ListTemplates(ctx, &ListOptions{
 		PageSize: 3,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if len(templates.Templates) == 0 {
+	if len(templates.Templates) != 3 {
 		t.Fatal("wrong number of templates")
 	}
 
@@ -109,5 +106,9 @@ func TestListTemplates(t *testing.T) {
 
 	if templates.Templates[0].Name == "" {
 		t.Fatal("wrong template name")
+	}
+
+	if templates.Templates[0].Content.Steps == nil {
+		t.Fatal("empty template content")
 	}
 }

@@ -1,43 +1,41 @@
+// Package transloadit provides a client to interact with the Transloadt API.
 package transloadit
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
+// Config defines the configuration options for a client.
 type Config struct {
 	AuthKey    string
 	AuthSecret string
-	Region     string
 	Endpoint   string
 }
 
+// DefaultConfig is the recommended base configuration.
 var DefaultConfig = Config{
-	Region:   "us-east-1",
-	Endpoint: "http://api2.transloadit.com",
+	Endpoint: "https://api2.transloadit.com",
 }
 
+// Client provides an interface to the Transloadit REST API bound to a specific
+// account.
 type Client struct {
 	config     Config
 	httpClient *http.Client
 }
 
-type Response map[string]interface{}
-
-// Options when retrieving a list.
-// Look at the documentation which properties are accepted
-// and to see their meaining, e.g. https://transloadit.com/docs/api-docs#retrieve-assembly-list
-// for listing assemblies.
+// ListOptions defines criteria used when a list is being retrieved. Details
+// about each property can be found at https://transloadit.com/docs/api-docs#retrieve-assembly-list.
 type ListOptions struct {
 	Page       int        `json:"page,omitempty"`
 	PageSize   int        `json:"pagesize,omitempty"`
@@ -46,39 +44,58 @@ type ListOptions struct {
 	Fields     []string   `json:"fields,omitempty"`
 	Type       string     `json:"type,omitempty"`
 	Keywords   []string   `json:"keyword,omitempty"`
-	AssemblyId string     `json:"assembly_id,omitempty"`
+	AssemblyID string     `json:"assembly_id,omitempty"`
 	FromDate   *time.Time `json:"fromdate,omitempty"`
 	ToDate     *time.Time `json:"todate,omitempty"`
-	// For internal use only!
-	Auth struct {
-		Key     string `json:"key"`
-		Expires string `json:"expires"`
-	} `json:"auth"`
 }
 
-// Create a new client using the provided configuration object.
-// An error will be returned if no AuthKey or AuthSecret is found in config.
-func NewClient(config Config) (*Client, error) {
+type authParams struct {
+	Key     string `json:"key"`
+	Expires string `json:"expires"`
+}
+
+type authListOptions struct {
+	*ListOptions
+
+	// For internal use only!
+	Auth authParams `json:"auth"`
+}
+
+// RequestError represents an error returned by the Transloadit API alongside
+// additional service-specific information.
+type RequestError struct {
+	Code    string `json:"error"`
+	Message string `json:"message"`
+}
+
+// Error return a formatted message describing the error.
+func (err RequestError) Error() string {
+	return fmt.Sprintf("request failed due to %s: %s", err.Code, err.Message)
+}
+
+// NewClient creates a new client using the provided configuration struct.
+// It will panic if no Config.AuthKey or Config.AuthSecret are empty.
+func NewClient(config Config) Client {
 	if config.AuthKey == "" {
-		return nil, errors.New("failed to create client: missing AuthKey")
+		panic("failed to create Transloadit client: missing AuthKey")
 	}
 
 	if config.AuthSecret == "" {
-		return nil, errors.New("failed to create client: missing AuthSecret")
+		panic("failed to create Transloadit client: missing AuthSecret")
 	}
 
-	client := &Client{
+	client := Client{
 		config:     config,
 		httpClient: &http.Client{},
 	}
 
-	return client, nil
+	return client
 }
 
 func (client *Client) sign(params map[string]interface{}) (string, string, error) {
-	params["auth"] = map[string]string{
-		"key":     client.config.AuthKey,
-		"expires": getExpireString(),
+	params["auth"] = authParams{
+		Key:     client.config.AuthKey,
+		Expires: getExpireString(),
 	}
 
 	b, err := json.Marshal(params)
@@ -91,41 +108,38 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 	return string(b), hex.EncodeToString(hash.Sum(nil)), nil
 }
 
-func (client *Client) doRequest(req *http.Request, result interface{}) (Response, error) {
+func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	req.Header.Set("User-Agent", "Transloadit Go SDK "+Version)
 
 	res, err := client.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
+		return fmt.Errorf("failed execute http request: %s", err)
 	}
 	defer res.Body.Close()
 
 	// Limit response to 128MB
 	reader := io.LimitReader(res.Body, 128*1024*1024)
-	body, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return nil, fmt.Errorf("failed execute http request: %s", err)
-	}
+	decoder := json.NewDecoder(reader)
 
-	if result == nil {
-		var obj Response
-		err = json.Unmarshal(body, &obj)
-		if err != nil {
-			return nil, fmt.Errorf("failed execute http request: %s", err)
+	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
+		var reqErr RequestError
+		if err := decoder.Decode(&reqErr); err != nil {
+			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 
-		if res.StatusCode != 200 {
-			return obj, fmt.Errorf("failed execute http request: server responded with %s", obj["error"])
-		}
-
-		return obj, nil
-	} else {
-		err = json.Unmarshal(body, result)
-		return nil, err
+		return reqErr
 	}
+
+	if result != nil {
+		if err := decoder.Decode(result); err != nil {
+			return fmt.Errorf("failed unmarshal http request: %s", err)
+		}
+	}
+
+	return nil
 }
 
-func (client *Client) request(method string, path string, content map[string]interface{}, result interface{}) (Response, error) {
+func (client *Client) request(ctx context.Context, method string, path string, content map[string]interface{}, result interface{}) error {
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -140,7 +154,7 @@ func (client *Client) request(method string, path string, content map[string]int
 	// Create signature
 	params, signature, err := client.sign(content)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
 
 	v := url.Values{}
@@ -155,8 +169,9 @@ func (client *Client) request(method string, path string, content map[string]int
 	}
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
+	req = req.WithContext(ctx)
 
 	if method != "GET" {
 		// Add content type header
@@ -166,20 +181,20 @@ func (client *Client) request(method string, path string, content map[string]int
 	return client.doRequest(req, result)
 }
 
-func (client *Client) listRequest(path string, options *ListOptions, result interface{}) (Response, error) {
+func (client *Client) listRequest(ctx context.Context, path string, listOptions *ListOptions, result interface{}) error {
 	uri := client.config.Endpoint + "/" + path
 
-	options.Auth = struct {
-		Key     string `json:"key"`
-		Expires string `json:"expires"`
-	}{
-		Key:     client.config.AuthKey,
-		Expires: getExpireString(),
+	options := authListOptions{
+		ListOptions: listOptions,
+		Auth: authParams{
+			Key:     client.config.AuthKey,
+			Expires: getExpireString(),
+		},
 	}
 
 	b, err := json.Marshal(options)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create signature: %s", err)
+		return fmt.Errorf("unable to create signature: %s", err)
 	}
 
 	hash := hmac.New(sha1.New, []byte(client.config.AuthSecret))
@@ -196,8 +211,9 @@ func (client *Client) listRequest(path string, options *ListOptions, result inte
 
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
-		return nil, fmt.Errorf("request: %s", err)
+		return fmt.Errorf("request: %s", err)
 	}
+	req = req.WithContext(ctx)
 
 	return client.doRequest(req, result)
 }

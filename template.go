@@ -1,105 +1,84 @@
 package transloadit
 
-import (
-	"fmt"
-)
+import "context"
 
+// Template contains details about a single template.
 type Template struct {
-	Name string `json:"name"`
-	// See AddStep for simple usage.
-	Steps map[string]map[string]interface{} `json:"content"`
+	ID      string          `json:"id"`
+	Name    string          `json:"name"`
+	Content TemplateContent `json:"content"`
 }
 
-type templateGetResponse struct {
-	Name    string `json:"name"`
-	Content struct {
-		Steps map[string]map[string]interface{} `json:"steps"`
-	} `json:"content"`
+// TemplateContent contains details about the content of a single template.
+type TemplateContent struct {
+	Steps map[string]interface{} `json:"steps"`
 }
 
+// TemplateList contains a list of templates.
 type TemplateList struct {
-	Templates []TemplateListItem `json:"items"`
-	Count     int                `json:"count"`
+	Templates []Template `json:"items"`
+	Count     int        `json:"count"`
 }
 
-type TemplateListItem struct {
-	Id    string                 `json:"id"`
-	Name  string                 `json:"name"`
-	Steps map[string]interface{} `json:"json"`
-}
-
-// Creates a new template instance which can be saved to transloadit.
-func NewTemplate(name string) *Template {
-	return &Template{
-		Name:  name,
-		Steps: make(map[string]map[string]interface{}),
-	}
-}
-
-// Save the template.
-func (client *Client) CreateTemplate(template *Template) (string, error) {
-	content := map[string]interface{}{
-		"name": template.Name,
-		"template": map[string]interface{}{
-			"steps": template.Steps,
+// NewTemplate returns a new Template struct with initialized values. This
+// template will not be saved to Transloadit. To do so, please use the
+// Client.CreateTemplate function.
+func NewTemplate() Template {
+	return Template{
+		Content: TemplateContent{
+			make(map[string]interface{}),
 		},
 	}
-
-	res, err := client.request("POST", "templates", content, nil)
-	if err != nil {
-		return "", fmt.Errorf("unable to create template: %s", err)
-	}
-
-	return res["template_id"].(string), nil
 }
 
-// Get information about a template using its id.
-func (client *Client) GetTemplate(templateId string) (*Template, error) {
-	var templateGet templateGetResponse
-	_, err := client.request("GET", "templates/"+templateId, nil, &templateGet)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get template: %s", err)
-	}
-
-	var template Template
-	template.Name = templateGet.Name
-	template.Steps = templateGet.Content.Steps
-
-	return &template, nil
-}
-
-// Add another step to the template.
+// AddStep will add the provided step to the Template.Content.Steps map.
 func (template *Template) AddStep(name string, step map[string]interface{}) {
-	template.Steps[name] = step
+	template.Content.Steps[name] = step
 }
 
-// Delete a template from the list.
-func (client *Client) DeleteTemplate(templateId string) error {
-	_, err := client.request("DELETE", "templates/"+templateId, nil, nil)
-	if err != nil {
-		return fmt.Errorf("unable to delete template: %s", err)
+// CreateTemplate will save the provided template struct as a new template
+// and return the ID of the new template.
+func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
+	content := map[string]interface{}{
+		"name":     template.Name,
+		"template": template.Content,
 	}
 
-	return nil
+	if err := client.request(ctx, "POST", "templates", content, &template); err != nil {
+		return "", err
+	}
+
+	return template.ID, nil
 }
 
-// Update the name and content of the template defined using the id.
-func (client *Client) EditTemplate(templateId string, newTemplate *Template) error {
+// GetTemplate will retrieve details about the template associated with the
+// provided template ID.
+func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
+	err = client.request(ctx, "GET", "templates/"+templateID, nil, &template)
+	return template, err
+}
+
+// DeleteTemplate will delete the template associated with the provided
+// template ID.
+func (client *Client) DeleteTemplate(ctx context.Context, templateID string) error {
+	return client.request(ctx, "DELETE", "templates/"+templateID, nil, nil)
+}
+
+// UpdateTemplate will update the template associated with the provided
+// template ID to match the new name and  new content. Please be aware that you
+// are not able to change a template's ID.
+func (client *Client) UpdateTemplate(ctx context.Context, templateID string, newTemplate Template) error {
 	// Create signature
 	content := map[string]interface{}{
-		"name": newTemplate.Name,
-		"template": map[string]interface{}{
-			"steps": newTemplate.Steps,
-		},
+		"name":     newTemplate.Name,
+		"template": newTemplate.Content,
 	}
 
-	_, err := client.request("PUT", "templates/"+templateId, content, nil)
-	return err
+	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
 }
 
-// List all templates matching the criterias.
-func (client *Client) ListTemplates(options *ListOptions) (*TemplateList, error) {
-	var templates TemplateList
-	_, err := client.listRequest("templates", options, &templates)
-	return &templates, err
+// ListTemplates will retrieve all templates matching the criteria.
+func (client *Client) ListTemplates(ctx context.Context, options *ListOptions) (list TemplateList, err error) {
+	err = client.listRequest(ctx, "templates", options, &list)
+	return list, err
 }

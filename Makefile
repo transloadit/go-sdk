@@ -1,7 +1,12 @@
 SHELL := /usr/bin/env bash
 
-test:
-	go test
+test-examples:
+	cd ./examples && find . -type f | xargs -i sh -c "go build {} && go clean" \;
+
+test-package:
+	go test .
+
+test: test-package test-examples
 
 release:
 	#$(MAKE) build
@@ -14,4 +19,6 @@ release:
 
 .PHONY: \
 	release \
-	test
+	test \
+  test-package \
+  test-examples

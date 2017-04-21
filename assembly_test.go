@@ -7,12 +7,11 @@ import (
 	"testing"
 )
 
-var assemblyId string
-var assemblyUrl string
+var assemblyURL string
 
-func TestAssembly(t *testing.T) {
+func TestStartAssembly_Success(t *testing.T) {
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -30,18 +29,18 @@ func TestAssembly(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
+	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
 
-	info, err := assembly.Upload()
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyId == "" {
+	if info.AssemblyID == "" {
 		t.Fatal("response doesn't contain assembly_id")
 	}
 
-	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
 	}
 
@@ -66,21 +65,19 @@ func TestAssembly(t *testing.T) {
 		t.Fatal("wrong user agent")
 	}
 
-	assemblyId = info.AssemblyId
-	assemblyUrl = info.AssemblyUrl
+	assemblyURL = info.AssemblyURL
 }
 
-func TestAssemblyFail(t *testing.T) {
+func TestStartAssembly_Failure(t *testing.T) {
+	t.Parallel()
+
 	config := DefaultConfig
 	config.AuthKey = "does not exist"
 	config.AuthSecret = "does not matter"
 
-	client, err := NewClient(config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := NewClient(config)
 
-	assembly := client.CreateAssembly()
+	assembly := NewAssembly()
 
 	file, err := os.Open("./fixtures/lol_cat.jpg")
 	if err != nil {
@@ -97,76 +94,68 @@ func TestAssemblyFail(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	_, err = assembly.Upload()
-	if fmt.Sprintf("%s", err) != "failed to create assembly: GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
-		fmt.Printf("%v", err)
-		t.Fatal("reponse doesn't contain the error message GET_ACCOUNT_UNKNOWN_AUTH_KEY")
+	_, err = client.StartAssembly(ctx, assembly)
+	reqErr := err.(RequestError)
+	if reqErr.Code != "GET_ACCOUNT_UNKNOWN_AUTH_KEY" {
+		t.Fatal("wrong error code in response")
+	}
+	if reqErr.Message == "" {
+		t.Fatal("error message should not be empty")
 	}
 }
 
-func TestAssemblyBlocking(t *testing.T) {
+func TestStartAssembly_Template(t *testing.T) {
+	setupTemplates(t)
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := NewAssembly()
 
-	file, err := os.Open("./fixtures/lol_cat.jpg")
+	assembly.TemplateID = templateIDOptimizeResize
+
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assembly.AddReader("image", "lol_cat.jpg", file)
-
-	assembly.AddStep("resize", map[string]interface{}{
-		"robot":           "/image/resize",
-		"width":           75,
-		"height":          75,
-		"resize_strategy": "pad",
-		"background":      "#000000",
-	})
-
-	assembly.Blocking = true
-
-	info, err := assembly.Upload()
-	if err != nil {
-		t.Fatal(err)
+	if info.AssemblyID == "" {
+		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
 	}
 
-	if info.Ok != "ASSEMBLY_COMPLETED" {
-		t.Fatal("wrong assembly status")
-	}
-
-	if info.AssemblyId == "" {
-		t.Fatal("response doesn't contain assembly_id")
-	}
-
-	if len(info.Uploads) != 1 {
-		t.Fatal("wrong number of uploads")
+	if !strings.Contains(info.Params, templateIDOptimizeResize) {
+		t.Fatal("template id not as parameter submitted")
 	}
 }
 
 func TestGetAssembly(t *testing.T) {
 	client := setup(t)
-	assembly, err := client.GetAssembly(assemblyUrl)
+	assembly, err := client.GetAssembly(ctx, assemblyURL)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if assembly.AssemblyId == "" {
+	if assembly.AssemblyID == "" {
 		t.Fatal("assembly id not contained")
 	}
 
-	if assembly.AssemblyUrl != assemblyUrl {
+	if assembly.AssemblyURL != assemblyURL {
 		t.Fatal("assembly urls don't match")
 	}
 }
 
-func TestReplayAssembly(t *testing.T) {
+func TestStartAssemblyReplay(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
-	assembly := client.ReplayAssembly(assemblyId)
+	assembly := NewAssemblyReplay(assemblyURL)
 
-	assembly.NotifyUrl = "http://requestb.in/1kwp6lx1"
-	assembly.ReparseTemplate()
+	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
+	assembly.ReparseTemplate = true
 
-	info, err := assembly.Start()
+	assembly.AddStep("import", map[string]interface{}{
+		"robot": "/http/import",
+		"url":   "http://mirror.nl.leaseweb.net/speedtest/10mb.bin",
+	})
+
+	info, err := client.StartAssemblyReplay(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -175,76 +164,47 @@ func TestReplayAssembly(t *testing.T) {
 		t.Fatal("wrong status code returned")
 	}
 
-	if info.NotifyUrl != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
 		t.Fatal("wrong notify url")
 	}
 }
 
-func TestReplayAssemblyBlocking(t *testing.T) {
-	client := setup(t)
-	assembly := client.ReplayAssembly(assemblyId)
-
-	assembly.Blocking = true
-
-	info, err := assembly.Start()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if info.Ok != "ASSEMBLY_COMPLETED" {
-		t.Fatal("wrong status code returned")
-	}
-}
-
-func TestAssemblyUsingTemplate(t *testing.T) {
-	setupTemplates(t)
-	client := setup(t)
-	assembly := client.CreateAssembly()
-
-	assembly.TemplateId = templateIdOptimizeResize
-
-	info, err := assembly.Upload()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if info.AssemblyId == "" {
-		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
-	}
-
-	if !strings.Contains(info.Params, templateIdOptimizeResize) {
-		t.Fatal("template id not as parameter submitted")
-	}
-}
-
 func TestCancelAssembly(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
-	assembly := client.CreateAssembly()
+	assembly := NewAssembly()
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
 		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
 	})
 
-	info, err := assembly.Upload()
+	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if info.AssemblyUrl == "" {
+	if info.AssemblyURL == "" {
 		t.Fatal("response doesn't contain assembly_url")
 	}
 
-	_, err = client.CancelAssembly(info.AssemblyUrl)
+	info, err = client.CancelAssembly(ctx, info.AssemblyURL)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if info.Ok != "ASSEMBLY_CANCELED" {
+		t.Fatal("incorrect assembly status")
 	}
 }
 
 func TestListAssemblies(t *testing.T) {
+	t.Parallel()
+
 	client := setup(t)
 
-	assemblies, err := client.ListAssemblies(&ListOptions{
+	assemblies, err := client.ListAssemblies(ctx, &ListOptions{
 		PageSize: 3,
 	})
 	if err != nil {
@@ -259,7 +219,7 @@ func TestListAssemblies(t *testing.T) {
 		t.Fatal("wrong count")
 	}
 
-	if assemblies.Assemblies[0].AssemblyId == "" {
+	if assemblies.Assemblies[0].AssemblyID == "" {
 		t.Fatal("wrong template name")
 	}
 }

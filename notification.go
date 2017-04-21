@@ -1,45 +1,46 @@
 package transloadit
 
 import (
+	"context"
 	"time"
 )
 
+// NotificationList contains a list of notifications.
 type NotificationList struct {
-	Notifications []*NotificationListItem `json:"items"`
-	Count         int                     `json:"count"`
+	Notifications []Notification `json:"items"`
+	Count         int            `json:"count"`
 }
 
-type NotificationListItem struct {
-	Id           string    `json:"id"`
-	AssemblyId   string    `json:"assembly_id"`
-	AccountId    string    `json:"account_id"`
-	Url          string    `json:"url"`
+// Notification contains details about a notification.
+type Notification struct {
+	ID           string    `json:"id"`
+	AssemblyID   string    `json:"assembly_id"`
+	AccountID    string    `json:"account_id"`
+	URL          string    `json:"url"`
 	ResponseCode int       `json:"response_code"`
-	RespandeData string    `json:"response_data"`
+	ResponseData string    `json:"response_data"`
 	Duration     float32   `json:"duration"`
 	Created      time.Time `json:"created"`
 	Error        string    `json:"error"`
 }
 
-// List all notificaions matching the criterias.
-func (client *Client) ListNotifications(options *ListOptions) (*NotificationList, error) {
-
-	var notifications NotificationList
-	_, err := client.listRequest("assembly_notifications", options, &notifications)
-	return &notifications, err
-
+// ListNotifications will return a list containing all notifications matching
+// the criteria defined using the ListOptions structure.
+func (client *Client) ListNotifications(ctx context.Context, options *ListOptions) (list NotificationList, err error) {
+	err = client.listRequest(ctx, "assembly_notifications", options, &list)
+	return list, err
 }
 
-// Replay a notification which was trigger by assembly defined using the assemblyId.
-// If notifyUrl is not empty it will override the original notify url.
-func (client *Client) ReplayNotification(assemblyId string, notifyUrl string) (Response, error) {
-
+// ReplayNotification instructs the endpoint to replay the notification
+// corresponding to the provided assembly ID.
+// If notifyURL is not empty it will override the notify URL used in the
+// assembly instructions.
+func (client *Client) ReplayNotification(ctx context.Context, assemblyID string, notifyURL string) error {
 	params := make(map[string]interface{})
 
-	if notifyUrl != "" {
-		params["notify_url"] = notifyUrl
+	if notifyURL != "" {
+		params["notify_url"] = notifyURL
 	}
 
-	return client.request("POST", "assembly_notifications/"+assemblyId+"/replay", params, nil)
-
+	return client.request(ctx, "POST", "assembly_notifications/"+assemblyID+"/replay", params, nil)
 }

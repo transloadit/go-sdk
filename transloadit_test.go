@@ -1,58 +1,60 @@
 package transloadit
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
 )
 
+var ctx = context.Background()
 var templatesSetup bool
-var templateIdOptimizeResize string
+var templateIDOptimizeResize string
 
-func TestCreateClient(t *testing.T) {
-	client, err := NewClient(DefaultConfig)
-	if client != nil {
-		t.Fatal("client should be nil")
-	}
+func TestNewClient_MissingAuthKey(t *testing.T) {
+	t.Parallel()
 
-	if !strings.Contains(err.Error(), "missing AuthKey") {
-		t.Fatal("error should contain message")
-	}
+	defer func() {
+		err := recover().(string)
+		if !strings.Contains(err, "missing AuthKey") {
+			t.Fatal("error should contain message")
+		}
+	}()
+
+	_ = NewClient(DefaultConfig)
+}
+
+func TestNewClient_MissingAuthSecret(t *testing.T) {
+	t.Parallel()
+
+	defer func() {
+		err := recover().(string)
+		if !strings.Contains(err, "missing AuthSecret") {
+			t.Fatal("error should contain message")
+		}
+	}()
 
 	config := DefaultConfig
 	config.AuthKey = "fooo"
-	client, err = NewClient(config)
-	if client != nil {
-		t.Fatal("client should be nil")
-	}
-
-	if !strings.Contains(err.Error(), "missing AuthSecret") {
-		t.Fatal("error should contain message")
-	}
-
-	config = DefaultConfig
-	config.AuthKey = "fooo"
-	config.AuthSecret = "bar"
-	client, err = NewClient(config)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if client == nil {
-		t.Fatal("client should not be nil")
-	}
+	_ = NewClient(config)
 }
 
-func setup(t *testing.T) *Client {
+func TestNewClient_Success(t *testing.T) {
+	t.Parallel()
+
+	config := DefaultConfig
+	config.AuthKey = "fooo"
+	config.AuthSecret = "bar"
+	_ = NewClient(config)
+}
+
+func setup(t *testing.T) Client {
 	config := DefaultConfig
 	config.AuthKey = os.Getenv("TRANSLOADIT_KEY")
 	config.AuthSecret = os.Getenv("TRANSLOADIT_SECRET")
 
-	client, err := NewClient(config)
-	if err != nil {
-		t.Fatal(err)
-	}
+	client := NewClient(config)
 
 	return client
 }
@@ -64,11 +66,12 @@ func setupTemplates(t *testing.T) {
 
 	client := setup(t)
 
-	template := NewTemplate("go-sdk-test")
+	template := NewTemplate()
+	template.Name = "go-sdk-test"
 
 	template.AddStep("optimize", map[string]interface{}{
-		"robot":    "/image/optimize",
-		"use":      ":original",
+		"robot": "/image/optimize",
+		"use":   ":original",
 	})
 	template.AddStep("image/resize", map[string]interface{}{
 		"background":      "#000000",
@@ -79,14 +82,14 @@ func setupTemplates(t *testing.T) {
 		"use":             "optimize",
 	})
 
-	id, err := client.CreateTemplate(template)
+	id, err := client.CreateTemplate(ctx, template)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	fmt.Printf("Created template 'go-sdk-test' (%s) for testing.\n", id)
 
-	templateIdOptimizeResize = id
+	templateIDOptimizeResize = id
 
 	templatesSetup = true
 }

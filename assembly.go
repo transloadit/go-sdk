@@ -1,7 +1,7 @@
 package transloadit
 
 import (
-	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -10,17 +10,19 @@ import (
 	"time"
 )
 
+// Assembly contains instructions used for starting assemblies.
 type Assembly struct {
-	client *Client
-	// Notify url to send a request to once the assembly finishes.
+	// NotifiyURL specifies a URL to which a request will be sent once the
+	// assembly finishes.
 	// See https://transloadit.com/docs#notifications.
-	NotifyUrl string
-	// Optional template id to use instead of adding steps.
-	TemplateId string
-	// Wait until the assembly completes (or is canceled).
-	Blocking bool
-	steps    map[string]map[string]interface{}
-	readers  []*upload
+	NotifyURL string
+	// TemplateID specifies a optional template from which the encoding
+	// instructions will be fetched.
+	// See https://transloadit.com/docs/#15-templates
+	TemplateID string
+
+	steps   map[string]map[string]interface{}
+	readers []*upload
 }
 
 type upload struct {
@@ -29,43 +31,56 @@ type upload struct {
 	Reader io.ReadCloser
 }
 
+// AssemblyReplay contains instructions used for replaying assemblies.
 type AssemblyReplay struct {
-	assemblyId string
-	client     *Client
-	// Notify url to send a request to once the assembly finishes.
+	// NotifiyURL specifies a URL to which a request will be sent once the
+	// assembly finishes. This overwrites the notify url from the original
+	// assembly instructions.
 	// See https://transloadit.com/docs#notifications.
-	NotifyUrl string
-	// Wait until the assembly completes (or is canceled).
-	Blocking        bool
-	reparseTemplate bool
-	steps           map[string]map[string]interface{}
+	NotifyURL string
+	// ReparseTemplate specifies whether the template should be fetched again
+	// before the assembly is replayed. This can be used if the template has
+	// changed since the original assembly was created.
+	ReparseTemplate bool
+
+	assemblyURL string
+	steps       map[string]map[string]interface{}
 }
 
+// AssemblyList contains a list of assemblies.
 type AssemblyList struct {
 	Assemblies []*AssemblyListItem `json:"items"`
 	Count      int                 `json:"count"`
 }
 
+// AssemblyListItem contains reduced details about an assembly.
 type AssemblyListItem struct {
-	AssemblyId        string    `json:"id"`
-	AccountId         string    `json:"account_id"`
-	TemplateId        string    `json:"template_id"`
-	Instance          string    `json:"instance"`
-	NotifyUrl         string    `json:"notify_url"`
-	RedirectUrl       string    `json:"redirect_url"`
-	ExecutionDuration float32   `json:"execution_duration"`
-	ExecutionStart    time.Time `json:"execution_start"`
-	Created           time.Time `json:"created"`
-	Ok                string    `json:"ok"`
-	Error             string    `json:"error"`
-	Files             string    `json:"files"`
+	Ok    string `json:"ok"`
+	Error string `json:"error"`
+
+	AssemblyID        string     `json:"id"`
+	AccountID         string     `json:"account_id"`
+	TemplateID        string     `json:"template_id"`
+	Instance          string     `json:"instance"`
+	NotifyURL         string     `json:"notify_url"`
+	RedirectURL       string     `json:"redirect_url"`
+	ExecutionDuration float32    `json:"execution_duration"`
+	ExecutionStart    *time.Time `json:"execution_start"`
+	Created           time.Time  `json:"created"`
+	Files             string     `json:"files"`
 }
 
+// AssemblyInfo contains details about an assemblies current status. Details
+// about each value can be found at https://transloadit.com/docs/api-docs/#assembly-status-response
 type AssemblyInfo struct {
-	AssemblyId             string                 `json:"assembly_id"`
-	ParentId               string                 `json:"parent_id"`
-	AssemblyUrl            string                 `json:"assembly_url"`
-	AssemblySslUrl         string                 `json:"assembly_ssl_url"`
+	Ok      string `json:"ok"`
+	Error   string `json:"error"`
+	Message string `json:"message"`
+
+	AssemblyID             string                 `json:"assembly_id"`
+	ParentID               string                 `json:"parent_id"`
+	AssemblyURL            string                 `json:"assembly_url"`
+	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          int                    `json:"bytes_expected"`
 	ClientAgent            string                 `json:"client_agent"`
@@ -75,7 +90,7 @@ type AssemblyInfo struct {
 	IsInfinite             bool                   `json:"is_infinite"`
 	HasDupeJobs            bool                   `json:"has_dupe_jobs"`
 	UploadDuration         float32                `json:"upload_duration"`
-	NotifyUrl              string                 `json:"notify_url"`
+	NotifyURL              string                 `json:"notify_url"`
 	NotifyStart            string                 `json:"notify_start"`
 	NotifyStatus           string                 `json:"notify_status"`
 	NotifyDuation          float32                `json:"notify_duration"`
@@ -83,24 +98,23 @@ type AssemblyInfo struct {
 	ExecutionDuration      float32                `json:"execution_duration"`
 	ExecutionStart         string                 `json:"execution_start"`
 	Created                string                 `json:"created"`
-	Ok                     string                 `json:"ok"`
-	Message                string                 `json:"message"`
 	Files                  string                 `json:"files"`
 	Fields                 map[string]interface{} `json:"fields"`
 	BytesUsage             int                    `json:"bytes_usage"`
 	FilesToStoreOnS3       int                    `json:"files_to_store_on_s3"`
 	QueuedFilesToStoreOnS3 int                    `json:"queued_files_to_store_on_s3"`
-	ExecutingJobs          []interface{}          `json:"executing_jobs"`
-	StartedJobs            []interface{}          `json:"started_jobs"`
+	ExecutingJobs          []string               `json:"executing_jobs"`
+	StartedJobs            []string               `json:"started_jobs"`
 	ParentAssemblyStatus   *AssemblyInfo          `json:"parent_assembly_status"`
 	Uploads                []*FileInfo            `json:"uploads"`
 	Results                map[string][]*FileInfo `json:"results"`
 	Params                 string                 `json:"params"`
-	Error                  string                 `json:"error"`
 }
 
+// FileInfo contains details about a file which was either uploaded or is the
+// result of an executed assembly.
 type FileInfo struct {
-	Id               string                 `json:"id"`
+	ID               string                 `json:"id"`
 	Name             string                 `json:"name"`
 	Basename         string                 `json:"basename"`
 	Ext              string                 `json:"ext"`
@@ -110,51 +124,60 @@ type FileInfo struct {
 	Field            string                 `json:"field"`
 	Md5Hash          string                 `json:"md5hash"`
 	OriginalMd5Hash  string                 `json:"original_md5hash"`
-	OriginalId       string                 `json:"original_id"`
+	OriginalID       string                 `json:"original_id"`
 	OriginalBasename string                 `json:"original_basename"`
-	Url              string                 `json:"url"`
-	SslUrl           string                 `json:"ssl_url"`
+	URL              string                 `json:"url"`
+	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
 }
 
-// Create a new assembly instance which can be executed later.
-func (client *Client) CreateAssembly() *Assembly {
-	return &Assembly{
-		client:  client,
+// NewAssembly will create a new Assembly struct which can be used to start
+// an assembly using Client.StartAssembly.
+func NewAssembly() Assembly {
+	return Assembly{
 		steps:   make(map[string]map[string]interface{}),
 		readers: make([]*upload, 0),
 	}
 }
 
-// Add another reader to upload later.
-func (assembly *Assembly) AddReader(field, name string, reader io.ReadCloser) {
+// AddReader will add the provided io.Reader to the list which will be uploaded
+// once Client.StartAssembly is invoked. The corresponding field name can be
+// used to reference the file in the assembly instructions.
+func (assembly *Assembly) AddReader(fieldname, filename string, reader io.ReadCloser) {
 	assembly.readers = append(assembly.readers, &upload{
-		Field:  field,
-		Name:   name,
+		Field:  fieldname,
+		Name:   filename,
 		Reader: reader,
 	})
 }
 
-// Add another file to upload later.
-func (assembly *Assembly) AddFile(field, name string) error {
-	file, err := os.Open(name)
+// AddFile will open the provided file path and add it to the list which will be
+// uploaded once Client.StartAssembly is invoked. The corresponding field name
+// can be used to reference the file in the assembly instructions.
+func (assembly *Assembly) AddFile(fieldname, filepath string) error {
+	file, err := os.Open(filepath)
 	if err != nil {
 		return err
 	}
 
-	assembly.AddReader(field, name, file)
+	assembly.AddReader(fieldname, filepath, file)
 	return nil
 }
 
-// Add a step to the assembly.
+// AddStep will add the provided step to the assembly instructions. Details
+// about possible values can be found at https://transloadit.com/docs/#14-assembly-instructions
 func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
-// Start the assembly and upload all files.
+// StartAssembly will upload all provided files and instruct the endpoint to
+// start executing it. The function will return after all uploads complete and
+// the remote server received the instructions (or the provided context times
+// out). It won't wait until the execution has finished and results are
+// available, which can be achieved using WaitForAssembly.
+//
 // When an error is returned you should also check AssemblyInfo.Error for more
-// information about the error. This happens when there is an error returned by
-// the Transloadit API:
+// information about the error sent by the Transloadit API:
 //  info, err := assembly.Upload()
 //  if err != nil {
 //  	if info != nil && info.Error != "" {
@@ -162,63 +185,30 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 //  	}
 //  	panic(err)
 //  }
-func (assembly *Assembly) Upload() (*AssemblyInfo, error) {
-	req, err := assembly.makeRequest()
+func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*AssemblyInfo, error) {
+	req, err := assembly.makeRequest(ctx, client)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create assembly request: %s", err)
 	}
 
 	var info AssemblyInfo
-	_, err = assembly.client.doRequest(req, &info)
+	// TODO: add context.Context
+	if err = client.doRequest(req, &info); err != nil {
+		return nil, err
+	}
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to create assembly: %s", info.Error)
 	}
 
-	if !assembly.Blocking {
-		return &info, err
-	}
-
-	watcher := assembly.client.WaitForAssembly(info.AssemblyUrl)
-
-	select {
-	case res := <-watcher.Response:
-		// Assembly completed
-		return res, nil
-	case err := <-watcher.Error:
-		// Error appeared
-		return nil, err
-	}
+	return &info, err
 }
 
-func (assembly *Assembly) makeRequest() (*http.Request, error) {
-	// Get bored instance to upload files to
-	bored, err := assembly.client.getBoredInstance()
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
-
-	url := "http://api2-" + bored + "/assemblies"
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-
-	// Add files to upload
-	for _, reader := range assembly.readers {
-		part, err := writer.CreateFormFile(reader.Field, reader.Name)
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-
-		_, err = io.Copy(part, reader.Reader)
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-
-		err = reader.Reader.Close()
-		if err != nil {
-			return nil, fmt.Errorf("unable to create upload request: %s", err)
-		}
-	}
+func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
+	// TODO: test with huge files
+	url := client.config.Endpoint + "/assemblies"
+	bodyReader, bodyWriter := io.Pipe()
+	multiWriter := multipart.NewWriter(bodyWriter)
 
 	options := make(map[string]interface{})
 
@@ -226,121 +216,136 @@ func (assembly *Assembly) makeRequest() (*http.Request, error) {
 		options["steps"] = assembly.steps
 	}
 
-	if assembly.TemplateId != "" {
-		options["template_id"] = assembly.TemplateId
+	if assembly.TemplateID != "" {
+		options["template_id"] = assembly.TemplateID
 	}
 
-	if assembly.NotifyUrl != "" {
-		options["notify_url"] = assembly.NotifyUrl
+	if assembly.NotifyURL != "" {
+		options["notify_url"] = assembly.NotifyURL
 	}
 
-	params, signature, err := assembly.client.sign(options)
+	params, signature, err := client.sign(options)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
-	// Add additional keys and values
-	err = writer.WriteField("params", params)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
-	err = writer.WriteField("signature", signature)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
+	// All writes to the multipart.Writer multiWriter _must_ happen inside this
+	// goroutine because the writer is connected to the HTTP requst using an
+	// in-memory pipe. Therefore a write to the multipart.Writer will block until
+	// a corresponding read is happening from the HTTP request. The gist is that
+	// the writes and reads must not occur sequentially but in parallel.
+	go func() {
+		defer bodyWriter.Close()
+		defer multiWriter.Close()
+		// Add additional keys and values
 
-	// Close multipart writer
-	err = writer.Close()
-	if err != nil {
-		return nil, fmt.Errorf("unable to create upload request: %s", err)
-	}
+		if err := multiWriter.WriteField("params", params); err != nil {
+			fmt.Println(fmt.Errorf("unable to write params field: %s", err))
+		}
+		if err := multiWriter.WriteField("signature", signature); err != nil {
+			fmt.Println(fmt.Errorf("unable to write signature field: %s", err))
+		}
+
+		// Add files to upload
+		for _, reader := range assembly.readers {
+			defer reader.Reader.Close()
+
+			part, err := multiWriter.CreateFormFile(reader.Field, reader.Name)
+			if err != nil {
+				fmt.Println(fmt.Errorf("unable to create form field: %s", err))
+			}
+
+			if _, err := io.Copy(part, reader.Reader); err != nil {
+				fmt.Println(fmt.Errorf("unable to create upload request: %s", err))
+			}
+		}
+	}()
 
 	// Create HTTP request
-	req, err := http.NewRequest("POST", url, body)
+	req, err := http.NewRequest("POST", url, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create upload request: %s", err)
 	}
 
-	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
 	return req, nil
 }
 
-// Get information about an assembly using its url.
-func (client *Client) GetAssembly(assemblyUrl string) (*AssemblyInfo, error) {
+// GetAssembly fetches the full assembly status from the provided URL.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
+func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	_, err := client.request("GET", assemblyUrl, nil, &info)
+	err := client.request(ctx, "GET", assemblyURL, nil, &info)
 
 	return &info, err
 }
 
-// Cancel an assembly using its url.
-func (client *Client) CancelAssembly(assemblyUrl string) (Response, error) {
-	return client.request("DELETE", assemblyUrl, nil, nil)
+// CancelAssembly cancels an assembly which will result in all corresponding
+// uploads and encoding jobs to be aborted. Finally, the updated assembly
+// information after the cancellation will be returned.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
+func (client *Client) CancelAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
+	var info AssemblyInfo
+	err := client.request(ctx, "DELETE", assemblyURL, nil, &info)
+
+	return &info, err
 }
 
-// Create a new AssemblyReplay instance.
-func (client *Client) ReplayAssembly(assemblyId string) *AssemblyReplay {
-	return &AssemblyReplay{
-		client:     client,
-		steps:      make(map[string]map[string]interface{}),
-		assemblyId: assemblyId,
+// NewAssemblyReplay will create a new AssemblyReplay struct which can be used
+// to replay an assemblie's execution using Client.StartAssemblyReplay.
+// The assembly URL must be absolute, for example:
+// https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
+func NewAssemblyReplay(assemblyURL string) AssemblyReplay {
+	return AssemblyReplay{
+		steps:       make(map[string]map[string]interface{}),
+		assemblyURL: assemblyURL,
 	}
 }
 
-// Add a step to override the original ones.
+// AddStep will add the provided step to the new assembly instructions. When the
+// assembly is replayed, those new steps will be used instead of the original
+// ones. Details about possible values can be found at
+// https://transloadit.com/docs/#14-assembly-instructions.
 func (assembly *AssemblyReplay) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
 
-// Reparse the template when replaying. Useful if the template has changed since the orignal assembly was created.
-func (assembly *AssemblyReplay) ReparseTemplate() {
-	assembly.reparseTemplate = true
-}
-
-// Start the assembly replay.
-func (assembly *AssemblyReplay) Start() (*AssemblyInfo, error) {
+// StartAssemblyReplay will instruct the endpoint to replay the entire assembly
+// execution.
+func (client *Client) StartAssemblyReplay(ctx context.Context, assembly AssemblyReplay) (*AssemblyInfo, error) {
 	options := map[string]interface{}{
 		"steps": assembly.steps,
 	}
 
-	if assembly.reparseTemplate {
+	if assembly.ReparseTemplate {
 		options["reparse_template"] = 1
 	}
 
-	if assembly.NotifyUrl != "" {
-		options["notify_url"] = assembly.NotifyUrl
+	if assembly.NotifyURL != "" {
+		options["notify_url"] = assembly.NotifyURL
 	}
 
 	var info AssemblyInfo
-	_, err := assembly.client.request("POST", "assemblies/"+assembly.assemblyId+"/replay", options, &info)
+	err := client.request(ctx, "POST", assembly.assemblyURL+"/replay", options, &info)
+	if err != nil {
+		return nil, err
+	}
 
 	if info.Error != "" {
 		return &info, fmt.Errorf("failed to start assembly replay: %s", info.Error)
 	}
 
-	if !assembly.Blocking {
-		return &info, err
-	}
-
-	// Assembly replay response doesn't contains assembly url
-	assemblyUrl := assembly.client.config.Endpoint + "/assemblies/" + info.AssemblyId
-	watcher := assembly.client.WaitForAssembly(assemblyUrl)
-
-	select {
-	case res := <-watcher.Response:
-		// Assembly completed
-		return res, nil
-	case err := <-watcher.Error:
-		// Error appeared
-		return nil, err
-	}
+	return &info, nil
 }
 
-// List all assemblies matching the criterias.
-func (client *Client) ListAssemblies(options *ListOptions) (*AssemblyList, error) {
+// ListAssemblies will fetch all assemblies matching the provided criteria.
+func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
-	_, err := client.listRequest("assemblies", options, &assemblies)
+	err := client.listRequest(ctx, "assemblies", options, &assemblies)
 
-	return &assemblies, err
+	return assemblies, err
 }

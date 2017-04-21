@@ -14,10 +14,10 @@ This is a **Go** SDK to make it easy to talk to the [Transloadit](https://transl
 ## Install
 
 ```bash
-go get github.com/transloadit/go-sdk
+go get gopkg.in/transloadit/go-sdk.v1
 ```
 
-The Go SDK requires Go 1.1 or higher.
+The Go SDK requires Go 1.7 or higher.
 
 ## Usage
 
@@ -25,46 +25,50 @@ The Go SDK requires Go 1.1 or higher.
 package main
 
 import (
-    "fmt"
-    "github.com/transloadit/go-sdk"
+	"context"
+	"fmt"
+
+	"gopkg.in/transloadit/go-sdk.v1"
 )
 
-func main () {
-    // Create client
-    options := transloadit.DefaultConfig
-    options.AuthKey = "TRANSLOADIT_KEY"
-    options.AuthSecret = "TRANSLOADIT_SECRET"
-    client, err := transloadit.NewClient(options)
-    if err != nil {
-        panic(err)
-    }
+func main() {
+	// Create client
+	options := transloadit.DefaultConfig
+	options.AuthKey = "TRANSLOADIT_KEY"
+	options.AuthSecret = "TRANSLOADIT_SECRET"
+	client := transloadit.NewClient(options)
 
-    // Initialize new assembly
-    assembly := client.CreateAssembly()
+	// Initialize new assembly
+	assembly := transloadit.NewAssembly()
 
-    // Add input file to upload
-    assembly.AddFile("myimage", "/PATH/TO/FILE.jpg")
+	// Add a file to upload
+	assembly.AddFile("image", "/PATH/TO/FILE.jpg")
 
-    // Add instructions, e.g. resize image to 75x75px
-    assembly.AddStep("resize", map[string]interface{}{
-        "robot":           "/image/resize",
-        "width":           75,
-        "height":          75,
-        "resize_strategy": "pad",
-        "background":      "#000000",
-    })
+	// Add instructions, e.g. resize image to 75x75px
+	assembly.AddStep("resize", map[string]interface{}{
+		"robot":           "/image/resize",
+		"width":           75,
+		"height":          75,
+		"resize_strategy": "pad",
+		"background":      "#000000",
+	})
 
-    // Wait until transloadit is done processing all uploads
-    // and is ready to download the results
-    assembly.Blocking = true
+	// Start the upload
+	info, err := client.StartAssembly(context.Background(), assembly)
+	if err != nil {
+		panic(err)
+	}
 
-    // Start the upload
-    info, err := assembly.Upload()
-    if err != nil {
-        panic(err)
-    }
+	// All files have now been uploaded and the assembly has started but no
+	// results are available yet since the conversion has not finished.
+	// WaitForAssembly provides functionality for polling until the assembly
+	// has ended.
+	info, err = client.WaitForAssembly(context.Background(), info)
+	if err != nil {
+		panic(err)
+	}
 
-    fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].Url)
+	fmt.Printf("You can view the result at: %s\n", info.Results["resize"][0].SSLURL)
 }
 ```
 
@@ -74,7 +78,7 @@ For fully working examples on how to use templates, non-blocking processing and 
 
 ## Documentation
 
-See [Godoc](http://godoc.org/github.com/transloadit/go-sdk).
+See [Godoc](https://godoc.org/gopkg.in/transloadit/go-sdk.v1).
 
 ## License
 
