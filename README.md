@@ -78,7 +78,7 @@ For fully working examples on how to use templates, non-blocking processing and 
 
 ## Documentation
 
-See [Godoc](https://godoc.org/gopkg.in/transloadit/go-sdk.v1).
+See <a href="https://godoc.org/gopkg.in/transloadit/go-sdk.v1" rel="canonical">Godoc</a>.
 
 ## License
 
