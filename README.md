@@ -34,8 +34,8 @@ import (
 func main() {
 	// Create client
 	options := transloadit.DefaultConfig
-	options.AuthKey = "TRANSLOADIT_KEY"
-	options.AuthSecret = "TRANSLOADIT_SECRET"
+	options.AuthKey = "YOUR_TRANSLOADIT_AUTH_KEY"
+	options.AuthSecret = "YOUR_TRANSLOADIT_AUTH_SECRET"
 	client := transloadit.NewClient(options)
 
 	// Initialize new assembly
