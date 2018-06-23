@@ -60,11 +60,6 @@ func TestStartAssembly_Success(t *testing.T) {
 		t.Fatal("lol_cat.jpg not found in uploads")
 	}
 
-	expectedAgent := "Transloadit Go SDK v"
-	if info.ClientAgent[:len(expectedAgent)] != expectedAgent {
-		t.Fatal("wrong user agent")
-	}
-
 	assemblyURL = info.AssemblyURL
 }
 

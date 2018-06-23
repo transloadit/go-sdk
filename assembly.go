@@ -83,9 +83,6 @@ type AssemblyInfo struct {
 	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          int                    `json:"bytes_expected"`
-	ClientAgent            string                 `json:"client_agent"`
-	ClientIp               string                 `json:"client_ip"`
-	ClientReferer          string                 `json:"client_referer"`
 	StartDate              string                 `json:"start_date"`
 	IsInfinite             bool                   `json:"is_infinite"`
 	HasDupeJobs            bool                   `json:"has_dupe_jobs"`
@@ -109,6 +106,13 @@ type AssemblyInfo struct {
 	Uploads                []*FileInfo            `json:"uploads"`
 	Results                map[string][]*FileInfo `json:"results"`
 	Params                 string                 `json:"params"`
+
+	// Since 7 March 2018, the user agent, IP and referer are no longer
+	// stored by Transloadit (see https://transloadit.com/blog/2018/03/gdpr/)
+	// Therefore, these properties will always hold empty strings.
+	ClientAgent   string
+	ClientIp      string
+	ClientReferer string
 }
 
 // FileInfo contains details about a file which was either uploaded or is the
