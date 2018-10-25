@@ -109,7 +109,7 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 }
 
 func (client *Client) doRequest(req *http.Request, result interface{}) error {
-	req.Header.Set("User-Agent", "Transloadit Go SDK "+Version)
+	req.Header.Set("Transloadit-Client", "go-sdk:"+Version)
 
 	res, err := client.httpClient.Do(req)
 	if err != nil {
