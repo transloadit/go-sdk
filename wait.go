@@ -5,10 +5,9 @@ import (
 	"time"
 )
 
-// WaitForAssembly fetches continuously the assembly status until is either
-// completed (ASSEMBLY_COMPLETED), canceled (ASSEMBLY_CANCELED) or aborted
-// (REQUEST_ABORTED). If you want to end this loop prematurely, you can cancel
-// the supplied context.
+// WaitForAssembly fetches continuously the assembly status until it has
+// finished uploading and executing or until an assembly error occurs.
+// If you want to end this loop prematurely, you can cancel the supplied context.
 func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInfo) (*AssemblyInfo, error) {
 	for {
 		res, err := client.GetAssembly(ctx, assembly.AssemblySSLURL)
@@ -16,7 +15,13 @@ func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInf
 			return nil, err
 		}
 
-		if res.Ok == "ASSEMBLY_COMPLETED" || res.Ok == "ASSEMBLY_CANCELED" || res.Ok == "REQUEST_ABORTED" {
+		// Abort polling if the assembly has entered an error state
+		if res.Error != "" {
+			return res, nil
+		}
+
+		// The polling is done if the assembly is not uploading or executing anymore.
+		if res.Ok != "ASSEMBLY_UPLOADING" && res.Ok != "ASSEMBLY_EXECUTING" {
 			return res, nil
 		}
 
