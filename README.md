@@ -44,7 +44,7 @@ func main() {
 	// Add a file to upload
 	assembly.AddFile("image", "/PATH/TO/FILE.jpg")
 
-	// Add instructions, e.g. resize image to 75x75px
+	// Add Instructions, e.g. resize image to 75x75px
 	assembly.AddStep("resize", map[string]interface{}{
 		"robot":           "/image/resize",
 		"width":           75,
