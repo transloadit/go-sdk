@@ -34,3 +34,4 @@ builds/
 demo-session.sh
 
 .vagrant/
+env.sh
