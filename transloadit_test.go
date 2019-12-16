@@ -74,12 +74,13 @@ func setupTemplates(t *testing.T) {
 		"use":   ":original",
 	})
 	template.AddStep("image/resize", map[string]interface{}{
-		"background":      "#000000",
-		"height":          75,
-		"resize_strategy": "pad",
-		"robot":           "/image/resize",
-		"width":           75,
-		"use":             "optimize",
+		"background":        "#000000",
+		"height":            75,
+		"resize_strategy":   "pad",
+		"robot":             "/image/resize",
+		"width":             75,
+		"use":               "optimize",
+		"imagemagick_stack": "v2.0.7",
 	})
 
 	id, err := client.CreateTemplate(ctx, template)

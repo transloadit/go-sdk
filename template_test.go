@@ -10,11 +10,12 @@ func TestTemplate(t *testing.T) {
 	template := NewTemplate()
 	template.Name = "go-sdk-test-create-template"
 	template.AddStep("resize", map[string]interface{}{
-		"robot":           "/image/resize",
-		"width":           75,
-		"height":          75,
-		"resize_strategy": "pad",
-		"background":      "#000000",
+		"robot":             "/image/resize",
+		"width":             75,
+		"height":            75,
+		"resize_strategy":   "pad",
+		"background":        "#000000",
+		"imagemagick_stack": "v2.0.7",
 	})
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",

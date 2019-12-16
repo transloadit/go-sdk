@@ -22,11 +22,12 @@ func TestStartAssembly_Success(t *testing.T) {
 	assembly.AddFile("image2", "./fixtures/mona_lisa.jpg")
 
 	assembly.AddStep("resize", map[string]interface{}{
-		"robot":           "/image/resize",
-		"width":           75,
-		"height":          75,
-		"resize_strategy": "pad",
-		"background":      "#000000",
+		"robot":             "/image/resize",
+		"width":             75,
+		"height":            75,
+		"resize_strategy":   "pad",
+		"background":        "#000000",
+		"imagemagick_stack": "v2.0.7",
 	})
 
 	assembly.NotifyURL = "https://example.com/"
@@ -82,11 +83,12 @@ func TestStartAssembly_Failure(t *testing.T) {
 	assembly.AddReader("image", "lol_cat.jpg", file)
 
 	assembly.AddStep("resize", map[string]interface{}{
-		"robot":           "/image/resize",
-		"width":           75,
-		"height":          75,
-		"resize_strategy": "pad",
-		"background":      "#000000",
+		"robot":             "/image/resize",
+		"width":             75,
+		"height":            75,
+		"resize_strategy":   "pad",
+		"background":        "#000000",
+		"imagemagick_stack": "v2.0.7",
 	})
 
 	_, err = client.StartAssembly(ctx, assembly)
