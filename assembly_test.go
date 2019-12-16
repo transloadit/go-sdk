@@ -29,7 +29,7 @@ func TestStartAssembly_Success(t *testing.T) {
 		"background":      "#000000",
 	})
 
-	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
+	assembly.NotifyURL = "https://example.com/"
 
 	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
@@ -40,7 +40,7 @@ func TestStartAssembly_Success(t *testing.T) {
 		t.Fatal("response doesn't contain assembly_id")
 	}
 
-	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "https://example.com/" {
 		t.Fatal("wrong notify url")
 	}
 
@@ -142,7 +142,7 @@ func TestStartAssemblyReplay(t *testing.T) {
 	client := setup(t)
 	assembly := NewAssemblyReplay(assemblyURL)
 
-	assembly.NotifyURL = "http://requestb.in/1kwp6lx1"
+	assembly.NotifyURL = "https://example.com/"
 	assembly.ReparseTemplate = true
 
 	assembly.AddStep("import", map[string]interface{}{
@@ -159,7 +159,7 @@ func TestStartAssemblyReplay(t *testing.T) {
 		t.Fatal("wrong status code returned")
 	}
 
-	if info.NotifyURL != "http://requestb.in/1kwp6lx1" {
+	if info.NotifyURL != "https://example.com/" {
 		t.Fatal("wrong notify url")
 	}
 }
