@@ -149,7 +149,7 @@ func TestStartAssemblyReplay(t *testing.T) {
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
-		"url":   "http://mirror.nl.leaseweb.net/speedtest/10mb.bin",
+		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
 	})
 
 	info, err := client.StartAssemblyReplay(ctx, assembly)
@@ -174,7 +174,7 @@ func TestCancelAssembly(t *testing.T) {
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
-		"url":   "http://mirror.nl.leaseweb.net/speedtest/10000mb.bin",
+		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
 	})
 
 	info, err := client.StartAssembly(ctx, assembly)

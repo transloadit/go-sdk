@@ -16,7 +16,7 @@ func TestWaitForAssembly(t *testing.T) {
 
 	assembly.AddStep("import", map[string]interface{}{
 		"robot": "/http/import",
-		"url":   "http://mirror.nl.leaseweb.net/speedtest/100mb.bin",
+		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
 	})
 
 	info, err := client.StartAssembly(ctx, assembly)
