@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 var ctx = context.Background()
@@ -67,7 +68,8 @@ func setupTemplates(t *testing.T) {
 	client := setup(t)
 
 	template := NewTemplate()
-	template.Name = "go-sdk-test"
+	// Append the current date to the template name to make them unique
+	template.Name = "gosdk-" + time.Now().Format("06-01-02-15-04-05")
 
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",
@@ -88,7 +90,7 @@ func setupTemplates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("Created template 'go-sdk-test' (%s) for testing.\n", id)
+	fmt.Printf("Created template '%s' (%s) for testing.\n", template.Name, id)
 
 	templateIDOptimizeResize = id
 
