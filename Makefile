@@ -4,7 +4,7 @@ test-examples:
 	cd ./examples && find . -type f | xargs -i sh -c "go build {} && go clean" \;
 
 test-package:
-	go test .
+	go test -v .
 
 test: test-package test-examples
 
