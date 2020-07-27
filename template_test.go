@@ -6,9 +6,10 @@ func TestTemplate(t *testing.T) {
 	t.Parallel()
 
 	client := setup(t)
+	templateName := generateTemplateName()
 
 	template := NewTemplate()
-	template.Name = "go-sdk-test-template"
+	template.Name = templateName
 	template.AddStep("resize", map[string]interface{}{
 		"robot":             "/image/resize",
 		"width":             75,
@@ -35,7 +36,7 @@ func TestTemplate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if template.Name != "go-sdk-test-template" {
+	if template.Name != templateName {
 		t.Error("wrong template name")
 	}
 	if _, found := template.Content.Steps["resize"]; !found {
@@ -45,8 +46,9 @@ func TestTemplate(t *testing.T) {
 		t.Error("optimize step missing")
 	}
 
+	newTemplateName := generateTemplateName()
 	template = NewTemplate()
-	template.Name = "go-sdk-test-new"
+	template.Name = newTemplateName
 	template.AddStep("bar", map[string]interface{}{})
 	template.AddStep("baz", map[string]interface{}{})
 
@@ -60,7 +62,7 @@ func TestTemplate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if template.Name != "go-sdk-test-new" {
+	if template.Name != newTemplateName {
 		t.Error("wrong template name")
 	}
 	if _, found := template.Content.Steps["resize"]; found {

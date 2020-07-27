@@ -3,6 +3,7 @@ package transloadit
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"testing"
@@ -68,8 +69,7 @@ func setupTemplates(t *testing.T) {
 	client := setup(t)
 
 	template := NewTemplate()
-	// Append the current date to the template name to make them unique
-	template.Name = "gosdk-" + time.Now().Format("06-01-02-15-04-05")
+	template.Name = generateTemplateName()
 
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",
@@ -95,4 +95,15 @@ func setupTemplates(t *testing.T) {
 	templateIDOptimizeResize = id
 
 	templatesSetup = true
+}
+
+var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
+var letters = []rune("abcdefghijklmnopqrstuvwxyz0123456789")
+
+func generateTemplateName() string {
+	b := make([]rune, 16)
+	for i := range b {
+		b[i] = letters[seededRand.Intn(len(letters))]
+	}
+	return "gosdk-" + string(b)
 }
