@@ -40,7 +40,7 @@ func TestTemplate(t *testing.T) {
 	if template.Name != templateName {
 		t.Error("wrong template name")
 	}
-	if !template.RequireSignatureAuth  {
+	if !template.RequireSignatureAuth {
 		t.Error("Error on setting require_signature_auth=true")
 	}
 	if _, found := template.Content.Steps["resize"]; !found {

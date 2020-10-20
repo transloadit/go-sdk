@@ -30,9 +30,8 @@ type TemplateList struct {
 
 type templateListInternal struct {
 	Templates []templateInternal `json:"items"`
-	Count     int        `json:"count"`
+	Count     int                `json:"count"`
 }
-
 
 // NewTemplate returns a new Template struct with initialized values. This
 // template will not be saved to Transloadit. To do so, please use the
@@ -50,36 +49,34 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
-func (template *Template) setFromInternal(templateInternal templateInternal){
+func (template *Template) setFromInternal(templateInternal templateInternal) {
 	template.Name = templateInternal.Name
 	template.Content = templateInternal.Content
 	template.ID = templateInternal.ID
 	if templateInternal.RequireSignatureAuth == 1 {
 		template.RequireSignatureAuth = true
-	}else {
+	} else {
 		template.RequireSignatureAuth = false
 	}
 }
 
-func (templateList *TemplateList) setFromInternal(templateListInternal templateListInternal){
+func (templateList *TemplateList) setFromInternal(templateListInternal templateListInternal) {
 	templateList.Count = templateListInternal.Count
-	for _, templateInternal := range templateListInternal.Templates{
+	for _, templateInternal := range templateListInternal.Templates {
 		var template Template
 		template.setFromInternal(templateInternal)
 		templateList.Templates = append(templateList.Templates, template)
 	}
 }
 
-
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
 	content := map[string]interface{}{
-		"name":                   template.Name,
-		"template":               template.Content,
-
+		"name":     template.Name,
+		"template": template.Content,
 	}
-	if template.RequireSignatureAuth{
+	if template.RequireSignatureAuth {
 		content["require_signature_auth"] = 1
 	}
 
@@ -111,12 +108,12 @@ func (client *Client) DeleteTemplate(ctx context.Context, templateID string) err
 func (client *Client) UpdateTemplate(ctx context.Context, templateID string, newTemplate Template) error {
 	// Create signature
 	content := map[string]interface{}{
-		"name":                   newTemplate.Name,
-		"template":               newTemplate.Content,
+		"name":     newTemplate.Name,
+		"template": newTemplate.Content,
 	}
 	if newTemplate.RequireSignatureAuth {
 		content["require_signature_auth"] = 1
-	}else {
+	} else {
 		content["require_signature_auth"] = 0
 	}
 
