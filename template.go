@@ -4,9 +4,10 @@ import "context"
 
 // Template contains details about a single template.
 type Template struct {
-	ID      string          `json:"id"`
-	Name    string          `json:"name"`
-	Content TemplateContent `json:"content"`
+	ID                   string          `json:"id"`
+	Name                 string          `json:"name"`
+	Content              TemplateContent `json:"content"`
+	RequireSignatureAuth int             `json:"require_signature_auth"`
 }
 
 // TemplateContent contains details about the content of a single template.
@@ -42,6 +43,7 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 	content := map[string]interface{}{
 		"name":     template.Name,
 		"template": template.Content,
+		"require_signature_auth" : template.RequireSignatureAuth,
 	}
 
 	if err := client.request(ctx, "POST", "templates", content, &template); err != nil {
@@ -72,6 +74,7 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 	content := map[string]interface{}{
 		"name":     newTemplate.Name,
 		"template": newTemplate.Content,
+		"require_signature_auth" : newTemplate.RequireSignatureAuth,
 	}
 
 	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
