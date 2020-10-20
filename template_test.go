@@ -10,7 +10,7 @@ func TestTemplate(t *testing.T) {
 
 	template := NewTemplate()
 	template.Name = templateName
-	template.RequireSignatureAuth = 1
+	template.RequireSignatureAuth = true
 	template.AddStep("resize", map[string]interface{}{
 		"robot":             "/image/resize",
 		"width":             75,
@@ -40,8 +40,8 @@ func TestTemplate(t *testing.T) {
 	if template.Name != templateName {
 		t.Error("wrong template name")
 	}
-	if template.RequireSignatureAuth != 1 {
-		t.Error("Error on setting require_signature_auth=1")
+	if !template.RequireSignatureAuth  {
+		t.Error("Error on setting require_signature_auth=true")
 	}
 	if _, found := template.Content.Steps["resize"]; !found {
 		t.Error("resize step missing")
@@ -78,8 +78,8 @@ func TestTemplate(t *testing.T) {
 	if _, found := template.Content.Steps["baz"]; !found {
 		t.Error("baz step missing")
 	}
-	if template.RequireSignatureAuth != 0 {
-		t.Error("Error on updating require_signature_auth=0")
+	if template.RequireSignatureAuth {
+		t.Error("Error on updating require_signature_auth=false")
 	}
 
 	// Step 5: Delete template

@@ -4,6 +4,13 @@ import "context"
 
 // Template contains details about a single template.
 type Template struct {
+	ID                   string
+	Name                 string
+	Content              TemplateContent
+	RequireSignatureAuth bool
+}
+
+type templateInternal struct {
 	ID                   string          `json:"id"`
 	Name                 string          `json:"name"`
 	Content              TemplateContent `json:"content"`
@@ -21,6 +28,12 @@ type TemplateList struct {
 	Count     int        `json:"count"`
 }
 
+type templateListInternal struct {
+	Templates []templateInternal `json:"items"`
+	Count     int        `json:"count"`
+}
+
+
 // NewTemplate returns a new Template struct with initialized values. This
 // template will not be saved to Transloadit. To do so, please use the
 // Client.CreateTemplate function.
@@ -37,13 +50,37 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
+func (template *Template) setFromInternal(templateInternal templateInternal){
+	template.Name = templateInternal.Name
+	template.Content = templateInternal.Content
+	template.ID = templateInternal.ID
+	if templateInternal.RequireSignatureAuth == 1 {
+		template.RequireSignatureAuth = true
+	}else {
+		template.RequireSignatureAuth = false
+	}
+}
+
+func (templateList *TemplateList) setFromInternal(templateListInternal templateListInternal){
+	templateList.Count = templateListInternal.Count
+	for _, templateInternal := range templateListInternal.Templates{
+		var template Template
+		template.setFromInternal(templateInternal)
+		templateList.Templates = append(templateList.Templates, template)
+	}
+}
+
+
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
 	content := map[string]interface{}{
 		"name":                   template.Name,
 		"template":               template.Content,
-		"require_signature_auth": template.RequireSignatureAuth,
+
+	}
+	if template.RequireSignatureAuth{
+		content["require_signature_auth"] = 1
 	}
 
 	if err := client.request(ctx, "POST", "templates", content, &template); err != nil {
@@ -56,7 +93,9 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
 func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
-	err = client.request(ctx, "GET", "templates/"+templateID, nil, &template)
+	var templateInternal templateInternal
+	err = client.request(ctx, "GET", "templates/"+templateID, nil, &templateInternal)
+	template.setFromInternal(templateInternal)
 	return template, err
 }
 
@@ -74,7 +113,11 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 	content := map[string]interface{}{
 		"name":                   newTemplate.Name,
 		"template":               newTemplate.Content,
-		"require_signature_auth": newTemplate.RequireSignatureAuth,
+	}
+	if newTemplate.RequireSignatureAuth {
+		content["require_signature_auth"] = 1
+	}else {
+		content["require_signature_auth"] = 0
 	}
 
 	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
@@ -82,6 +125,8 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 
 // ListTemplates will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(ctx context.Context, options *ListOptions) (list TemplateList, err error) {
-	err = client.listRequest(ctx, "templates", options, &list)
+	var templateListInternal templateListInternal
+	err = client.listRequest(ctx, "templates", options, &templateListInternal)
+	list.setFromInternal(templateListInternal)
 	return list, err
 }
