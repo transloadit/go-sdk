@@ -41,9 +41,9 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
 	content := map[string]interface{}{
-		"name":     template.Name,
-		"template": template.Content,
-		"require_signature_auth" : template.RequireSignatureAuth,
+		"name":                   template.Name,
+		"template":               template.Content,
+		"require_signature_auth": template.RequireSignatureAuth,
 	}
 
 	if err := client.request(ctx, "POST", "templates", content, &template); err != nil {
@@ -72,9 +72,9 @@ func (client *Client) DeleteTemplate(ctx context.Context, templateID string) err
 func (client *Client) UpdateTemplate(ctx context.Context, templateID string, newTemplate Template) error {
 	// Create signature
 	content := map[string]interface{}{
-		"name":     newTemplate.Name,
-		"template": newTemplate.Content,
-		"require_signature_auth" : newTemplate.RequireSignatureAuth,
+		"name":                   newTemplate.Name,
+		"template":               newTemplate.Content,
+		"require_signature_auth": newTemplate.RequireSignatureAuth,
 	}
 
 	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
