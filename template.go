@@ -1,12 +1,16 @@
 package transloadit
 
-import "context"
+import (
+	"context"
+	"encoding/json"
+)
 
 // Template contains details about a single template.
 type Template struct {
-	ID      string          `json:"id"`
-	Name    string          `json:"name"`
-	Content TemplateContent `json:"content"`
+	ID                   string
+	Name                 string
+	Content              TemplateContent
+	RequireSignatureAuth bool
 }
 
 // TemplateContent contains details about the content of a single template.
@@ -18,6 +22,11 @@ type TemplateContent struct {
 type TemplateList struct {
 	Templates []Template `json:"items"`
 	Count     int        `json:"count"`
+}
+
+type templateListInternal struct {
+	Templates []templateInternal `json:"items"`
+	Count     int                `json:"count"`
 }
 
 // NewTemplate returns a new Template struct with initialized values. This
@@ -36,12 +45,57 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
+// templateInternal is the struct we use for encoding/decoding the Template
+// JSON since we need to convert between boolean and integer.
+type templateInternal struct {
+	ID                   string          `json:"id"`
+	Name                 string          `json:"name"`
+	Content              TemplateContent `json:"content"`
+	RequireSignatureAuth int             `json:"require_signature_auth"`
+}
+
+func (template *Template) UnmarshalJSON(b []byte) error {
+	var internal templateInternal
+	if err := json.Unmarshal(b, &internal); err != nil {
+		return err
+	}
+
+	template.Name = internal.Name
+	template.Content = internal.Content
+	template.ID = internal.ID
+	if internal.RequireSignatureAuth == 1 {
+		template.RequireSignatureAuth = true
+	} else {
+		template.RequireSignatureAuth = false
+	}
+
+	return nil
+}
+
+func (template Template) MarshalJSON() ([]byte, error) {
+	var internal templateInternal
+
+	internal.Name = template.Name
+	internal.Content = template.Content
+	internal.ID = template.ID
+	if template.RequireSignatureAuth {
+		internal.RequireSignatureAuth = 1
+	} else {
+		internal.RequireSignatureAuth = 0
+	}
+
+	return json.Marshal(internal)
+}
+
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
 	content := map[string]interface{}{
 		"name":     template.Name,
 		"template": template.Content,
+	}
+	if template.RequireSignatureAuth {
+		content["require_signature_auth"] = 1
 	}
 
 	if err := client.request(ctx, "POST", "templates", content, &template); err != nil {
@@ -72,6 +126,11 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 	content := map[string]interface{}{
 		"name":     newTemplate.Name,
 		"template": newTemplate.Content,
+	}
+	if newTemplate.RequireSignatureAuth {
+		content["require_signature_auth"] = 1
+	} else {
+		content["require_signature_auth"] = 0
 	}
 
 	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
