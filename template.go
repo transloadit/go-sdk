@@ -1,6 +1,9 @@
 package transloadit
 
-import "context"
+import (
+	"context"
+	"encoding/json"
+)
 
 // Template contains details about a single template.
 type Template struct {
@@ -8,13 +11,6 @@ type Template struct {
 	Name                 string
 	Content              TemplateContent
 	RequireSignatureAuth bool
-}
-
-type templateInternal struct {
-	ID                   string          `json:"id"`
-	Name                 string          `json:"name"`
-	Content              TemplateContent `json:"content"`
-	RequireSignatureAuth int             `json:"require_signature_auth"`
 }
 
 // TemplateContent contains details about the content of a single template.
@@ -49,24 +45,46 @@ func (template *Template) AddStep(name string, step map[string]interface{}) {
 	template.Content.Steps[name] = step
 }
 
-func (template *Template) setFromInternal(templateInternal templateInternal) {
-	template.Name = templateInternal.Name
-	template.Content = templateInternal.Content
-	template.ID = templateInternal.ID
-	if templateInternal.RequireSignatureAuth == 1 {
+// templateInternal is the struct we use for encoding/decoding the Template
+// JSON since we need to convert between boolean and integer.
+type templateInternal struct {
+	ID                   string          `json:"id"`
+	Name                 string          `json:"name"`
+	Content              TemplateContent `json:"content"`
+	RequireSignatureAuth int             `json:"require_signature_auth"`
+}
+
+func (template *Template) UnmarshalJSON(b []byte) error {
+	var internal templateInternal
+	if err := json.Unmarshal(b, &internal); err != nil {
+		return err
+	}
+
+	template.Name = internal.Name
+	template.Content = internal.Content
+	template.ID = internal.ID
+	if internal.RequireSignatureAuth == 1 {
 		template.RequireSignatureAuth = true
 	} else {
 		template.RequireSignatureAuth = false
 	}
+
+	return nil
 }
 
-func (templateList *TemplateList) setFromInternal(templateListInternal templateListInternal) {
-	templateList.Count = templateListInternal.Count
-	for _, templateInternal := range templateListInternal.Templates {
-		var template Template
-		template.setFromInternal(templateInternal)
-		templateList.Templates = append(templateList.Templates, template)
+func (template Template) MarshalJSON() ([]byte, error) {
+	var internal templateInternal
+
+	internal.Name = template.Name
+	internal.Content = template.Content
+	internal.ID = template.ID
+	if template.RequireSignatureAuth {
+		internal.RequireSignatureAuth = 1
+	} else {
+		internal.RequireSignatureAuth = 0
 	}
+
+	return json.Marshal(internal)
 }
 
 // CreateTemplate will save the provided template struct as a new template
@@ -90,9 +108,7 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
 func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
-	var templateInternal templateInternal
-	err = client.request(ctx, "GET", "templates/"+templateID, nil, &templateInternal)
-	template.setFromInternal(templateInternal)
+	err = client.request(ctx, "GET", "templates/"+templateID, nil, &template)
 	return template, err
 }
 
@@ -122,8 +138,6 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 
 // ListTemplates will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(ctx context.Context, options *ListOptions) (list TemplateList, err error) {
-	var templateListInternal templateListInternal
-	err = client.listRequest(ctx, "templates", options, &templateListInternal)
-	list.setFromInternal(templateListInternal)
+	err = client.listRequest(ctx, "templates", options, &list)
 	return list, err
 }

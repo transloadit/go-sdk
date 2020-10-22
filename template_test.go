@@ -41,7 +41,7 @@ func TestTemplate(t *testing.T) {
 		t.Error("wrong template name")
 	}
 	if !template.RequireSignatureAuth {
-		t.Error("Error on setting require_signature_auth=true")
+		t.Error("require_signature_auth is not enabled")
 	}
 	if _, found := template.Content.Steps["resize"]; !found {
 		t.Error("resize step missing")
@@ -55,6 +55,7 @@ func TestTemplate(t *testing.T) {
 	template.Name = newTemplateName
 	template.AddStep("bar", map[string]interface{}{})
 	template.AddStep("baz", map[string]interface{}{})
+	template.RequireSignatureAuth = false
 
 	// Step 3: Update previously created template
 	if err := client.UpdateTemplate(ctx, id, template); err != nil {
@@ -79,7 +80,7 @@ func TestTemplate(t *testing.T) {
 		t.Error("baz step missing")
 	}
 	if template.RequireSignatureAuth {
-		t.Error("Error on updating require_signature_auth=false")
+		t.Error("require_signature_auth was not disabled after an update")
 	}
 
 	// Step 5: Delete template
