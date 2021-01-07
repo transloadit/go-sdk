@@ -14,9 +14,9 @@ func TestWaitForAssembly(t *testing.T) {
 
 	assembly := NewAssembly()
 
-	assembly.AddStep("import", map[string]interface{}{
-		"robot": "/http/import",
-		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
+	assembly.AddStep("convert", map[string]interface{}{
+		"robot": "/html/convert",
+		"url":   "https://transloadit.com/",
 	})
 
 	info, err := client.StartAssembly(ctx, assembly)

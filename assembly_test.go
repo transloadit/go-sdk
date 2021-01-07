@@ -147,9 +147,9 @@ func TestStartAssemblyReplay(t *testing.T) {
 	assembly.NotifyURL = "https://example.com/"
 	assembly.ReparseTemplate = true
 
-	assembly.AddStep("import", map[string]interface{}{
-		"robot": "/http/import",
-		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
+	assembly.AddStep("convert", map[string]interface{}{
+		"robot": "/html/convert",
+		"url":   "https://transloadit.com/",
 	})
 
 	info, err := client.StartAssemblyReplay(ctx, assembly)
@@ -172,9 +172,9 @@ func TestCancelAssembly(t *testing.T) {
 	client := setup(t)
 	assembly := NewAssembly()
 
-	assembly.AddStep("import", map[string]interface{}{
-		"robot": "/http/import",
-		"url":   "https://transloadit.edgly.net/assets/images/robots/70x70/image-resize.jpg",
+	assembly.AddStep("convert", map[string]interface{}{
+		"robot": "/html/convert",
+		"url":   "https://transloadit.com/",
 	})
 
 	info, err := client.StartAssembly(ctx, assembly)
