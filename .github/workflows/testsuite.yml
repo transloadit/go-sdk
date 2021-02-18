@@ -1,0 +1,29 @@
+name: Test suite
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Test on Go ${{ matrix.go_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go_version: ['1.7', '1.8', '1.9', '1.10', '1.11', '1.12', '1.13', '1.14', '1.15', '1.16']
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go ${{ matrix.go_version }}
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go_version }}
+
+    - name: Test
+      run: make test
+      env:
+        TRANSLOADIT_KEY: TODO
+        TRANSLOADIT_SECRET: TODO
