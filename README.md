@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/transloadit/go-sdk.svg)](https://travis-ci.org/transloadit/go-sdk)
-[![Coverage Status](https://coveralls.io/repos/transloadit/go-sdk/badge.png)](https://coveralls.io/r/transloadit/go-sdk)
-
 # go-sdk
 
 A **Go** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
@@ -14,10 +11,10 @@ This is a **Go** SDK to make it easy to talk to the [Transloadit](https://transl
 ## Install
 
 ```bash
-go get gopkg.in/transloadit/go-sdk.v1
+go get github.com/transloadit/go-sdk
 ```
 
-The Go SDK requires Go 1.7 or higher.
+The Go SDK is confirmed to work with Go 1.11 or higher.
 
 ## Usage
 
@@ -28,7 +25,7 @@ import (
 	"context"
 	"fmt"
 
-	"gopkg.in/transloadit/go-sdk.v1"
+	"github.com/transloadit/go-sdk"
 )
 
 func main() {
@@ -78,7 +75,7 @@ For fully working examples on how to use templates, non-blocking processing and 
 
 ## Documentation
 
-See <a href="https://godoc.org/gopkg.in/transloadit/go-sdk.v1">Godoc</a> for full API documentation.
+See <a href="https://pkg.go.dev/github.com/transloadit/go-sdk">Godoc</a> for full API documentation.
 
 ## License
 
