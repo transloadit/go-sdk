@@ -2,6 +2,7 @@ name: Test suite
 
 on:
   push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -25,5 +26,5 @@ jobs:
     - name: Test
       run: make test
       env:
-        TRANSLOADIT_KEY: TODO
-        TRANSLOADIT_SECRET: TODO
+        TRANSLOADIT_KEY: ${{ secrets.TRANSLOADIT_KEY }}
+        TRANSLOADIT_SECRET: ${{ secrets.TRANSLOADIT_SECRET }}
