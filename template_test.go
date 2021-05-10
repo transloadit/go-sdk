@@ -1,6 +1,10 @@
 package transloadit
 
-import "testing"
+import (
+	"encoding/json"
+	"reflect"
+	"testing"
+)
 
 func TestTemplate(t *testing.T) {
 	t.Parallel()
@@ -22,6 +26,7 @@ func TestTemplate(t *testing.T) {
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",
 	})
+	template.Content.AdditionalProperties["notify_url"] = "https://example.com"
 
 	// Step 1: Create a brand new template
 	id, err := client.CreateTemplate(ctx, template)
@@ -49,12 +54,16 @@ func TestTemplate(t *testing.T) {
 	if _, found := template.Content.Steps["optimize"]; !found {
 		t.Error("optimize step missing")
 	}
+	if template.Content.AdditionalProperties["notify_url"] != "https://example.com" {
+		t.Error("missing notify_url")
+	}
 
 	newTemplateName := generateTemplateName()
 	template = NewTemplate()
 	template.Name = newTemplateName
 	template.AddStep("bar", map[string]interface{}{})
 	template.AddStep("baz", map[string]interface{}{})
+	template.Content.AdditionalProperties["allow_steps_override"] = true
 	template.RequireSignatureAuth = false
 
 	// Step 3: Update previously created template
@@ -81,6 +90,9 @@ func TestTemplate(t *testing.T) {
 	}
 	if template.RequireSignatureAuth {
 		t.Error("require_signature_auth was not disabled after an update")
+	}
+	if template.Content.AdditionalProperties["allow_steps_override"] != true {
+		t.Error("missing allow_steps_override")
 	}
 
 	// Step 5: Delete template
@@ -121,5 +133,82 @@ func TestListTemplates(t *testing.T) {
 
 	if templates.Templates[0].Content.Steps == nil {
 		t.Fatal("empty template content")
+	}
+}
+
+func TestTemplateContent_MarshalJSON(t *testing.T) {
+	content := TemplateContent{
+		Steps: map[string]interface{}{
+			":original": map[string]interface{}{
+				"robot": "/upload/handle",
+			},
+			"resize": map[string]interface{}{
+				"robot": "/image/resize",
+			},
+		},
+		AdditionalProperties: map[string]interface{}{
+			"notify_url":           "https://example.com",
+			"allow_steps_override": false,
+		},
+	}
+
+	result, err := json.MarshalIndent(content, "", "	")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Go orders the keys of the JSON object lexicographically
+	if string(result) != `{
+	"allow_steps_override": false,
+	"notify_url": "https://example.com",
+	"steps": {
+		":original": {
+			"robot": "/upload/handle"
+		},
+		"resize": {
+			"robot": "/image/resize"
+		}
+	}
+}` {
+		t.Fatal("wrong JSON for template content")
+	}
+}
+
+func TestTemplateContent_UnmarshalJSON(t *testing.T) {
+	var content TemplateContent
+
+	err := json.Unmarshal([]byte(`{
+	"steps": {
+		":original": {
+			"robot": "/upload/handle"
+		},
+		"resize": {
+			"robot": "/image/resize"
+		}
+	},
+	"allow_steps_override": false,
+	"notify_url": "https://example.com"
+}`), &content)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(
+		content,
+		TemplateContent{
+			Steps: map[string]interface{}{
+				":original": map[string]interface{}{
+					"robot": "/upload/handle",
+				},
+				"resize": map[string]interface{}{
+					"robot": "/image/resize",
+				},
+			},
+			AdditionalProperties: map[string]interface{}{
+				"allow_steps_override": false,
+				"notify_url":           "https://example.com",
+			},
+		}) {
+		t.Fatal("wrong template content for JSON")
 	}
 }

@@ -3,6 +3,7 @@ package transloadit
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 )
 
 // Template contains details about a single template.
@@ -14,8 +15,82 @@ type Template struct {
 }
 
 // TemplateContent contains details about the content of a single template.
+// The Steps fields maps to the `steps` key in the JSON format. The AdditionalProperties
+// field allows you to store additional keys (such as `notify_url`) on the same
+// level as the `steps` key.
+// For example, the following instance
+//	 TemplateContent{
+//	 	Steps: map[string]interface{}{
+//	 		":original": map[string]interface{}{
+//	 			"robot": "/upload/handle",
+//	 		},
+//	 		"resize": map[string]interface{}{
+//	 			"robot": "/image/resize",
+//	 		},
+//	 	},
+//	 	AdditionalProperties: map[string]interface{}{
+//	 		"notify_url":           "https://example.com",
+//	 		"allow_steps_override": false,
+//	 	},
+//	 }
+// is represented by following JSON:
+//	  {
+//	 	"steps": {
+//	 		":original": {
+//	 			"robot": "/upload/handle"
+//	 		},
+//	 		"resize": {
+//	 			"robot": "/image/resize"
+//	 		}
+//	 	},
+//	 	"allow_steps_override": false,
+//	 	"notify_url": "https://example.com"
+//	 }
 type TemplateContent struct {
-	Steps map[string]interface{} `json:"steps"`
+	Steps                map[string]interface{}
+	AdditionalProperties map[string]interface{}
+}
+
+func (content *TemplateContent) UnmarshalJSON(b []byte) error {
+	var data map[string]interface{}
+	if err := json.Unmarshal(b, &data); err != nil {
+		return err
+	}
+
+	if stepsRaw, ok := data["steps"]; ok {
+		steps, ok := stepsRaw.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("transloadit: steps property in template content is not an object but %v", stepsRaw)
+		}
+
+		content.Steps = steps
+		delete(data, "steps")
+	}
+
+	if content.AdditionalProperties == nil {
+		content.AdditionalProperties = make(map[string]interface{}, len(data))
+	}
+
+	for key, val := range data {
+		content.AdditionalProperties[key] = val
+	}
+
+	return nil
+}
+
+func (content TemplateContent) MarshalJSON() ([]byte, error) {
+	// Add a hint for the size of the map to reduce the number of necessary allocations
+	// when filling the map.
+	numKeys := len(content.AdditionalProperties) + 1
+	data := make(map[string]interface{}, numKeys)
+
+	data["steps"] = content.Steps
+
+	for key, val := range content.AdditionalProperties {
+		data[key] = val
+	}
+
+	return json.Marshal(data)
 }
 
 // TemplateList contains a list of templates.
@@ -35,6 +110,7 @@ type templateListInternal struct {
 func NewTemplate() Template {
 	return Template{
 		Content: TemplateContent{
+			make(map[string]interface{}),
 			make(map[string]interface{}),
 		},
 	}
