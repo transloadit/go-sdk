@@ -99,11 +99,6 @@ type TemplateList struct {
 	Count     int        `json:"count"`
 }
 
-type templateListInternal struct {
-	Templates []templateInternal `json:"items"`
-	Count     int                `json:"count"`
-}
-
 // NewTemplate returns a new Template struct with initialized values. This
 // template will not be saved to Transloadit. To do so, please use the
 // Client.CreateTemplate function.
