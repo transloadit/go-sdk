@@ -2,6 +2,7 @@ package transloadit
 
 import (
 	"context"
+	"errors"
 	"time"
 )
 
@@ -26,9 +27,11 @@ type Notification struct {
 
 // ListNotifications will return a list containing all notifications matching
 // the criteria defined using the ListOptions structure.
+//
+// Deprecated: As of December 2021, the List Notifications API endpoint from
+// Transloadit has been removed. This function will now always return an error.
 func (client *Client) ListNotifications(ctx context.Context, options *ListOptions) (list NotificationList, err error) {
-	err = client.listRequest(ctx, "assembly_notifications", options, &list)
-	return list, err
+	return list, errors.New("transloadit: listing assembly notifications is no longer available")
 }
 
 // ReplayNotification instructs the endpoint to replay the notification
