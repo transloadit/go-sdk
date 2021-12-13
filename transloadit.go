@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -119,11 +120,14 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 
 	// Limit response to 128MB
 	reader := io.LimitReader(res.Body, 128*1024*1024)
-	decoder := json.NewDecoder(reader)
+	body, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return err
+	}
 
 	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
 		var reqErr RequestError
-		if err := decoder.Decode(&reqErr); err != nil {
+		if err := json.Unmarshal(body, &reqErr); err != nil {
 			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 
@@ -131,7 +135,8 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 	}
 
 	if result != nil {
-		if err := decoder.Decode(result); err != nil {
+		if err := json.Unmarshal(body, result); err != nil {
+			fmt.Println(string(body))
 			return fmt.Errorf("failed unmarshal http request: %s", err)
 		}
 	}
