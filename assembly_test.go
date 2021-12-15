@@ -139,7 +139,6 @@ func TestGetAssembly(t *testing.T) {
 }
 
 func TestStartAssemblyReplay(t *testing.T) {
-	t.Skip()
 	t.Parallel()
 
 	client := setup(t)
