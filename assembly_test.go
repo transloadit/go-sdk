@@ -64,6 +64,22 @@ func TestStartAssembly_Success(t *testing.T) {
 	assemblyURL = info.AssemblyURL
 }
 
+func TestGetAssembly(t *testing.T) {
+	client := setup(t)
+	assembly, err := client.GetAssembly(ctx, assemblyURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if assembly.AssemblyID == "" {
+		t.Fatal("assembly id not contained")
+	}
+
+	if assembly.AssemblyURL != assemblyURL {
+		t.Fatal("assembly urls don't match")
+	}
+}
+
 func TestStartAssembly_Failure(t *testing.T) {
 	t.Parallel()
 
@@ -119,22 +135,6 @@ func TestStartAssembly_Template(t *testing.T) {
 
 	if !strings.Contains(info.Params, templateIDOptimizeResize) {
 		t.Fatal("template id not as parameter submitted")
-	}
-}
-
-func TestGetAssembly(t *testing.T) {
-	client := setup(t)
-	assembly, err := client.GetAssembly(ctx, assemblyURL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if assembly.AssemblyID == "" {
-		t.Fatal("assembly id not contained")
-	}
-
-	if assembly.AssemblyURL != assemblyURL {
-		t.Fatal("assembly urls don't match")
 	}
 }
 
