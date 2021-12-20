@@ -22,6 +22,7 @@ type Assembly struct {
 	TemplateID string
 
 	steps   map[string]map[string]interface{}
+	Fields  map[string]interface{}
 	readers []*upload
 }
 
@@ -218,6 +219,10 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 
 	if len(assembly.steps) != 0 {
 		options["steps"] = assembly.steps
+	}
+
+	if len(assembly.Fields) != 0 {
+		options["fields"] = assembly.Fields
 	}
 
 	if assembly.TemplateID != "" {
