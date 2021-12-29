@@ -51,7 +51,8 @@ func TestStartAssembly_Success(t *testing.T) {
 		t.Fatal("wrong field string_test")
 	}
 
-	fmt.Printf("%#v\n", info.Fields)
+	// Go's JSON package parses numbers as a float by default, so we
+	// need 100 to be a float for comparison.
 	if info.Fields["number_test"] != float64(100) {
 		t.Fatal("wrong field number_test")
 	}
