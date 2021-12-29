@@ -14,15 +14,18 @@ import (
 type Assembly struct {
 	// NotifiyURL specifies a URL to which a request will be sent once the
 	// assembly finishes.
-	// See https://transloadit.com/docs#notifications.
+	// See https://transloadit.com/docs#notifications
 	NotifyURL string
 	// TemplateID specifies a optional template from which the encoding
 	// instructions will be fetched.
 	// See https://transloadit.com/docs/#15-templates
 	TemplateID string
+	// Fields specifies additional key-value pairs that can be accessed by
+	// Assembly Instructions to allow customizing steps on a per-assembly basis.
+	// See https://transloadit.com/docs/#assembly-variables
+	Fields map[string]interface{}
 
 	steps   map[string]map[string]interface{}
-	Fields  map[string]interface{}
 	readers []*upload
 }
 
@@ -140,6 +143,7 @@ type FileInfo struct {
 // an assembly using Client.StartAssembly.
 func NewAssembly() Assembly {
 	return Assembly{
+		Fields:  make(map[string]interface{}),
 		steps:   make(map[string]map[string]interface{}),
 		readers: make([]*upload, 0),
 	}

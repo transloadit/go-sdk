@@ -31,6 +31,8 @@ func TestStartAssembly_Success(t *testing.T) {
 	})
 
 	assembly.NotifyURL = "https://example.com/"
+	assembly.Fields["string_test"] = "foo"
+	assembly.Fields["number_test"] = 100
 
 	info, err := client.StartAssembly(ctx, assembly)
 	if err != nil {
@@ -43,6 +45,15 @@ func TestStartAssembly_Success(t *testing.T) {
 
 	if info.NotifyURL != "https://example.com/" {
 		t.Fatal("wrong notify url")
+	}
+
+	if info.Fields["string_test"] != "foo" {
+		t.Fatal("wrong field string_test")
+	}
+
+	fmt.Printf("%#v\n", info.Fields)
+	if info.Fields["number_test"] != float64(100) {
+		t.Fatal("wrong field number_test")
 	}
 
 	if len(info.Uploads) != 2 {
