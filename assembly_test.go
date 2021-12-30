@@ -1,6 +1,7 @@
 package transloadit
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -230,5 +231,35 @@ func TestListAssemblies(t *testing.T) {
 
 	if assemblies.Assemblies[0].AssemblyID == "" {
 		t.Fatal("wrong template name")
+	}
+}
+
+func TestInteger_MarshalJSON(t *testing.T) {
+	var info AssemblyInfo
+	err := json.Unmarshal([]byte(`{"bytes_expected":55}`), &info)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.BytesExpected != 55 {
+		t.Fatal("wrong integer parsed")
+	}
+
+	err = json.Unmarshal([]byte(`{"bytes_expected":null}`), &info)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.BytesExpected != 0 {
+		t.Fatal("wrong default value for null")
+	}
+
+	err = json.Unmarshal([]byte(`{"bytes_expected":""}`), &info)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.BytesExpected != 0 {
+		t.Fatal("wrong default value for string")
 	}
 }

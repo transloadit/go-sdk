@@ -140,9 +140,14 @@ type FileInfo struct {
 	Meta             map[string]interface{} `json:"meta"`
 }
 
+// Integer is a warpper around a normal int but has softer JSON parsing requirements.
+// It can be used in situations where a JSON value is not always a number. Then parsing
+// will not fail and a default value of 0 will be returned.
+// For more details see: https://github.com/transloadit/go-sdk/issues/26
 type Integer int
 
 func (i *Integer) UnmarshalJSON(text []byte) error {
+	// Try parsing as an integer and default to 0, if it fails.
 	n, err := strconv.Atoi(string(text))
 	if err != nil {
 		*i = 0
