@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -86,7 +87,7 @@ type AssemblyInfo struct {
 	AssemblyURL            string                 `json:"assembly_url"`
 	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
 	BytesReceived          int                    `json:"bytes_received"`
-	BytesExpected          int                    `json:"bytes_expected"`
+	BytesExpected          Integer                `json:"bytes_expected"`
 	StartDate              string                 `json:"start_date"`
 	IsInfinite             bool                   `json:"is_infinite"`
 	HasDupeJobs            bool                   `json:"has_dupe_jobs"`
@@ -137,6 +138,18 @@ type FileInfo struct {
 	URL              string                 `json:"url"`
 	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
+}
+
+type Integer int
+
+func (i *Integer) UnmarshalJSON(text []byte) error {
+	n, err := strconv.Atoi(string(text))
+	if err != nil {
+		*i = 0
+	}
+
+	*i = Integer(n)
+	return nil
 }
 
 // NewAssembly will create a new Assembly struct which can be used to start
