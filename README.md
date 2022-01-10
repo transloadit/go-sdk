@@ -16,6 +16,8 @@ go get github.com/transloadit/go-sdk
 
 The Go SDK is confirmed to work with Go 1.11 or higher.
 
+<a name="user-content-go-sdk-usage">
+
 ## Usage
 
 ```go
@@ -69,9 +71,13 @@ func main() {
 }
 ```
 
+<a name="user-content-go-sdk-example">
+
 ## Example
 
 For fully working examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
+
+<a name="user-content-go-sdk-documentation">
 
 ## Documentation
 
