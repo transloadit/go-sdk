@@ -19,11 +19,11 @@ type Assembly struct {
 	NotifyURL string
 	// TemplateID specifies a optional template from which the encoding
 	// instructions will be fetched.
-	// See https://transloadit.com/docs/#15-templates
+	// See https://transloadit.com/docs/topics/templates/
 	TemplateID string
 	// Fields specifies additional key-value pairs that can be accessed by
 	// Assembly Instructions to allow customizing steps on a per-assembly basis.
-	// See https://transloadit.com/docs/#assembly-variables
+	// See https://transloadit.com/docs/topics/assembly-instructions/#assembly-variables
 	Fields map[string]interface{}
 
 	steps   map[string]map[string]interface{}
@@ -192,7 +192,7 @@ func (assembly *Assembly) AddFile(fieldname, filepath string) error {
 }
 
 // AddStep will add the provided step to the assembly instructions. Details
-// about possible values can be found at https://transloadit.com/docs/#14-assembly-instructions
+// about possible values can be found at https://transloadit.com/docs/topics/assembly-instructions/
 func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
@@ -340,7 +340,7 @@ func NewAssemblyReplay(assemblyURL string) AssemblyReplay {
 // AddStep will add the provided step to the new assembly instructions. When the
 // assembly is replayed, those new steps will be used instead of the original
 // ones. Details about possible values can be found at
-// https://transloadit.com/docs/#14-assembly-instructions.
+// https://transloadit.com/docs/topics/assembly-instructions/.
 func (assembly *AssemblyReplay) AddStep(name string, details map[string]interface{}) {
 	assembly.steps[name] = details
 }
