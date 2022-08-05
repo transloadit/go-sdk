@@ -6,23 +6,27 @@ import (
 
 // Template contains details about a single template.
 type TemplateCredential struct {
-	ID                   string		`json:"id"`
-	Name                 string     `json:"name"`
-	Type              	 string 	`json:"type"`
-	Content				 map[string]interface{} `json:"content"`
+	ID          string                 `json:"id"`
+	Name        string                 `json:"name"`
+	Type        string                 `json:"type"`
+	Content     map[string]interface{} `json:"content"`
+	Created     string                 `json:"created",omitempty`
+	Modified    string                 `json:"modified",omitempty`
+	Deleted     string                 `json:"deleted",omitempty`
+	Stringified string                 `json:"stringified",omitempty`
 }
 
-type TemplatePostCredential struct {
-	Credentials 		TemplateCredential `json:"credentials"`
-	OK 					string `json:"ok"`
-	Message 			string `json:"message"`
+type TemplateCredentialResponseBody struct {
+	Credential TemplateCredential `json:"credential"`
+	OK         string             `json:"ok"`
+	Message    string             `json:"message"`
 }
 
 // TemplateList contains a list of templates.
 type TemplateCredentialList struct {
 	TemplateCredential []Template `json:"credentials"`
-	OK 					string `json:"ok"`
-	Message 			string `json:"message"`
+	OK                 string     `json:"ok"`
+	Message            string     `json:"message"`
 }
 
 // NewTemplate returns a new Template struct with initialized values. This
@@ -34,35 +38,37 @@ func NewTemplateCredential() TemplateCredential {
 	}
 }
 
-var templateCredentialPrefix="template_credentials"
+var templateCredentialPrefix = "template_credentials"
 
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplateCredential(ctx context.Context, templateCredential TemplateCredential) (string, error) {
 	content := map[string]interface{}{
-		"name":     templateCredential.Name,
-		"type": 	templateCredential.Type,
+		"name":    templateCredential.Name,
+		"type":    templateCredential.Type,
 		"content": templateCredential.Content,
 	}
-	var response TemplatePostCredential
+	var response TemplateCredentialResponseBody
 	if err := client.request(ctx, "POST", templateCredentialPrefix, content, &response); err != nil {
 		return "", err
 	}
-	templateCredential = response.Credentials
+	templateCredential = response.Credential
 	return templateCredential.ID, nil
 }
 
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateID string) (template TemplateCredential, err error) {
-	err = client.request(ctx, "GET", templateCredentialPrefix + "/" +templateID, nil, &template)
+	var response TemplateCredentialResponseBody
+	err = client.request(ctx, "GET", templateCredentialPrefix+"/"+templateID, nil, &response)
+	template = response.Credential
 	return template, err
 }
 
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
 func (client *Client) DeleteTemplateCredential(ctx context.Context, templateID string) error {
-	return client.request(ctx, "DELETE", templateCredentialPrefix +"/"+templateID, nil, nil)
+	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateID, nil, nil)
 }
 
 // ListTemplatesCredential will retrieve all templates credential matching the criteria.
