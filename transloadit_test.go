@@ -97,6 +97,14 @@ func setupTemplates(t *testing.T) {
 	templatesSetup = true
 }
 
+func tearDownTemplate(t *testing.T) {
+	client := setup(t)
+	err := client.DeleteTemplate(ctx, templateIDOptimizeResize)
+	if err != nil {
+		fmt.Printf("Error to delete template %s : %s", templateIDOptimizeResize, err)
+	}
+}
+
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 var letters = []rune("abcdefghijklmnopqrstuvwxyz0123456789")
 

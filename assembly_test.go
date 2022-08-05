@@ -132,6 +132,8 @@ func TestStartAssembly_Failure(t *testing.T) {
 
 func TestStartAssembly_Template(t *testing.T) {
 	setupTemplates(t)
+	// Delete Template
+	defer tearDownTemplate(t)
 	client := setup(t)
 	assembly := NewAssembly()
 
