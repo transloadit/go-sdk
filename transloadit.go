@@ -99,6 +99,8 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 		Key:     client.config.AuthKey,
 		Expires: getExpireString(),
 	}
+	// Add a random nonce to make signatures unique and prevent error about
+	// signature reuse: https://github.com/transloadit/go-sdk/pull/35
 	params["nonce"] = rand.Int()
 	b, err := json.Marshal(params)
 	if err != nil {
