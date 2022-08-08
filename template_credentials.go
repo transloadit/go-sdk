@@ -29,9 +29,9 @@ type TemplateCredentialList struct {
 	Message            string     `json:"message"`
 }
 
-// NewTemplate returns a new Template struct with initialized values. This
+// NewTemplateCredential returns a new TemplateCredential struct with initialized values. This
 // template will not be saved to Transloadit. To do so, please use the
-// Client.CreateTemplate function.
+// Client.CreateTemplateCredential function.
 func NewTemplateCredential() TemplateCredential {
 	return TemplateCredential{
 		Content: make(map[string]interface{}),
