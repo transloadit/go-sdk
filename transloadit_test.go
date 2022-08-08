@@ -93,16 +93,21 @@ func setupTemplates(t *testing.T) {
 	fmt.Printf("Created template '%s' (%s) for testing.\n", template.Name, id)
 
 	templateIDOptimizeResize = id
-
 	templatesSetup = true
 }
 
 func tearDownTemplate(t *testing.T) {
-	client := setup(t)
-	err := client.DeleteTemplate(ctx, templateIDOptimizeResize)
-	if err != nil {
-		fmt.Printf("Error to delete template %s : %s", templateIDOptimizeResize, err)
+	if !templatesSetup {
+		return
 	}
+	
+	client := setup(t)
+	if err := client.DeleteTemplate(ctx, templateIDOptimizeResize); err != nil {
+		t.Fatalf("Error to delete template %s: %s", templateIDOptimizeResize, err)
+	}
+	
+	templateIDOptimizeResize = ""
+	templatesSetup = false
 }
 
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
