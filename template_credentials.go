@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// Template contains details about a single template.
+// TemplateCredential contains details about a single template.credential
 type TemplateCredential struct {
 	ID          string                 `json:"id"`
 	Name        string                 `json:"name"`
@@ -16,15 +16,15 @@ type TemplateCredential struct {
 	Stringified string                 `json:"stringified",omitempty`
 }
 
-type TemplateCredentialResponseBody struct {
+type templateCredentialResponseBody struct {
 	Credential TemplateCredential `json:"credential"`
 	OK         string             `json:"ok"`
 	Message    string             `json:"message"`
 }
 
-// TemplateList contains a list of templates.
+// TemplateCredentialList contains a list of templates credentials.
 type TemplateCredentialList struct {
-	TemplateCredential []Template `json:"credentials"`
+	TemplateCredential []TemplateCredential `json:"credentials"`
 	OK                 string     `json:"ok"`
 	Message            string     `json:"message"`
 }
@@ -48,7 +48,7 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 		"type":    templateCredential.Type,
 		"content": templateCredential.Content,
 	}
-	var response TemplateCredentialResponseBody
+	var response templateCredentialResponseBody
 	if err := client.request(ctx, "POST", templateCredentialPrefix, content, &response); err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateID string) (template TemplateCredential, err error) {
-	var response TemplateCredentialResponseBody
+	var response templateCredentialResponseBody
 	err = client.request(ctx, "GET", templateCredentialPrefix+"/"+templateID, nil, &response)
 	template = response.Credential
 	return template, err

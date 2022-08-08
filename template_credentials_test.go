@@ -1,9 +1,8 @@
 package transloadit
 
 import (
-	"fmt"
+	"reflect"
 	"testing"
-	"time"
 )
 
 func TestTemplateCredentials(t *testing.T) {
@@ -15,57 +14,66 @@ func TestTemplateCredentials(t *testing.T) {
 	templateCredentialPost := NewTemplateCredential()
 	templateCredentialPost.Name = templateCredentialName
 	templateCredentialPost.Type = "s3"
-	templateCredentialPost.Content["key"] = "xyxy"
-	templateCredentialPost.Content["secret"] = "xyxyxyxy"
-	templateCredentialPost.Content["bucket"] = "mybucket.example.com"
-	templateCredentialPost.Content["bucket_region"] = "us-east-1"
+	templateCredentialContent := map[string]interface{}{
+		"key":           "xyxy",
+		"secret":        "xyxyxyxy",
+		"bucket":        "mybucket.example.com",
+		"bucket_region": "us-east-1",
+	}
+	templateCredentialPost.Content = templateCredentialContent
 
-	// Step 1: Create a brand new templateCredentialPost
+	// Step 1: Create a brand new templateCredential
 	id, err := client.CreateTemplateCredential(ctx, templateCredentialPost)
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
-	defer client.DeleteTemplateCredential(ctx, id)
 	if id == "" {
 		t.Error("no templateCredentialPost id returned")
 	}
 
-	// Step 2: Retrieve new templateCredentialPost and assert it's properties
+	// Step 2: Retrieve new templateCredential created and assert its properties
 	var templateCredential TemplateCredential
 	if templateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
+	checkTemplateCredential(t, templateCredential, templateCredentialName, templateCredentialContent)
 
-	if templateCredential.Name != templateCredentialName {
-		t.Error("wrong templateCredentialPost name")
-	}
-	if templateCredential.Type != "s3" {
-		t.Error("wrong templateCredentialPost type")
-	}
-
-	// Step 3: Delete templateCredentialPost
-	if err := client.DeleteTemplateCredential(ctx, id); err != nil {
-		t.Fatal(err)
-	}
-
-	// Step 4: Assert templateCredentialPost has been deleted
-	_, err = client.GetTemplateCredential(ctx, id)
-	if err.(RequestError).Code != "TEMPLATE_CREDENTIALS_NOT_READ" {
-		t.Error("templateCredentialPost has not been deleted")
-	}
-	time.Sleep(10 * time.Second)
+	// Step 3: List all Templated credentials and assume that the created templateCredential is present
 	list, err := client.ListTemplateCredential(ctx, nil)
 	if err != nil {
 		t.Error(err)
 	}
-	fmt.Printf("%d", len(list.TemplateCredential))
+	found := false
+	for _, cred := range list.TemplateCredential {
+		if cred.ID == id {
+			checkTemplateCredential(t, cred, templateCredentialName, templateCredentialContent)
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("Created TemplateCredential not found id=%s", id)
+	}
+
+	// Step 4: Delete test templateCredential
+	if err := client.DeleteTemplateCredential(ctx, id); err != nil {
+		t.Error(err)
+	}
+
+	// Step 5: Assert templateCredential has been deleted
+	_, err = client.GetTemplateCredential(ctx, id)
+	if err.(RequestError).Code != "TEMPLATE_CREDENTIALS_NOT_READ" {
+		t.Error("templateCredentialPost has not been deleted")
+	}
 }
 
-func TestListTemplateCredentials(t *testing.T) {
-	t.Parallel()
-	client := setup(t)
-	_, err := client.ListTemplateCredential(ctx, nil)
-	if err != nil {
-		t.Error(err)
+func checkTemplateCredential(t *testing.T, cred TemplateCredential, templateCredentialName string, expected map[string]interface{}) {
+	if cred.Name != templateCredentialName {
+		t.Error("wrong templateCredentialPost name")
+	}
+	if cred.Type != "s3" {
+		t.Error("wrong templateCredentialPost type")
+	}
+	if !reflect.DeepEqual(cred.Content, expected) {
+		t.Errorf("Different in content expected=%+v . In response : %+v", expected, cred.Content)
 	}
 }
