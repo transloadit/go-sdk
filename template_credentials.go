@@ -40,7 +40,7 @@ func NewTemplateCredential() TemplateCredential {
 
 var templateCredentialPrefix = "template_credentials"
 
-// CreateTemplate will save the provided template struct as a new template
+// CreateTemplateCredential will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplateCredential(ctx context.Context, templateCredential TemplateCredential) (string, error) {
 	content := map[string]interface{}{
@@ -52,8 +52,7 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 	if err := client.request(ctx, "POST", templateCredentialPrefix, content, &response); err != nil {
 		return "", err
 	}
-	templateCredential = response.Credential
-	return templateCredential.ID, nil
+	return response.Credential.ID, nil
 }
 
 // GetTemplateCredential will retrieve details about the template credential associated with the
@@ -71,7 +70,7 @@ func (client *Client) DeleteTemplateCredential(ctx context.Context, templateID s
 	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateID, nil, nil)
 }
 
-// ListTemplatesCredential will retrieve all templates credential matching the criteria.
+// ListTemplateCredential will retrieve all templates credential matching the criteria.
 func (client *Client) ListTemplateCredential(ctx context.Context, options *ListOptions) (list TemplateCredentialList, err error) {
 	err = client.listRequest(ctx, templateCredentialPrefix, options, &list)
 	return list, err
