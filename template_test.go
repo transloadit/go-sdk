@@ -30,7 +30,6 @@ func TestTemplate(t *testing.T) {
 
 	// Step 1: Create a brand new template
 	id, err := client.CreateTemplate(ctx, template)
-	defer client.DeleteTemplate(ctx, id)
 	if err != nil {
 		t.Fatal(err)
 	}
