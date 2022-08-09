@@ -34,6 +34,7 @@ var DefaultConfig = Config{
 type Client struct {
 	config     Config
 	httpClient *http.Client
+	random     *rand.Rand
 }
 
 // ListOptions defines criteria used when a list is being retrieved. Details
@@ -89,6 +90,7 @@ func NewClient(config Config) Client {
 	client := Client{
 		config:     config,
 		httpClient: &http.Client{},
+		random:     rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
 
 	return client
@@ -101,7 +103,7 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 	}
 	// Add a random nonce to make signatures unique and prevent error about
 	// signature reuse: https://github.com/transloadit/go-sdk/pull/35
-	params["nonce"] = rand.Int()
+	params["nonce"] = client.random.Int()
 	b, err := json.Marshal(params)
 	if err != nil {
 		return "", "", fmt.Errorf("unable to create signature: %s", err)
