@@ -12,8 +12,6 @@ type TemplateCredential struct {
 	Content     map[string]interface{} `json:"content"`
 	Created     string                 `json:"created",omitempty`
 	Modified    string                 `json:"modified",omitempty`
-	Deleted     string                 `json:"deleted",omitempty`
-	Stringified string                 `json:"stringified",omitempty`
 }
 
 type templateCredentialResponseBody struct {
