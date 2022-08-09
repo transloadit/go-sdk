@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// TemplateCredential contains details about a single template.credential
+// TemplateCredential contains details about a single template credential.
 type TemplateCredential struct {
 	ID          string                 `json:"id"`
 	Name        string                 `json:"name"`
@@ -22,7 +22,7 @@ type templateCredentialResponseBody struct {
 	Message    string             `json:"message"`
 }
 
-// TemplateCredentialList contains a list of templates credentials.
+// TemplateCredentialList contains a list of template credentials.
 type TemplateCredentialList struct {
 	TemplateCredential []TemplateCredential `json:"credentials"`
 	OK                 string     `json:"ok"`
@@ -30,7 +30,7 @@ type TemplateCredentialList struct {
 }
 
 // NewTemplateCredential returns a new TemplateCredential struct with initialized values. This
-// template will not be saved to Transloadit. To do so, please use the
+// template credential will not be saved to Transloadit. To do so, please use the
 // Client.CreateTemplateCredential function.
 func NewTemplateCredential() TemplateCredential {
 	return TemplateCredential{
@@ -40,8 +40,8 @@ func NewTemplateCredential() TemplateCredential {
 
 var templateCredentialPrefix = "template_credentials"
 
-// CreateTemplateCredential will save the provided template struct as a new template
-// and return the ID of the new template.
+// CreateTemplateCredential will save the provided template credential struct to the server
+// and return the ID of the new template credential.
 func (client *Client) CreateTemplateCredential(ctx context.Context, templateCredential TemplateCredential) (string, error) {
 	content := map[string]interface{}{
 		"name":    templateCredential.Name,
