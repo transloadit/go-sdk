@@ -53,13 +53,35 @@ func TestTemplateCredentials(t *testing.T) {
 	if !found {
 		t.Errorf("Created TemplateCredential not found id=%s", id)
 	}
+	// Step 4 : Update the Template credential
+	newTemplateCredentialPost := NewTemplateCredential()
+	newtemplateCredentialName := templateCredentialName + "updated"
+	newTemplateCredentialPost.Name = newtemplateCredentialName
+	newTemplateCredentialPost.Type = "backblaze"
+	newtemplateCredentialContent := map[string]interface{}{
+		"bucket":     "mybucket",
+		"app_key_id": "mykeyid",
+		"app_key":    "mykey",
+	}
+	newTemplateCredentialPost.Content = newtemplateCredentialContent
+	err = client.UpdateTemplateCredential(ctx, id, newTemplateCredentialPost)
+	if err != nil {
+		t.Error(err)
+	}
 
-	// Step 4: Delete test templateCredential
+	// Step 5 : Check the updated Template credential
+	var newTemplateCredential TemplateCredential
+	if newTemplateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
+		t.Error(err)
+	}
+	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent)
+
+	// Step 6: Delete test templateCredential
 	if err := client.DeleteTemplateCredential(ctx, id); err != nil {
 		t.Error(err)
 	}
 
-	// Step 5: Assert templateCredential has been deleted
+	// Step 7: Assert templateCredential has been deleted
 	_, err = client.GetTemplateCredential(ctx, id)
 	if err.(RequestError).Code != "TEMPLATE_CREDENTIALS_NOT_READ" {
 		t.Error("templateCredentialPost has not been deleted")

@@ -55,21 +55,31 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
-func (client *Client) GetTemplateCredential(ctx context.Context, templateID string) (template TemplateCredential, err error) {
+func (client *Client) GetTemplateCredential(ctx context.Context, templateCredentialID string) (TemplateCredential, error) {
 	var response templateCredentialResponseBody
-	err = client.request(ctx, "GET", templateCredentialPrefix+"/"+templateID, nil, &response)
-	template = response.Credential
-	return template, err
+	err := client.request(ctx, "GET", templateCredentialPrefix+"/"+templateCredentialID, nil, &response)
+	return response.Credential, err
 }
 
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
-func (client *Client) DeleteTemplateCredential(ctx context.Context, templateID string) error {
-	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateID, nil, nil)
+func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCredentialID string) error {
+	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateCredentialID, nil, nil)
 }
 
 // ListTemplateCredential will retrieve all templates credential matching the criteria.
 func (client *Client) ListTemplateCredential(ctx context.Context, options *ListOptions) (list TemplateCredentialList, err error) {
 	err = client.listRequest(ctx, templateCredentialPrefix, options, &list)
 	return list, err
+}
+
+// UpdateTemplateCredential will update the template credential associated with the provided
+// template credential ID to match the new name and  new content.
+func (client *Client) UpdateTemplateCredential(ctx context.Context, templateCredentialID string, templateCredential TemplateCredential) error {
+	content := map[string]interface{}{
+		"name":    templateCredential.Name,
+		"type":    templateCredential.Type,
+		"content": templateCredential.Content,
+	}
+	return client.request(ctx, "PUT", templateCredentialPrefix+"/"+templateCredentialID, content, nil)
 }
