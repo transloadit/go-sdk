@@ -71,7 +71,7 @@ func main() {
 
 ## Example
 
-For fully working examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/master/examples).
+For fully working examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/main/examples).
 
 ## Documentation
 
