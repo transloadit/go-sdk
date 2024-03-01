@@ -1,4 +1,4 @@
 package transloadit
 
 // Version specifies the version of the Go SDK.
-var Version = "v1.5.1"
+var Version = "v1.5.2"
