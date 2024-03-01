@@ -19,33 +19,36 @@ type Template struct {
 // field allows you to store additional keys (such as `notify_url`) on the same
 // level as the `steps` key.
 // For example, the following instance
-//	 TemplateContent{
-//	 	Steps: map[string]interface{}{
-//	 		":original": map[string]interface{}{
-//	 			"robot": "/upload/handle",
-//	 		},
-//	 		"resize": map[string]interface{}{
-//	 			"robot": "/image/resize",
-//	 		},
-//	 	},
-//	 	AdditionalProperties: map[string]interface{}{
-//	 		"notify_url":           "https://example.com",
-//	 		"allow_steps_override": false,
-//	 	},
-//	 }
+//
+//	TemplateContent{
+//		Steps: map[string]interface{}{
+//			":original": map[string]interface{}{
+//				"robot": "/upload/handle",
+//			},
+//			"resize": map[string]interface{}{
+//				"robot": "/image/resize",
+//			},
+//		},
+//		AdditionalProperties: map[string]interface{}{
+//			"notify_url":           "https://example.com",
+//			"allow_steps_override": false,
+//		},
+//	}
+//
 // is represented by following JSON:
-//	  {
-//	 	"steps": {
-//	 		":original": {
-//	 			"robot": "/upload/handle"
-//	 		},
-//	 		"resize": {
-//	 			"robot": "/image/resize"
-//	 		}
-//	 	},
-//	 	"allow_steps_override": false,
-//	 	"notify_url": "https://example.com"
-//	 }
+//
+//	 {
+//		"steps": {
+//			":original": {
+//				"robot": "/upload/handle"
+//			},
+//			"resize": {
+//				"robot": "/image/resize"
+//			}
+//		},
+//		"allow_steps_override": false,
+//		"notify_url": "https://example.com"
+//	}
 type TemplateContent struct {
 	Steps                map[string]interface{}
 	AdditionalProperties map[string]interface{}

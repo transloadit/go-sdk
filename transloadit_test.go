@@ -100,12 +100,12 @@ func tearDownTemplate(t *testing.T) {
 	if !templatesSetup {
 		return
 	}
-	
+
 	client := setup(t)
 	if err := client.DeleteTemplate(ctx, templateIDOptimizeResize); err != nil {
 		t.Fatalf("Error to delete template %s: %s", templateIDOptimizeResize, err)
 	}
-	
+
 	templateIDOptimizeResize = ""
 	templatesSetup = false
 }

@@ -6,12 +6,12 @@ import (
 
 // TemplateCredential contains details about a single template credential.
 type TemplateCredential struct {
-	ID          string                 `json:"id"`
-	Name        string                 `json:"name"`
-	Type        string                 `json:"type"`
-	Content     map[string]interface{} `json:"content"`
-	Created     string                 `json:"created",omitempty`
-	Modified    string                 `json:"modified",omitempty`
+	ID       string                 `json:"id"`
+	Name     string                 `json:"name"`
+	Type     string                 `json:"type"`
+	Content  map[string]interface{} `json:"content"`
+	Created  string                 `json:"created",omitempty`
+	Modified string                 `json:"modified",omitempty`
 }
 
 type templateCredentialResponseBody struct {
@@ -23,8 +23,8 @@ type templateCredentialResponseBody struct {
 // TemplateCredentialList contains a list of template credentials.
 type TemplateCredentialList struct {
 	TemplateCredential []TemplateCredential `json:"credentials"`
-	OK                 string     `json:"ok"`
-	Message            string     `json:"message"`
+	OK                 string               `json:"ok"`
+	Message            string               `json:"message"`
 }
 
 // NewTemplateCredential returns a new TemplateCredential struct with initialized values. This

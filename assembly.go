@@ -205,13 +205,14 @@ func (assembly *Assembly) AddStep(name string, details map[string]interface{}) {
 //
 // When an error is returned you should also check AssemblyInfo.Error for more
 // information about the error sent by the Transloadit API:
-//  info, err := assembly.Upload()
-//  if err != nil {
-//  	if info != nil && info.Error != "" {
-//  		// See info.Error
-//  	}
-//  	panic(err)
-//  }
+//
+//	info, err := assembly.Upload()
+//	if err != nil {
+//		if info != nil && info.Error != "" {
+//			// See info.Error
+//		}
+//		panic(err)
+//	}
 func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*AssemblyInfo, error) {
 	req, err := assembly.makeRequest(ctx, client)
 	if err != nil {
