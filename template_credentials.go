@@ -10,8 +10,8 @@ type TemplateCredential struct {
 	Name     string                 `json:"name"`
 	Type     string                 `json:"type"`
 	Content  map[string]interface{} `json:"content"`
-	Created  string                 `json:"created",omitempty`
-	Modified string                 `json:"modified",omitempty`
+	Created  string                 `json:"created,omitempty"`
+	Modified string                 `json:"modified,omitempty"`
 }
 
 type templateCredentialResponseBody struct {

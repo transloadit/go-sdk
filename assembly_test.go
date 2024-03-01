@@ -2,7 +2,6 @@ package transloadit
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -145,7 +144,7 @@ func TestStartAssembly_Template(t *testing.T) {
 	}
 
 	if info.AssemblyID == "" {
-		t.Fatal(fmt.Sprintf("response doesn't contain assembly_id. %s", info.Error))
+		t.Fatalf("response doesn't contain assembly_id. %s", info.Error)
 	}
 
 	if !strings.Contains(info.Params, templateIDOptimizeResize) {
