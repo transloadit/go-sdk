@@ -2,6 +2,7 @@ package transloadit
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -118,6 +119,8 @@ func TestListTemplates(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	fmt.Printf("%#v\n", templates)
 
 	if len(templates.Templates) != 3 {
 		t.Fatal("wrong number of templates")
