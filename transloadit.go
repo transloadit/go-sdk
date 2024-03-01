@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/hmac"
 	"crypto/sha1"
+	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -104,14 +105,16 @@ func (client *Client) sign(params map[string]interface{}) (string, string, error
 	// Add a random nonce to make signatures unique and prevent error about
 	// signature reuse: https://github.com/transloadit/go-sdk/pull/35
 	params["nonce"] = client.random.Int()
-	b, err := json.Marshal(params)
+	contentToSign, err := json.Marshal(params)
 	if err != nil {
 		return "", "", fmt.Errorf("unable to create signature: %s", err)
 	}
 
-	hash := hmac.New(sha1.New, []byte(client.config.AuthSecret))
-	hash.Write(b)
-	return string(b), hex.EncodeToString(hash.Sum(nil)), nil
+	hash := hmac.New(sha512.New384, []byte(client.config.AuthSecret))
+	hash.Write(contentToSign)
+	signature := "sha384:" + hex.EncodeToString(hash.Sum(nil))
+
+	return string(contentToSign), signature, nil
 }
 
 func (client *Client) doRequest(req *http.Request, result interface{}) error {
