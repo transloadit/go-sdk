@@ -21,7 +21,7 @@ func TestTemplate(t *testing.T) {
 		"height":            75,
 		"resize_strategy":   "pad",
 		"background":        "#000000",
-		"imagemagick_stack": "v2.0.7",
+		"imagemagick_stack": "v3.0.0",
 	})
 	template.AddStep("optimize", map[string]interface{}{
 		"robot": "/image/optimize",

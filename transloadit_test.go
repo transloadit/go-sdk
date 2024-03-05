@@ -82,7 +82,7 @@ func setupTemplates(t *testing.T) {
 		"robot":             "/image/resize",
 		"width":             75,
 		"use":               "optimize",
-		"imagemagick_stack": "v2.0.7",
+		"imagemagick_stack": "v3.0.0",
 	})
 
 	id, err := client.CreateTemplate(ctx, template)

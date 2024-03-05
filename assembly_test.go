@@ -27,7 +27,7 @@ func TestStartAssembly_Success(t *testing.T) {
 		"height":            75,
 		"resize_strategy":   "pad",
 		"background":        "#000000",
-		"imagemagick_stack": "v2.0.7",
+		"imagemagick_stack": "v3.0.0",
 	})
 
 	assembly.NotifyURL = "https://example.com/"
@@ -116,7 +116,7 @@ func TestStartAssembly_Failure(t *testing.T) {
 		"height":            75,
 		"resize_strategy":   "pad",
 		"background":        "#000000",
-		"imagemagick_stack": "v2.0.7",
+		"imagemagick_stack": "v3.0.0",
 	})
 
 	_, err = client.StartAssembly(ctx, assembly)
