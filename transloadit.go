@@ -266,7 +266,7 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	expiresIn := opts.ExpiresIn
 	if expiresIn <= 0 {
-		expiresIn = int64(time.Hour.Milliseconds()) // 1 hour
+		expiresIn = int64(time.Hour.Seconds() * 1000) // 1 hour
 	}
 
 	// Convert URLParams to url.Values
@@ -276,7 +276,7 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 	}
 
 	queryParams["auth_key"] = client.config.AuthKey
-	queryParams["exp"] = fmt.Sprintf("%d", now().UnixMilli()+expiresIn)
+	queryParams["exp"] = fmt.Sprintf("%d", (now().Unix()*1000)+expiresIn)
 
 	// Build query string with sorted keys
 	queryParamsKeys := make([]string, 0, len(queryParams))
