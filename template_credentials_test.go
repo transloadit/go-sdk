@@ -36,9 +36,9 @@ func TestTemplateCredentials(t *testing.T) {
 	if templateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
 		t.Error(err)
 	}
-	checkTemplateCredential(t, templateCredential, templateCredentialName, templateCredentialContent)
+	checkTemplateCredential(t, templateCredential, templateCredentialName, templateCredentialContent, "s3")
 
-	// Step 3: List all Templated credentials and assume that the created templateCredential is present
+	// Step 3: List all Template credentials and assume that the created templateCredential is present
 	list, err := client.ListTemplateCredential(ctx, nil)
 	if err != nil {
 		t.Error(err)
@@ -46,7 +46,7 @@ func TestTemplateCredentials(t *testing.T) {
 	found := false
 	for _, cred := range list.TemplateCredential {
 		if cred.ID == id {
-			checkTemplateCredential(t, cred, templateCredentialName, templateCredentialContent)
+			checkTemplateCredential(t, cred, templateCredentialName, templateCredentialContent, "s3")
 			found = true
 		}
 	}
@@ -74,7 +74,7 @@ func TestTemplateCredentials(t *testing.T) {
 	if newTemplateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
 		t.Error(err)
 	}
-	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent)
+	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent, "backblaze")
 
 	// Step 6: Delete test templateCredential
 	if err := client.DeleteTemplateCredential(ctx, id); err != nil {
@@ -88,11 +88,11 @@ func TestTemplateCredentials(t *testing.T) {
 	}
 }
 
-func checkTemplateCredential(t *testing.T, cred TemplateCredential, templateCredentialName string, expected map[string]interface{}) {
+func checkTemplateCredential(t *testing.T, cred TemplateCredential, templateCredentialName string, expected map[string]interface{}, expectedType string) {
 	if cred.Name != templateCredentialName {
 		t.Error("wrong templateCredentialPost name")
 	}
-	if cred.Type != "s3" {
+	if cred.Type != expectedType {
 		t.Error("wrong templateCredentialPost type")
 	}
 	if !reflect.DeepEqual(cred.Content, expected) {
