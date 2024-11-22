@@ -120,3 +120,34 @@ func generateTemplateName() string {
 	}
 	return "gosdk-" + string(b)
 }
+
+func TestCreateSignedSmartCDNUrl(t *testing.T) {
+	// Mock time to 2024-05-01T00:00:00.000Z
+	// Note: We don't ensure t.Parallel() for this test.
+	mockTime := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
+	now = func() time.Time {
+		return mockTime
+	}
+	defer func() { now = time.Now }()
+
+	client := NewClient(Config{
+		AuthKey:    "foo_key",
+		AuthSecret: "foo_secret",
+	})
+
+	url := client.CreateSignedSmartCDNUrl(SignedSmartCDNUrlOptions{
+		Workspace: "foo_workspace",
+		Template:  "foo_template",
+		Input:     "foo/input",
+		URLParams: map[string]string{
+			"foo": "bar",
+			"aaa": "42", // This must be sorted as the first parameter.
+		},
+	})
+
+	expected := "https://foo_workspace.tlcdn.com/foo_template/foo%2Finput?aaa=42&auth_key=foo_key&exp=1714525200000&foo=bar&sig=sha256:995dd1aae135fb77fa98b0e6946bd9768e0443a6028eba0361c03807e8fb68a5"
+
+	if url != expected {
+		t.Errorf("Expected URL:\n%s\nGot:\n%s", expected, url)
+	}
+}
