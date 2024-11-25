@@ -249,7 +249,7 @@ type SignedSmartCDNUrlOptions struct {
 	// Input value that is provided as `${fields.input}` in the template
 	Input string
 	// Additional parameters for the URL query string. Can be nil.
-	URLParams map[string]string
+	URLParams url.Values
 	// Expiration time of the signature in milliseconds. Defaults to 1 hour.
 	ExpiresIn int64
 }
@@ -269,14 +269,13 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 		expiresIn = int64(time.Hour.Seconds() * 1000) // 1 hour
 	}
 
-	// Convert URLParams to url.Values
-	queryParams := make(map[string]string, len(opts.URLParams)+2)
-	for key, value := range opts.URLParams {
-		queryParams[key] = value
+	queryParams := make(url.Values, len(opts.URLParams)+2)
+	for key, values := range opts.URLParams {
+		queryParams[key] = values
 	}
 
-	queryParams["auth_key"] = client.config.AuthKey
-	queryParams["exp"] = fmt.Sprintf("%d", (now().Unix()*1000)+expiresIn)
+	queryParams.Set("auth_key", client.config.AuthKey)
+	queryParams.Set("exp", fmt.Sprintf("%d", (now().Unix()*1000)+expiresIn))
 
 	// Build query string with sorted keys
 	queryParamsKeys := make([]string, 0, len(queryParams))
@@ -287,7 +286,9 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	var queryParts []string
 	for _, k := range queryParamsKeys {
-		queryParts = append(queryParts, url.QueryEscape(k)+"="+url.QueryEscape(queryParams[k]))
+		for _, v := range queryParams[k] {
+			queryParts = append(queryParts, url.QueryEscape(k)+"="+url.QueryEscape(v))
+		}
 	}
 	queryString := strings.Join(queryParts, "&")
 
@@ -296,9 +297,9 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 	// Create signature using SHA-256
 	hash := hmac.New(sha256.New, []byte(client.config.AuthSecret))
 	hash.Write([]byte(stringToSign))
-	signature := hex.EncodeToString(hash.Sum(nil))
+	signature := url.QueryEscape("sha256:" + hex.EncodeToString(hash.Sum(nil)))
 
-	signedURL := fmt.Sprintf("https://%s.tlcdn.com/%s/%s?%s&sig=sha256:%s",
+	signedURL := fmt.Sprintf("https://%s.tlcdn.com/%s/%s?%s&sig=%s",
 		workspaceSlug, templateSlug, inputField, queryString, signature)
 
 	return signedURL

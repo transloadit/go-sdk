@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"net/url"
 	"os"
 	"strings"
 	"testing"
@@ -135,17 +136,19 @@ func TestCreateSignedSmartCDNUrl(t *testing.T) {
 		AuthSecret: "foo_secret",
 	})
 
+	params := url.Values{}
+	params.Add("foo", "bar")
+	params.Add("aaa", "42") // This must be sorted before `foo`
+	params.Add("aaa", "21")
+
 	url := client.CreateSignedSmartCDNUrl(SignedSmartCDNUrlOptions{
 		Workspace: "foo_workspace",
 		Template:  "foo_template",
 		Input:     "foo/input",
-		URLParams: map[string]string{
-			"foo": "bar",
-			"aaa": "42", // This must be sorted as the first parameter.
-		},
+		URLParams: params,
 	})
 
-	expected := "https://foo_workspace.tlcdn.com/foo_template/foo%2Finput?aaa=42&auth_key=foo_key&exp=1714525200000&foo=bar&sig=sha256:995dd1aae135fb77fa98b0e6946bd9768e0443a6028eba0361c03807e8fb68a5"
+	expected := "https://foo_workspace.tlcdn.com/foo_template/foo%2Finput?aaa=42&aaa=21&auth_key=foo_key&exp=1714525200000&foo=bar&sig=sha256%3A9a8df3bb28eea621b46ec808a250b7903b2546be7e66c048956d4f30b8da7519"
 
 	if url != expected {
 		t.Errorf("Expected URL:\n%s\nGot:\n%s", expected, url)
