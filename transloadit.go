@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/hmac"
 	"crypto/sha1"
+	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
@@ -14,6 +15,8 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -236,4 +239,68 @@ func getExpireString() string {
 	expires := time.Now().UTC().Add(time.Hour)
 	expiresStr := fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d+00:00", expires.Year(), expires.Month(), expires.Day(), expires.Hour(), expires.Minute(), expires.Second())
 	return string(expiresStr)
+}
+
+// SignedSmartCDNUrlOptions contains options for creating a signed Smart CDN URL
+type SignedSmartCDNUrlOptions struct {
+	// Workspace slug
+	Workspace string
+	// Template slug or template ID
+	Template string
+	// Input value that is provided as `${fields.input}` in the template
+	Input string
+	// Additional parameters for the URL query string. Can be nil.
+	URLParams url.Values
+	// Expiration timestamp of the signature. Defaults to 1 hour from now if left unset.
+	ExpiresAt time.Time
+}
+
+// CreateSignedSmartCDNUrl constructs a signed Smart CDN URL.
+// See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn
+func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) string {
+	workspaceSlug := url.PathEscape(opts.Workspace)
+	templateSlug := url.PathEscape(opts.Template)
+	inputField := url.PathEscape(opts.Input)
+
+	var expiresAt int64
+	if !opts.ExpiresAt.IsZero() {
+		expiresAt = opts.ExpiresAt.Unix() * 1000
+	} else {
+		expiresAt = time.Now().Add(time.Hour).Unix() * 1000 // 1 hour
+	}
+
+	queryParams := make(url.Values, len(opts.URLParams)+2)
+	for key, values := range opts.URLParams {
+		queryParams[key] = values
+	}
+
+	queryParams.Set("auth_key", client.config.AuthKey)
+	queryParams.Set("exp", strconv.FormatInt(expiresAt, 10))
+
+	// Build query string with sorted keys
+	queryParamsKeys := make([]string, 0, len(queryParams))
+	for k := range queryParams {
+		queryParamsKeys = append(queryParamsKeys, k)
+	}
+	sort.Strings(queryParamsKeys)
+
+	var queryParts []string
+	for _, k := range queryParamsKeys {
+		for _, v := range queryParams[k] {
+			queryParts = append(queryParts, url.QueryEscape(k)+"="+url.QueryEscape(v))
+		}
+	}
+	queryString := strings.Join(queryParts, "&")
+
+	stringToSign := fmt.Sprintf("%s/%s/%s?%s", workspaceSlug, templateSlug, inputField, queryString)
+
+	// Create signature using SHA-256
+	hash := hmac.New(sha256.New, []byte(client.config.AuthSecret))
+	hash.Write([]byte(stringToSign))
+	signature := url.QueryEscape("sha256:" + hex.EncodeToString(hash.Sum(nil)))
+
+	signedURL := fmt.Sprintf("https://%s.tlcdn.com/%s/%s?%s&sig=%s",
+		workspaceSlug, templateSlug, inputField, queryString, signature)
+
+	return signedURL
 }

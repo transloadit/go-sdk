@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"net/url"
 	"os"
 	"strings"
 	"testing"
@@ -119,4 +120,30 @@ func generateTemplateName() string {
 		b[i] = letters[seededRand.Intn(len(letters))]
 	}
 	return "gosdk-" + string(b)
+}
+
+func TestCreateSignedSmartCDNUrl(t *testing.T) {
+	client := NewClient(Config{
+		AuthKey:    "foo_key",
+		AuthSecret: "foo_secret",
+	})
+
+	params := url.Values{}
+	params.Add("foo", "bar")
+	params.Add("aaa", "42") // This must be sorted before `foo`
+	params.Add("aaa", "21")
+
+	url := client.CreateSignedSmartCDNUrl(SignedSmartCDNUrlOptions{
+		Workspace: "foo_workspace",
+		Template:  "foo_template",
+		Input:     "foo/input",
+		URLParams: params,
+		ExpiresAt: time.Date(2024, 5, 1, 1, 0, 0, 0, time.UTC),
+	})
+
+	expected := "https://foo_workspace.tlcdn.com/foo_template/foo%2Finput?aaa=42&aaa=21&auth_key=foo_key&exp=1714525200000&foo=bar&sig=sha256%3A9a8df3bb28eea621b46ec808a250b7903b2546be7e66c048956d4f30b8da7519"
+
+	if url != expected {
+		t.Errorf("Expected URL:\n%s\nGot:\n%s", expected, url)
+	}
 }
