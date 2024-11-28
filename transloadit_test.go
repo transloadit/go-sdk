@@ -123,14 +123,6 @@ func generateTemplateName() string {
 }
 
 func TestCreateSignedSmartCDNUrl(t *testing.T) {
-	// Mock time to 2024-05-01T00:00:00.000Z
-	// Note: We don't ensure t.Parallel() for this test.
-	mockTime := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
-	now = func() time.Time {
-		return mockTime
-	}
-	defer func() { now = time.Now }()
-
 	client := NewClient(Config{
 		AuthKey:    "foo_key",
 		AuthSecret: "foo_secret",
@@ -146,6 +138,7 @@ func TestCreateSignedSmartCDNUrl(t *testing.T) {
 		Template:  "foo_template",
 		Input:     "foo/input",
 		URLParams: params,
+		ExpiresAt: time.Date(2024, 5, 1, 1, 0, 0, 0, time.UTC),
 	})
 
 	expected := "https://foo_workspace.tlcdn.com/foo_template/foo%2Finput?aaa=42&aaa=21&auth_key=foo_key&exp=1714525200000&foo=bar&sig=sha256%3A9a8df3bb28eea621b46ec808a250b7903b2546be7e66c048956d4f30b8da7519"

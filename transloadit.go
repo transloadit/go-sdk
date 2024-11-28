@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -250,12 +251,9 @@ type SignedSmartCDNUrlOptions struct {
 	Input string
 	// Additional parameters for the URL query string. Can be nil.
 	URLParams url.Values
-	// Expiration time of the signature in milliseconds. Defaults to 1 hour.
-	ExpiresIn int64
+	// Expiration timestamp of the signature. Defaults to 1 hour from now if left unset.
+	ExpiresAt time.Time
 }
-
-// Allows us to overwrite `time.Now()` for testing purposes.
-var now = time.Now
 
 // CreateSignedSmartCDNUrl constructs a signed Smart CDN URL.
 // See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn
@@ -264,9 +262,11 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 	templateSlug := url.PathEscape(opts.Template)
 	inputField := url.PathEscape(opts.Input)
 
-	expiresIn := opts.ExpiresIn
-	if expiresIn <= 0 {
-		expiresIn = int64(time.Hour.Seconds() * 1000) // 1 hour
+	var expiresAt int64
+	if !opts.ExpiresAt.IsZero() {
+		expiresAt = opts.ExpiresAt.Unix() * 1000
+	} else {
+		expiresAt = time.Now().Add(time.Hour).Unix() * 1000 // 1 hour
 	}
 
 	queryParams := make(url.Values, len(opts.URLParams)+2)
@@ -275,7 +275,7 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 	}
 
 	queryParams.Set("auth_key", client.config.AuthKey)
-	queryParams.Set("exp", fmt.Sprintf("%d", (now().Unix()*1000)+expiresIn))
+	queryParams.Set("exp", strconv.FormatInt(expiresAt, 10))
 
 	// Build query string with sorted keys
 	queryParamsKeys := make([]string, 0, len(queryParams))
