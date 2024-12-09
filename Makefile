@@ -4,7 +4,7 @@ test-examples:
 	cd ./examples && find . -type f | xargs -i sh -c "go build {} && go clean" \;
 
 test-package:
-	go test -v .
+	go test -v -coverprofile=coverage.out -covermode=atomic .
 
 test: test-package test-examples
 
