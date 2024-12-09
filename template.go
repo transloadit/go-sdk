@@ -146,21 +146,6 @@ func (template *Template) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (template Template) MarshalJSON() ([]byte, error) {
-	var internal templateInternal
-
-	internal.Name = template.Name
-	internal.Content = template.Content
-	internal.ID = template.ID
-	if template.RequireSignatureAuth {
-		internal.RequireSignatureAuth = 1
-	} else {
-		internal.RequireSignatureAuth = 0
-	}
-
-	return json.Marshal(internal)
-}
-
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
