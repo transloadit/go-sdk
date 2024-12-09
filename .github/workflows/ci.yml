@@ -31,4 +31,8 @@ jobs:
         TRANSLOADIT_SECRET: ${{ secrets.TRANSLOADIT_SECRET }}
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: true
+        files: ./coverage.out
+        token: ${{ secrets.CODECOV_TOKEN }}
