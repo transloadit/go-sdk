@@ -138,6 +138,7 @@ type FileInfo struct {
 	URL              string                 `json:"url"`
 	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
+	Cost             int                    `json:"cost"`
 }
 
 // Integer is a warpper around a normal int but has softer JSON parsing requirements.
