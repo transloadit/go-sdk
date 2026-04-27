@@ -5,6 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha512"
 	"encoding/hex"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -44,16 +45,24 @@ func TestListRequest_UsesSha384WithAlgorithmPrefix(t *testing.T) {
 		AuthSecret: "foo_secret",
 	})
 
+	errCh := make(chan error, 1)
+	reportErr := func(err error) {
+		select {
+		case errCh <- err:
+		default:
+		}
+	}
+
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		params := r.URL.Query().Get("params")
 		signature := r.URL.Query().Get("signature")
 
 		if params == "" {
-			t.Fatal("params query should be set")
+			reportErr(fmt.Errorf("params query should be set"))
 		}
 
 		if !strings.HasPrefix(signature, "sha384:") {
-			t.Fatalf("listRequest signature prefix should be sha384:, got %q", signature)
+			reportErr(fmt.Errorf("listRequest signature prefix should be sha384:, got %q", signature))
 		}
 
 		hash := hmac.New(sha512.New384, []byte(client.config.AuthSecret))
@@ -61,7 +70,7 @@ func TestListRequest_UsesSha384WithAlgorithmPrefix(t *testing.T) {
 		expected := "sha384:" + hex.EncodeToString(hash.Sum(nil))
 
 		if signature != expected {
-			t.Fatalf("wrong listRequest signature, expected %q got %q", expected, signature)
+			reportErr(fmt.Errorf("wrong listRequest signature, expected %q got %q", expected, signature))
 		}
 
 		w.Header().Set("Content-Type", "application/json")
@@ -78,5 +87,11 @@ func TestListRequest_UsesSha384WithAlgorithmPrefix(t *testing.T) {
 
 	if list.Count != 0 {
 		t.Fatalf("expected empty list count 0, got %d", list.Count)
+	}
+
+	select {
+	case verifyErr := <-errCh:
+		t.Fatal(verifyErr)
+	default:
 	}
 }
