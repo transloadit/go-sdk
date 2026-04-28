@@ -4,7 +4,6 @@ package transloadit
 import (
 	"context"
 	"crypto/hmac"
-	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/hex"
@@ -213,11 +212,11 @@ func (client *Client) listRequest(ctx context.Context, path string, listOptions 
 		return fmt.Errorf("unable to create signature: %s", err)
 	}
 
-	hash := hmac.New(sha1.New, []byte(client.config.AuthSecret))
+	hash := hmac.New(sha512.New384, []byte(client.config.AuthSecret))
 	hash.Write(b)
 
 	params := string(b)
-	signature := hex.EncodeToString(hash.Sum(nil))
+	signature := "sha384:" + hex.EncodeToString(hash.Sum(nil))
 
 	v := url.Values{}
 	v.Set("params", params)

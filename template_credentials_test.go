@@ -53,15 +53,17 @@ func TestTemplateCredentials(t *testing.T) {
 	if !found {
 		t.Errorf("Created TemplateCredential not found id=%s", id)
 	}
-	// Step 4 : Update the Template credential
+	// Step 4 : Update the Template credential.
+	// Keep the same type because the API does not allow changing credential type.
 	newTemplateCredentialPost := NewTemplateCredential()
 	newtemplateCredentialName := templateCredentialName + "updated"
 	newTemplateCredentialPost.Name = newtemplateCredentialName
-	newTemplateCredentialPost.Type = "backblaze"
+	newTemplateCredentialPost.Type = "s3"
 	newtemplateCredentialContent := map[string]interface{}{
-		"bucket":     "mybucket",
-		"app_key_id": "mykeyid",
-		"app_key":    "mykey",
+		"key":           "updated-key",
+		"secret":        "updated-secret",
+		"bucket":        "updated-bucket.example.com",
+		"bucket_region": "eu-central-1",
 	}
 	newTemplateCredentialPost.Content = newtemplateCredentialContent
 	err = client.UpdateTemplateCredential(ctx, id, newTemplateCredentialPost)
@@ -74,7 +76,7 @@ func TestTemplateCredentials(t *testing.T) {
 	if newTemplateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
 		t.Error(err)
 	}
-	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent, "backblaze")
+	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent, "s3")
 
 	// Step 6: Delete test templateCredential
 	if err := client.DeleteTemplateCredential(ctx, id); err != nil {

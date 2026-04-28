@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 
 test-examples:
-	cd ./examples && find . -type f | xargs -i sh -c "go build {} && go clean" \;
+	go build ./examples/...
 
 test-package:
 	go test -v -coverprofile=coverage.out -covermode=atomic .
