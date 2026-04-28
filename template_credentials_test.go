@@ -76,7 +76,7 @@ func TestTemplateCredentials(t *testing.T) {
 	if newTemplateCredential, err = client.GetTemplateCredential(ctx, id); err != nil {
 		t.Error(err)
 	}
-	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent, "backblaze")
+	checkTemplateCredential(t, newTemplateCredential, newtemplateCredentialName, newtemplateCredentialContent, "s3")
 
 	// Step 6: Delete test templateCredential
 	if err := client.DeleteTemplateCredential(ctx, id); err != nil {
