@@ -20,5 +20,5 @@ release:
 .PHONY: \
 	release \
 	test \
-  test-package \
-  test-examples
+	test-package \
+	test-examples

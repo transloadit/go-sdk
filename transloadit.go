@@ -293,7 +293,7 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	stringToSign := fmt.Sprintf("%s/%s/%s?%s", workspaceSlug, templateSlug, inputField, queryString)
 
-	// Create signature using SHA-256
+	// Smart CDN signatures intentionally remain SHA-256; API request signatures use SHA-384.
 	hash := hmac.New(sha256.New, []byte(client.config.AuthSecret))
 	hash.Write([]byte(stringToSign))
 	signature := url.QueryEscape("sha256:" + hex.EncodeToString(hash.Sum(nil)))
