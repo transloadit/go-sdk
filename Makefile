@@ -1,7 +1,11 @@
 SHELL := /usr/bin/env bash
 
 test-examples:
-	cd ./examples && find . -type f | xargs -i sh -c "go build {} && go clean" \;
+	tmp=$$(mktemp -d); \
+	trap 'rm -rf "$$tmp"' EXIT; \
+	while IFS= read -r -d '' file; do \
+		go build -o "$$tmp/$$(basename "$$(dirname "$$file")")" "$$file"; \
+	done < <(find ./examples -name '*.go' -print0)
 
 test-package:
 	go test -v -coverprofile=coverage.out -covermode=atomic .
@@ -20,5 +24,5 @@ release:
 .PHONY: \
 	release \
 	test \
-  test-package \
-  test-examples
+	test-package \
+	test-examples
