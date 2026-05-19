@@ -1,11 +1,7 @@
 SHELL := /usr/bin/env bash
 
 test-examples:
-	tmp=$$(mktemp -d); \
-	trap 'rm -rf "$$tmp"' EXIT; \
-	while IFS= read -r -d '' file; do \
-		go build -o "$$tmp/$$(basename "$$(dirname "$$file")")" "$$file"; \
-	done < <(find ./examples -name '*.go' -print0)
+	go build ./examples/...
 
 test-package:
 	go test -v -coverprofile=coverage.out -covermode=atomic .
