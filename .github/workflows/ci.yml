@@ -13,14 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go_version: ['1.11', '1.12', '1.13', '1.14', '1.15', '1.16', '1.17', '1.18', '1.19', '1.20', '1.21', '1.22', '1.23', '1.24']
+        go_version: ['1.15', '1.20', '1.24', '1.25', '1.26']
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
 
     - name: Set up Go ${{ matrix.go_version }}
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v6
       with:
         go-version: ${{ matrix.go_version }}
 
@@ -31,7 +31,7 @@ jobs:
         TRANSLOADIT_SECRET: ${{ secrets.TRANSLOADIT_SECRET }}
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         fail_ci_if_error: true
         files: ./coverage.out
