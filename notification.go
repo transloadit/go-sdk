@@ -34,6 +34,8 @@ func (client *Client) ListNotifications(ctx context.Context, options *ListOption
 	return list, errors.New("transloadit: listing assembly notifications is no longer available")
 }
 
+// <api2-generated-endpoint replayAssemblyNotification>
+
 // ReplayNotification instructs the endpoint to replay the notification
 // corresponding to the provided assembly ID.
 // If notifyURL is not empty it will override the notify URL used in the
@@ -47,3 +49,5 @@ func (client *Client) ReplayNotification(ctx context.Context, assemblyID string,
 
 	return client.request(ctx, "POST", "assembly_notifications/"+assemblyID+"/replay", params, nil)
 }
+
+// </api2-generated-endpoint replayAssemblyNotification>

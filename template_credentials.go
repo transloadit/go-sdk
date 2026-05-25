@@ -38,6 +38,8 @@ func NewTemplateCredential() TemplateCredential {
 
 var templateCredentialPrefix = "template_credentials"
 
+// <api2-generated-endpoint createTemplateCredentials>
+
 // CreateTemplateCredential will save the provided template credential struct to the server
 // and return the ID of the new template credential.
 func (client *Client) CreateTemplateCredential(ctx context.Context, templateCredential TemplateCredential) (string, error) {
@@ -53,6 +55,10 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 	return response.Credential.ID, nil
 }
 
+// </api2-generated-endpoint createTemplateCredentials>
+
+// <api2-generated-endpoint getTemplateCredentials>
+
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateCredentialID string) (TemplateCredential, error) {
@@ -61,17 +67,29 @@ func (client *Client) GetTemplateCredential(ctx context.Context, templateCredent
 	return response.Credential, err
 }
 
+// </api2-generated-endpoint getTemplateCredentials>
+
+// <api2-generated-endpoint deleteTemplateCredentials>
+
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
 func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCredentialID string) error {
 	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateCredentialID, nil, nil)
 }
 
+// </api2-generated-endpoint deleteTemplateCredentials>
+
+// <api2-generated-endpoint listTemplateCredentials>
+
 // ListTemplateCredential will retrieve all templates credential matching the criteria.
 func (client *Client) ListTemplateCredential(ctx context.Context, options *ListOptions) (list TemplateCredentialList, err error) {
 	err = client.listRequest(ctx, templateCredentialPrefix, options, &list)
 	return list, err
 }
+
+// </api2-generated-endpoint listTemplateCredentials>
+
+// <api2-generated-endpoint updateTemplateCredentials>
 
 // UpdateTemplateCredential will update the template credential associated with the provided
 // template credential ID to match the new name and  new content.
@@ -83,3 +101,5 @@ func (client *Client) UpdateTemplateCredential(ctx context.Context, templateCred
 	}
 	return client.request(ctx, "PUT", templateCredentialPrefix+"/"+templateCredentialID, content, nil)
 }
+
+// </api2-generated-endpoint updateTemplateCredentials>
