@@ -306,6 +306,12 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 	return req, nil
 }
 
+// <api2-generated-endpoint getAssemblyStatus>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // GetAssembly fetches the full assembly status from the provided URL.
 // The assembly URL must be absolute, for example:
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
@@ -315,6 +321,14 @@ func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*Ass
 
 	return &info, err
 }
+
+// </api2-generated-endpoint getAssemblyStatus>
+
+// <api2-generated-endpoint cancelAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
 
 // CancelAssembly cancels an assembly which will result in all corresponding
 // uploads and encoding jobs to be aborted. Finally, the updated assembly
@@ -327,6 +341,8 @@ func (client *Client) CancelAssembly(ctx context.Context, assemblyURL string) (*
 
 	return &info, err
 }
+
+// </api2-generated-endpoint cancelAssembly>
 
 // NewAssemblyReplay will create a new AssemblyReplay struct which can be used
 // to replay an assemblie's execution using Client.StartAssemblyReplay.
@@ -375,6 +391,12 @@ func (client *Client) StartAssemblyReplay(ctx context.Context, assembly Assembly
 	return &info, nil
 }
 
+// <api2-generated-endpoint listAssemblies>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // ListAssemblies will fetch all assemblies matching the provided criteria.
 func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
@@ -382,3 +404,5 @@ func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) 
 
 	return assemblies, err
 }
+
+// </api2-generated-endpoint listAssemblies>

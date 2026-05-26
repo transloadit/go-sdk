@@ -146,6 +146,12 @@ func (template *Template) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// <api2-generated-endpoint createTemplate>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // CreateTemplate will save the provided template struct as a new template
 // and return the ID of the new template.
 func (client *Client) CreateTemplate(ctx context.Context, template Template) (string, error) {
@@ -164,6 +170,14 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 	return template.ID, nil
 }
 
+// </api2-generated-endpoint createTemplate>
+
+// <api2-generated-endpoint getTemplate>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
 func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
@@ -171,11 +185,27 @@ func (client *Client) GetTemplate(ctx context.Context, templateID string) (templ
 	return template, err
 }
 
+// </api2-generated-endpoint getTemplate>
+
+// <api2-generated-endpoint deleteTemplate>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // DeleteTemplate will delete the template associated with the provided
 // template ID.
 func (client *Client) DeleteTemplate(ctx context.Context, templateID string) error {
 	return client.request(ctx, "DELETE", "templates/"+templateID, nil, nil)
 }
+
+// </api2-generated-endpoint deleteTemplate>
+
+// <api2-generated-endpoint updateTemplate>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
 
 // UpdateTemplate will update the template associated with the provided
 // template ID to match the new name and  new content. Please be aware that you
@@ -195,8 +225,18 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
 }
 
+// </api2-generated-endpoint updateTemplate>
+
+// <api2-generated-endpoint listTemplates>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // ListTemplates will retrieve all templates matching the criteria.
 func (client *Client) ListTemplates(ctx context.Context, options *ListOptions) (list TemplateList, err error) {
 	err = client.listRequest(ctx, "templates", options, &list)
 	return list, err
 }
+
+// </api2-generated-endpoint listTemplates>
