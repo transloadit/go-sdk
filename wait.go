@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// <api2-generated-feature waitForAssembly>
+
 // WaitForAssembly fetches continuously the assembly status until it has
 // finished uploading and executing or until an assembly error occurs.
 // If you want to end this loop prematurely, you can cancel the supplied context.
@@ -33,3 +35,5 @@ func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInf
 		}
 	}
 }
+
+// </api2-generated-feature waitForAssembly>
