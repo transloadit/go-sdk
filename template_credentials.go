@@ -40,6 +40,10 @@ var templateCredentialPrefix = "template_credentials"
 
 // <api2-generated-endpoint createTemplateCredentials>
 
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // CreateTemplateCredential will save the provided template credential struct to the server
 // and return the ID of the new template credential.
 func (client *Client) CreateTemplateCredential(ctx context.Context, templateCredential TemplateCredential) (string, error) {
@@ -59,6 +63,10 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 
 // <api2-generated-endpoint getTemplateCredentials>
 
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateCredentialID string) (TemplateCredential, error) {
@@ -71,6 +79,10 @@ func (client *Client) GetTemplateCredential(ctx context.Context, templateCredent
 
 // <api2-generated-endpoint deleteTemplateCredentials>
 
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
 func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCredentialID string) error {
@@ -81,6 +93,10 @@ func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCred
 
 // <api2-generated-endpoint listTemplateCredentials>
 
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // ListTemplateCredential will retrieve all templates credential matching the criteria.
 func (client *Client) ListTemplateCredential(ctx context.Context, options *ListOptions) (list TemplateCredentialList, err error) {
 	err = client.listRequest(ctx, templateCredentialPrefix, options, &list)
@@ -90,6 +106,10 @@ func (client *Client) ListTemplateCredential(ctx context.Context, options *ListO
 // </api2-generated-endpoint listTemplateCredentials>
 
 // <api2-generated-endpoint updateTemplateCredentials>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
 
 // UpdateTemplateCredential will update the template credential associated with the provided
 // template credential ID to match the new name and  new content.
