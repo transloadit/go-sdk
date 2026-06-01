@@ -155,6 +155,32 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 }
 
 func (client *Client) request(ctx context.Context, method string, path string, content map[string]interface{}, result interface{}) error {
+	return client.requestWithFormFields(ctx, method, path, content, nil, result)
+}
+
+func formFieldValue(value interface{}) string {
+	switch typed := value.(type) {
+	case nil:
+		return ""
+	case bool:
+		return strconv.FormatBool(typed)
+	case float32:
+		return strconv.FormatFloat(float64(typed), 'f', -1, 32)
+	case float64:
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	case string:
+		return typed
+	}
+
+	serialized, err := json.Marshal(value)
+	if err == nil {
+		return string(serialized)
+	}
+
+	return fmt.Sprint(value)
+}
+
+func (client *Client) requestWithFormFields(ctx context.Context, method string, path string, content map[string]interface{}, formFields map[string]interface{}, result interface{}) error {
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -175,6 +201,9 @@ func (client *Client) request(ctx context.Context, method string, path string, c
 	v := url.Values{}
 	v.Set("params", params)
 	v.Set("signature", signature)
+	for name, value := range formFields {
+		v.Set(name, formFieldValue(value))
+	}
 
 	var body io.Reader
 	if method == "GET" {

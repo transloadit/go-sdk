@@ -233,6 +233,36 @@ func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*As
 	return &info, err
 }
 
+// <api2-generated-feature createTusAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// CreateTusAssembly creates a TUS-ready Assembly that waits for the requested number of resumable uploads before execution continues.
+func (client *Client) CreateTusAssembly(ctx context.Context, fileCount int) (*AssemblyInfo, error) {
+	content := map[string]interface{}{
+		"await": false,
+		"steps": map[string]interface{}{
+			":original": map[string]interface{}{
+				"output_meta": true,
+				"result":      "debug",
+				"robot":       "/upload/handle",
+			},
+		},
+	}
+	formFields := map[string]interface{}{
+		"num_expected_upload_files": fileCount,
+	}
+
+	var assembly AssemblyInfo
+	err := client.requestWithFormFields(ctx, "POST", "assemblies", content, formFields, &assembly)
+
+	return &assembly, err
+}
+
+// </api2-generated-feature createTusAssembly>
+
 func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
 	// TODO: test with huge files
 	url := client.config.Endpoint + "/assemblies"
