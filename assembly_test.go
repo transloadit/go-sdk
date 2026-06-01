@@ -264,3 +264,50 @@ func TestInteger_MarshalJSON(t *testing.T) {
 		t.Fatal("wrong default value for string")
 	}
 }
+
+func TestAssemblyInfo_TusFields(t *testing.T) {
+	t.Parallel()
+
+	var info AssemblyInfo
+	err := json.Unmarshal([]byte(`{
+		"tus_url": "https://api2.example/resumable/files/",
+		"uploads": [
+			{
+				"is_tus_file": true,
+				"tus_upload_url": "https://api2.example/resumable/files/upload-id",
+				"user_meta": {
+					"hello": "world"
+				}
+			}
+		],
+		"results": {
+			":original": [
+				{
+					"is_tus_file": false,
+					"user_meta": {
+						"hello": "world"
+					}
+				}
+			]
+		}
+	}`), &info)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if info.TUSURL != "https://api2.example/resumable/files/" {
+		t.Fatal("wrong tus url")
+	}
+	if len(info.Uploads) != 1 || !info.Uploads[0].IsTUSFile {
+		t.Fatal("wrong TUS upload marker")
+	}
+	if info.Uploads[0].TUSUploadURL != "https://api2.example/resumable/files/upload-id" {
+		t.Fatal("wrong TUS upload url")
+	}
+	if info.Uploads[0].UserMeta["hello"] != "world" {
+		t.Fatal("wrong upload user meta")
+	}
+	if info.Results[":original"][0].UserMeta["hello"] != "world" {
+		t.Fatal("wrong result user meta")
+	}
+}

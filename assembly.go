@@ -86,6 +86,7 @@ type AssemblyInfo struct {
 	ParentID               string                 `json:"parent_id"`
 	AssemblyURL            string                 `json:"assembly_url"`
 	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
+	TUSURL                 string                 `json:"tus_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          Integer                `json:"bytes_expected"`
 	StartDate              string                 `json:"start_date"`
@@ -135,9 +136,12 @@ type FileInfo struct {
 	OriginalMd5Hash  string                 `json:"original_md5hash"`
 	OriginalID       string                 `json:"original_id"`
 	OriginalBasename string                 `json:"original_basename"`
+	IsTUSFile        bool                   `json:"is_tus_file"`
+	TUSUploadURL     string                 `json:"tus_upload_url"`
 	URL              string                 `json:"url"`
 	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
+	UserMeta         map[string]interface{} `json:"user_meta"`
 	Cost             int                    `json:"cost"`
 }
 
