@@ -5,11 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
-	"strings"
 	"time"
 
 	transloadit "github.com/transloadit/go-sdk"
@@ -64,7 +61,7 @@ func loadScenario() (templateLifecycleScenario, error) {
 		)
 	}
 
-	contents, err := ioutil.ReadFile(scenarioPath)
+	contents, err := os.ReadFile(scenarioPath)
 	if err != nil {
 		return templateLifecycleScenario{}, err
 	}
@@ -94,34 +91,6 @@ func newTemplate(name string, requireSignatureAuth bool, content scenarioContent
 	applyTemplateContent(&template, content)
 
 	return template
-}
-
-func assertTemplateContent(label string, template transloadit.Template, expected scenarioContent) {
-	for stepName, expectedStep := range expected.Steps {
-		actualStep, ok := template.Content.Steps[stepName]
-		if !ok {
-			fail("%s response did not include step %q", label, stepName)
-		}
-		if !reflect.DeepEqual(actualStep, expectedStep) {
-			fail("%s response step %q was %v, expected %v", label, stepName, actualStep, expectedStep)
-		}
-	}
-
-	for name, expectedValue := range expected.AdditionalProperties {
-		actualValue, ok := template.Content.AdditionalProperties[name]
-		if !ok {
-			fail("%s response did not include content property %q", label, name)
-		}
-		if !reflect.DeepEqual(actualValue, expectedValue) {
-			fail(
-				"%s response content property %q was %v, expected %v",
-				label,
-				name,
-				actualValue,
-				expectedValue,
-			)
-		}
-	}
 }
 
 func main() {
@@ -165,33 +134,12 @@ func main() {
 	if err != nil {
 		fail("get template: %v", err)
 	}
-	if fetched.ID != templateID {
-		fail("get template returned id %q, expected %q", fetched.ID, templateID)
-	}
-	if fetched.Name != templateName {
-		fail("get template returned name %q, expected %q", fetched.Name, templateName)
-	}
-	if fetched.RequireSignatureAuth != scenario.Template.RequireSignatureAuth {
-		fail(
-			"get template returned RequireSignatureAuth=%v, expected %v",
-			fetched.RequireSignatureAuth,
-			scenario.Template.RequireSignatureAuth,
-		)
-	}
-	assertTemplateContent("get template", fetched, scenario.Template.Content)
 
 	templateList, err := client.ListTemplates(ctx, &transloadit.ListOptions{
 		PageSize: scenario.List.PageSize,
 	})
 	if err != nil {
 		fail("list templates: %v", err)
-	}
-	if templateList.Count < scenario.List.MinimumCount {
-		fail(
-			"list templates returned count=%d, expected at least %d",
-			templateList.Count,
-			scenario.List.MinimumCount,
-		)
 	}
 
 	updatedTemplate := newTemplate(
@@ -208,17 +156,6 @@ func main() {
 	if err != nil {
 		fail("get updated template: %v", err)
 	}
-	if fetchedUpdated.Name != updatedTemplate.Name {
-		fail("updated template returned name %q, expected %q", fetchedUpdated.Name, updatedTemplate.Name)
-	}
-	if fetchedUpdated.RequireSignatureAuth != scenario.Update.RequireSignatureAuth {
-		fail(
-			"updated template returned RequireSignatureAuth=%v, expected %v",
-			fetchedUpdated.RequireSignatureAuth,
-			scenario.Update.RequireSignatureAuth,
-		)
-	}
-	assertTemplateContent("updated template", fetchedUpdated, scenario.Update.Content)
 
 	if err := client.DeleteTemplate(ctx, templateID); err != nil {
 		fail("delete template: %v", err)
@@ -226,15 +163,28 @@ func main() {
 	deleteTemplate = false
 
 	_, err = client.GetTemplate(ctx, templateID)
-	if err == nil {
-		fail("get deleted template succeeded unexpectedly")
-	}
+	deletedGetSucceeded := err == nil
+	deletedErrorCode := ""
 	var requestErr transloadit.RequestError
-	if !errors.As(err, &requestErr) {
+	if err != nil && !errors.As(err, &requestErr) {
 		fail("get deleted template returned %T, expected transloadit.RequestError", err)
 	}
-	if !strings.Contains(requestErr.Code, scenario.Delete.ErrorCodeIncludes) {
-		fail("get deleted template returned unexpected error code %q", requestErr.Code)
+	if err != nil {
+		deletedErrorCode = requestErr.Code
+	}
+
+	result := map[string]interface{}{
+		"deletedErrorCode":    deletedErrorCode,
+		"deletedGetSucceeded": deletedGetSucceeded,
+		"fetched":             templateResult(fetched),
+		"listCount":           templateList.Count,
+		"templateId":          templateID,
+		"templateName":        templateName,
+		"updated":             templateResult(fetchedUpdated),
+		"updatedTemplateName": updatedTemplate.Name,
+	}
+	if err := writeResult(result); err != nil {
+		fail("write result: %v", err)
 	}
 
 	fmt.Printf(
@@ -242,4 +192,34 @@ func main() {
 		scenario.ScenarioID,
 		requiredEnv("TRANSLOADIT_ENDPOINT"),
 	)
+}
+
+func templateResult(template transloadit.Template) map[string]interface{} {
+	content := map[string]interface{}{
+		"steps": template.Content.Steps,
+	}
+	for name, value := range template.Content.AdditionalProperties {
+		content[name] = value
+	}
+
+	return map[string]interface{}{
+		"content":              content,
+		"id":                   template.ID,
+		"name":                 template.Name,
+		"requireSignatureAuth": template.RequireSignatureAuth,
+	}
+}
+
+func writeResult(result map[string]interface{}) error {
+	resultPath := os.Getenv("API2_SDK_EXAMPLE_RESULT")
+	if resultPath == "" {
+		return nil
+	}
+
+	contents, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(resultPath, append(contents, '\n'), 0o644)
 }
