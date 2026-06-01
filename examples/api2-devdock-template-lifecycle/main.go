@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
@@ -61,7 +62,7 @@ func loadScenario() (templateLifecycleScenario, error) {
 		)
 	}
 
-	contents, err := os.ReadFile(scenarioPath)
+	contents, err := ioutil.ReadFile(scenarioPath)
 	if err != nil {
 		return templateLifecycleScenario{}, err
 	}
@@ -221,5 +222,5 @@ func writeResult(result map[string]interface{}) error {
 		return err
 	}
 
-	return os.WriteFile(resultPath, append(contents, '\n'), 0o644)
+	return ioutil.WriteFile(resultPath, append(contents, '\n'), 0o644)
 }
