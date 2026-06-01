@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -63,7 +64,7 @@ func loadScenario() (templateLifecycleScenario, error) {
 		)
 	}
 
-	contents, err := os.ReadFile(scenarioPath)
+	contents, err := ioutil.ReadFile(scenarioPath)
 	if err != nil {
 		return templateLifecycleScenario{}, err
 	}
