@@ -186,6 +186,42 @@ func resolveValue(
 	return readPath(rootValue, pathParts, label)
 }
 
+func featurePreparation(
+	scenario map[string]interface{},
+	featureID string,
+) (map[string]interface{}, string, error) {
+	preparations, err := arrayValue(scenario["preparations"], "preparations")
+	if err != nil {
+		return nil, "", err
+	}
+
+	for index, rawPreparation := range preparations {
+		label := fmt.Sprintf("preparations[%d]", index)
+		preparation, err := objectValue(rawPreparation, label)
+		if err != nil {
+			return nil, "", err
+		}
+		currentFeatureID, err := stringValue(preparation["featureId"], label+".featureId")
+		if err != nil {
+			return nil, "", err
+		}
+		if currentFeatureID != featureID {
+			continue
+		}
+		kind, err := stringValue(preparation["kind"], label+".kind")
+		if err != nil {
+			return nil, "", err
+		}
+		if kind != "feature-call" {
+			return nil, "", fmt.Errorf("%s must be a feature-call preparation", label)
+		}
+
+		return preparation, label, nil
+	}
+
+	return nil, "", fmt.Errorf("scenario has no preparation for feature %q", featureID)
+}
+
 func asJsonObject(value interface{}, label string) (map[string]interface{}, error) {
 	contents, err := json.Marshal(value)
 	if err != nil {
@@ -205,15 +241,15 @@ func createAssembly(
 	client transloadit.Client,
 	scenario map[string]interface{},
 ) (*transloadit.AssemblyInfo, map[string]interface{}, error) {
-	createConfig, err := objectValue(scenario["createTusAssembly"], "createTusAssembly")
+	createConfig, createConfigLabel, err := featurePreparation(scenario, "createTusAssembly")
 	if err != nil {
 		return nil, nil, err
 	}
-	input, err := objectValue(createConfig["input"], "createTusAssembly.input")
+	input, err := objectValue(createConfig["input"], createConfigLabel+".input")
 	if err != nil {
 		return nil, nil, err
 	}
-	fileCount, err := intValue(input["file_count"], "createTusAssembly.input.file_count")
+	fileCount, err := intValue(input["file_count"], createConfigLabel+".input.file_count")
 	if err != nil {
 		return nil, nil, err
 	}
@@ -229,7 +265,7 @@ func createAssembly(
 
 	requiredPaths, err := arrayValue(
 		createConfig["requiredResponsePaths"],
-		"createTusAssembly.requiredResponsePaths",
+		createConfigLabel+".requiredResponsePaths",
 	)
 	if err != nil {
 		return nil, nil, err
@@ -237,7 +273,7 @@ func createAssembly(
 	for index, rawPath := range requiredPaths {
 		pathParts, err := arrayValue(
 			rawPath,
-			fmt.Sprintf("createTusAssembly.requiredResponsePaths[%d]", index),
+			fmt.Sprintf("%s.requiredResponsePaths[%d]", createConfigLabel, index),
 		)
 		if err != nil {
 			return nil, nil, err
@@ -245,7 +281,7 @@ func createAssembly(
 		value, err := readPath(
 			createResponse,
 			pathParts,
-			fmt.Sprintf("createTusAssembly.requiredResponsePaths[%d]", index),
+			fmt.Sprintf("%s.requiredResponsePaths[%d]", createConfigLabel, index),
 		)
 		if err != nil {
 			return nil, nil, err
