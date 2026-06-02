@@ -343,12 +343,12 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 	if uploadResponse.StatusCode != 204 {
 		return nil, "", fmt.Errorf("TUS upload returned HTTP %d, expected 204", uploadResponse.StatusCode)
 	}
-	remoteOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
+	uploadOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
 	if err != nil {
 		return nil, "", err
 	}
-	if remoteOffset != len(content) {
-		return nil, "", fmt.Errorf("TUS upload offset %d, expected %d", remoteOffset, len(content))
+	if uploadOffset != len(content) {
+		return nil, "", fmt.Errorf("TUS upload offset %d, expected %d", uploadOffset, len(content))
 	}
 
 	completedAssembly, err := client.WaitForAssembly(ctx, createdAssembly)
