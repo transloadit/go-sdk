@@ -289,13 +289,13 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 		return nil, "", err
 	}
 
-	uploadMetadata := make(map[string]string)
+	metadataMap := make(map[string]string)
 	for name, value := range userMeta {
-		uploadMetadata[name] = value
+		metadataMap[name] = value
 	}
-	uploadMetadata["assembly_url"] = createdAssembly.AssemblyURL
-	uploadMetadata["fieldname"] = fieldname
-	uploadMetadata["filename"] = filename
+	metadataMap["assembly_url"] = createdAssembly.AssemblyURL
+	metadataMap["fieldname"] = fieldname
+	metadataMap["filename"] = filename
 
 	createRequest, err := http.NewRequestWithContext(ctx, "POST", endpointURL.String(), nil)
 	if err != nil {
@@ -303,8 +303,8 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 	}
 	createRequest.Header.Set("Tus-Resumable", "1.0.0")
 	createRequest.Header.Set("Upload-Length", strconv.Itoa(len(content)))
-	metadataParts := make([]string, 0, len(uploadMetadata))
-	for name, value := range uploadMetadata {
+	metadataParts := make([]string, 0, len(metadataMap))
+	for name, value := range metadataMap {
 		metadataParts = append(metadataParts, fmt.Sprintf("%s %s", name, base64.StdEncoding.EncodeToString([]byte(value))))
 	}
 	createRequest.Header.Set("Upload-Metadata", strings.Join(metadataParts, ","))
@@ -317,33 +317,33 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 	if createResponse.StatusCode != 201 {
 		return nil, "", fmt.Errorf("TUS create returned HTTP %d, expected 201", createResponse.StatusCode)
 	}
-	location := createResponse.Header.Get("Location")
-	if location == "" {
+	uploadURLLocation := createResponse.Header.Get("Location")
+	if uploadURLLocation == "" {
 		return nil, "", fmt.Errorf("TUS create did not return a Location header")
 	}
-	uploadURL, err := endpointURL.Parse(location)
+	uploadURL, err := endpointURL.Parse(uploadURLLocation)
 	if err != nil {
 		return nil, "", err
 	}
 	uploadURLText := uploadURL.String()
 
-	patchRequest, err := http.NewRequestWithContext(ctx, "PATCH", uploadURLText, bytes.NewReader(content))
+	uploadRequest, err := http.NewRequestWithContext(ctx, "PATCH", uploadURLText, bytes.NewReader(content))
 	if err != nil {
 		return nil, "", err
 	}
-	patchRequest.Header.Set("Tus-Resumable", "1.0.0")
-	patchRequest.Header.Set("Upload-Offset", "0")
-	patchRequest.Header.Set("Content-Type", "application/offset+octet-stream")
+	uploadRequest.Header.Set("Tus-Resumable", "1.0.0")
+	uploadRequest.Header.Set("Upload-Offset", "0")
+	uploadRequest.Header.Set("Content-Type", "application/offset+octet-stream")
 
-	patchResponse, err := client.httpClient.Do(patchRequest)
+	uploadResponse, err := client.httpClient.Do(uploadRequest)
 	if err != nil {
 		return nil, "", err
 	}
-	defer patchResponse.Body.Close()
-	if patchResponse.StatusCode != 204 {
-		return nil, "", fmt.Errorf("TUS upload returned HTTP %d, expected 204", patchResponse.StatusCode)
+	defer uploadResponse.Body.Close()
+	if uploadResponse.StatusCode != 204 {
+		return nil, "", fmt.Errorf("TUS upload returned HTTP %d, expected 204", uploadResponse.StatusCode)
 	}
-	remoteOffset, err := strconv.Atoi(patchResponse.Header.Get("Upload-Offset"))
+	remoteOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
 	if err != nil {
 		return nil, "", err
 	}
