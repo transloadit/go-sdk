@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -37,7 +37,7 @@ func loadScenario() (map[string]interface{}, error) {
 		scenarioPath = filepath.Join("examples", "api2-devdock-tus-assembly", "api2-scenario.json")
 	}
 
-	contents, err := os.ReadFile(scenarioPath)
+	contents, err := ioutil.ReadFile(scenarioPath)
 	if err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func checkedResponse(response *http.Response, expectedStatus int, label string) 
 		return nil
 	}
 
-	body, _ := io.ReadAll(response.Body)
+	body, _ := ioutil.ReadAll(response.Body)
 	return fmt.Errorf("%s returned HTTP %d: %s", label, response.StatusCode, string(body))
 }
 
@@ -462,7 +462,7 @@ func writeResult(
 		return err
 	}
 
-	return os.WriteFile(resultPath, append(contents, '\n'), 0o644)
+	return ioutil.WriteFile(resultPath, append(contents, '\n'), 0o644)
 }
 
 func main() {
