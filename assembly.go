@@ -1,13 +1,17 @@
 package transloadit
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -266,6 +270,96 @@ func (client *Client) CreateTusAssembly(ctx context.Context, fileCount int) (*As
 }
 
 // </api2-generated-feature createTusAssembly>
+
+// <api2-generated-feature uploadTusAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// UploadTusAssembly creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
+func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, content []byte, fieldname string, filename string, userMeta map[string]string) (*AssemblyInfo, string, error) {
+	createdAssembly, err := client.CreateTusAssembly(ctx, fileCount)
+	if err != nil {
+		return nil, "", err
+	}
+
+	endpointURL, err := url.Parse(createdAssembly.TUSURL)
+	if err != nil {
+		return nil, "", err
+	}
+
+	uploadMetadata := make(map[string]string)
+	for name, value := range userMeta {
+		uploadMetadata[name] = value
+	}
+	uploadMetadata["assembly_url"] = createdAssembly.AssemblyURL
+	uploadMetadata["fieldname"] = fieldname
+	uploadMetadata["filename"] = filename
+
+	createRequest, err := http.NewRequestWithContext(ctx, "POST", endpointURL.String(), nil)
+	if err != nil {
+		return nil, "", err
+	}
+	createRequest.Header.Set("Tus-Resumable", "1.0.0")
+	createRequest.Header.Set("Upload-Length", strconv.Itoa(len(content)))
+	metadataParts := make([]string, 0, len(uploadMetadata))
+	for name, value := range uploadMetadata {
+		metadataParts = append(metadataParts, fmt.Sprintf("%s %s", name, base64.StdEncoding.EncodeToString([]byte(value))))
+	}
+	createRequest.Header.Set("Upload-Metadata", strings.Join(metadataParts, ","))
+
+	createResponse, err := client.httpClient.Do(createRequest)
+	if err != nil {
+		return nil, "", err
+	}
+	defer createResponse.Body.Close()
+	if createResponse.StatusCode != 201 {
+		return nil, "", fmt.Errorf("TUS create returned HTTP %d, expected 201", createResponse.StatusCode)
+	}
+	location := createResponse.Header.Get("Location")
+	if location == "" {
+		return nil, "", fmt.Errorf("TUS create did not return a Location header")
+	}
+	uploadURL, err := endpointURL.Parse(location)
+	if err != nil {
+		return nil, "", err
+	}
+	uploadURLText := uploadURL.String()
+
+	patchRequest, err := http.NewRequestWithContext(ctx, "PATCH", uploadURLText, bytes.NewReader(content))
+	if err != nil {
+		return nil, "", err
+	}
+	patchRequest.Header.Set("Tus-Resumable", "1.0.0")
+	patchRequest.Header.Set("Upload-Offset", "0")
+	patchRequest.Header.Set("Content-Type", "application/offset+octet-stream")
+
+	patchResponse, err := client.httpClient.Do(patchRequest)
+	if err != nil {
+		return nil, "", err
+	}
+	defer patchResponse.Body.Close()
+	if patchResponse.StatusCode != 204 {
+		return nil, "", fmt.Errorf("TUS upload returned HTTP %d, expected 204", patchResponse.StatusCode)
+	}
+	remoteOffset, err := strconv.Atoi(patchResponse.Header.Get("Upload-Offset"))
+	if err != nil {
+		return nil, "", err
+	}
+	if remoteOffset != len(content) {
+		return nil, "", fmt.Errorf("TUS upload offset %d, expected %d", remoteOffset, len(content))
+	}
+
+	completedAssembly, err := client.WaitForAssembly(ctx, createdAssembly)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return completedAssembly, uploadURLText, nil
+}
+
+// </api2-generated-feature uploadTusAssembly>
 
 func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
 	// TODO: test with huge files

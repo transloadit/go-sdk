@@ -1,18 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"time"
 
 	transloadit "github.com/transloadit/go-sdk"
@@ -99,93 +94,6 @@ func intValue(value interface{}, label string) (int, error) {
 	}
 }
 
-func scalarString(value interface{}) string {
-	switch typed := value.(type) {
-	case bool:
-		return strconv.FormatBool(typed)
-	case float64:
-		return strconv.FormatFloat(typed, 'f', -1, 64)
-	case int:
-		return strconv.Itoa(typed)
-	case string:
-		return typed
-	default:
-		serialized, err := json.Marshal(typed)
-		if err != nil {
-			return fmt.Sprintf("%v", typed)
-		}
-
-		return string(serialized)
-	}
-}
-
-func readPath(value interface{}, pathParts []interface{}, label string) (interface{}, error) {
-	current := value
-	for _, part := range pathParts {
-		if object, ok := current.(map[string]interface{}); ok {
-			key, ok := part.(string)
-			if !ok {
-				return nil, fmt.Errorf("%s path cannot read non-string key %v from object", label, part)
-			}
-			next, ok := object[key]
-			if !ok {
-				return nil, fmt.Errorf("%s path is missing key %q", label, key)
-			}
-			current = next
-			continue
-		}
-
-		if array, ok := current.([]interface{}); ok {
-			index, err := intValue(part, label)
-			if err != nil {
-				return nil, err
-			}
-			if index < 0 || index >= len(array) {
-				return nil, fmt.Errorf("%s path index %d is out of range", label, index)
-			}
-			current = array[index]
-			continue
-		}
-
-		return nil, fmt.Errorf("%s path cannot read %v from %v", label, part, current)
-	}
-
-	return current, nil
-}
-
-func resolveValue(
-	valueSpec interface{},
-	context map[string]interface{},
-	label string,
-) (interface{}, error) {
-	spec, err := objectValue(valueSpec, label)
-	if err != nil {
-		return nil, err
-	}
-	if literal, ok := spec["value"]; ok {
-		return literal, nil
-	}
-
-	source, err := objectValue(spec["source"], label+".source")
-	if err != nil {
-		return nil, err
-	}
-	root, err := stringValue(source["root"], label+".source.root")
-	if err != nil {
-		return nil, err
-	}
-	rootValue, ok := context[root]
-	if !ok {
-		return nil, fmt.Errorf("%s source root %q is unavailable", label, root)
-	}
-	pathParts, err := arrayValue(source["path"], label+".source.path")
-	if err != nil {
-		return nil, err
-	}
-
-	return readPath(rootValue, pathParts, label)
-}
-
 func featurePreparation(
 	scenario map[string]interface{},
 	featureID string,
@@ -236,62 +144,17 @@ func asJsonObject(value interface{}, label string) (map[string]interface{}, erro
 	return result, nil
 }
 
-func createAssembly(
-	ctx context.Context,
-	client transloadit.Client,
-	scenario map[string]interface{},
-) (*transloadit.AssemblyInfo, map[string]interface{}, error) {
+func scenarioFileCount(scenario map[string]interface{}) (int, error) {
 	createConfig, createConfigLabel, err := featurePreparation(scenario, "createTusAssembly")
 	if err != nil {
-		return nil, nil, err
+		return 0, err
 	}
 	input, err := objectValue(createConfig["input"], createConfigLabel+".input")
 	if err != nil {
-		return nil, nil, err
-	}
-	fileCount, err := intValue(input["file_count"], createConfigLabel+".input.file_count")
-	if err != nil {
-		return nil, nil, err
+		return 0, err
 	}
 
-	info, err := client.CreateTusAssembly(ctx, fileCount)
-	if err != nil {
-		return nil, nil, err
-	}
-	createResponse, err := asJsonObject(info, "create response")
-	if err != nil {
-		return nil, nil, err
-	}
-
-	requiredPaths, err := arrayValue(
-		createConfig["requiredResponsePaths"],
-		createConfigLabel+".requiredResponsePaths",
-	)
-	if err != nil {
-		return nil, nil, err
-	}
-	for index, rawPath := range requiredPaths {
-		pathParts, err := arrayValue(
-			rawPath,
-			fmt.Sprintf("%s.requiredResponsePaths[%d]", createConfigLabel, index),
-		)
-		if err != nil {
-			return nil, nil, err
-		}
-		value, err := readPath(
-			createResponse,
-			pathParts,
-			fmt.Sprintf("%s.requiredResponsePaths[%d]", createConfigLabel, index),
-		)
-		if err != nil {
-			return nil, nil, err
-		}
-		if scalarString(value) == "" {
-			return nil, nil, fmt.Errorf("create response path %v is empty", pathParts)
-		}
-	}
-
-	return info, createResponse, nil
+	return intValue(input["file_count"], createConfigLabel+".input.file_count")
 }
 
 func scenarioBytes(scenario map[string]interface{}) ([]byte, error) {
@@ -325,158 +188,45 @@ func scenarioBytes(scenario map[string]interface{}) ([]byte, error) {
 	return []byte(value), nil
 }
 
-func uploadMetadata(
-	scenario map[string]interface{},
-	createResponse map[string]interface{},
-) (map[string]string, error) {
-	upload, err := objectValue(scenario["upload"], "upload")
-	if err != nil {
-		return nil, err
-	}
-	fields, err := arrayValue(upload["metadata"], "upload.metadata")
-	if err != nil {
-		return nil, err
-	}
-
-	context := map[string]interface{}{
-		"createResponse": createResponse,
-		"scenario":       scenario,
-	}
-	metadata := map[string]string{}
-	for index, rawField := range fields {
-		label := fmt.Sprintf("upload.metadata[%d]", index)
-		field, err := objectValue(rawField, label)
-		if err != nil {
-			return nil, err
-		}
-		name, err := stringValue(field["name"], label+".name")
-		if err != nil {
-			return nil, err
-		}
-		value, err := resolveValue(field["value"], context, label+".value")
-		if err != nil {
-			return nil, err
-		}
-		metadata[name] = scalarString(value)
-	}
-
-	return metadata, nil
-}
-
-func tusMetadataHeader(metadata map[string]string) string {
-	parts := make([]string, 0, len(metadata))
-	for name, value := range metadata {
-		encoded := base64.StdEncoding.EncodeToString([]byte(value))
-		parts = append(parts, fmt.Sprintf("%s %s", name, encoded))
-	}
-
-	return strings.Join(parts, ",")
-}
-
-func checkedResponse(response *http.Response, expectedStatus int, label string) error {
-	defer response.Body.Close()
-	if response.StatusCode == expectedStatus {
-		return nil
-	}
-
-	body, _ := ioutil.ReadAll(response.Body)
-	return fmt.Errorf("%s returned HTTP %d: %s", label, response.StatusCode, string(body))
-}
-
-func uploadWithTus(
-	ctx context.Context,
-	scenario map[string]interface{},
-	createResponse map[string]interface{},
-) (string, error) {
+func uploadInfo(scenario map[string]interface{}) (string, string, map[string]string, error) {
 	uploadConfig, err := objectValue(scenario["upload"], "upload")
 	if err != nil {
-		return "", err
-	}
-	context := map[string]interface{}{
-		"createResponse": createResponse,
-		"scenario":       scenario,
-	}
-	endpointValue, err := resolveValue(uploadConfig["tusUrl"], context, "upload.tusUrl")
-	if err != nil {
-		return "", err
-	}
-	endpointURL, err := url.Parse(scalarString(endpointValue))
-	if err != nil {
-		return "", err
-	}
-	content, err := scenarioBytes(scenario)
-	if err != nil {
-		return "", err
+		return "", "", nil, err
 	}
 	chunkSize, err := stringValue(uploadConfig["chunkSize"], "upload.chunkSize")
 	if err != nil {
-		return "", err
+		return "", "", nil, err
 	}
 	if chunkSize != "full-file" {
-		return "", fmt.Errorf("unsupported chunk size policy %q", chunkSize)
+		return "", "", nil, fmt.Errorf("unsupported chunk size policy %q", chunkSize)
 	}
-	metadata, err := uploadMetadata(scenario, createResponse)
+	fieldName, err := stringValue(uploadConfig["fieldName"], "upload.fieldName")
 	if err != nil {
-		return "", err
+		return "", "", nil, err
+	}
+	fileName, err := stringValue(uploadConfig["fileName"], "upload.fileName")
+	if err != nil {
+		return "", "", nil, err
 	}
 
-	createRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, endpointURL.String(), nil)
-	if err != nil {
-		return "", err
-	}
-	createRequest.Header.Set("Tus-Resumable", "1.0.0")
-	createRequest.Header.Set("Upload-Length", strconv.Itoa(len(content)))
-	createRequest.Header.Set("Upload-Metadata", tusMetadataHeader(metadata))
-
-	createResponseHttp, err := http.DefaultClient.Do(createRequest)
-	if err != nil {
-		return "", err
-	}
-	if err := checkedResponse(createResponseHttp, http.StatusCreated, "TUS create"); err != nil {
-		return "", err
-	}
-	location := createResponseHttp.Header.Get("Location")
-	if location == "" {
-		return "", fmt.Errorf("TUS create did not return a Location header")
-	}
-	uploadURL, err := endpointURL.Parse(location)
-	if err != nil {
-		return "", err
+	userMeta := map[string]string{}
+	if rawUserMeta, ok := uploadConfig["userMeta"]; ok {
+		userMetaObject, err := objectValue(rawUserMeta, "upload.userMeta")
+		if err != nil {
+			return "", "", nil, err
+		}
+		for name, value := range userMetaObject {
+			userMeta[name], err = stringValue(value, "upload.userMeta."+name)
+			if err != nil {
+				return "", "", nil, err
+			}
+		}
 	}
 
-	patchRequest, err := http.NewRequestWithContext(
-		ctx,
-		http.MethodPatch,
-		uploadURL.String(),
-		bytes.NewReader(content),
-	)
-	if err != nil {
-		return "", err
-	}
-	patchRequest.Header.Set("Tus-Resumable", "1.0.0")
-	patchRequest.Header.Set("Upload-Offset", "0")
-	patchRequest.Header.Set("Content-Type", "application/offset+octet-stream")
-
-	patchResponse, err := http.DefaultClient.Do(patchRequest)
-	if err != nil {
-		return "", err
-	}
-	if err := checkedResponse(patchResponse, http.StatusNoContent, "TUS upload"); err != nil {
-		return "", err
-	}
-	remoteOffset, err := intValue(patchResponse.Header.Get("Upload-Offset"), "Upload-Offset")
-	if err != nil {
-		return "", err
-	}
-	if remoteOffset != len(content) {
-		return "", fmt.Errorf("TUS upload offset %d, expected %d", remoteOffset, len(content))
-	}
-
-	return uploadURL.String(), nil
+	return fieldName, fileName, userMeta, nil
 }
 
 func writeResult(
-	createResponse map[string]interface{},
 	status map[string]interface{},
 	uploadURL string,
 ) error {
@@ -487,7 +237,7 @@ func writeResult(
 
 	contents, err := json.MarshalIndent(
 		map[string]interface{}{
-			"createResponse": createResponse,
+			"createResponse": status,
 			"status":         status,
 			"uploadUrl":      uploadURL,
 		},
@@ -516,23 +266,35 @@ func main() {
 		Endpoint:   requiredEnv("TRANSLOADIT_ENDPOINT"),
 	})
 
-	info, createResponse, err := createAssembly(ctx, client, scenario)
+	fileCount, err := scenarioFileCount(scenario)
 	if err != nil {
-		fail("create TUS assembly: %v", err)
+		fail("read file count: %v", err)
 	}
-	uploadURL, err := uploadWithTus(ctx, scenario, createResponse)
+	content, err := scenarioBytes(scenario)
 	if err != nil {
-		fail("upload: %v", err)
+		fail("read upload bytes: %v", err)
 	}
-	statusInfo, err := client.WaitForAssembly(ctx, info)
+	fieldName, fileName, userMeta, err := uploadInfo(scenario)
 	if err != nil {
-		fail("wait for assembly: %v", err)
+		fail("read upload info: %v", err)
+	}
+
+	statusInfo, uploadURL, err := client.UploadTusAssembly(
+		ctx,
+		fileCount,
+		content,
+		fieldName,
+		fileName,
+		userMeta,
+	)
+	if err != nil {
+		fail("upload TUS assembly: %v", err)
 	}
 	status, err := asJsonObject(statusInfo, "assembly status")
 	if err != nil {
 		fail("serialize assembly status: %v", err)
 	}
-	if err := writeResult(createResponse, status, uploadURL); err != nil {
+	if err := writeResult(status, uploadURL); err != nil {
 		fail("write result: %v", err)
 	}
 
