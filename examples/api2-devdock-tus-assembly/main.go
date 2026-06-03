@@ -94,40 +94,40 @@ func intValue(value interface{}, label string) (int, error) {
 	}
 }
 
-func featurePreparation(
+func sdkFeatureCall(
 	scenario map[string]interface{},
 	featureID string,
 ) (map[string]interface{}, string, error) {
-	preparations, err := arrayValue(scenario["preparations"], "preparations")
+	featureCalls, err := arrayValue(scenario["sdkFeatureCalls"], "sdkFeatureCalls")
 	if err != nil {
 		return nil, "", err
 	}
 
-	for index, rawPreparation := range preparations {
-		label := fmt.Sprintf("preparations[%d]", index)
-		preparation, err := objectValue(rawPreparation, label)
+	for index, rawFeatureCall := range featureCalls {
+		label := fmt.Sprintf("sdkFeatureCalls[%d]", index)
+		featureCall, err := objectValue(rawFeatureCall, label)
 		if err != nil {
 			return nil, "", err
 		}
-		currentFeatureID, err := stringValue(preparation["featureId"], label+".featureId")
+		currentFeatureID, err := stringValue(featureCall["featureId"], label+".featureId")
 		if err != nil {
 			return nil, "", err
 		}
 		if currentFeatureID != featureID {
 			continue
 		}
-		kind, err := stringValue(preparation["kind"], label+".kind")
+		kind, err := stringValue(featureCall["kind"], label+".kind")
 		if err != nil {
 			return nil, "", err
 		}
-		if kind != "feature-call" {
-			return nil, "", fmt.Errorf("%s must be a feature-call preparation", label)
+		if kind != "sdk-feature-call" {
+			return nil, "", fmt.Errorf("%s must be an sdk-feature-call", label)
 		}
 
-		return preparation, label, nil
+		return featureCall, label, nil
 	}
 
-	return nil, "", fmt.Errorf("scenario has no preparation for feature %q", featureID)
+	return nil, "", fmt.Errorf("scenario has no SDK feature call for feature %q", featureID)
 }
 
 func asJsonObject(value interface{}, label string) (map[string]interface{}, error) {
@@ -144,79 +144,72 @@ func asJsonObject(value interface{}, label string) (map[string]interface{}, erro
 	return result, nil
 }
 
-func scenarioFileCount(scenario map[string]interface{}) (int, error) {
-	createConfig, createConfigLabel, err := featurePreparation(scenario, "createTusAssembly")
+func uploadTusAssemblyInput(scenario map[string]interface{}) (map[string]interface{}, error) {
+	featureCall, featureCallLabel, err := sdkFeatureCall(scenario, "uploadTusAssembly")
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	input, err := objectValue(createConfig["input"], createConfigLabel+".input")
+	input, err := objectValue(featureCall["input"], featureCallLabel+".input")
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return intValue(input["file_count"], createConfigLabel+".input.file_count")
+	return input, nil
 }
 
-func scenarioBytes(scenario map[string]interface{}) ([]byte, error) {
-	upload, err := objectValue(scenario["upload"], "upload")
-	if err != nil {
-		return nil, err
-	}
-	source, err := objectValue(upload["source"], "upload.source")
-	if err != nil {
-		return nil, err
-	}
-	kind, err := stringValue(source["kind"], "upload.source.kind")
-	if err != nil {
-		return nil, err
-	}
-	if kind != "bytes" {
-		return nil, fmt.Errorf("unsupported scenario source kind %q", kind)
-	}
-	encoding, err := stringValue(source["encoding"], "upload.source.encoding")
-	if err != nil {
-		return nil, err
-	}
-	if encoding != "utf8" {
-		return nil, fmt.Errorf("unsupported scenario source encoding %q", encoding)
-	}
-	value, err := stringValue(source["value"], "upload.source.value")
-	if err != nil {
-		return nil, err
-	}
-
-	return []byte(value), nil
+func scenarioFileCount(input map[string]interface{}) (int, error) {
+	return intValue(input["file_count"], "sdkFeatureCalls.uploadTusAssembly.input.file_count")
 }
 
-func uploadInfo(scenario map[string]interface{}) (string, string, map[string]string, error) {
-	uploadConfig, err := objectValue(scenario["upload"], "upload")
+func scenarioBytes(uploadConfig map[string]interface{}) ([]byte, error) {
+	content, err := stringValue(
+		uploadConfig["content"],
+		"sdkFeatureCalls.uploadTusAssembly.input.upload.content",
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte(content), nil
+}
+
+func uploadInfo(input map[string]interface{}) (string, string, map[string]string, error) {
+	uploadConfig, err := objectValue(
+		input["upload"],
+		"sdkFeatureCalls.uploadTusAssembly.input.upload",
+	)
 	if err != nil {
 		return "", "", nil, err
 	}
-	chunkSize, err := stringValue(uploadConfig["chunkSize"], "upload.chunkSize")
+	fieldName, err := stringValue(
+		uploadConfig["fieldname"],
+		"sdkFeatureCalls.uploadTusAssembly.input.upload.fieldname",
+	)
 	if err != nil {
 		return "", "", nil, err
 	}
-	if chunkSize != "full-file" {
-		return "", "", nil, fmt.Errorf("unsupported chunk size policy %q", chunkSize)
-	}
-	fieldName, err := stringValue(uploadConfig["fieldName"], "upload.fieldName")
-	if err != nil {
-		return "", "", nil, err
-	}
-	fileName, err := stringValue(uploadConfig["fileName"], "upload.fileName")
+	fileName, err := stringValue(
+		uploadConfig["filename"],
+		"sdkFeatureCalls.uploadTusAssembly.input.upload.filename",
+	)
 	if err != nil {
 		return "", "", nil, err
 	}
 
 	userMeta := map[string]string{}
-	if rawUserMeta, ok := uploadConfig["userMeta"]; ok {
-		userMetaObject, err := objectValue(rawUserMeta, "upload.userMeta")
+	if rawUserMeta, ok := uploadConfig["user_meta"]; ok {
+		userMetaObject, err := objectValue(
+			rawUserMeta,
+			"sdkFeatureCalls.uploadTusAssembly.input.upload.user_meta",
+		)
 		if err != nil {
 			return "", "", nil, err
 		}
 		for name, value := range userMetaObject {
-			userMeta[name], err = stringValue(value, "upload.userMeta."+name)
+			userMeta[name], err = stringValue(
+				value,
+				"sdkFeatureCalls.uploadTusAssembly.input.upload.user_meta."+name,
+			)
 			if err != nil {
 				return "", "", nil, err
 			}
@@ -259,6 +252,10 @@ func main() {
 	if err != nil {
 		fail("load scenario: %v", err)
 	}
+	input, err := uploadTusAssemblyInput(scenario)
+	if err != nil {
+		fail("read SDK feature call input: %v", err)
+	}
 
 	client := transloadit.NewClient(transloadit.Config{
 		AuthKey:    requiredEnv("TRANSLOADIT_KEY"),
@@ -266,17 +263,24 @@ func main() {
 		Endpoint:   requiredEnv("TRANSLOADIT_ENDPOINT"),
 	})
 
-	fileCount, err := scenarioFileCount(scenario)
+	fileCount, err := scenarioFileCount(input)
 	if err != nil {
 		fail("read file count: %v", err)
 	}
-	content, err := scenarioBytes(scenario)
-	if err != nil {
-		fail("read upload bytes: %v", err)
-	}
-	fieldName, fileName, userMeta, err := uploadInfo(scenario)
+	fieldName, fileName, userMeta, err := uploadInfo(input)
 	if err != nil {
 		fail("read upload info: %v", err)
+	}
+	uploadConfig, err := objectValue(
+		input["upload"],
+		"sdkFeatureCalls.uploadTusAssembly.input.upload",
+	)
+	if err != nil {
+		fail("read upload config: %v", err)
+	}
+	content, err := scenarioBytes(uploadConfig)
+	if err != nil {
+		fail("read upload bytes: %v", err)
 	}
 
 	statusInfo, uploadURL, err := client.UploadTusAssembly(
