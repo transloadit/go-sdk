@@ -7,11 +7,31 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	transloadit "github.com/transloadit/go-sdk"
 )
+
+type tusAssemblyScenario struct {
+	ExampleInput struct {
+		ScenarioID       string `json:"scenarioId"`
+		SdkFeatureInputs struct {
+			UploadTusAssembly uploadTusAssemblyInput `json:"uploadTusAssembly"`
+		} `json:"sdkFeatureInputs"`
+	} `json:"exampleInput"`
+}
+
+type uploadTusAssemblyInput struct {
+	FileCount int          `json:"file_count"`
+	Upload    uploadConfig `json:"upload"`
+}
+
+type uploadConfig struct {
+	Content  string            `json:"content"`
+	Field    string            `json:"fieldname"`
+	Filename string            `json:"filename"`
+	UserMeta map[string]string `json:"user_meta"`
+}
 
 func requiredEnv(name string) string {
 	value := os.Getenv(name)
@@ -26,7 +46,7 @@ func fail(format string, args ...interface{}) {
 	panic(fmt.Sprintf(format, args...))
 }
 
-func loadScenario() (map[string]interface{}, error) {
+func loadScenario() (tusAssemblyScenario, error) {
 	scenarioPath := os.Getenv("API2_SDK_EXAMPLE_SCENARIO")
 	if scenarioPath == "" {
 		scenarioPath = filepath.Join("examples", "api2-devdock-tus-assembly", "api2-scenario.json")
@@ -34,100 +54,15 @@ func loadScenario() (map[string]interface{}, error) {
 
 	contents, err := ioutil.ReadFile(scenarioPath)
 	if err != nil {
-		return nil, err
+		return tusAssemblyScenario{}, err
 	}
 
-	var scenario map[string]interface{}
+	var scenario tusAssemblyScenario
 	if err := json.Unmarshal(contents, &scenario); err != nil {
-		return nil, err
+		return tusAssemblyScenario{}, err
 	}
 
 	return scenario, nil
-}
-
-func objectValue(value interface{}, label string) (map[string]interface{}, error) {
-	object, ok := value.(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("%s must be an object", label)
-	}
-
-	return object, nil
-}
-
-func arrayValue(value interface{}, label string) ([]interface{}, error) {
-	array, ok := value.([]interface{})
-	if !ok {
-		return nil, fmt.Errorf("%s must be an array", label)
-	}
-
-	return array, nil
-}
-
-func stringValue(value interface{}, label string) (string, error) {
-	text, ok := value.(string)
-	if !ok {
-		return "", fmt.Errorf("%s must be a string", label)
-	}
-
-	return text, nil
-}
-
-func intValue(value interface{}, label string) (int, error) {
-	switch number := value.(type) {
-	case float64:
-		if float64(int(number)) != number {
-			return 0, fmt.Errorf("%s must be an integer", label)
-		}
-
-		return int(number), nil
-	case int:
-		return number, nil
-	case string:
-		parsed, err := strconv.Atoi(number)
-		if err != nil {
-			return 0, fmt.Errorf("%s must be an integer", label)
-		}
-
-		return parsed, nil
-	default:
-		return 0, fmt.Errorf("%s must be an integer", label)
-	}
-}
-
-func sdkFeatureCall(
-	scenario map[string]interface{},
-	featureID string,
-) (map[string]interface{}, string, error) {
-	featureCalls, err := arrayValue(scenario["sdkFeatureCalls"], "sdkFeatureCalls")
-	if err != nil {
-		return nil, "", err
-	}
-
-	for index, rawFeatureCall := range featureCalls {
-		label := fmt.Sprintf("sdkFeatureCalls[%d]", index)
-		featureCall, err := objectValue(rawFeatureCall, label)
-		if err != nil {
-			return nil, "", err
-		}
-		currentFeatureID, err := stringValue(featureCall["featureId"], label+".featureId")
-		if err != nil {
-			return nil, "", err
-		}
-		if currentFeatureID != featureID {
-			continue
-		}
-		kind, err := stringValue(featureCall["kind"], label+".kind")
-		if err != nil {
-			return nil, "", err
-		}
-		if kind != "sdk-feature-call" {
-			return nil, "", fmt.Errorf("%s must be an sdk-feature-call", label)
-		}
-
-		return featureCall, label, nil
-	}
-
-	return nil, "", fmt.Errorf("scenario has no SDK feature call for feature %q", featureID)
 }
 
 func asJsonObject(value interface{}, label string) (map[string]interface{}, error) {
@@ -142,81 +77,6 @@ func asJsonObject(value interface{}, label string) (map[string]interface{}, erro
 	}
 
 	return result, nil
-}
-
-func uploadTusAssemblyInput(scenario map[string]interface{}) (map[string]interface{}, error) {
-	featureCall, featureCallLabel, err := sdkFeatureCall(scenario, "uploadTusAssembly")
-	if err != nil {
-		return nil, err
-	}
-	input, err := objectValue(featureCall["input"], featureCallLabel+".input")
-	if err != nil {
-		return nil, err
-	}
-
-	return input, nil
-}
-
-func scenarioFileCount(input map[string]interface{}) (int, error) {
-	return intValue(input["file_count"], "sdkFeatureCalls.uploadTusAssembly.input.file_count")
-}
-
-func scenarioBytes(uploadConfig map[string]interface{}) ([]byte, error) {
-	content, err := stringValue(
-		uploadConfig["content"],
-		"sdkFeatureCalls.uploadTusAssembly.input.upload.content",
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return []byte(content), nil
-}
-
-func uploadInfo(input map[string]interface{}) (string, string, map[string]string, error) {
-	uploadConfig, err := objectValue(
-		input["upload"],
-		"sdkFeatureCalls.uploadTusAssembly.input.upload",
-	)
-	if err != nil {
-		return "", "", nil, err
-	}
-	fieldName, err := stringValue(
-		uploadConfig["fieldname"],
-		"sdkFeatureCalls.uploadTusAssembly.input.upload.fieldname",
-	)
-	if err != nil {
-		return "", "", nil, err
-	}
-	fileName, err := stringValue(
-		uploadConfig["filename"],
-		"sdkFeatureCalls.uploadTusAssembly.input.upload.filename",
-	)
-	if err != nil {
-		return "", "", nil, err
-	}
-
-	userMeta := map[string]string{}
-	if rawUserMeta, ok := uploadConfig["user_meta"]; ok {
-		userMetaObject, err := objectValue(
-			rawUserMeta,
-			"sdkFeatureCalls.uploadTusAssembly.input.upload.user_meta",
-		)
-		if err != nil {
-			return "", "", nil, err
-		}
-		for name, value := range userMetaObject {
-			userMeta[name], err = stringValue(
-				value,
-				"sdkFeatureCalls.uploadTusAssembly.input.upload.user_meta."+name,
-			)
-			if err != nil {
-				return "", "", nil, err
-			}
-		}
-	}
-
-	return fieldName, fileName, userMeta, nil
 }
 
 func writeResult(
@@ -252,10 +112,7 @@ func main() {
 	if err != nil {
 		fail("load scenario: %v", err)
 	}
-	input, err := uploadTusAssemblyInput(scenario)
-	if err != nil {
-		fail("read SDK feature call input: %v", err)
-	}
+	input := scenario.ExampleInput.SdkFeatureInputs.UploadTusAssembly
 
 	client := transloadit.NewClient(transloadit.Config{
 		AuthKey:    requiredEnv("TRANSLOADIT_KEY"),
@@ -263,32 +120,17 @@ func main() {
 		Endpoint:   requiredEnv("TRANSLOADIT_ENDPOINT"),
 	})
 
-	fileCount, err := scenarioFileCount(input)
-	if err != nil {
-		fail("read file count: %v", err)
-	}
-	fieldName, fileName, userMeta, err := uploadInfo(input)
-	if err != nil {
-		fail("read upload info: %v", err)
-	}
-	uploadConfig, err := objectValue(
-		input["upload"],
-		"sdkFeatureCalls.uploadTusAssembly.input.upload",
-	)
-	if err != nil {
-		fail("read upload config: %v", err)
-	}
-	content, err := scenarioBytes(uploadConfig)
-	if err != nil {
-		fail("read upload bytes: %v", err)
+	userMeta := input.Upload.UserMeta
+	if userMeta == nil {
+		userMeta = map[string]string{}
 	}
 
 	statusInfo, uploadURL, err := client.UploadTusAssembly(
 		ctx,
-		fileCount,
-		content,
-		fieldName,
-		fileName,
+		input.FileCount,
+		[]byte(input.Upload.Content),
+		input.Upload.Field,
+		input.Upload.Filename,
 		userMeta,
 	)
 	if err != nil {
@@ -302,9 +144,9 @@ func main() {
 		fail("write result: %v", err)
 	}
 
-	scenarioID, err := stringValue(scenario["scenarioId"], "scenarioId")
-	if err != nil {
-		fail("read scenario id: %v", err)
-	}
-	fmt.Printf("Go Transloadit SDK devdock scenario %s uploaded to %s\n", scenarioID, uploadURL)
+	fmt.Printf(
+		"Go Transloadit SDK devdock scenario %s uploaded to %s\n",
+		scenario.ExampleInput.ScenarioID,
+		uploadURL,
+	)
 }
