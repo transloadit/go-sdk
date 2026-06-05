@@ -11,9 +11,8 @@ import (
 // please report the issue instead of editing this block by hand; the source fix
 // belongs in the contract generator so all SDKs stay in sync.
 
-// WaitForAssembly fetches continuously the assembly status until it has
-// finished uploading and executing or until an assembly error occurs.
-// If you want to end this loop prematurely, you can cancel the supplied context.
+// WaitForAssembly waits for an Assembly to finish uploading and executing.
+// Use the returned assembly_ssl_url as the assembly URL.
 func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInfo) (*AssemblyInfo, error) {
 	for {
 		res, err := client.GetAssembly(ctx, assembly.AssemblySSLURL)

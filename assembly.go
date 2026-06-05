@@ -351,6 +351,10 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 		return nil, "", fmt.Errorf("TUS upload offset %d, expected %d", uploadOffset, len(content))
 	}
 
+	createdAssemblyAssemblySSLURL := createdAssembly.AssemblySSLURL
+	if createdAssemblyAssemblySSLURL == "" {
+		return nil, "", fmt.Errorf("uploadTusAssembly needs createdAssembly.assembly_ssl_url")
+	}
 	completedAssembly, err := client.WaitForAssembly(ctx, createdAssembly)
 	if err != nil {
 		return nil, "", err
