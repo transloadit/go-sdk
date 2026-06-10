@@ -293,7 +293,7 @@ func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, cont
 	for name, value := range userMeta {
 		metadataMap[name] = value
 	}
-	metadataMap["assembly_url"] = createdAssembly.AssemblyURL
+	metadataMap["assembly_url"] = createdAssembly.AssemblySSLURL
 	metadataMap["fieldname"] = fieldname
 	metadataMap["filename"] = filename
 
