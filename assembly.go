@@ -271,6 +271,76 @@ func (client *Client) CreateTusAssembly(ctx context.Context, fileCount int) (*As
 
 // </api2-generated-feature createTusAssembly>
 
+// <api2-generated-feature resumeTusUpload>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// ResumeTusUpload resumes an interrupted TUS upload from the server-reported offset and waits for the Assembly to finish.
+func (client *Client) ResumeTusUpload(ctx context.Context, uploadUrl string, content []byte, assembly *AssemblyInfo) (*AssemblyInfo, error) {
+	storedUploadURL, err := url.Parse(uploadUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	offsetRequest, err := http.NewRequestWithContext(ctx, "HEAD", storedUploadURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	offsetRequest.Header.Set("Tus-Resumable", "1.0.0")
+
+	offsetResponse, err := client.httpClient.Do(offsetRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer offsetResponse.Body.Close()
+	if offsetResponse.StatusCode != 200 {
+		return nil, fmt.Errorf("TUS offset returned HTTP %d, expected 200", offsetResponse.StatusCode)
+	}
+	resumeOffsetHeader := offsetResponse.Header.Get("Upload-Offset")
+	if resumeOffsetHeader == "" {
+		return nil, fmt.Errorf("TUS offset did not return a Upload-Offset header")
+	}
+	resumeOffset, err := strconv.Atoi(resumeOffsetHeader)
+	if err != nil {
+		return nil, fmt.Errorf("TUS offset returned an invalid Upload-Offset header")
+	}
+
+	uploadRequest, err := http.NewRequestWithContext(ctx, "PATCH", storedUploadURL.String(), bytes.NewReader(content[resumeOffset:]))
+	if err != nil {
+		return nil, err
+	}
+	uploadRequest.Header.Set("Tus-Resumable", "1.0.0")
+	uploadRequest.Header.Set("Upload-Offset", strconv.Itoa(resumeOffset))
+	uploadRequest.Header.Set("Content-Type", "application/offset+octet-stream")
+
+	uploadResponse, err := client.httpClient.Do(uploadRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer uploadResponse.Body.Close()
+	if uploadResponse.StatusCode != 204 {
+		return nil, fmt.Errorf("TUS upload returned HTTP %d, expected 204", uploadResponse.StatusCode)
+	}
+	uploadOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
+	if err != nil {
+		return nil, err
+	}
+	if uploadOffset != len(content) {
+		return nil, fmt.Errorf("TUS upload offset %d, expected %d", uploadOffset, len(content))
+	}
+
+	completedAssembly, err := client.WaitForAssembly(ctx, assembly)
+	if err != nil {
+		return nil, err
+	}
+
+	return completedAssembly, nil
+}
+
+// </api2-generated-feature resumeTusUpload>
+
 // <api2-generated-feature uploadTusAssembly>
 
 // This block is generated from Transloadit API2 contracts. If it looks wrong,
