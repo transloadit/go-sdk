@@ -109,19 +109,28 @@ func main() {
 		fail("get assembly: %v", err)
 	}
 
-	assemblies, err := client.ListAssemblies(ctx, &transloadit.ListOptions{
-		AssemblyID: created.AssemblyID,
-		PageSize:   scenario.List.PageSize,
-	})
-	if err != nil {
-		fail("list assemblies: %v", err)
-	}
-
+	// The Assembly list is eventually consistent: the API acknowledges creation before the
+	// list storage row lands, so poll briefly until the created Assembly shows up.
+	var assemblies transloadit.AssemblyList
 	listContainsCreated := false
-	for _, assembly := range assemblies.Assemblies {
-		if assembly.AssemblyID == created.AssemblyID {
-			listContainsCreated = true
+	for attempt := 0; attempt < 20; attempt++ {
+		assemblies, err = client.ListAssemblies(ctx, &transloadit.ListOptions{
+			AssemblyID: created.AssemblyID,
+			PageSize:   scenario.List.PageSize,
+		})
+		if err != nil {
+			fail("list assemblies: %v", err)
 		}
+
+		for _, assembly := range assemblies.Assemblies {
+			if assembly.AssemblyID == created.AssemblyID {
+				listContainsCreated = true
+			}
+		}
+		if listContainsCreated {
+			break
+		}
+		time.Sleep(500 * time.Millisecond)
 	}
 
 	cancelled, err := client.CancelAssembly(ctx, created.AssemblySSLURL)
