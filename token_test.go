@@ -10,6 +10,12 @@ import (
 	"testing"
 )
 
+type roundTripFunc func(*http.Request) (*http.Response, error)
+
+func (fn roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return fn(request)
+}
+
 func TestIssueBearerToken(t *testing.T) {
 	t.Parallel()
 
@@ -78,5 +84,28 @@ func TestIssueBearerTokenDoesNotFollowRedirects(t *testing.T) {
 	}
 	if redirected {
 		t.Fatal("IssueBearerToken followed a redirect with Basic credentials")
+	}
+}
+
+func TestIssueBearerTokenRejects127PrefixedDomain(t *testing.T) {
+	t.Parallel()
+
+	requested := false
+	client := NewClient(Config{
+		AuthKey:    "key",
+		AuthSecret: "secret",
+		Endpoint:   "http://127.attacker.com",
+	})
+	client.httpClient.Transport = roundTripFunc(func(*http.Request) (*http.Response, error) {
+		requested = true
+		return nil, nil
+	})
+
+	_, err := client.IssueBearerToken(context.Background(), BearerTokenOptions{})
+	if err == nil {
+		t.Fatal("IssueBearerToken should reject a 127-prefixed domain")
+	}
+	if requested {
+		t.Fatal("IssueBearerToken sent credentials to a 127-prefixed domain")
 	}
 }

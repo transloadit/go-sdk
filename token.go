@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -41,7 +42,9 @@ func (client *Client) IssueBearerToken(ctx context.Context, options BearerTokenO
 	if err != nil {
 		return BearerTokenResponse{}, fmt.Errorf("parse bearer token endpoint: %w", err)
 	}
-	loopback := endpointURL.Hostname() == "localhost" || endpointURL.Hostname() == "::1" || strings.HasPrefix(endpointURL.Hostname(), "127.")
+	hostname := endpointURL.Hostname()
+	ip := net.ParseIP(hostname)
+	loopback := hostname == "localhost" || (ip != nil && ip.IsLoopback())
 	if endpointURL.User != nil || (endpointURL.Scheme != "https" && !(endpointURL.Scheme == "http" && loopback)) {
 		return BearerTokenResponse{}, fmt.Errorf("refusing to send credentials to bearer token endpoint %q", endpointURL.Redacted())
 	}
