@@ -332,3 +332,31 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	return signedURL
 }
+
+// <api2-generated-endpoint getBill>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) GetBill(ctx context.Context, month string) (map[string]interface{}, error) {
+	var bill map[string]interface{}
+	err := client.request(ctx, "GET", "bill/"+month, nil, &bill)
+	return bill, err
+}
+
+// </api2-generated-endpoint getBill>
+
+// <api2-generated-endpoint getBillForInvoice>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) GetBillForInvoice(ctx context.Context, month string, invoiceID string) (map[string]interface{}, error) {
+	var bill map[string]interface{}
+	err := client.request(ctx, "GET", "bill/"+month+"/"+invoiceID, nil, &bill)
+	return bill, err
+}
+
+// </api2-generated-endpoint getBillForInvoice>
