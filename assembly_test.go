@@ -2,6 +2,8 @@ package transloadit
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
@@ -89,6 +91,59 @@ func TestGetAssembly(t *testing.T) {
 
 	if assembly.AssemblyURL != assemblyURL {
 		t.Fatal("assembly urls don't match")
+	}
+}
+
+func TestGetAssemblyRejectsUntrustedURLWithoutSendingCredentials(t *testing.T) {
+	requestReceived := make(chan struct{}, 1)
+	untrustedServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requestReceived <- struct{}{}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"assembly_id":"assembly-id"}`))
+	}))
+	defer untrustedServer.Close()
+
+	configuredServer := httptest.NewServer(http.NotFoundHandler())
+	defer configuredServer.Close()
+
+	config := DefaultConfig
+	config.AuthKey = "key"
+	config.AuthSecret = "secret"
+	config.Endpoint = configuredServer.URL
+	client := NewClient(config)
+
+	_, err := client.GetAssembly(ctx, untrustedServer.URL+"/assemblies/assembly-id")
+	if err == nil {
+		t.Fatal("expected an untrusted Assembly URL error")
+	}
+	select {
+	case <-requestReceived:
+		t.Fatal("sent a request to an untrusted Assembly URL")
+	default:
+	}
+}
+
+func TestGetAssemblyDoesNotAuthenticateNoAuthRequest(t *testing.T) {
+	query := make(chan string, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		query <- request.URL.RawQuery
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"assembly_id":"assembly-id"}`))
+	}))
+	defer server.Close()
+
+	config := DefaultConfig
+	config.AuthKey = "key"
+	config.AuthSecret = "secret"
+	config.Endpoint = server.URL
+	client := NewClient(config)
+
+	_, err := client.GetAssembly(ctx, server.URL+"/assemblies/assembly-id")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rawQuery := <-query; rawQuery != "" {
+		t.Fatalf("expected an unauthenticated request, got query %q", rawQuery)
 	}
 }
 

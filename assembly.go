@@ -519,7 +519,7 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "GET", assemblyURL, nil, &info)
+	err := client.requestAssemblyURL(ctx, "GET", assemblyURL, &info)
 
 	return &info, err
 }
@@ -539,7 +539,7 @@ func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*Ass
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) CancelAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "DELETE", assemblyURL, nil, &info)
+	err := client.requestAssemblyURL(ctx, "DELETE", assemblyURL, &info)
 
 	return &info, err
 }
