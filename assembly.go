@@ -348,8 +348,8 @@ func (client *Client) ResumeTusUpload(ctx context.Context, uploadUrl string, con
 // belongs in the contract generator so all SDKs stay in sync.
 
 // UploadTusAssembly creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
-func (client *Client) UploadTusAssembly(ctx context.Context, fileCount int, content []byte, fieldname string, filename string, userMeta map[string]string) (*AssemblyInfo, string, error) {
-	createdAssembly, err := client.CreateTusAssembly(ctx, fileCount)
+func (client *Client) UploadTusAssembly(ctx context.Context, content []byte, fieldname string, filename string, userMeta map[string]string) (*AssemblyInfo, string, error) {
+	createdAssembly, err := client.CreateTusAssembly(ctx, 1)
 	if err != nil {
 		return nil, "", err
 	}

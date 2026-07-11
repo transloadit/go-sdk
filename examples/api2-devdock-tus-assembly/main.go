@@ -127,7 +127,6 @@ func main() {
 
 	statusInfo, uploadURL, err := client.UploadTusAssembly(
 		ctx,
-		input.FileCount,
 		[]byte(input.Upload.Content),
 		input.Upload.Field,
 		input.Upload.Filename,
