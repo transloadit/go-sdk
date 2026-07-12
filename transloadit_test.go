@@ -52,6 +52,29 @@ func TestNewClient_Success(t *testing.T) {
 	_ = NewClient(config)
 }
 
+func TestFormFieldValue(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		input    interface{}
+		expected string
+	}{
+		"bool":   {input: true, expected: "true"},
+		"int":    {input: 3, expected: "3"},
+		"nil":    {input: nil, expected: ""},
+		"object": {input: map[string]interface{}{"field": "value"}, expected: `{"field":"value"}`},
+		"string": {input: "file", expected: "file"},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			if actual := formFieldValue(tc.input); actual != tc.expected {
+				t.Fatalf("expected %q, got %q", tc.expected, actual)
+			}
+		})
+	}
+}
+
 func setup(t *testing.T) Client {
 	config := DefaultConfig
 	config.AuthKey = os.Getenv("TRANSLOADIT_KEY")

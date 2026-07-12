@@ -155,6 +155,32 @@ func (client *Client) doRequest(req *http.Request, result interface{}) error {
 }
 
 func (client *Client) request(ctx context.Context, method string, path string, content map[string]interface{}, result interface{}) error {
+	return client.requestWithFormFields(ctx, method, path, content, nil, result)
+}
+
+func formFieldValue(value interface{}) string {
+	switch typed := value.(type) {
+	case nil:
+		return ""
+	case bool:
+		return strconv.FormatBool(typed)
+	case float32:
+		return strconv.FormatFloat(float64(typed), 'f', -1, 32)
+	case float64:
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	case string:
+		return typed
+	}
+
+	serialized, err := json.Marshal(value)
+	if err == nil {
+		return string(serialized)
+	}
+
+	return fmt.Sprint(value)
+}
+
+func (client *Client) requestWithFormFields(ctx context.Context, method string, path string, content map[string]interface{}, formFields map[string]interface{}, result interface{}) error {
 	uri := path
 	// Don't add host for absolute urls
 	if u, err := url.Parse(path); err == nil && u.Scheme == "" {
@@ -175,6 +201,9 @@ func (client *Client) request(ctx context.Context, method string, path string, c
 	v := url.Values{}
 	v.Set("params", params)
 	v.Set("signature", signature)
+	for name, value := range formFields {
+		v.Set(name, formFieldValue(value))
+	}
 
 	var body io.Reader
 	if method == "GET" {
@@ -303,3 +332,92 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	return signedURL
 }
+
+// <api2-generated-endpoint getBill>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) GetBill(ctx context.Context, month string) (map[string]interface{}, error) {
+	if err := validatePathSegment(month); err != nil {
+		return nil, err
+	}
+
+	var bill map[string]interface{}
+	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month), nil, &bill)
+	return bill, err
+}
+
+// </api2-generated-endpoint getBill>
+
+// <api2-generated-endpoint getBillForInvoice>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) GetBillForInvoice(ctx context.Context, month string, invoiceID string) (map[string]interface{}, error) {
+	if err := validatePathSegment(month); err != nil {
+		return nil, err
+	}
+	if err := validatePathSegment(invoiceID); err != nil {
+		return nil, err
+	}
+
+	var bill map[string]interface{}
+	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month)+"/"+escapePathSegment(invoiceID), nil, &bill)
+	return bill, err
+}
+
+// </api2-generated-endpoint getBillForInvoice>
+
+// <api2-generated-endpoint assemblyUrlRequestSupport>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) requestAssemblyURL(ctx context.Context, method string, assemblyURL string, result interface{}) error {
+	candidate, err := url.Parse(assemblyURL)
+	if err != nil || !candidate.IsAbs() || candidate.User != nil {
+		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
+	}
+
+	configured, err := url.Parse(client.config.Endpoint)
+	if err != nil {
+		return fmt.Errorf("invalid configured endpoint: %s", err)
+	}
+
+	sameOrigin := strings.EqualFold(candidate.Scheme, configured.Scheme) &&
+		strings.EqualFold(candidate.Hostname(), configured.Hostname()) &&
+		candidate.Port() == configured.Port()
+	sameHTTPSHost := strings.EqualFold(candidate.Scheme, "https") &&
+		(candidate.Port() == "" || candidate.Port() == "443") &&
+		candidate.Hostname() != "" &&
+		strings.EqualFold(candidate.Hostname(), configured.Hostname())
+	hostname := strings.ToLower(candidate.Hostname())
+	isTransloaditAPI2Cell := strings.EqualFold(candidate.Scheme, "https") &&
+		(candidate.Port() == "" || candidate.Port() == "443") &&
+		strings.HasPrefix(hostname, "api2-") &&
+		strings.HasSuffix(hostname, ".transloadit.com")
+	if !sameOrigin && !sameHTTPSHost && !isTransloaditAPI2Cell {
+		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, assemblyURL, nil)
+	if err != nil {
+		return fmt.Errorf("request: %s", err)
+	}
+
+	requestClient := *client
+	httpClient := *client.httpClient
+	httpClient.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	requestClient.httpClient = &httpClient
+
+	return requestClient.doRequest(req, result)
+}
+
+// </api2-generated-endpoint assemblyUrlRequestSupport>

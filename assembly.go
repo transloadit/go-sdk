@@ -1,13 +1,17 @@
 package transloadit
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -86,6 +90,7 @@ type AssemblyInfo struct {
 	ParentID               string                 `json:"parent_id"`
 	AssemblyURL            string                 `json:"assembly_url"`
 	AssemblySSLURL         string                 `json:"assembly_ssl_url"`
+	TUSURL                 string                 `json:"tus_url"`
 	BytesReceived          int                    `json:"bytes_received"`
 	BytesExpected          Integer                `json:"bytes_expected"`
 	StartDate              string                 `json:"start_date"`
@@ -135,9 +140,12 @@ type FileInfo struct {
 	OriginalMd5Hash  string                 `json:"original_md5hash"`
 	OriginalID       string                 `json:"original_id"`
 	OriginalBasename string                 `json:"original_basename"`
+	IsTUSFile        bool                   `json:"is_tus_file"`
+	TUSUploadURL     string                 `json:"tus_upload_url"`
 	URL              string                 `json:"url"`
 	SSLURL           string                 `json:"ssl_url"`
 	Meta             map[string]interface{} `json:"meta"`
+	UserMeta         map[string]interface{} `json:"user_meta"`
 	Cost             int                    `json:"cost"`
 }
 
@@ -233,6 +241,200 @@ func (client *Client) StartAssembly(ctx context.Context, assembly Assembly) (*As
 	return &info, err
 }
 
+// <api2-generated-feature createTusAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// CreateTusAssembly creates a TUS-ready Assembly that waits for the requested number of resumable uploads before execution continues.
+func (client *Client) CreateTusAssembly(ctx context.Context, fileCount int) (*AssemblyInfo, error) {
+	content := map[string]interface{}{
+		"await": false,
+		"steps": map[string]interface{}{
+			":original": map[string]interface{}{
+				"output_meta": true,
+				"result":      "debug",
+				"robot":       "/upload/handle",
+			},
+		},
+	}
+	formFields := map[string]interface{}{
+		"num_expected_upload_files": fileCount,
+	}
+
+	var assembly AssemblyInfo
+	err := client.requestWithFormFields(ctx, "POST", "assemblies", content, formFields, &assembly)
+
+	return &assembly, err
+}
+
+// </api2-generated-feature createTusAssembly>
+
+// <api2-generated-feature resumeTusUpload>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// ResumeTusUpload resumes an interrupted TUS upload from the server-reported offset and waits for the Assembly to finish.
+func (client *Client) ResumeTusUpload(ctx context.Context, uploadUrl string, content []byte, assembly *AssemblyInfo) (*AssemblyInfo, error) {
+	storedUploadURL, err := url.Parse(uploadUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	offsetRequest, err := http.NewRequestWithContext(ctx, "HEAD", storedUploadURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	offsetRequest.Header.Set("Tus-Resumable", "1.0.0")
+
+	offsetResponse, err := client.httpClient.Do(offsetRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer offsetResponse.Body.Close()
+	if offsetResponse.StatusCode != 200 {
+		return nil, fmt.Errorf("TUS offset returned HTTP %d, expected 200", offsetResponse.StatusCode)
+	}
+	resumeOffsetHeader := offsetResponse.Header.Get("Upload-Offset")
+	if resumeOffsetHeader == "" {
+		return nil, fmt.Errorf("TUS offset did not return a Upload-Offset header")
+	}
+	resumeOffset, err := strconv.Atoi(resumeOffsetHeader)
+	if err != nil {
+		return nil, fmt.Errorf("TUS offset returned an invalid Upload-Offset header")
+	}
+
+	uploadRequest, err := http.NewRequestWithContext(ctx, "PATCH", storedUploadURL.String(), bytes.NewReader(content[resumeOffset:]))
+	if err != nil {
+		return nil, err
+	}
+	uploadRequest.Header.Set("Tus-Resumable", "1.0.0")
+	uploadRequest.Header.Set("Upload-Offset", strconv.Itoa(resumeOffset))
+	uploadRequest.Header.Set("Content-Type", "application/offset+octet-stream")
+
+	uploadResponse, err := client.httpClient.Do(uploadRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer uploadResponse.Body.Close()
+	if uploadResponse.StatusCode != 204 {
+		return nil, fmt.Errorf("TUS upload returned HTTP %d, expected 204", uploadResponse.StatusCode)
+	}
+	uploadOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
+	if err != nil {
+		return nil, err
+	}
+	if uploadOffset != len(content) {
+		return nil, fmt.Errorf("TUS upload offset %d, expected %d", uploadOffset, len(content))
+	}
+
+	completedAssembly, err := client.WaitForAssembly(ctx, assembly)
+	if err != nil {
+		return nil, err
+	}
+
+	return completedAssembly, nil
+}
+
+// </api2-generated-feature resumeTusUpload>
+
+// <api2-generated-feature uploadTusAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+// UploadTusAssembly creates a TUS-ready Assembly, uploads one file with the TUS protocol, and waits for the Assembly to finish.
+func (client *Client) UploadTusAssembly(ctx context.Context, content []byte, fieldname string, filename string, userMeta map[string]string) (*AssemblyInfo, string, error) {
+	createdAssembly, err := client.CreateTusAssembly(ctx, 1)
+	if err != nil {
+		return nil, "", err
+	}
+
+	endpointURL, err := url.Parse(createdAssembly.TUSURL)
+	if err != nil {
+		return nil, "", err
+	}
+
+	metadataMap := make(map[string]string)
+	for name, value := range userMeta {
+		metadataMap[name] = value
+	}
+	metadataMap["assembly_url"] = createdAssembly.AssemblySSLURL
+	metadataMap["fieldname"] = fieldname
+	metadataMap["filename"] = filename
+
+	createRequest, err := http.NewRequestWithContext(ctx, "POST", endpointURL.String(), nil)
+	if err != nil {
+		return nil, "", err
+	}
+	createRequest.Header.Set("Tus-Resumable", "1.0.0")
+	createRequest.Header.Set("Upload-Length", strconv.Itoa(len(content)))
+	metadataParts := make([]string, 0, len(metadataMap))
+	for name, value := range metadataMap {
+		metadataParts = append(metadataParts, fmt.Sprintf("%s %s", name, base64.StdEncoding.EncodeToString([]byte(value))))
+	}
+	createRequest.Header.Set("Upload-Metadata", strings.Join(metadataParts, ","))
+
+	createResponse, err := client.httpClient.Do(createRequest)
+	if err != nil {
+		return nil, "", err
+	}
+	defer createResponse.Body.Close()
+	if createResponse.StatusCode != 201 {
+		return nil, "", fmt.Errorf("TUS create returned HTTP %d, expected 201", createResponse.StatusCode)
+	}
+	uploadURLLocation := createResponse.Header.Get("Location")
+	if uploadURLLocation == "" {
+		return nil, "", fmt.Errorf("TUS create did not return a Location header")
+	}
+	uploadURL, err := endpointURL.Parse(uploadURLLocation)
+	if err != nil {
+		return nil, "", err
+	}
+	uploadURLText := uploadURL.String()
+
+	uploadRequest, err := http.NewRequestWithContext(ctx, "PATCH", uploadURLText, bytes.NewReader(content))
+	if err != nil {
+		return nil, "", err
+	}
+	uploadRequest.Header.Set("Tus-Resumable", "1.0.0")
+	uploadRequest.Header.Set("Upload-Offset", "0")
+	uploadRequest.Header.Set("Content-Type", "application/offset+octet-stream")
+
+	uploadResponse, err := client.httpClient.Do(uploadRequest)
+	if err != nil {
+		return nil, "", err
+	}
+	defer uploadResponse.Body.Close()
+	if uploadResponse.StatusCode != 204 {
+		return nil, "", fmt.Errorf("TUS upload returned HTTP %d, expected 204", uploadResponse.StatusCode)
+	}
+	uploadOffset, err := strconv.Atoi(uploadResponse.Header.Get("Upload-Offset"))
+	if err != nil {
+		return nil, "", err
+	}
+	if uploadOffset != len(content) {
+		return nil, "", fmt.Errorf("TUS upload offset %d, expected %d", uploadOffset, len(content))
+	}
+
+	createdAssemblyAssemblySSLURL := createdAssembly.AssemblySSLURL
+	if createdAssemblyAssemblySSLURL == "" {
+		return nil, "", fmt.Errorf("uploadTusAssembly needs createdAssembly.assembly_ssl_url")
+	}
+	completedAssembly, err := client.WaitForAssembly(ctx, createdAssembly)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return completedAssembly, uploadURLText, nil
+}
+
+// </api2-generated-feature uploadTusAssembly>
+
 func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*http.Request, error) {
 	// TODO: test with huge files
 	url := client.config.Endpoint + "/assemblies"
@@ -306,15 +508,29 @@ func (assembly *Assembly) makeRequest(ctx context.Context, client *Client) (*htt
 	return req, nil
 }
 
+// <api2-generated-endpoint getAssemblyStatus>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // GetAssembly fetches the full assembly status from the provided URL.
 // The assembly URL must be absolute, for example:
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "GET", assemblyURL, nil, &info)
+	err := client.requestAssemblyURL(ctx, "GET", assemblyURL, &info)
 
 	return &info, err
 }
+
+// </api2-generated-endpoint getAssemblyStatus>
+
+// <api2-generated-endpoint cancelAssembly>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
 
 // CancelAssembly cancels an assembly which will result in all corresponding
 // uploads and encoding jobs to be aborted. Finally, the updated assembly
@@ -323,10 +539,12 @@ func (client *Client) GetAssembly(ctx context.Context, assemblyURL string) (*Ass
 // https://api2-amberly.transloadit.com/assemblies/15a6b3701d3811e78d7bfba4db1b053e
 func (client *Client) CancelAssembly(ctx context.Context, assemblyURL string) (*AssemblyInfo, error) {
 	var info AssemblyInfo
-	err := client.request(ctx, "DELETE", assemblyURL, nil, &info)
+	err := client.requestAssemblyURL(ctx, "DELETE", assemblyURL, &info)
 
 	return &info, err
 }
+
+// </api2-generated-endpoint cancelAssembly>
 
 // NewAssemblyReplay will create a new AssemblyReplay struct which can be used
 // to replay an assemblie's execution using Client.StartAssemblyReplay.
@@ -375,6 +593,12 @@ func (client *Client) StartAssemblyReplay(ctx context.Context, assembly Assembly
 	return &info, nil
 }
 
+// <api2-generated-endpoint listAssemblies>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
 // ListAssemblies will fetch all assemblies matching the provided criteria.
 func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) (AssemblyList, error) {
 	var assemblies AssemblyList
@@ -382,3 +606,5 @@ func (client *Client) ListAssemblies(ctx context.Context, options *ListOptions) 
 
 	return assemblies, err
 }
+
+// </api2-generated-endpoint listAssemblies>
