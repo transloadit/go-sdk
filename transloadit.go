@@ -340,6 +340,10 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 // belongs in the contract generator so all SDKs stay in sync.
 
 func (client *Client) GetBill(ctx context.Context, month string) (map[string]interface{}, error) {
+	if err := validatePathSegment(month); err != nil {
+		return nil, err
+	}
+
 	var bill map[string]interface{}
 	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month), nil, &bill)
 	return bill, err
@@ -354,6 +358,13 @@ func (client *Client) GetBill(ctx context.Context, month string) (map[string]int
 // belongs in the contract generator so all SDKs stay in sync.
 
 func (client *Client) GetBillForInvoice(ctx context.Context, month string, invoiceID string) (map[string]interface{}, error) {
+	if err := validatePathSegment(month); err != nil {
+		return nil, err
+	}
+	if err := validatePathSegment(invoiceID); err != nil {
+		return nil, err
+	}
+
 	var bill map[string]interface{}
 	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month)+"/"+escapePathSegment(invoiceID), nil, &bill)
 	return bill, err

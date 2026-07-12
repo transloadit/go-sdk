@@ -2,9 +2,34 @@ package transloadit
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 )
+
+func TestGetTemplateRejectsDotPathSegments(t *testing.T) {
+	for _, segment := range []string{".", ".."} {
+		t.Run(segment, func(t *testing.T) {
+			requested := false
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				requested = true
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{}`))
+			}))
+			defer server.Close()
+
+			client := NewClient(Config{AuthKey: "key", AuthSecret: "secret", Endpoint: server.URL})
+			_, err := client.GetTemplate(ctx, segment)
+			if err == nil {
+				t.Error("expected a dot path segment error")
+			}
+			if requested {
+				t.Error("sent a request for a dot path segment")
+			}
+		})
+	}
+}
 
 func TestTemplate(t *testing.T) {
 	t.Parallel()

@@ -181,6 +181,10 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
 func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
+	if err := validatePathSegment(templateID); err != nil {
+		return Template{}, err
+	}
+
 	err = client.request(ctx, "GET", "templates/"+escapePathSegment(templateID), nil, &template)
 	return template, err
 }
@@ -196,6 +200,10 @@ func (client *Client) GetTemplate(ctx context.Context, templateID string) (templ
 // DeleteTemplate will delete the template associated with the provided
 // template ID.
 func (client *Client) DeleteTemplate(ctx context.Context, templateID string) error {
+	if err := validatePathSegment(templateID); err != nil {
+		return err
+	}
+
 	return client.request(ctx, "DELETE", "templates/"+escapePathSegment(templateID), nil, nil)
 }
 
@@ -211,6 +219,10 @@ func (client *Client) DeleteTemplate(ctx context.Context, templateID string) err
 // template ID to match the new name and  new content. Please be aware that you
 // are not able to change a template's ID.
 func (client *Client) UpdateTemplate(ctx context.Context, templateID string, newTemplate Template) error {
+	if err := validatePathSegment(templateID); err != nil {
+		return err
+	}
+
 	// Create signature
 	content := map[string]interface{}{
 		"name":     newTemplate.Name,

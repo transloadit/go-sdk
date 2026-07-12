@@ -70,6 +70,10 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 // GetTemplateCredential will retrieve details about the template credential associated with the
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateCredentialID string) (TemplateCredential, error) {
+	if err := validatePathSegment(templateCredentialID); err != nil {
+		return TemplateCredential{}, err
+	}
+
 	var response templateCredentialResponseBody
 	err := client.request(ctx, "GET", templateCredentialPrefix+"/"+escapePathSegment(templateCredentialID), nil, &response)
 	return response.Credential, err
@@ -86,6 +90,10 @@ func (client *Client) GetTemplateCredential(ctx context.Context, templateCredent
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
 func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCredentialID string) error {
+	if err := validatePathSegment(templateCredentialID); err != nil {
+		return err
+	}
+
 	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+escapePathSegment(templateCredentialID), nil, nil)
 }
 
@@ -114,6 +122,10 @@ func (client *Client) ListTemplateCredential(ctx context.Context, options *ListO
 // UpdateTemplateCredential will update the template credential associated with the provided
 // template credential ID to match the new name and  new content.
 func (client *Client) UpdateTemplateCredential(ctx context.Context, templateCredentialID string, templateCredential TemplateCredential) error {
+	if err := validatePathSegment(templateCredentialID); err != nil {
+		return err
+	}
+
 	content := map[string]interface{}{
 		"name":    templateCredential.Name,
 		"type":    templateCredential.Type,

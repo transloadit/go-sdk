@@ -45,6 +45,10 @@ func (client *Client) ListNotifications(ctx context.Context, options *ListOption
 // If notifyURL is not empty it will override the notify URL used in the
 // assembly instructions.
 func (client *Client) ReplayNotification(ctx context.Context, assemblyID string, notifyURL string) error {
+	if err := validatePathSegment(assemblyID); err != nil {
+		return err
+	}
+
 	params := make(map[string]interface{})
 
 	if notifyURL != "" {
