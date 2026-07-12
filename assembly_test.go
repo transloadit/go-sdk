@@ -2,6 +2,7 @@ package transloadit
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -144,6 +145,31 @@ func TestGetAssemblyDoesNotAuthenticateNoAuthRequest(t *testing.T) {
 	}
 	if rawQuery := <-query; rawQuery != "" {
 		t.Fatalf("expected an unauthenticated request, got query %q", rawQuery)
+	}
+}
+
+func TestGetAssemblyAllowsHTTPSForConfiguredHostname(t *testing.T) {
+	requested := false
+	config := DefaultConfig
+	config.AuthKey = "key"
+	config.AuthSecret = "secret"
+	config.Endpoint = "http://api2-devdock.transloadit.dev"
+	client := NewClient(config)
+	client.httpClient.Transport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		requested = true
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`{"assembly_id":"assembly-id"}`)),
+		}, nil
+	})
+
+	_, err := client.GetAssembly(ctx, "https://api2-devdock.transloadit.dev/assemblies/assembly-id")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !requested {
+		t.Fatal("expected an HTTPS request to the configured hostname")
 	}
 }
 

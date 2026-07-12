@@ -158,37 +158,6 @@ func (client *Client) request(ctx context.Context, method string, path string, c
 	return client.requestWithFormFields(ctx, method, path, content, nil, result)
 }
 
-func (client *Client) requestAssemblyURL(ctx context.Context, method string, assemblyURL string, result interface{}) error {
-	candidate, err := url.Parse(assemblyURL)
-	if err != nil || !candidate.IsAbs() || candidate.User != nil {
-		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
-	}
-
-	configured, err := url.Parse(client.config.Endpoint)
-	if err != nil {
-		return fmt.Errorf("invalid configured endpoint: %s", err)
-	}
-
-	sameOrigin := strings.EqualFold(candidate.Scheme, configured.Scheme) &&
-		strings.EqualFold(candidate.Hostname(), configured.Hostname()) &&
-		candidate.Port() == configured.Port()
-	hostname := strings.ToLower(candidate.Hostname())
-	isTransloaditAPI2Cell := strings.EqualFold(candidate.Scheme, "https") &&
-		(candidate.Port() == "" || candidate.Port() == "443") &&
-		strings.HasPrefix(hostname, "api2-") &&
-		strings.HasSuffix(hostname, ".transloadit.com")
-	if !sameOrigin && !isTransloaditAPI2Cell {
-		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
-	}
-
-	req, err := http.NewRequestWithContext(ctx, method, assemblyURL, nil)
-	if err != nil {
-		return fmt.Errorf("request: %s", err)
-	}
-
-	return client.doRequest(req, result)
-}
-
 func formFieldValue(value interface{}) string {
 	switch typed := value.(type) {
 	case nil:
@@ -391,3 +360,46 @@ func (client *Client) GetBillForInvoice(ctx context.Context, month string, invoi
 }
 
 // </api2-generated-endpoint getBillForInvoice>
+
+// <api2-generated-endpoint assemblyUrlRequestSupport>
+
+// This block is generated from Transloadit API2 contracts. If it looks wrong,
+// please report the issue instead of editing this block by hand; the source fix
+// belongs in the contract generator so all SDKs stay in sync.
+
+func (client *Client) requestAssemblyURL(ctx context.Context, method string, assemblyURL string, result interface{}) error {
+	candidate, err := url.Parse(assemblyURL)
+	if err != nil || !candidate.IsAbs() || candidate.User != nil {
+		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
+	}
+
+	configured, err := url.Parse(client.config.Endpoint)
+	if err != nil {
+		return fmt.Errorf("invalid configured endpoint: %s", err)
+	}
+
+	sameOrigin := strings.EqualFold(candidate.Scheme, configured.Scheme) &&
+		strings.EqualFold(candidate.Hostname(), configured.Hostname()) &&
+		candidate.Port() == configured.Port()
+	sameHTTPSHost := strings.EqualFold(candidate.Scheme, "https") &&
+		(candidate.Port() == "" || candidate.Port() == "443") &&
+		candidate.Hostname() != "" &&
+		strings.EqualFold(candidate.Hostname(), configured.Hostname())
+	hostname := strings.ToLower(candidate.Hostname())
+	isTransloaditAPI2Cell := strings.EqualFold(candidate.Scheme, "https") &&
+		(candidate.Port() == "" || candidate.Port() == "443") &&
+		strings.HasPrefix(hostname, "api2-") &&
+		strings.HasSuffix(hostname, ".transloadit.com")
+	if !sameOrigin && !sameHTTPSHost && !isTransloaditAPI2Cell {
+		return fmt.Errorf("untrusted Assembly URL: %s", assemblyURL)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, assemblyURL, nil)
+	if err != nil {
+		return fmt.Errorf("request: %s", err)
+	}
+
+	return client.doRequest(req, result)
+}
+
+// </api2-generated-endpoint assemblyUrlRequestSupport>
