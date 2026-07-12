@@ -399,7 +399,14 @@ func (client *Client) requestAssemblyURL(ctx context.Context, method string, ass
 		return fmt.Errorf("request: %s", err)
 	}
 
-	return client.doRequest(req, result)
+	requestClient := *client
+	httpClient := *client.httpClient
+	httpClient.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	requestClient.httpClient = &httpClient
+
+	return requestClient.doRequest(req, result)
 }
 
 // </api2-generated-endpoint assemblyUrlRequestSupport>

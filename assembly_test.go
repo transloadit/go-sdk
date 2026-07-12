@@ -124,6 +124,37 @@ func TestGetAssemblyRejectsUntrustedURLWithoutSendingCredentials(t *testing.T) {
 	}
 }
 
+func TestCancelAssemblyDoesNotFollowRedirects(t *testing.T) {
+	redirectedRequestMethod := make(chan string, 1)
+	redirectedServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		redirectedRequestMethod <- request.Method
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"assembly_id":"assembly-id"}`))
+	}))
+	defer redirectedServer.Close()
+
+	configuredServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		http.Redirect(w, request, redirectedServer.URL+"/assemblies/assembly-id", http.StatusFound)
+	}))
+	defer configuredServer.Close()
+
+	config := DefaultConfig
+	config.AuthKey = "key"
+	config.AuthSecret = "secret"
+	config.Endpoint = configuredServer.URL
+	client := NewClient(config)
+
+	_, err := client.CancelAssembly(ctx, configuredServer.URL+"/assemblies/assembly-id")
+	if err == nil {
+		t.Error("expected a redirect response error")
+	}
+	select {
+	case method := <-redirectedRequestMethod:
+		t.Fatalf("followed an Assembly URL redirect using %s", method)
+	default:
+	}
+}
+
 func TestGetAssemblyDoesNotAuthenticateNoAuthRequest(t *testing.T) {
 	query := make(chan string, 1)
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
