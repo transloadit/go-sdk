@@ -372,7 +372,7 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 func (client *Client) GetBill(ctx context.Context, month string) (map[string]interface{}, error) {
 	var bill map[string]interface{}
-	err := client.request(ctx, "GET", "bill/"+month, nil, &bill)
+	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month), nil, &bill)
 	return bill, err
 }
 
@@ -386,7 +386,7 @@ func (client *Client) GetBill(ctx context.Context, month string) (map[string]int
 
 func (client *Client) GetBillForInvoice(ctx context.Context, month string, invoiceID string) (map[string]interface{}, error) {
 	var bill map[string]interface{}
-	err := client.request(ctx, "GET", "bill/"+month+"/"+invoiceID, nil, &bill)
+	err := client.request(ctx, "GET", "bill/"+escapePathSegment(month)+"/"+escapePathSegment(invoiceID), nil, &bill)
 	return bill, err
 }
 

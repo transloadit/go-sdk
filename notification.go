@@ -51,7 +51,7 @@ func (client *Client) ReplayNotification(ctx context.Context, assemblyID string,
 		params["notify_url"] = notifyURL
 	}
 
-	return client.request(ctx, "POST", "assembly_notifications/"+assemblyID+"/replay", params, nil)
+	return client.request(ctx, "POST", "assembly_notifications/"+escapePathSegment(assemblyID)+"/replay", params, nil)
 }
 
 // </api2-generated-endpoint replayAssemblyNotification>

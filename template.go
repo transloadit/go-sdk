@@ -181,7 +181,7 @@ func (client *Client) CreateTemplate(ctx context.Context, template Template) (st
 // GetTemplate will retrieve details about the template associated with the
 // provided template ID.
 func (client *Client) GetTemplate(ctx context.Context, templateID string) (template Template, err error) {
-	err = client.request(ctx, "GET", "templates/"+templateID, nil, &template)
+	err = client.request(ctx, "GET", "templates/"+escapePathSegment(templateID), nil, &template)
 	return template, err
 }
 
@@ -196,7 +196,7 @@ func (client *Client) GetTemplate(ctx context.Context, templateID string) (templ
 // DeleteTemplate will delete the template associated with the provided
 // template ID.
 func (client *Client) DeleteTemplate(ctx context.Context, templateID string) error {
-	return client.request(ctx, "DELETE", "templates/"+templateID, nil, nil)
+	return client.request(ctx, "DELETE", "templates/"+escapePathSegment(templateID), nil, nil)
 }
 
 // </api2-generated-endpoint deleteTemplate>
@@ -222,7 +222,7 @@ func (client *Client) UpdateTemplate(ctx context.Context, templateID string, new
 		content["require_signature_auth"] = 0
 	}
 
-	return client.request(ctx, "PUT", "templates/"+templateID, content, nil)
+	return client.request(ctx, "PUT", "templates/"+escapePathSegment(templateID), content, nil)
 }
 
 // </api2-generated-endpoint updateTemplate>

@@ -71,7 +71,7 @@ func (client *Client) CreateTemplateCredential(ctx context.Context, templateCred
 // provided template credential ID.
 func (client *Client) GetTemplateCredential(ctx context.Context, templateCredentialID string) (TemplateCredential, error) {
 	var response templateCredentialResponseBody
-	err := client.request(ctx, "GET", templateCredentialPrefix+"/"+templateCredentialID, nil, &response)
+	err := client.request(ctx, "GET", templateCredentialPrefix+"/"+escapePathSegment(templateCredentialID), nil, &response)
 	return response.Credential, err
 }
 
@@ -86,7 +86,7 @@ func (client *Client) GetTemplateCredential(ctx context.Context, templateCredent
 // DeleteTemplateCredential will delete the template credential associated with the provided
 // template ID.
 func (client *Client) DeleteTemplateCredential(ctx context.Context, templateCredentialID string) error {
-	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+templateCredentialID, nil, nil)
+	return client.request(ctx, "DELETE", templateCredentialPrefix+"/"+escapePathSegment(templateCredentialID), nil, nil)
 }
 
 // </api2-generated-endpoint deleteTemplateCredentials>
@@ -119,7 +119,7 @@ func (client *Client) UpdateTemplateCredential(ctx context.Context, templateCred
 		"type":    templateCredential.Type,
 		"content": templateCredential.Content,
 	}
-	return client.request(ctx, "PUT", templateCredentialPrefix+"/"+templateCredentialID, content, nil)
+	return client.request(ctx, "PUT", templateCredentialPrefix+"/"+escapePathSegment(templateCredentialID), content, nil)
 }
 
 // </api2-generated-endpoint updateTemplateCredentials>
