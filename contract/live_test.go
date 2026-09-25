@@ -80,6 +80,25 @@ func TestContractDevdock(t *testing.T) {
 	if listed.Count != 1 {
 		t.Fatal("query filter was not honored")
 	}
+	var builtinParams ListTemplatesParams
+	if err := json.Unmarshal([]byte(`{"include_builtin":"exclusively-latest"}`), &builtinParams); err != nil {
+		t.Fatal(err)
+	}
+	builtins, err := client.ListTemplates(ctx, ListTemplatesInput{Params: builtinParams})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(builtins.Items) == 0 {
+		t.Fatal("missing built-in Templates")
+	}
+	builtinID := nativeJSONString(t, builtins.Items[0].Id)
+	builtin, err := client.GetTemplate(ctx, GetTemplateInput{TemplateIdOrName: builtinID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if nativeJSONString(t, builtin.Id) != builtinID {
+		t.Fatal("wrong built-in Template")
+	}
 	scope := "templates:read"
 	token, err := client.IssueBearerToken(ctx, IssueBearerTokenInput{Body: IssueBearerTokenBody{GrantType: "client_credentials", Scope: &scope}})
 	if err != nil {
@@ -102,7 +121,7 @@ func TestContractDevdock(t *testing.T) {
 		t.Fatal(err)
 	}
 	var params CreateAssemblyParams
-	encoded, err = json.Marshal(map[string]string{"template_id": id})
+	encoded, err = json.Marshal(map[string]interface{}{"template_id": id, "auth": map[string]int{"max_size": 10000000, "max_number_of_files": 1}})
 	if err != nil {
 		t.Fatal(err)
 	}

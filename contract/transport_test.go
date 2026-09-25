@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -58,6 +59,104 @@ func TestNullableUnionDoesNotDecodeNullAsZero(t *testing.T) {
 	var params UpdateAuthKeyParams
 	if err := json.Unmarshal([]byte(`{"is_allowed_for_smartcdn":null}`), &params); err == nil {
 		t.Fatal("non-nullable boolean accepted null")
+	}
+}
+
+type roundTripFunction func(*http.Request) (*http.Response, error)
+
+func (run roundTripFunction) RoundTrip(request *http.Request) (*http.Response, error) {
+	return run(request)
+}
+
+type failedBody struct{ err error }
+
+func (body failedBody) Read([]byte) (int, error) { return 0, body.err }
+func (failedBody) Close() error                  { return nil }
+
+type staticBody struct{ io.Reader }
+
+func (staticBody) Close() error { return nil }
+
+func TestBodyReadTransportError(t *testing.T) {
+	cause := errors.New("synthetic read failure")
+	client, err := NewClient(Config{AuthKey: "synthetic-key", AuthSecret: "synthetic-secret", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+		return &http.Response{StatusCode: 200, Body: failedBody{cause}, Header: http.Header{}}, nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.GetTemplate(context.Background(), GetTemplateInput{TemplateIdOrName: "test"})
+	var transportError *TransportError
+	if !errors.As(err, &transportError) || !errors.Is(err, cause) {
+		t.Fatalf("body error is not a transport error: %v", err)
+	}
+}
+
+func TestRejectInsecureRemoteOrigin(t *testing.T) {
+	_, err := NewClient(Config{Origin: "http://proxy.example.com", AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"})
+	if err == nil {
+		t.Fatal("insecure credential transport was accepted")
+	}
+}
+
+func TestBuiltinTemplateAndProxyPrefix(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.URL.Path != "/proxy/templates/builtin/encode-hls-video@0.0.1" {
+			t.Error("changed proxy prefix or built-in Template ID")
+		}
+		w.WriteHeader(400)
+		w.Write([]byte(`{"error":"TEST_ERROR"}`))
+	}))
+	defer server.Close()
+	client, err := NewClient(Config{Origin: server.URL + "/proxy", AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.GetTemplate(context.Background(), GetTemplateInput{TemplateIdOrName: "builtin/encode-hls-video@0.0.1"})
+	if _, ok := err.(*ResponseError); !ok {
+		t.Fatalf("valid built-in ID was not sent: %v", err)
+	}
+	_, err = client.GetTemplate(context.Background(), GetTemplateInput{TemplateIdOrName: "builtin/../auth_keys"})
+	if err == nil || calls != 1 {
+		t.Fatal("unsafe path was not rejected before transport")
+	}
+}
+
+func TestAssemblyUploadConstraints(t *testing.T) {
+	var params CreateAssemblyParams
+	if err := json.Unmarshal([]byte(`{"template_id":"synthetic","auth":{"max_size":7,"max_number_of_files":1,"referer":"example.invalid"}}`), &params); err != nil {
+		t.Fatal(err)
+	}
+	client, err := NewClient(Config{AuthKey: "synthetic-key", AuthSecret: "synthetic-secret", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if err := request.ParseMultipartForm(1 << 20); err != nil {
+			t.Error(err)
+		}
+		defer request.MultipartForm.RemoveAll()
+		raw := request.FormValue("params")
+		var data struct {
+			Auth struct {
+				Key      string `json:"key"`
+				MaxSize  int    `json:"max_size"`
+				MaxFiles int    `json:"max_number_of_files"`
+				Referer  string `json:"referer"`
+			} `json:"auth"`
+		}
+		if err := json.Unmarshal([]byte(raw), &data); err != nil {
+			t.Error(err)
+		}
+		if data.Auth.Key != "synthetic-key" || data.Auth.MaxSize != 7 || data.Auth.MaxFiles != 1 || data.Auth.Referer != "example.invalid" {
+			t.Error("upload constraints were lost")
+		}
+		return &http.Response{StatusCode: 400, Body: staticBody{strings.NewReader(`{"error":"TEST_ERROR"}`)}, Header: http.Header{}}, nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.CreateAssembly(context.Background(), CreateAssemblyInput{Params: params})
+	if _, ok := err.(*ResponseError); !ok {
+		t.Fatalf("unexpected request error: %v", err)
 	}
 }
 

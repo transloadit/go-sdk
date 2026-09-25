@@ -16,9 +16,11 @@ import (
 	"io"
 	"io/ioutil"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"net/url"
 	"reflect"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -67,8 +69,12 @@ func NewClient(config Config) (*Client, error) {
 		config.Origin = defaultOrigin
 	}
 	origin, err := url.Parse(config.Origin)
-	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || (origin.Path != "" && origin.Path != "/") || origin.RawQuery != "" || origin.Fragment != "" {
-		return nil, fmt.Errorf("contract client requires an HTTP(S) origin without credentials, path or query")
+	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || origin.RawQuery != "" || origin.Fragment != "" {
+		return nil, fmt.Errorf("contract client requires an HTTP(S) endpoint without credentials, query or fragment")
+	}
+	address := net.ParseIP(origin.Hostname())
+	if origin.Scheme == "http" && origin.Hostname() != "localhost" && (address == nil || !address.IsLoopback()) {
+		return nil, fmt.Errorf("HTTPS is required except for loopback development endpoints")
 	}
 	if config.BearerToken == "" && (config.AuthKey == "" || config.AuthSecret == "") {
 		return nil, fmt.Errorf("Auth Key credentials or bearer token required")
@@ -76,7 +82,7 @@ func NewClient(config Config) (*Client, error) {
 	if config.BearerToken != "" && (config.AuthKey != "" || config.AuthSecret != "") {
 		return nil, fmt.Errorf("choose signed or bearer authentication")
 	}
-	config.Origin = origin.Scheme + "://" + origin.Host
+	config.Origin = strings.TrimSuffix(origin.String(), "/")
 	if config.SignatureAlgorithm == "" {
 		config.SignatureAlgorithm = defaultAlgorithm
 	}
@@ -89,14 +95,15 @@ func NewClient(config Config) (*Client, error) {
 }
 
 type operation struct {
-	ID             string
-	Method         string
-	Path           string
-	Auth           string
-	Bearer         bool
-	Encoding       string
-	ParamsField    string
-	SignatureField string
+	ID              string
+	Method          string
+	Path            string
+	RawPathPatterns map[string]string
+	Auth            string
+	Bearer          bool
+	Encoding        string
+	ParamsField     string
+	SignatureField  string
 }
 
 type impossibleValue struct{}
@@ -247,7 +254,19 @@ func (client *Client) signature(data []byte) (string, error) {
 func (client *Client) request(ctx context.Context, operation operation, path map[string]string, input interface{}, files map[string]UploadFile, extraFields map[string]string, result interface{}) error {
 	target := operation.Path
 	for name, value := range path {
-		if value == "" || value == "." || value == ".." || strings.ContainsAny(value, "/\\") || strings.ContainsFunc(value, func(character rune) bool { return character < 32 || character == 127 }) {
+		// The generator only supplies the owner's portable ASCII path grammar here, not arbitrary
+		// JSON Schema regexes. Native transport contains no endpoint-specific path inventory.
+		if pattern, ok := operation.RawPathPatterns[name]; ok && strings.IndexFunc(value, func(character rune) bool { return character < 32 || character == 127 }) < 0 {
+			matched, err := regexp.MatchString(pattern, value)
+			if err != nil {
+				return fmt.Errorf("invalid generated path grammar")
+			}
+			if matched {
+				target = strings.ReplaceAll(target, "{"+name+"}", value)
+				continue
+			}
+		}
+		if value == "" || value == "." || value == ".." || strings.ContainsAny(value, "/\\") || strings.IndexFunc(value, func(character rune) bool { return character < 32 || character == 127 }) >= 0 {
 			return fmt.Errorf("invalid path parameter: %s", name)
 		}
 		target = strings.ReplaceAll(target, "{"+name+"}", url.PathEscape(value))
@@ -280,11 +299,29 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 				fields.Set(key, value)
 			}
 		} else {
-			if _, ok := params["auth"]; ok {
-				return fmt.Errorf("the SDK owns params.auth; configure client authentication")
+			authFields := make(map[string]json.RawMessage)
+			if raw, ok := params["auth"]; ok {
+				if err := json.Unmarshal(raw, &authFields); err != nil || authFields == nil {
+					return fmt.Errorf("expected auth metadata object")
+				}
+				if _, present := authFields["key"]; present {
+					return fmt.Errorf("the SDK owns auth credentials")
+				}
+				if _, present := authFields["expires"]; present {
+					return fmt.Errorf("the SDK owns auth credentials")
+				}
 			}
 			if operation.Auth == "api-key" && client.config.BearerToken == "" {
-				auth, err := json.Marshal(map[string]string{"key": client.config.AuthKey, "expires": time.Now().Add(5 * time.Minute).UTC().Format(time.RFC3339)})
+				key, err := json.Marshal(client.config.AuthKey)
+				if err != nil {
+					return err
+				}
+				expires, err := json.Marshal(time.Now().Add(5 * time.Minute).UTC().Format(time.RFC3339))
+				if err != nil {
+					return err
+				}
+				authFields["key"], authFields["expires"] = key, expires
+				auth, err := json.Marshal(authFields)
 				if err != nil {
 					return err
 				}
@@ -381,7 +418,7 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 	const limit = 128 * 1024 * 1024
 	data, err := ioutil.ReadAll(io.LimitReader(response.Body, limit+1))
 	if err != nil {
-		return err
+		return &TransportError{Cause: err}
 	}
 	if len(data) > limit {
 		return fmt.Errorf("API response exceeds size limit")

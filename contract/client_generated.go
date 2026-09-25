@@ -1,4 +1,4 @@
-// Code generated from API2 contract b6ab4439842519a0dbaeb315cee691cd71505800cda1609355486fa926bdf020; DO NOT EDIT.
+// Code generated from API2 contract a3d79872eb285e056f5b5849b3dd34bd0ebd7b1137e9d234634c8395aae9d64a; DO NOT EDIT.
 package contract
 
 import (
@@ -4165,6 +4165,7 @@ type CreateAssemblyParams_Choice1 struct {
 	Steps                 CreateAssemblyParams_Choice1_Steps                 `json:"steps"`
 	TemplateId            string                                             `json:"template_id"`
 	UsageTags             *string                                            `json:"usage_tags,omitempty"`
+	Auth                  *CreateAssemblyParams_Choice1_Auth                 `json:"auth,omitempty"`
 }
 
 func (value CreateAssemblyParams_Choice1) MarshalJSON() ([]byte, error) {
@@ -4313,6 +4314,26 @@ func (value *CreateAssemblyParams_Choice1_Steps_AdditionalProperty_Robot) Unmars
 	return nil
 }
 
+type CreateAssemblyParams_Choice1_Auth struct {
+	MaxNumberOfFiles *int64   `json:"max_number_of_files,omitempty"`
+	MaxSize          *float64 `json:"max_size,omitempty"`
+	Referer          *string  `json:"referer,omitempty"`
+}
+
+func (value CreateAssemblyParams_Choice1_Auth) MarshalJSON() ([]byte, error) {
+	type plain CreateAssemblyParams_Choice1_Auth
+	return marshalObject(plain(value))
+}
+func (value *CreateAssemblyParams_Choice1_Auth) UnmarshalJSON(data []byte) error {
+	type plain CreateAssemblyParams_Choice1_Auth
+	var next plain
+	if err := unmarshalObject(data, &next, []string{}, []string{}); err != nil {
+		return err
+	}
+	*value = CreateAssemblyParams_Choice1_Auth(next)
+	return nil
+}
+
 type CreateAssemblyParams_Choice2 struct {
 	EmitExecutionProgress *bool                                              `json:"emit_execution_progress,omitempty"`
 	ExiftoolStack         *string                                            `json:"exiftool_stack,omitempty"`
@@ -4330,6 +4351,7 @@ type CreateAssemblyParams_Choice2 struct {
 	Steps                 *CreateAssemblyParams_Choice2_Steps                `json:"steps,omitempty"`
 	TemplateId            *string                                            `json:"template_id,omitempty"`
 	UsageTags             *string                                            `json:"usage_tags,omitempty"`
+	Auth                  *CreateAssemblyParams_Choice1_Auth                 `json:"auth,omitempty"`
 }
 
 func (value CreateAssemblyParams_Choice2) MarshalJSON() ([]byte, error) {
@@ -38780,7 +38802,7 @@ type AssemblyStatsInput struct{ Params AssemblyStatsParams }
 
 func (client *Client) AssemblyStats(ctx context.Context, input AssemblyStatsInput) (*AssemblyStatsResult, error) {
 	var result AssemblyStatsResult
-	err := client.request(ctx, operation{ID: "api2.assembly-stats", Method: "GET", Path: "/assembly_stats", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.assembly-stats", Method: "GET", Path: "/assembly_stats", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38791,7 +38813,7 @@ type BulkDeleteDamAssetsInput struct{ Params BulkDeleteDamAssetsParams }
 
 func (client *Client) BulkDeleteDamAssets(ctx context.Context, input BulkDeleteDamAssetsInput) (*BulkDeleteDamAssetsResult, error) {
 	var result BulkDeleteDamAssetsResult
-	err := client.request(ctx, operation{ID: "api2.bulk-delete-dam-assets", Method: "POST", Path: "/dam/assets/bulk/delete", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.bulk-delete-dam-assets", Method: "POST", Path: "/dam/assets/bulk/delete", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38804,7 +38826,7 @@ type BulkMoveDamAssetsError = BulkDeleteDamAssetsError
 
 func (client *Client) BulkMoveDamAssets(ctx context.Context, input BulkMoveDamAssetsInput) (*BulkMoveDamAssetsResult, error) {
 	var result BulkMoveDamAssetsResult
-	err := client.request(ctx, operation{ID: "api2.bulk-move-dam-assets", Method: "POST", Path: "/dam/assets/bulk/move", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.bulk-move-dam-assets", Method: "POST", Path: "/dam/assets/bulk/move", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38817,7 +38839,7 @@ type CancelAssemblyError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) CancelAssembly(ctx context.Context, input CancelAssemblyInput) (*CancelAssemblyResult, error) {
 	var result CancelAssemblyResult
-	err := client.request(ctx, operation{ID: "api2.cancel-assembly", Method: "DELETE", Path: "/assemblies/{assemblyId}", Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.cancel-assembly", Method: "DELETE", Path: "/assemblies/{assemblyId}", RawPathPatterns: map[string]string{}, Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38833,7 +38855,7 @@ type CreateAssemblyResult = CancelAssemblyResult
 
 func (client *Client) CreateAssembly(ctx context.Context, input CreateAssemblyInput) (*CreateAssemblyResult, error) {
 	var result CreateAssemblyResult
-	err := client.request(ctx, operation{ID: "api2.create-assembly", Method: "POST", Path: "/assemblies", Auth: "api-key", Bearer: true, Encoding: "multipart/form-data", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, input.Files, input.Fields, &result)
+	err := client.request(ctx, operation{ID: "api2.create-assembly", Method: "POST", Path: "/assemblies", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "multipart/form-data", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, input.Files, input.Fields, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38844,7 +38866,7 @@ type CreateAuthKeyInput struct{ Params CreateAuthKeyParams }
 
 func (client *Client) CreateAuthKey(ctx context.Context, input CreateAuthKeyInput) (*CreateAuthKeyResult, error) {
 	var result CreateAuthKeyResult
-	err := client.request(ctx, operation{ID: "api2.create-auth-key", Method: "POST", Path: "/auth_keys", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.create-auth-key", Method: "POST", Path: "/auth_keys", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38855,7 +38877,7 @@ type CreateTemplateInput struct{ Params CreateTemplateParams }
 
 func (client *Client) CreateTemplate(ctx context.Context, input CreateTemplateInput) (*CreateTemplateResult, error) {
 	var result CreateTemplateResult
-	err := client.request(ctx, operation{ID: "api2.create-template", Method: "POST", Path: "/templates", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.create-template", Method: "POST", Path: "/templates", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38868,7 +38890,7 @@ type CreateTemplateCredentialInput struct {
 
 func (client *Client) CreateTemplateCredential(ctx context.Context, input CreateTemplateCredentialInput) (*CreateTemplateCredentialResult, error) {
 	var result CreateTemplateCredentialResult
-	err := client.request(ctx, operation{ID: "api2.create-template-credential", Method: "POST", Path: "/template_credentials", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.create-template-credential", Method: "POST", Path: "/template_credentials", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38882,7 +38904,7 @@ type DeleteAuthKeyInput struct {
 
 func (client *Client) DeleteAuthKey(ctx context.Context, input DeleteAuthKeyInput) (*DeleteAuthKeyResult, error) {
 	var result DeleteAuthKeyResult
-	err := client.request(ctx, operation{ID: "api2.delete-auth-key", Method: "DELETE", Path: "/auth_keys/{authKeyId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.delete-auth-key", Method: "DELETE", Path: "/auth_keys/{authKeyId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38899,7 +38921,7 @@ type DeleteDamAssetError = BulkDeleteDamAssetsError
 
 func (client *Client) DeleteDamAsset(ctx context.Context, input DeleteDamAssetInput) (*DeleteDamAssetResult, error) {
 	var result DeleteDamAssetResult
-	err := client.request(ctx, operation{ID: "api2.delete-dam-asset", Method: "DELETE", Path: "/dam/assets/{assetId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.delete-dam-asset", Method: "DELETE", Path: "/dam/assets/{assetId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38916,7 +38938,7 @@ type DeleteTemplateError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) DeleteTemplate(ctx context.Context, input DeleteTemplateInput) (*DeleteTemplateResult, error) {
 	var result DeleteTemplateResult
-	err := client.request(ctx, operation{ID: "api2.delete-template", Method: "DELETE", Path: "/templates/{templateIdOrName}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.delete-template", Method: "DELETE", Path: "/templates/{templateIdOrName}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38931,7 +38953,7 @@ type DeleteTemplateCredentialInput struct {
 
 func (client *Client) DeleteTemplateCredential(ctx context.Context, input DeleteTemplateCredentialInput) (*DeleteTemplateCredentialResult, error) {
 	var result DeleteTemplateCredentialResult
-	err := client.request(ctx, operation{ID: "api2.delete-template-credential", Method: "DELETE", Path: "/template_credentials/{templateCredentialId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.delete-template-credential", Method: "DELETE", Path: "/template_credentials/{templateCredentialId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38944,7 +38966,7 @@ type GetAssemblyError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) GetAssembly(ctx context.Context, input GetAssemblyInput) (*GetAssemblyResult, error) {
 	var result GetAssemblyResult
-	err := client.request(ctx, operation{ID: "api2.get-assembly", Method: "GET", Path: "/assemblies/{assemblyId}", Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.get-assembly", Method: "GET", Path: "/assemblies/{assemblyId}", RawPathPatterns: map[string]string{}, Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38959,7 +38981,7 @@ type GetBillInput struct {
 
 func (client *Client) GetBill(ctx context.Context, input GetBillInput) (*GetBillResult, error) {
 	var result GetBillResult
-	err := client.request(ctx, operation{ID: "api2.get-bill", Method: "GET", Path: "/bill/{billYearMonth}", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"billYearMonth": input.BillYearMonth}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.get-bill", Method: "GET", Path: "/bill/{billYearMonth}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"billYearMonth": input.BillYearMonth}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38975,7 +38997,7 @@ type GetDamAssetError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) GetDamAsset(ctx context.Context, input GetDamAssetInput) (*GetDamAssetResult, error) {
 	var result GetDamAssetResult
-	err := client.request(ctx, operation{ID: "api2.get-dam-asset", Method: "GET", Path: "/dam/assets/{assetId}", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.get-dam-asset", Method: "GET", Path: "/dam/assets/{assetId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38992,7 +39014,7 @@ type GetTemplateError = GetBillError
 
 func (client *Client) GetTemplate(ctx context.Context, input GetTemplateInput) (*GetTemplateResult, error) {
 	var result GetTemplateResult
-	err := client.request(ctx, operation{ID: "api2.get-template", Method: "GET", Path: "/templates/{templateIdOrName}", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.get-template", Method: "GET", Path: "/templates/{templateIdOrName}", RawPathPatterns: map[string]string{"templateIdOrName": "^builtin/[a-z0-9-]+(@[0-9a-z.-]+)?$"}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39007,7 +39029,7 @@ type GetTemplateCredentialInput struct {
 
 func (client *Client) GetTemplateCredential(ctx context.Context, input GetTemplateCredentialInput) (*GetTemplateCredentialResult, error) {
 	var result GetTemplateCredentialResult
-	err := client.request(ctx, operation{ID: "api2.get-template-credential", Method: "GET", Path: "/template_credentials/{templateCredentialId}", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.get-template-credential", Method: "GET", Path: "/template_credentials/{templateCredentialId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39018,7 +39040,7 @@ type IssueBearerTokenInput struct{ Body IssueBearerTokenBody }
 
 func (client *Client) IssueBearerToken(ctx context.Context, input IssueBearerTokenInput) (*IssueBearerTokenResult, error) {
 	var result IssueBearerTokenResult
-	err := client.request(ctx, operation{ID: "api2.issue-bearer-token", Method: "POST", Path: "/token", Auth: "basic", Bearer: false, Encoding: "form", ParamsField: "", SignatureField: ""}, map[string]string{}, input.Body, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.issue-bearer-token", Method: "POST", Path: "/token", RawPathPatterns: map[string]string{}, Auth: "basic", Bearer: false, Encoding: "form", ParamsField: "", SignatureField: ""}, map[string]string{}, input.Body, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39029,7 +39051,7 @@ type ListAssembliesInput struct{ Params ListAssembliesParams }
 
 func (client *Client) ListAssemblies(ctx context.Context, input ListAssembliesInput) (*ListAssembliesResult, error) {
 	var result ListAssembliesResult
-	err := client.request(ctx, operation{ID: "api2.list-assemblies", Method: "GET", Path: "/assemblies", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-assemblies", Method: "GET", Path: "/assemblies", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39042,7 +39064,7 @@ type ListAssemblyNotificationsError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ListAssemblyNotifications(ctx context.Context, input ListAssemblyNotificationsInput) (*ListAssemblyNotificationsResult, error) {
 	var result ListAssemblyNotificationsResult
-	err := client.request(ctx, operation{ID: "api2.list-assembly-notifications", Method: "GET", Path: "/assembly_notifications/{assemblyId}", Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-assembly-notifications", Method: "GET", Path: "/assembly_notifications/{assemblyId}", RawPathPatterns: map[string]string{}, Auth: "none", Bearer: false, Encoding: "none", ParamsField: "", SignatureField: ""}, map[string]string{"assemblyId": input.AssemblyId}, nil, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39056,7 +39078,7 @@ type ListAuthKeyScopesError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ListAuthKeyScopes(ctx context.Context, input ListAuthKeyScopesInput) (*ListAuthKeyScopesResult, error) {
 	var result ListAuthKeyScopesResult
-	err := client.request(ctx, operation{ID: "api2.list-auth-key-scopes", Method: "GET", Path: "/auth_keys/scopes", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-auth-key-scopes", Method: "GET", Path: "/auth_keys/scopes", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39070,7 +39092,7 @@ type ListAuthKeysError = GetBillError
 
 func (client *Client) ListAuthKeys(ctx context.Context, input ListAuthKeysInput) (*ListAuthKeysResult, error) {
 	var result ListAuthKeysResult
-	err := client.request(ctx, operation{ID: "api2.list-auth-keys", Method: "GET", Path: "/auth_keys", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-auth-keys", Method: "GET", Path: "/auth_keys", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39083,7 +39105,7 @@ type ListDamAssetsError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ListDamAssets(ctx context.Context, input ListDamAssetsInput) (*ListDamAssetsResult, error) {
 	var result ListDamAssetsResult
-	err := client.request(ctx, operation{ID: "api2.list-dam-assets", Method: "GET", Path: "/dam/assets", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-dam-assets", Method: "GET", Path: "/dam/assets", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39097,7 +39119,7 @@ type ListPriorityJobSlotsError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ListPriorityJobSlots(ctx context.Context, input ListPriorityJobSlotsInput) (*ListPriorityJobSlotsResult, error) {
 	var result ListPriorityJobSlotsResult
-	err := client.request(ctx, operation{ID: "api2.list-priority-job-slots", Method: "GET", Path: "/queues/job_slots", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-priority-job-slots", Method: "GET", Path: "/queues/job_slots", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39113,7 +39135,7 @@ type ListTemplateCredentialTypesError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ListTemplateCredentialTypes(ctx context.Context, input ListTemplateCredentialTypesInput) (*ListTemplateCredentialTypesResult, error) {
 	var result ListTemplateCredentialTypesResult
-	err := client.request(ctx, operation{ID: "api2.list-template-credential-types", Method: "GET", Path: "/template_credentials/types", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-template-credential-types", Method: "GET", Path: "/template_credentials/types", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39125,7 +39147,7 @@ type ListTemplateCredentialsInput struct{ Params ListTemplateCredentialsParams }
 
 func (client *Client) ListTemplateCredentials(ctx context.Context, input ListTemplateCredentialsInput) (*ListTemplateCredentialsResult, error) {
 	var result ListTemplateCredentialsResult
-	err := client.request(ctx, operation{ID: "api2.list-template-credentials", Method: "GET", Path: "/template_credentials", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-template-credentials", Method: "GET", Path: "/template_credentials", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39136,7 +39158,7 @@ type ListTemplatesInput struct{ Params ListTemplatesParams }
 
 func (client *Client) ListTemplates(ctx context.Context, input ListTemplatesInput) (*ListTemplatesResult, error) {
 	var result ListTemplatesResult
-	err := client.request(ctx, operation{ID: "api2.list-templates", Method: "GET", Path: "/templates", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.list-templates", Method: "GET", Path: "/templates", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39152,7 +39174,7 @@ type MoveDamAssetError = BulkDeleteDamAssetsError
 
 func (client *Client) MoveDamAsset(ctx context.Context, input MoveDamAssetInput) (*MoveDamAssetResult, error) {
 	var result MoveDamAssetResult
-	err := client.request(ctx, operation{ID: "api2.move-dam-asset", Method: "PATCH", Path: "/dam/assets/{assetId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.move-dam-asset", Method: "PATCH", Path: "/dam/assets/{assetId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assetId": input.AssetId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39165,7 +39187,7 @@ type MoveDamEntryError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) MoveDamEntry(ctx context.Context, input MoveDamEntryInput) (*MoveDamEntryResult, error) {
 	var result MoveDamEntryResult
-	err := client.request(ctx, operation{ID: "api2.move-dam-entry", Method: "POST", Path: "/dam/entries/move", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.move-dam-entry", Method: "POST", Path: "/dam/entries/move", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39176,7 +39198,7 @@ type PriorityJobSlotStatsInput struct{ Params PriorityJobSlotStatsParams }
 
 func (client *Client) PriorityJobSlotStats(ctx context.Context, input PriorityJobSlotStatsInput) (*PriorityJobSlotStatsResult, error) {
 	var result PriorityJobSlotStatsResult
-	err := client.request(ctx, operation{ID: "api2.priority-job-slot-stats", Method: "GET", Path: "/priority_job_slot_stats", Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.priority-job-slot-stats", Method: "GET", Path: "/priority_job_slot_stats", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "query", ParamsField: "params", SignatureField: "signature"}, map[string]string{}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39195,7 +39217,7 @@ type ReplaceAssemblyError = CreateAssemblyError
 
 func (client *Client) ReplaceAssembly(ctx context.Context, input ReplaceAssemblyInput) (*ReplaceAssemblyResult, error) {
 	var result ReplaceAssemblyResult
-	err := client.request(ctx, operation{ID: "api2.replace-assembly", Method: "PUT", Path: "/assemblies/{assemblyId}", Auth: "api-key", Bearer: true, Encoding: "multipart/form-data", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, input.Files, input.Fields, &result)
+	err := client.request(ctx, operation{ID: "api2.replace-assembly", Method: "PUT", Path: "/assemblies/{assemblyId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "multipart/form-data", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, input.Files, input.Fields, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39211,7 +39233,7 @@ type ReplayAssemblyError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ReplayAssembly(ctx context.Context, input ReplayAssemblyInput) (*ReplayAssemblyResult, error) {
 	var result ReplayAssemblyResult
-	err := client.request(ctx, operation{ID: "api2.replay-assembly", Method: "POST", Path: "/assemblies/{assemblyId}/replay", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.replay-assembly", Method: "POST", Path: "/assemblies/{assemblyId}/replay", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39227,7 +39249,7 @@ type ReplayAssemblyNotificationError = AssemblyStatsError_Choice1_Choice2
 
 func (client *Client) ReplayAssemblyNotification(ctx context.Context, input ReplayAssemblyNotificationInput) (*ReplayAssemblyNotificationResult, error) {
 	var result ReplayAssemblyNotificationResult
-	err := client.request(ctx, operation{ID: "api2.replay-assembly-notification", Method: "POST", Path: "/assembly_notifications/{assemblyId}/replay", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.replay-assembly-notification", Method: "POST", Path: "/assembly_notifications/{assemblyId}/replay", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"assemblyId": input.AssemblyId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39242,7 +39264,7 @@ type ShowAuthKeySecretInput struct {
 
 func (client *Client) ShowAuthKeySecret(ctx context.Context, input ShowAuthKeySecretInput) (*ShowAuthKeySecretResult, error) {
 	var result ShowAuthKeySecretResult
-	err := client.request(ctx, operation{ID: "api2.show-auth-key-secret", Method: "POST", Path: "/auth_keys/show_secret/{authKeyId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.show-auth-key-secret", Method: "POST", Path: "/auth_keys/show_secret/{authKeyId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39256,7 +39278,7 @@ type UpdateAuthKeyInput struct {
 
 func (client *Client) UpdateAuthKey(ctx context.Context, input UpdateAuthKeyInput) (*UpdateAuthKeyResult, error) {
 	var result UpdateAuthKeyResult
-	err := client.request(ctx, operation{ID: "api2.update-auth-key", Method: "PUT", Path: "/auth_keys/{authKeyId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.update-auth-key", Method: "PUT", Path: "/auth_keys/{authKeyId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"authKeyId": input.AuthKeyId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39272,7 +39294,7 @@ type UpdateTemplateError = CreateTemplateError
 
 func (client *Client) UpdateTemplate(ctx context.Context, input UpdateTemplateInput) (*UpdateTemplateResult, error) {
 	var result UpdateTemplateResult
-	err := client.request(ctx, operation{ID: "api2.update-template", Method: "PUT", Path: "/templates/{templateIdOrName}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.update-template", Method: "PUT", Path: "/templates/{templateIdOrName}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateIdOrName": input.TemplateIdOrName}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39286,7 +39308,7 @@ type UpdateTemplateCredentialInput struct {
 
 func (client *Client) UpdateTemplateCredential(ctx context.Context, input UpdateTemplateCredentialInput) (*UpdateTemplateCredentialResult, error) {
 	var result UpdateTemplateCredentialResult
-	err := client.request(ctx, operation{ID: "api2.update-template-credential", Method: "PUT", Path: "/template_credentials/{templateCredentialId}", Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.update-template-credential", Method: "PUT", Path: "/template_credentials/{templateCredentialId}", RawPathPatterns: map[string]string{}, Auth: "api-key", Bearer: true, Encoding: "application/x-www-form-urlencoded", ParamsField: "params", SignatureField: "signature"}, map[string]string{"templateCredentialId": input.TemplateCredentialId}, input.Params, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
