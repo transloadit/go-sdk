@@ -26567,19 +26567,26 @@ func (value ValueBooleanOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueBooleanOrNull) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueBooleanOrNull{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueBooleanOrNull{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate bool
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueBooleanOrNull{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueBooleanOrNull{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueBooleanOrNull JSON shape")
 }
@@ -26613,19 +26620,26 @@ func (value ValueIntegerOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueIntegerOrNull) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate Integer
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueIntegerOrNull{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueIntegerOrNull{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate Integer
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueIntegerOrNull{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueIntegerOrNull{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueIntegerOrNull JSON shape")
 }
@@ -26659,19 +26673,26 @@ func (value ValueIntegerOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueIntegerOrString) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate Integer
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueIntegerOrString{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueIntegerOrString{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate Integer
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueIntegerOrString{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueIntegerOrString{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueIntegerOrString JSON shape")
 }
@@ -26705,19 +26726,26 @@ func (value ValueNullOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNullOrString) UnmarshalJSON(data []byte) error {
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNullOrString{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(string) }}, []bool{true, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNullOrString{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueNullOrString{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueNullOrString{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueNullOrString JSON shape")
 }
@@ -26751,19 +26779,26 @@ func (value ValueNumberOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrNull) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrNull{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrNull{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate float64
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueNumberOrNull{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueNumberOrNull{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueNumberOrNull JSON shape")
 }
@@ -26797,19 +26832,26 @@ func (value ValueNumberOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrString) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrString{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrString{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate float64
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueNumberOrString{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueNumberOrString{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueNumberOrString JSON shape")
 }
@@ -26851,26 +26893,33 @@ func (value ValueNumberOrStringOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrStringOrNull) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, false, true})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrStringOrNull{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueNumberOrStringOrNull{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrStringOrNull{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueNumberOrStringOrNull{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueNumberOrStringOrNull{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueNumberOrStringOrNull{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueNumberOrStringOrNull JSON shape")
 }
@@ -26904,19 +26953,26 @@ func (value ValueStringOrInteger) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrInteger) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrInteger{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate Integer
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrInteger{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrInteger{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate Integer
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrInteger{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrInteger JSON shape")
 }
@@ -26950,19 +27006,26 @@ func (value ValueStringOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNull) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNull{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNull{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrNull{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrNull{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrNull JSON shape")
 }
@@ -26996,19 +27059,26 @@ func (value ValueStringOrNumber) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNumber) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNumber{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNumber{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrNumber{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate float64
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrNumber{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrNumber JSON shape")
 }
@@ -27050,26 +27120,33 @@ func (value ValueStringOrNumberOrBoolean) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNumberOrBoolean) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNumberOrBoolean{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueStringOrNumberOrBoolean{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNumberOrBoolean{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueStringOrNumberOrBoolean{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrNumberOrBoolean{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrNumberOrBoolean{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrNumberOrBoolean JSON shape")
 }
@@ -27103,19 +27180,26 @@ func (value ValueStringOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrString) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrString{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrString{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrString{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrString{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrString JSON shape")
 }
@@ -27157,26 +27241,33 @@ func (value ValueStringOrStringOrInteger) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrStringOrInteger) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrInteger{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrInteger{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueStringOrStringOrInteger{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrStringOrInteger{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate Integer
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrInteger{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrStringOrInteger{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrStringOrInteger JSON shape")
 }
@@ -27218,26 +27309,33 @@ func (value ValueStringOrStringOrNumber) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrStringOrNumber) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrNumber{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrNumber{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = ValueStringOrStringOrNumber{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = ValueStringOrStringOrNumber{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = ValueStringOrStringOrNumber{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = ValueStringOrStringOrNumber{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid ValueStringOrStringOrNumber JSON shape")
 }
@@ -27295,19 +27393,26 @@ func (value wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a
 	return data, nil
 }
 func (value *wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebd154da7716945df9cd169d50481e04b22f3c597ef3c502061fb65cc754e7ada) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebd154da7716945df9cd169d50481e04b22f3c597ef3c502061fb65cc754e7ada
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebd154da7716945df9cd169d50481e04b22f3c597ef3c502061fb65cc754e7ada
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire002b8d56abf0b1d966984820247e1371ea4ca713bf47489b414c11b2c323888a JSON shape")
 }
@@ -27490,26 +27595,33 @@ func (value wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9
 	return data, nil
 }
 func (value *wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire01573ad8f4c8fa2fb1b92f388281b6c7c0c0019e3252a0c8ff2dc00b794950b9 JSON shape")
 }
@@ -27591,19 +27703,26 @@ func (value wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9
 	return data, nil
 }
 func (value *wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate impossibleValue
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate impossibleValue
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate ValueStringOrString
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9 JSON shape")
 }
@@ -27637,19 +27756,26 @@ func (value wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d
 	return data, nil
 }
 func (value *wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9151410bc57f18dd947e2663c77628f847f2bd1bf993964d58c0998aa9ce4ab7) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9151410bc57f18dd947e2663c77628f847f2bd1bf993964d58c0998aa9ce4ab7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9151410bc57f18dd947e2663c77628f847f2bd1bf993964d58c0998aa9ce4ab7
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d JSON shape")
 }
@@ -27683,19 +27809,26 @@ func (value wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a
 	return data, nil
 }
 func (value *wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb77fc0c0a9f0ae6b30338274bfa1d6903f901e191f1d94e365da0d68a1918278) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb77fc0c0a9f0ae6b30338274bfa1d6903f901e191f1d94e365da0d68a1918278
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb77fc0c0a9f0ae6b30338274bfa1d6903f901e191f1d94e365da0d68a1918278
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a JSON shape")
 }
@@ -27729,19 +27862,26 @@ func (value wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136
 	return data, nil
 }
 func (value *wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire35400d67c395b777e42fa8c7835e8c5fe2643f38b0ac1d04ce8d2ae183d99620) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire35400d67c395b777e42fa8c7835e8c5fe2643f38b0ac1d04ce8d2ae183d99620
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire35400d67c395b777e42fa8c7835e8c5fe2643f38b0ac1d04ce8d2ae183d99620
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire01c9e60f7fd192308a0f299a68f80e188544d3c83eb5f312a7e65375e040c136 JSON shape")
 }
@@ -28027,19 +28167,26 @@ func (value wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149
 	return data, nil
 }
 func (value *wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirea3302217db0e80f478d1edf88e3e99e82d14abe42b8793521a745f2eab9b8ec2) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirea3302217db0e80f478d1edf88e3e99e82d14abe42b8793521a745f2eab9b8ec2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirea3302217db0e80f478d1edf88e3e99e82d14abe42b8793521a745f2eab9b8ec2
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire02f070e7b099eb983b19929a789afe45cc43b0ad13df788ea4d9cc293633a149 JSON shape")
 }
@@ -28075,19 +28222,26 @@ func (value wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74
 	return data, nil
 }
 func (value *wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire030cf7f897f4b4a6ff65c9655592ee247308bd0b3a4eceb77b04f48eb244af74 JSON shape")
 }
@@ -28148,19 +28302,26 @@ func (value wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738
 	return data, nil
 }
 func (value *wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire03b4a00c53e7c4a2be028b75644aafeccd1cd0c2f75c53f361be39022243a738 JSON shape")
 }
@@ -28262,26 +28423,33 @@ func (value wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19
 	return data, nil
 }
 func (value *wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire66a9805ba0513cb22b8de00e0f639a497dad4831abdfa6dee40b5ad3b0149bdd) }, func() interface{} { return new(wire14e947db9d8803a94237f71e5069d2f214623f0b52015206e3bc3f57e51a3bd8) }, func() interface{} { return new(wired078673ce94aeb71826f34548a4dc6c3018afcea1df3c190ead7ffc8cf357ce3) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire66a9805ba0513cb22b8de00e0f639a497dad4831abdfa6dee40b5ad3b0149bdd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire14e947db9d8803a94237f71e5069d2f214623f0b52015206e3bc3f57e51a3bd8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wired078673ce94aeb71826f34548a4dc6c3018afcea1df3c190ead7ffc8cf357ce3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19 JSON shape")
 }
@@ -28365,19 +28533,26 @@ func (value wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1
 	return data, nil
 }
 func (value *wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrStringOrInteger
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate ValueStringOrStringOrInteger
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire0518990bcd3a5ea4bebfacf7047136723baffe28c6f4db79f808ab79964d26c1 JSON shape")
 }
@@ -28419,26 +28594,33 @@ func (value wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7
 	return data, nil
 }
 func (value *wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire05a46ca0d58bc7d55dce0213c5d27752bfa0f6a07bc7fa0236338860b91337c7 JSON shape")
 }
@@ -28613,19 +28795,26 @@ func (value wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559
 	return data, nil
 }
 func (value *wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref90bf29587c39ff6ec788b4b446f53679eb3ddc18355a1c3eca96c1530a63a37
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiref90bf29587c39ff6ec788b4b446f53679eb3ddc18355a1c3eca96c1530a63a37) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiref90bf29587c39ff6ec788b4b446f53679eb3ddc18355a1c3eca96c1530a63a37
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire07702e37bc6bc3fa96a0ff40310117888a5f4b71ac647e3f93e4593018665559 JSON shape")
 }
@@ -28731,19 +28920,26 @@ func (value wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b
 	return data, nil
 }
 func (value *wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9) }, func() interface{} { return new(wire92bccfac3530556c1cc458f4b78f007b1a3bb41560cddb2afb317a44ba3c1188) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire92bccfac3530556c1cc458f4b78f007b1a3bb41560cddb2afb317a44ba3c1188
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire92bccfac3530556c1cc458f4b78f007b1a3bb41560cddb2afb317a44ba3c1188
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire0862c00c4e0751b789b855a35c3ce6c8bf90839f7e0e0cfd9bd5654e297de97b JSON shape")
 }
@@ -28777,19 +28973,26 @@ func (value wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c
 	return data, nil
 }
 func (value *wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire96b23bc576b3604386b4f5dca5f66e5229a2c460020ea5a83999fcce036c9f2c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire96b23bc576b3604386b4f5dca5f66e5229a2c460020ea5a83999fcce036c9f2c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire96b23bc576b3604386b4f5dca5f66e5229a2c460020ea5a83999fcce036c9f2c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire08eee2ad022a49c40f8b7cf12b44eee58d303df7b249fee101d269207b0ce91c JSON shape")
 }
@@ -29279,40 +29482,47 @@ func (value wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3
 	return data, nil
 }
 func (value *wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }, func() interface{} { return new(wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23) }, func() interface{} { return new(wire10dd332d572b5443f8830c8806d49420da1a468233f4636f1912c73457135368) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire10dd332d572b5443f8830c8806d49420da1a468233f4636f1912c73457135368
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire0e18773a0eac3dcb581aa86b131af8c6b762dc9c9896216b03a17ba98f82b8b3 JSON shape")
 }
@@ -29549,26 +29759,33 @@ func (value wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201
 	return data, nil
 }
 func (value *wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201 JSON shape")
 }
@@ -29655,26 +29872,33 @@ func (value wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847
 	return data, nil
 }
 func (value *wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiread1963a9801cc0f40b05ab6a593bbf68a5104aa9310f4b6bff6a7d17f3d51242) }, func() interface{} { return new(wire10de0326a8ca8fbd63a8659acec81c7fc4c8db52031d82573c3de4f3dcf27cdd) }, func() interface{} { return new(wirebf43d9088f0ada027767a5f7fac99449ba58422fe6a79a3cfdaa6ecbea7a5373) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wiread1963a9801cc0f40b05ab6a593bbf68a5104aa9310f4b6bff6a7d17f3d51242
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire10de0326a8ca8fbd63a8659acec81c7fc4c8db52031d82573c3de4f3dcf27cdd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirebf43d9088f0ada027767a5f7fac99449ba58422fe6a79a3cfdaa6ecbea7a5373
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847 JSON shape")
 }
@@ -29767,19 +29991,26 @@ func (value wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed
 	return data, nil
 }
 func (value *wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb) }, func() interface{} { return new(wire6d6a894918f7af509022454e44aaf99290945227a7cf178f829430d546a76b21) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6d6a894918f7af509022454e44aaf99290945227a7cf178f829430d546a76b21
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6d6a894918f7af509022454e44aaf99290945227a7cf178f829430d546a76b21
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1311798f636d5bdc90da3c576f67c74ceaee2576d90b75ffb2483ec61a68b2ed JSON shape")
 }
@@ -29833,19 +30064,26 @@ func (value wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90
 	return data, nil
 }
 func (value *wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire13e225e53a710e51f0fd0db854b9fe68189f4437d8def80ddb00d57509417a90 JSON shape")
 }
@@ -29927,19 +30165,26 @@ func (value wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04
 	return data, nil
 }
 func (value *wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire270f5690e8dd4d274ca44e5e61d2cbefad190f730deb12ab627412e6177f6963) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire270f5690e8dd4d274ca44e5e61d2cbefad190f730deb12ab627412e6177f6963
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire270f5690e8dd4d274ca44e5e61d2cbefad190f730deb12ab627412e6177f6963
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire148c8a50739b2f81b1c03fdad70fb32ece34503d97f90a6bf0ef5624927d3d04 JSON shape")
 }
@@ -30061,33 +30306,40 @@ func (value wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08
 	return data, nil
 }
 func (value *wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734) }, func() interface{} { return new(wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33) }, func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire155967a575a6c4818c28c4750fe72e2269f3e2e2601ea2b4afd31768694e0f08 JSON shape")
 }
@@ -30220,19 +30472,26 @@ func (value wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41
 	return data, nil
 }
 func (value *wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2c69c1b33ad216afed44ad64ab48a210f3f24e387c1841d2d7a8329d46fab62f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2c69c1b33ad216afed44ad64ab48a210f3f24e387c1841d2d7a8329d46fab62f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2c69c1b33ad216afed44ad64ab48a210f3f24e387c1841d2d7a8329d46fab62f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41 JSON shape")
 }
@@ -30290,19 +30549,26 @@ func (value wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4
 	return data, nil
 }
 func (value *wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire179233a2a04fd8b7bc19bf1e8cc223445c1da114236b687f296f7273785949f4 JSON shape")
 }
@@ -30465,19 +30731,26 @@ func (value wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa
 	return data, nil
 }
 func (value *wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirea796a48a45d3e61ca2afbb9276c03abdd3b5d5fc086232170c76d9b5bcb4b4e6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirea796a48a45d3e61ca2afbb9276c03abdd3b5d5fc086232170c76d9b5bcb4b4e6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirea796a48a45d3e61ca2afbb9276c03abdd3b5d5fc086232170c76d9b5bcb4b4e6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire18f5b6978cceca24e0492be17a950d693d2ff2fcaa63521578a51f031f779afa JSON shape")
 }
@@ -30511,19 +30784,26 @@ func (value wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60
 	return data, nil
 }
 func (value *wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate ValueStringOrString
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire18ffad74b3b20cd5a9551da615b4ca0186d654f473f50273dfed86960dcaed60 JSON shape")
 }
@@ -30748,19 +31028,26 @@ func (value wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483
 	return data, nil
 }
 func (value *wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire48330728c3d47e354d0bd51d1d85e3932c1d25f7fa27f3b65fa180542f99d0e1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire48330728c3d47e354d0bd51d1d85e3932c1d25f7fa27f3b65fa180542f99d0e1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire48330728c3d47e354d0bd51d1d85e3932c1d25f7fa27f3b65fa180542f99d0e1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483 JSON shape")
 }
@@ -30942,26 +31229,33 @@ func (value wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48
 	return data, nil
 }
 func (value *wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiredea486e7d77db985a7b1c35dbce29b8fa5666bb513f9075cc7d89579feea9caa) }, func() interface{} { return new(wire5a924048ab3576bc6a60a99b0c9319d012be2a13578cff435001287553e19fb1) }, func() interface{} { return new(wireff86e76b36947867952b53cd2cbc5f1c0cf50191e83c519ba85a857655c0d90a) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wiredea486e7d77db985a7b1c35dbce29b8fa5666bb513f9075cc7d89579feea9caa
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire5a924048ab3576bc6a60a99b0c9319d012be2a13578cff435001287553e19fb1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wireff86e76b36947867952b53cd2cbc5f1c0cf50191e83c519ba85a857655c0d90a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48 JSON shape")
 }
@@ -31019,40 +31313,47 @@ func (value wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb
 	return data, nil
 }
 func (value *wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc) }}, []bool{false, false, false, true, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1df901cb52fbc2278e10ab153f1ed5812754bbb18e65474ad09f5fd81990e8fb JSON shape")
 }
@@ -31086,19 +31387,26 @@ func (value wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d
 	return data, nil
 }
 func (value *wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebd1a2bad65e793713e56c029a33a1476e0470e55a2cf078201701c87bef415c7) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebd1a2bad65e793713e56c029a33a1476e0470e55a2cf078201701c87bef415c7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebd1a2bad65e793713e56c029a33a1476e0470e55a2cf078201701c87bef415c7
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1e31b3250eae18651f8f55026ce55a1335866a5391bfa8087112997ae2e7030d JSON shape")
 }
@@ -31132,19 +31440,26 @@ func (value wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad
 	return data, nil
 }
 func (value *wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire29dc93b4779e46608f95214a7ce144eb8fac05c089893d58a8e92d2a3ac9a7c3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire29dc93b4779e46608f95214a7ce144eb8fac05c089893d58a8e92d2a3ac9a7c3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire29dc93b4779e46608f95214a7ce144eb8fac05c089893d58a8e92d2a3ac9a7c3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad JSON shape")
 }
@@ -31212,26 +31527,33 @@ func (value wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1
 	return data, nil
 }
 func (value *wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrInteger) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrInteger
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire1f218bcf674f03524399e339ff63bd5bf4309c54a59b2b1ad180f20b04be54e1 JSON shape")
 }
@@ -31399,26 +31721,33 @@ func (value wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493
 	return data, nil
 }
 func (value *wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508) }, func() interface{} { return new(wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire20efe228f94841123dbe43fcf326d81d46b084d2a4920c3e18ec6326997db493 JSON shape")
 }
@@ -31476,19 +31805,26 @@ func (value wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38
 	return data, nil
 }
 func (value *wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb7519aee933e47ff626b91801f38ba3aef4ac7bd67ff483329186590b2bcc640) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb7519aee933e47ff626b91801f38ba3aef4ac7bd67ff483329186590b2bcc640
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb7519aee933e47ff626b91801f38ba3aef4ac7bd67ff483329186590b2bcc640
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire21d9d620ead7e9b0f15e39e526fe5f6993a966cee079c71db5e7770780e19b38 JSON shape")
 }
@@ -31522,19 +31858,26 @@ func (value wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67
 	return data, nil
 }
 func (value *wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireda4c250a10030d3df8e12a53bfc9cb34fec9cd7d477c9dd3ac6de0b12d6e4425) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireda4c250a10030d3df8e12a53bfc9cb34fec9cd7d477c9dd3ac6de0b12d6e4425
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireda4c250a10030d3df8e12a53bfc9cb34fec9cd7d477c9dd3ac6de0b12d6e4425
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire21f3907004c02b9211e97dc8c5d7530c6283dcc1edb490e8235e5ae53d707b67 JSON shape")
 }
@@ -31568,19 +31911,26 @@ func (value wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2
 	return data, nil
 }
 func (value *wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3795e1aee7149b09e1a7394a474bf6c1344e3051f3a3c99a2e0092a32c360e77) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3795e1aee7149b09e1a7394a474bf6c1344e3051f3a3c99a2e0092a32c360e77
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3795e1aee7149b09e1a7394a474bf6c1344e3051f3a3c99a2e0092a32c360e77
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2210f93d423c51c91469dd3c0184a697e7e04d47c53e65e62af5ee2f15dad2e2 JSON shape")
 }
@@ -31638,19 +31988,26 @@ func (value wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371
 	return data, nil
 }
 func (value *wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireec6e5b62cefe7d510f1b2f5161265e4e25b2e850bda1d75c89f5366955a97e31
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireec6e5b62cefe7d510f1b2f5161265e4e25b2e850bda1d75c89f5366955a97e31) }, func() interface{} { return new(wirec68ec72bbfcb6ba3d167ad252185563f671b854776789a41fd0e5a5dea053180) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec68ec72bbfcb6ba3d167ad252185563f671b854776789a41fd0e5a5dea053180
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wireec6e5b62cefe7d510f1b2f5161265e4e25b2e850bda1d75c89f5366955a97e31
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec68ec72bbfcb6ba3d167ad252185563f671b854776789a41fd0e5a5dea053180
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire22bee776604f3f3843b8866590920b1a1d743392c52d76f8263e9a81dd164371 JSON shape")
 }
@@ -31708,40 +32065,47 @@ func (value wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1
 	return data, nil
 }
 func (value *wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, false, false, false, true})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire23017985a578fec3c6c3efe638b4ef128475adaa6fac72d0ca5aaddb9d021bd1 JSON shape")
 }
@@ -31864,26 +32228,33 @@ func (value wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638
 	return data, nil
 }
 func (value *wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wire2964fb4b2b040ca3a2b22ead1774e7270340893db5cf727e89c7b7324dbe5370) }, func() interface{} { return new(string) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire2964fb4b2b040ca3a2b22ead1774e7270340893db5cf727e89c7b7324dbe5370
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2450c4152fa4792faf0956ef0123a13d2430f2bd9f22034e2d8810db6ac21638 JSON shape")
 }
@@ -31917,19 +32288,26 @@ func (value wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71
 	return data, nil
 }
 func (value *wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2a5860cc990d3f13d585051165e56a99016d39445712509f176e13937dc099f5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2a5860cc990d3f13d585051165e56a99016d39445712509f176e13937dc099f5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2a5860cc990d3f13d585051165e56a99016d39445712509f176e13937dc099f5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71 JSON shape")
 }
@@ -31989,19 +32367,26 @@ func (value wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837
 	return data, nil
 }
 func (value *wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire251165584716e65f87bcb32c9c05c305b6f7420b7d4cbd5bf6fe209e4b09d837 JSON shape")
 }
@@ -32268,19 +32653,26 @@ func (value wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c
 	return data, nil
 }
 func (value *wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire119cb4b7950ac7b6cd1f9cae279cd1e3a456b770dbb2d4c56869cc33350e0201
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire275889fc14b678003bad3977cdcde4d9f5ab054b5f088dc7d64df87ddbdf009c JSON shape")
 }
@@ -32366,26 +32758,33 @@ func (value wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a
 	return data, nil
 }
 func (value *wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire8194b734446d2abdf9e4fe54964ce1bd93e95b8e617eab9c8ec32d210c6a60f1) }, func() interface{} { return new(wire1036ac23935ef37b4ae6a604b30fa02eb9cb28b7fc0acff19b07bc39a7125e6b) }, func() interface{} { return new(wire0385d0a7381f98dbd8e1c688fe6a64fb12f70080e4ae992716e721d7c4dd675d) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire8194b734446d2abdf9e4fe54964ce1bd93e95b8e617eab9c8ec32d210c6a60f1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire1036ac23935ef37b4ae6a604b30fa02eb9cb28b7fc0acff19b07bc39a7125e6b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire0385d0a7381f98dbd8e1c688fe6a64fb12f70080e4ae992716e721d7c4dd675d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a JSON shape")
 }
@@ -32463,19 +32862,26 @@ func (value wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0
 	return data, nil
 }
 func (value *wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire018fabf80a54cfb1829267c50012ef975895b6ea1f562164017af6255e88c7cf) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire018fabf80a54cfb1829267c50012ef975895b6ea1f562164017af6255e88c7cf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire018fabf80a54cfb1829267c50012ef975895b6ea1f562164017af6255e88c7cf
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0 JSON shape")
 }
@@ -32650,19 +33056,26 @@ func (value wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6
 	return data, nil
 }
 func (value *wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0130260465f8c213f77aa5b1a00041b9d3e1baa7a51edcf8809a73f99b373fe2) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0130260465f8c213f77aa5b1a00041b9d3e1baa7a51edcf8809a73f99b373fe2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0130260465f8c213f77aa5b1a00041b9d3e1baa7a51edcf8809a73f99b373fe2
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2b24c02225df954c7baa5a34f18df4f2e41da1f9d9d15f3ceda6a6ebf5110fd6 JSON shape")
 }
@@ -32696,19 +33109,26 @@ func (value wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025
 	return data, nil
 }
 func (value *wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4ecfeb5bae5fd65c5f5f9404038e84a53afa8b394c274a4b749187352de499fb) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4ecfeb5bae5fd65c5f5f9404038e84a53afa8b394c274a4b749187352de499fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4ecfeb5bae5fd65c5f5f9404038e84a53afa8b394c274a4b749187352de499fb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2b26fd2841b6b587a6d27ff3573dab9521a7e33d21f51e1f0f70a729f7ce8025 JSON shape")
 }
@@ -32742,19 +33162,26 @@ func (value wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40
 	return data, nil
 }
 func (value *wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire44f11c99223be5eac70ac037241e747d6129951413a304dc2c6da7de99a336c3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire44f11c99223be5eac70ac037241e747d6129951413a304dc2c6da7de99a336c3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire44f11c99223be5eac70ac037241e747d6129951413a304dc2c6da7de99a336c3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2b444e4138f01d2e43d967d00e6735c52a88640aef8d7f57c641e2712f4e9f40 JSON shape")
 }
@@ -32788,19 +33215,26 @@ func (value wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1
 	return data, nil
 }
 func (value *wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3c29e30997bd119086f15c0584343cc46da0fcfd871223aecb68deb30e9cbbf4) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3c29e30997bd119086f15c0584343cc46da0fcfd871223aecb68deb30e9cbbf4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3c29e30997bd119086f15c0584343cc46da0fcfd871223aecb68deb30e9cbbf4
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1 JSON shape")
 }
@@ -32968,19 +33402,26 @@ func (value wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8
 	return data, nil
 }
 func (value *wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2c5d960c355851f037c1571f109812d60bd9c1415af9612770742a8c2dde2ab8 JSON shape")
 }
@@ -33228,47 +33669,54 @@ func (value wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04
 	return data, nil
 }
 func (value *wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb) }, func() interface{} { return new(wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0) }}, []bool{false, false, false, true, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire2fd9046df38132ba5af55615f0621f68633975caa65be1aa45da56030a509c04 JSON shape")
 }
@@ -33324,19 +33772,26 @@ func (value wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242
 	return data, nil
 }
 func (value *wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebcd69fe5b800f02a49a8b54888cad5504db75768c52f9236730a6ea0cbd3fcae) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcd69fe5b800f02a49a8b54888cad5504db75768c52f9236730a6ea0cbd3fcae
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcd69fe5b800f02a49a8b54888cad5504db75768c52f9236730a6ea0cbd3fcae
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3089321c17ca1415606ef89da9f51ca14d18be2a4cc54d22a381610845f02242 JSON shape")
 }
@@ -33394,19 +33849,26 @@ func (value wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca
 	return data, nil
 }
 func (value *wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire41cc504ca3a1221f8344e85fe0ff3f2f854fcff9d973fbee6500c28049028de8) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire41cc504ca3a1221f8344e85fe0ff3f2f854fcff9d973fbee6500c28049028de8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire41cc504ca3a1221f8344e85fe0ff3f2f854fcff9d973fbee6500c28049028de8
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire30e5c37e7e5982f775647751661f76e3fee3742257ba0316a8e019d52dc5d5ca JSON shape")
 }
@@ -33532,19 +33994,26 @@ func (value wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115
 	return data, nil
 }
 func (value *wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2ff85f8639ee22a78a9bf9ad39621e4f794a90c775939b1291afa0bcb4e7962f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2ff85f8639ee22a78a9bf9ad39621e4f794a90c775939b1291afa0bcb4e7962f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2ff85f8639ee22a78a9bf9ad39621e4f794a90c775939b1291afa0bcb4e7962f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire31383ce8a17e7fd91b6ce6f73c717c5f1cc2566572a021956e9d19d8adcce115 JSON shape")
 }
@@ -33620,19 +34089,26 @@ func (value wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36
 	return data, nil
 }
 func (value *wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire22326bc0aa421c85d71f6fc73f68feceb8837ce2024cc30dd1fb12554bb59cdc) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire22326bc0aa421c85d71f6fc73f68feceb8837ce2024cc30dd1fb12554bb59cdc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire22326bc0aa421c85d71f6fc73f68feceb8837ce2024cc30dd1fb12554bb59cdc
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire31c9ab7714eda5c899914b3b9dda1f1187b3f900fb51c38401ea134165345d36 JSON shape")
 }
@@ -33666,19 +34142,26 @@ func (value wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4
 	return data, nil
 }
 func (value *wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireafd545e6ee80176241f6adadec674b159fec3fc28b1e3ac2a469c49a86bf9fce) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireafd545e6ee80176241f6adadec674b159fec3fc28b1e3ac2a469c49a86bf9fce
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireafd545e6ee80176241f6adadec674b159fec3fc28b1e3ac2a469c49a86bf9fce
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire31d5cd304175701342165fa145c96c497cce3708f03168727f00e4b00a8f18e4 JSON shape")
 }
@@ -33801,33 +34284,40 @@ func (value wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7
 	return data, nil
 }
 func (value *wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, false, false, true})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd7 JSON shape")
 }
@@ -33929,19 +34419,26 @@ func (value wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217
 	return data, nil
 }
 func (value *wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireea17595fb9ba3567a17b93b68a59de2e5af098c254f4801fffbdf3b13304219e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireea17595fb9ba3567a17b93b68a59de2e5af098c254f4801fffbdf3b13304219e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireea17595fb9ba3567a17b93b68a59de2e5af098c254f4801fffbdf3b13304219e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire339216bb3749cf5758b12548630cd80f18422b46e22343073d265ab1ef358217 JSON shape")
 }
@@ -33975,19 +34472,26 @@ func (value wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb
 	return data, nil
 }
 func (value *wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref846f39dca213cd9deb10f85d1cb7a0730c7a141e44568f5d9d9e3b58dfd5be9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref846f39dca213cd9deb10f85d1cb7a0730c7a141e44568f5d9d9e3b58dfd5be9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref846f39dca213cd9deb10f85d1cb7a0730c7a141e44568f5d9d9e3b58dfd5be9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire33e9abaa63e65f1543fb9480f09a7ef8a28a84c89a1d387ddb7c3d50fe2422bb JSON shape")
 }
@@ -34195,33 +34699,40 @@ func (value wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552
 	return data, nil
 }
 func (value *wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9f2fb414e579d9fb9340fee310732cfddc83b8334b7de43ae80b26b8f552fe48) }, func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire9f2fb414e579d9fb9340fee310732cfddc83b8334b7de43ae80b26b8f552fe48
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire366a1281174721e2454916435bb7ff4001ddf9583fdd2d43043d75a80bc26552 JSON shape")
 }
@@ -34289,26 +34800,33 @@ func (value wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a
 	return data, nil
 }
 func (value *wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire36b8e27cca7547b122f77ed702d2f67078c7e66ee9533f0c6670564f77e9835a JSON shape")
 }
@@ -34471,19 +34989,26 @@ func (value wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d
 	return data, nil
 }
 func (value *wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredc0101c2872dc1fe5e9f3b3b82c2ada06887b07f82185272cc6ec5d2a869e2b1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredc0101c2872dc1fe5e9f3b3b82c2ada06887b07f82185272cc6ec5d2a869e2b1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiredc0101c2872dc1fe5e9f3b3b82c2ada06887b07f82185272cc6ec5d2a869e2b1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3803bfe901eec4cb22b4be19c070351e30715ebea62b470444174dda9056ad4d JSON shape")
 }
@@ -34565,19 +35090,26 @@ func (value wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e
 	return data, nil
 }
 func (value *wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8863b36d28f61c1ab85b439020a669c46eb70d5d35d09304624624559643658d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8863b36d28f61c1ab85b439020a669c46eb70d5d35d09304624624559643658d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8863b36d28f61c1ab85b439020a669c46eb70d5d35d09304624624559643658d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3892e87ba2cf704f0ec23abc4190f027afcfcced36100f8d1679dea640bec85e JSON shape")
 }
@@ -34611,19 +35143,26 @@ func (value wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef
 	return data, nil
 }
 func (value *wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate impossibleValue
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrStringOrInteger
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate impossibleValue
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate ValueStringOrStringOrInteger
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef JSON shape")
 }
@@ -34720,19 +35259,26 @@ func (value wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c
 	return data, nil
 }
 func (value *wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c JSON shape")
 }
@@ -34865,19 +35411,26 @@ func (value wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0
 	return data, nil
 }
 func (value *wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3a15cf47adf979f413e31bb523bc8e2980f6f6771da10a98f65e33e50e91a8e0 JSON shape")
 }
@@ -34911,19 +35464,26 @@ func (value wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49
 	return data, nil
 }
 func (value *wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec727e44e6fe89ef1aa1a7f9f86fea343f28963d48d58f2be6057f77cdd80b781) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec727e44e6fe89ef1aa1a7f9f86fea343f28963d48d58f2be6057f77cdd80b781
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec727e44e6fe89ef1aa1a7f9f86fea343f28963d48d58f2be6057f77cdd80b781
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3a235e258585db842a8797cc4c4027c38bae3d09f4926d36c1c130ecae4c7e49 JSON shape")
 }
@@ -34957,19 +35517,26 @@ func (value wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b
 	return data, nil
 }
 func (value *wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wired834d0da580ca6d31cfd11ed2299e50a04522beb58dc00974e3fafbd867a9f54) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired834d0da580ca6d31cfd11ed2299e50a04522beb58dc00974e3fafbd867a9f54
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wired834d0da580ca6d31cfd11ed2299e50a04522beb58dc00974e3fafbd867a9f54
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3a74fab26a8226ffb77dcb50e04f7f4aacd8e13f439230c84215d9632ca7937b JSON shape")
 }
@@ -35003,19 +35570,26 @@ func (value wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622
 	return data, nil
 }
 func (value *wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0a1c9f14917147a3ef183290c0b0519521af9d9bac5eae65779c93a3f04b3679) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0a1c9f14917147a3ef183290c0b0519521af9d9bac5eae65779c93a3f04b3679
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0a1c9f14917147a3ef183290c0b0519521af9d9bac5eae65779c93a3f04b3679
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3a77da167f73d3484dd18ef631af4b43e7030d6c7de9caed86f1554f84cd4622 JSON shape")
 }
@@ -35057,26 +35631,33 @@ func (value wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02
 	return data, nil
 }
 func (value *wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire8a88ce755f05977629f5d1e91001fb429d55233039113b1802dfebbf2ade73e5) }, func() interface{} { return new(wireb90f27f5c5d74df96513679e6c869e5987ab0efd50635e8f540e9983f951d8f6) }, func() interface{} { return new(wire0204abb122391b9f7bb52347264b9ecf8c1363868347edd25e7325f1654a7180) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire8a88ce755f05977629f5d1e91001fb429d55233039113b1802dfebbf2ade73e5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wireb90f27f5c5d74df96513679e6c869e5987ab0efd50635e8f540e9983f951d8f6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire0204abb122391b9f7bb52347264b9ecf8c1363868347edd25e7325f1654a7180
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3af1017709f95354baf07dc066ab49d48a86f2ba63736201680e178ba290ba02 JSON shape")
 }
@@ -35134,19 +35715,26 @@ func (value wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec
 	return data, nil
 }
 func (value *wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec5ff3ca6547da1064ce059ad881aadd138e5f3786b94361cd3bbdd637fd3ac0f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec5ff3ca6547da1064ce059ad881aadd138e5f3786b94361cd3bbdd637fd3ac0f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec5ff3ca6547da1064ce059ad881aadd138e5f3786b94361cd3bbdd637fd3ac0f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3b7669466bbbe92bc4d46d3d8afb6a0b1d5ebbb75cce9b2b0847a36be0e6e3ec JSON shape")
 }
@@ -35212,26 +35800,33 @@ func (value wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c
 	return data, nil
 }
 func (value *wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c) }, func() interface{} { return new(wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire394061dfd4ae87de240fb95a47b8874e55910741e2418f41fe83e15aa270bf1c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3c1783116b66525b8871c829bcce0f4d469f3c2b12c57cffbdb75f731e38224c JSON shape")
 }
@@ -35356,19 +35951,26 @@ func (value wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1
 	return data, nil
 }
 func (value *wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredc3f259d7327b93ad0aef781e4e31c43a17a952346e96fa5fa89cce776745335
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiredc3f259d7327b93ad0aef781e4e31c43a17a952346e96fa5fa89cce776745335) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiredc3f259d7327b93ad0aef781e4e31c43a17a952346e96fa5fa89cce776745335
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1 JSON shape")
 }
@@ -35402,19 +36004,26 @@ func (value wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7
 	return data, nil
 }
 func (value *wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec1bf69c01831e67feeb96b2fd11870103be44fdedcc71338565402cc688b7912) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec1bf69c01831e67feeb96b2fd11870103be44fdedcc71338565402cc688b7912
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec1bf69c01831e67feeb96b2fd11870103be44fdedcc71338565402cc688b7912
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7 JSON shape")
 }
@@ -35604,19 +36213,26 @@ func (value wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01
 	return data, nil
 }
 func (value *wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire41107aac4d500689f4b616ac9e51574f3659eefa05cc77251790646df5ce4dc6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire41107aac4d500689f4b616ac9e51574f3659eefa05cc77251790646df5ce4dc6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire41107aac4d500689f4b616ac9e51574f3659eefa05cc77251790646df5ce4dc6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3e1047b76597bfeee5b42117f7e2eb873958f19b30557d7eca0f07cd2b399f01 JSON shape")
 }
@@ -35670,19 +36286,26 @@ func (value wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9
 	return data, nil
 }
 func (value *wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire345315ce688dbf9ece9a702d00a88b34d77363d0fe8d410a573cc950dbdba14c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire345315ce688dbf9ece9a702d00a88b34d77363d0fe8d410a573cc950dbdba14c) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire345315ce688dbf9ece9a702d00a88b34d77363d0fe8d410a573cc950dbdba14c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9 JSON shape")
 }
@@ -35755,19 +36378,26 @@ func (value wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4
 	return data, nil
 }
 func (value *wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiree28f6186420db3c1bfc0301aa7656cddff652e895594112818986be5fc9d2b5f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiree28f6186420db3c1bfc0301aa7656cddff652e895594112818986be5fc9d2b5f) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiree28f6186420db3c1bfc0301aa7656cddff652e895594112818986be5fc9d2b5f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4 JSON shape")
 }
@@ -35817,33 +36447,40 @@ func (value wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819
 	return data, nil
 }
 func (value *wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) }, func() interface{} { return new(wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3ed9aada45dcb69330c6d57bc334e93e887f35e023f8db4bcae68ecacb727819 JSON shape")
 }
@@ -35927,26 +36564,33 @@ func (value wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16
 	return data, nil
 }
 func (value *wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire4197b3efab05e434780500764fbd00feff693301f4581ac3b184c4af816b32fe) }, func() interface{} { return new(wired90dba30ccb527067c39bf3e0034119d7944a4b2c309650b46e627c094500f4d) }, func() interface{} { return new(wiref9a2acc6156168621ca51c90ccfd1e2faefa45032c0fc3492dc10d402cf21bc5) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire4197b3efab05e434780500764fbd00feff693301f4581ac3b184c4af816b32fe
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wired90dba30ccb527067c39bf3e0034119d7944a4b2c309650b46e627c094500f4d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiref9a2acc6156168621ca51c90ccfd1e2faefa45032c0fc3492dc10d402cf21bc5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16 JSON shape")
 }
@@ -35980,19 +36624,26 @@ func (value wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8
 	return data, nil
 }
 func (value *wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueNumberOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate ValueNumberOrString
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire3f9c0de665c60d8836ec650f9babc03d2a3149428f9c405470514e79253c44b8 JSON shape")
 }
@@ -36050,19 +36701,26 @@ func (value wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83
 	return data, nil
 }
 func (value *wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire68ab171ca57bfab860c0f3dcecb3967fa6eb2a90718ed1739eb479a7abcf0764) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire68ab171ca57bfab860c0f3dcecb3967fa6eb2a90718ed1739eb479a7abcf0764
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire68ab171ca57bfab860c0f3dcecb3967fa6eb2a90718ed1739eb479a7abcf0764
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83 JSON shape")
 }
@@ -36096,19 +36754,26 @@ func (value wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2
 	return data, nil
 }
 func (value *wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3e8c538a2dcda0f300313b709784733753bcc6108eba6f1efe661745fecfb3c4
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4069e4705a12e252f879884fce6519e0d4bcb4d9b90b2f28b8fa3f666f8693d2 JSON shape")
 }
@@ -36273,26 +36938,33 @@ func (value wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0
 	return data, nil
 }
 func (value *wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiree70b86caf9405b04d1e07d928e893ad1776213a0933ddd1bdbddafbd1031ee8d) }, func() interface{} { return new(wire9f72d3c8afeb8790f95fc5c1f3e09979f6b80153463ccaa5f6b4c4e26ec65e8e) }, func() interface{} { return new(wire7efc157bc59848c458725b5abeec3c72986aa76419cf7673282535f732b632eb) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wiree70b86caf9405b04d1e07d928e893ad1776213a0933ddd1bdbddafbd1031ee8d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire9f72d3c8afeb8790f95fc5c1f3e09979f6b80153463ccaa5f6b4c4e26ec65e8e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire7efc157bc59848c458725b5abeec3c72986aa76419cf7673282535f732b632eb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0 JSON shape")
 }
@@ -36401,19 +37073,26 @@ func (value wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f
 	return data, nil
 }
 func (value *wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec6a7aa6737e4e647d54e09c58007ba5c3df97bd101d1ac0e7e93bf08a429ea87
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirec6a7aa6737e4e647d54e09c58007ba5c3df97bd101d1ac0e7e93bf08a429ea87) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirec6a7aa6737e4e647d54e09c58007ba5c3df97bd101d1ac0e7e93bf08a429ea87
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f JSON shape")
 }
@@ -36447,19 +37126,26 @@ func (value wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f
 	return data, nil
 }
 func (value *wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireab8ac47ef52b3d364dc8fcc95af31823429a48547c4d23975040c350c5452968) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireab8ac47ef52b3d364dc8fcc95af31823429a48547c4d23975040c350c5452968
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireab8ac47ef52b3d364dc8fcc95af31823429a48547c4d23975040c350c5452968
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire42a41feb81ed2ba5a0bc2e43ad1bf0266777f2f61001442316edfc27cc5a721f JSON shape")
 }
@@ -36543,19 +37229,26 @@ func (value wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39
 	return data, nil
 }
 func (value *wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire322f9b826b526a7812668deb6f235c2d1903efa61dda029c6f866ef090be8ae6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire322f9b826b526a7812668deb6f235c2d1903efa61dda029c6f866ef090be8ae6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire322f9b826b526a7812668deb6f235c2d1903efa61dda029c6f866ef090be8ae6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire43fc60e95a2b59ad0c5dd5ad6c7e5844b359d7975df90f6d228c8cc753052d39 JSON shape")
 }
@@ -36639,19 +37332,26 @@ func (value wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe
 	return data, nil
 }
 func (value *wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueIntegerOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate ValueIntegerOrString
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire45167670277104febc863b578a02c97860cbec3fa9a03d30617153872fcd6fbe JSON shape")
 }
@@ -36717,47 +37417,54 @@ func (value wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560
 	return data, nil
 }
 func (value *wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0) }, func() interface{} { return new(wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, false, false, false, false, true})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire458260f1efa4a8b26a5001ad8c171147a31fe3983e62404f2503d73c50779560 JSON shape")
 }
@@ -36791,19 +37498,26 @@ func (value wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f
 	return data, nil
 }
 func (value *wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2023a18aba9da35a825f025ded16698239c0299493e9ad3a8f295a47598bb1bc) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2023a18aba9da35a825f025ded16698239c0299493e9ad3a8f295a47598bb1bc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2023a18aba9da35a825f025ded16698239c0299493e9ad3a8f295a47598bb1bc
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire45925b484b8fca595b4ff3ca9a27ce7ff4b72e0d015173f51f82e3cf4153be7f JSON shape")
 }
@@ -36861,19 +37575,26 @@ func (value wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7
 	return data, nil
 }
 func (value *wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2d5a996b6b88f14b6ebff6c0169bb8686f0f2e5ed706a411d1ec5b1cee8a7296) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2d5a996b6b88f14b6ebff6c0169bb8686f0f2e5ed706a411d1ec5b1cee8a7296
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2d5a996b6b88f14b6ebff6c0169bb8686f0f2e5ed706a411d1ec5b1cee8a7296
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire460a9585cc13cd953d862210a74c7efaee639d0c40be588fc89a600722cab1a7 JSON shape")
 }
@@ -36952,19 +37673,26 @@ func (value wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b
 	return data, nil
 }
 func (value *wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire46e486bcc442885ba8d917cba74c413f4859afee8de31026b786497cac54b12b JSON shape")
 }
@@ -37040,54 +37768,61 @@ func (value wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b
 	return data, nil
 }
 func (value *wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb) }, func() interface{} { return new(wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83) }, func() interface{} { return new(wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1) }, func() interface{} { return new(wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e) }, func() interface{} { return new(wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd) }, func() interface{} { return new(wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515) }}, []bool{false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire4010b77f17e633f373ee9de58f2177092b6b7cc5e18f6e34606332a91a87ee83
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b{Choice7: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire47677b83bb672ac6d935a1f8c50872fd636dea2beebd1c7ebe91f07934a6256b JSON shape")
 }
@@ -37296,19 +38031,26 @@ func (value wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038
 	return data, nil
 }
 func (value *wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038 JSON shape")
 }
@@ -37342,19 +38084,26 @@ func (value wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527
 	return data, nil
 }
 func (value *wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire00c1c52053adc066a577b24384a0e46c9ad73bb3ab00f8794969fa061ebc6d30) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire00c1c52053adc066a577b24384a0e46c9ad73bb3ab00f8794969fa061ebc6d30
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire00c1c52053adc066a577b24384a0e46c9ad73bb3ab00f8794969fa061ebc6d30
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527 JSON shape")
 }
@@ -37388,19 +38137,26 @@ func (value wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947
 	return data, nil
 }
 func (value *wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire83fff0fbfaff052047ca384c498529fd533b08d940e3053683cbdcd9f93dfeca) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire83fff0fbfaff052047ca384c498529fd533b08d940e3053683cbdcd9f93dfeca
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire83fff0fbfaff052047ca384c498529fd533b08d940e3053683cbdcd9f93dfeca
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4a6e80b0b0342a8a1eddce18aafa09acdf9f36055faaeb5b6152fd2269320947 JSON shape")
 }
@@ -37434,19 +38190,26 @@ func (value wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418
 	return data, nil
 }
 func (value *wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3dabf3164d7cc029477e77b88d693ed1cd408dea352fa0a0963af1f44f60eac0) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3dabf3164d7cc029477e77b88d693ed1cd408dea352fa0a0963af1f44f60eac0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3dabf3164d7cc029477e77b88d693ed1cd408dea352fa0a0963af1f44f60eac0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418 JSON shape")
 }
@@ -37553,19 +38316,26 @@ func (value wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409
 	return data, nil
 }
 func (value *wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4b2e484144775b8950d83d40ffadde622d96dff1b91ca85a7b9071657e678409 JSON shape")
 }
@@ -37615,33 +38385,40 @@ func (value wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6
 	return data, nil
 }
 func (value *wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af) }, func() interface{} { return new(wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e) }, func() interface{} { return new(wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847) }, func() interface{} { return new(wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4b788ce19c3da4e6165de210a0c1f23488283f38683327d11f2e8444ca0149a6 JSON shape")
 }
@@ -37731,26 +38508,33 @@ func (value wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7
 	return data, nil
 }
 func (value *wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire06ae440ea250672af239a7c4b0c34e7119aa4aa652069aaed7cd8690d4749168) }, func() interface{} { return new(wire4ee482042200f6a941609ba2ef6d66f5349516775f23ceaefc17feb57cd68c2f) }, func() interface{} { return new(wireb927345a99011efdf93c17ac4d5d5bd41ed2e7228375aaba1fce6cdb555faffc) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire06ae440ea250672af239a7c4b0c34e7119aa4aa652069aaed7cd8690d4749168
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire4ee482042200f6a941609ba2ef6d66f5349516775f23ceaefc17feb57cd68c2f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wireb927345a99011efdf93c17ac4d5d5bd41ed2e7228375aaba1fce6cdb555faffc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7 JSON shape")
 }
@@ -37792,26 +38576,33 @@ func (value wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317
 	return data, nil
 }
 func (value *wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4bd9945116511c59dcaa13db5e08492aff609fd7fbea28a5bfe994a07326e317 JSON shape")
 }
@@ -37906,19 +38697,26 @@ func (value wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1
 	return data, nil
 }
 func (value *wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wired11aae3b3ef5b0400c35385e542c477a3a1d56e3af9bd3220f565610ec1aeb50) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired11aae3b3ef5b0400c35385e542c477a3a1d56e3af9bd3220f565610ec1aeb50
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wired11aae3b3ef5b0400c35385e542c477a3a1d56e3af9bd3220f565610ec1aeb50
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1 JSON shape")
 }
@@ -37972,19 +38770,26 @@ func (value wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734
 	return data, nil
 }
 func (value *wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734 JSON shape")
 }
@@ -38018,19 +38823,26 @@ func (value wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4
 	return data, nil
 }
 func (value *wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4) UnmarshalJSON(data []byte) error {
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{true, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4d0bcc4c918b1bc1a8c07aeadb536feb648a715fa4f0d5d7a4b0133ed94fc5e4 JSON shape")
 }
@@ -38148,19 +38960,26 @@ func (value wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996
 	return data, nil
 }
 func (value *wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire60e034d21b3bb22925471d51e420e71b99f53a15b019d9fba55337197f0d8318) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire60e034d21b3bb22925471d51e420e71b99f53a15b019d9fba55337197f0d8318
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire60e034d21b3bb22925471d51e420e71b99f53a15b019d9fba55337197f0d8318
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire4eb49a8e9cd4b0cbddd303f1c8fdbcfa927998da4b6f59bf126306f3edccb996 JSON shape")
 }
@@ -38309,19 +39128,26 @@ func (value wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff
 	return data, nil
 }
 func (value *wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9d9f882c91cb4d86203b5bd8d756eb32bd8b8091b53c7d9959bccfb9dcc85256) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9d9f882c91cb4d86203b5bd8d756eb32bd8b8091b53c7d9959bccfb9dcc85256
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9d9f882c91cb4d86203b5bd8d756eb32bd8b8091b53c7d9959bccfb9dcc85256
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire50159bc594454d8f85ace0f8eb1d568b98b154be9af89796a9b182828024e1ff JSON shape")
 }
@@ -38355,19 +39181,26 @@ func (value wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea
 	return data, nil
 }
 func (value *wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec95d077262e77c891662658119018924d6246a6b2d63c6c6b66e40d42f327f09) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec95d077262e77c891662658119018924d6246a6b2d63c6c6b66e40d42f327f09
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec95d077262e77c891662658119018924d6246a6b2d63c6c6b66e40d42f327f09
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea JSON shape")
 }
@@ -38456,19 +39289,26 @@ func (value wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9
 	return data, nil
 }
 func (value *wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire814fdbf511defca15c8c487251e6d6eaa3efb29c1f6a13f2e5715e732e0162ea) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire814fdbf511defca15c8c487251e6d6eaa3efb29c1f6a13f2e5715e732e0162ea
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire814fdbf511defca15c8c487251e6d6eaa3efb29c1f6a13f2e5715e732e0162ea
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire51759e57e37da4c2b73cc9d5a5187f4dab6ad9352133420f5bc7cb10eaf560b9 JSON shape")
 }
@@ -38526,19 +39366,26 @@ func (value wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3
 	return data, nil
 }
 func (value *wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire524c17984f867b0a93c09ccd73108b81aa610cefe5383abec23936230efd63c3 JSON shape")
 }
@@ -38572,19 +39419,26 @@ func (value wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483
 	return data, nil
 }
 func (value *wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireabdf18834b16b0a9be09e4d705c5650e2e412ea17e71bed1211c2f5044258de5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireabdf18834b16b0a9be09e4d705c5650e2e412ea17e71bed1211c2f5044258de5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireabdf18834b16b0a9be09e4d705c5650e2e412ea17e71bed1211c2f5044258de5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire525ea1d2e640c542d3c523c82023666f845e196d92cace0aa5568992c7e8d483 JSON shape")
 }
@@ -38897,19 +39751,26 @@ func (value wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf
 	return data, nil
 }
 func (value *wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiree61883157ff6342105becfafdf79a9330e95a6f93822729e5fd860d69b27d5b5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiree61883157ff6342105becfafdf79a9330e95a6f93822729e5fd860d69b27d5b5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiree61883157ff6342105becfafdf79a9330e95a6f93822729e5fd860d69b27d5b5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire555e113232bd7d0c36537643bf243d6558f9f3f1b6e35b24334e6979e84963bf JSON shape")
 }
@@ -38945,19 +39806,26 @@ func (value wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13
 	return data, nil
 }
 func (value *wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire5f7caf794d0a1fb86825f132f074e8cb8d62c2bd53fd6fc6362f5b8a87cba4bc) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5f7caf794d0a1fb86825f132f074e8cb8d62c2bd53fd6fc6362f5b8a87cba4bc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5f7caf794d0a1fb86825f132f074e8cb8d62c2bd53fd6fc6362f5b8a87cba4bc
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire55d02cf1d7a8e5894c80804b55faf4e1ce08cbdced302e6ddc7e3ff28dcfef13 JSON shape")
 }
@@ -38991,19 +39859,26 @@ func (value wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3
 	return data, nil
 }
 func (value *wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0c3203c97bdfade263573d12da205836770c9c09854822faeef4b198cbe6a3cd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0c3203c97bdfade263573d12da205836770c9c09854822faeef4b198cbe6a3cd) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0c3203c97bdfade263573d12da205836770c9c09854822faeef4b198cbe6a3cd
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3 JSON shape")
 }
@@ -39070,19 +39945,26 @@ func (value wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca
 	return data, nil
 }
 func (value *wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8e0d4eef1d41d9e9678e09143a2a36f7a7649bb1a25c52c195667975674a7beb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire8e0d4eef1d41d9e9678e09143a2a36f7a7649bb1a25c52c195667975674a7beb) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire8e0d4eef1d41d9e9678e09143a2a36f7a7649bb1a25c52c195667975674a7beb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5642c2b638ced211daaa64877127032a5a08e13b556877b7353136d4c2dfcdca JSON shape")
 }
@@ -39116,19 +39998,26 @@ func (value wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f
 	return data, nil
 }
 func (value *wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire94e08d2d6f6e8e052f5a40cfd719110bcf65daa84fd68e2ad5763b3a9ef9d62d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire94e08d2d6f6e8e052f5a40cfd719110bcf65daa84fd68e2ad5763b3a9ef9d62d) }, func() interface{} { return new(wire91b781d15bdf10aea0ea1d502908860cc9ddee0d43267a0cfc6b6811762d0d6c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire91b781d15bdf10aea0ea1d502908860cc9ddee0d43267a0cfc6b6811762d0d6c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire94e08d2d6f6e8e052f5a40cfd719110bcf65daa84fd68e2ad5763b3a9ef9d62d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire91b781d15bdf10aea0ea1d502908860cc9ddee0d43267a0cfc6b6811762d0d6c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire565dffa3d4cce5f0ef474559eeaa44f816924adbf7a5d0967dd25dfb4103a21f JSON shape")
 }
@@ -39306,19 +40195,26 @@ func (value wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea
 	return data, nil
 }
 func (value *wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire818cf5410f9a11caa280b5bc1fa44194807641e8bc1e6d995d1693e90e8347b9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire818cf5410f9a11caa280b5bc1fa44194807641e8bc1e6d995d1693e90e8347b9) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire818cf5410f9a11caa280b5bc1fa44194807641e8bc1e6d995d1693e90e8347b9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire58741054a5f0271e048430270a3963294ee7c6a17c18f30bc8b83c13e18ecdea JSON shape")
 }
@@ -39352,19 +40248,26 @@ func (value wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9
 	return data, nil
 }
 func (value *wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire151b390b021b7ad87a3a676532fee46e4a2e3b9b4884c0d57378f3f1f76a73df
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire151b390b021b7ad87a3a676532fee46e4a2e3b9b4884c0d57378f3f1f76a73df) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire151b390b021b7ad87a3a676532fee46e4a2e3b9b4884c0d57378f3f1f76a73df
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9 JSON shape")
 }
@@ -39492,19 +40395,26 @@ func (value wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022
 	return data, nil
 }
 func (value *wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire594abdaffe0174ddc1b09eb5f2fe590ad89cb87f216401bf58059c7c6ace7022 JSON shape")
 }
@@ -39538,19 +40448,26 @@ func (value wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167
 	return data, nil
 }
 func (value *wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire1d2c02e3add2b4e65fe4e831fcafd91c8699501401a8484a8c313f538fb648b4) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire1d2c02e3add2b4e65fe4e831fcafd91c8699501401a8484a8c313f538fb648b4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire1d2c02e3add2b4e65fe4e831fcafd91c8699501401a8484a8c313f538fb648b4
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5a03e528b7f6e88ec02491e1ac0e4a6fabaa52f4ff8f3b3d486e46a3376fd167 JSON shape")
 }
@@ -39592,26 +40509,33 @@ func (value wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b
 	return data, nil
 }
 func (value *wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5a5985a1b6ef461bc4a89f6d9d4a81d9b44f760743add44c4471fd60434a897b JSON shape")
 }
@@ -39677,47 +40601,54 @@ func (value wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33
 	return data, nil
 }
 func (value *wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734) }, func() interface{} { return new(wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f) }, func() interface{} { return new(wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7) }, func() interface{} { return new(wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943) }, func() interface{} { return new(wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76) }}, []bool{false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5a8bd1af6d22e7debe79ef77d24f4b663c889665163e35970cd90106a6d83d33 JSON shape")
 }
@@ -39823,19 +40754,26 @@ func (value wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3
 	return data, nil
 }
 func (value *wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5b172c7c8dbc121e6de8ab3e7988d2de4ee1f376cf0b218ddde87c361c1f4fe3 JSON shape")
 }
@@ -39890,19 +40828,26 @@ func (value wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540
 	return data, nil
 }
 func (value *wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire85747ab7f8cccb80c5de81f4462e809b35c49e3d5cb053e58a3763cde3b37731
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire85747ab7f8cccb80c5de81f4462e809b35c49e3d5cb053e58a3763cde3b37731) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire85747ab7f8cccb80c5de81f4462e809b35c49e3d5cb053e58a3763cde3b37731
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540 JSON shape")
 }
@@ -39936,19 +40881,26 @@ func (value wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2
 	return data, nil
 }
 func (value *wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8bb3bebbf7500810530301ac17193961f1976c9f6be551c974ea194b3279af0c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8bb3bebbf7500810530301ac17193961f1976c9f6be551c974ea194b3279af0c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8bb3bebbf7500810530301ac17193961f1976c9f6be551c974ea194b3279af0c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5bae80b89184dbaeed2f3432a28e890e82e733d327f8dbdc1f4db6fd7f3aecd2 JSON shape")
 }
@@ -40051,19 +41003,26 @@ func (value wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850
 	return data, nil
 }
 func (value *wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850 JSON shape")
 }
@@ -40097,19 +41056,26 @@ func (value wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196
 	return data, nil
 }
 func (value *wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec1a1ca760db92ed8c979f1aa003252c46aa99769190cf0827a9ea329a7cc6089
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirec1a1ca760db92ed8c979f1aa003252c46aa99769190cf0827a9ea329a7cc6089) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirec1a1ca760db92ed8c979f1aa003252c46aa99769190cf0827a9ea329a7cc6089
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5cedbc8720ed35e3c011b1b3a84c9de4f94410e54837397f469839e255c6b196 JSON shape")
 }
@@ -40225,19 +41191,26 @@ func (value wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5
 	return data, nil
 }
 func (value *wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5e558af8627f88273b4a06b0b585d7a8f76d35afe071edda875186e611190eb5 JSON shape")
 }
@@ -40295,19 +41268,26 @@ func (value wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914
 	return data, nil
 }
 func (value *wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireaec76c88eb99269dca348b49886374fc27d5ea706a25c39c4540618752aafe2a) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireaec76c88eb99269dca348b49886374fc27d5ea706a25c39c4540618752aafe2a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireaec76c88eb99269dca348b49886374fc27d5ea706a25c39c4540618752aafe2a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914 JSON shape")
 }
@@ -40548,19 +41528,26 @@ func (value wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598
 	return data, nil
 }
 func (value *wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3c442e6725a65af8af3af2845f239652844136de807962d8f215db6e00ff58b1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire60bef5379d36c92760e972474390146ffb6e2a09a878c974bf5e4817a79e2598 JSON shape")
 }
@@ -40711,19 +41698,26 @@ func (value wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5
 	return data, nil
 }
 func (value *wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3f161562db4a7237942681ccf41abd9a699b0260591ddd0d154bfca063f449bf) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3f161562db4a7237942681ccf41abd9a699b0260591ddd0d154bfca063f449bf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3f161562db4a7237942681ccf41abd9a699b0260591ddd0d154bfca063f449bf
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire61d977e20d47d660fb80fa8c98e39178a6ac4e31dac15be1b6132a5b893c4ae5 JSON shape")
 }
@@ -40798,19 +41792,26 @@ func (value wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388
 	return data, nil
 }
 func (value *wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5c9629611e05e5aa143f2be62f9c6a41908738e2f8528c0111e96d92eb18ca50
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire5c9629611e05e5aa143f2be62f9c6a41908738e2f8528c0111e96d92eb18ca50) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire5c9629611e05e5aa143f2be62f9c6a41908738e2f8528c0111e96d92eb18ca50
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388 JSON shape")
 }
@@ -40878,26 +41879,33 @@ func (value wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af
 	return data, nil
 }
 func (value *wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6291402340049327ae973210983099f218e93ff0c2b03376660ca6914e2598af JSON shape")
 }
@@ -40981,19 +41989,26 @@ func (value wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc
 	return data, nil
 }
 func (value *wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire368e411d2db64b38f47289f4ba8eb145ef3b1bb90fb976367873d17e06aa6581
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire368e411d2db64b38f47289f4ba8eb145ef3b1bb90fb976367873d17e06aa6581) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire368e411d2db64b38f47289f4ba8eb145ef3b1bb90fb976367873d17e06aa6581
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6375593444f9e33b3ba1463eadb6053a650f86580344ab8742a3e73751ff46dc JSON shape")
 }
@@ -41027,19 +42042,26 @@ func (value wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c
 	return data, nil
 }
 func (value *wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire538ca8dd6ec37c93a515c7fb7b278ac294dc40dfe841159f6098172193cd1b6d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire538ca8dd6ec37c93a515c7fb7b278ac294dc40dfe841159f6098172193cd1b6d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire538ca8dd6ec37c93a515c7fb7b278ac294dc40dfe841159f6098172193cd1b6d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire63a1990e3b25dee0085086b2e93e0630302cf35056bdfc999956c1a9a8d5ea3c JSON shape")
 }
@@ -41073,19 +42095,26 @@ func (value wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1
 	return data, nil
 }
 func (value *wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire63ade69cb8c07eefc5335c0335ad82038cf917af820bdb6d68ad6690bcb690a1 JSON shape")
 }
@@ -41119,19 +42148,26 @@ func (value wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822
 	return data, nil
 }
 func (value *wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire63c9e5ca59667d11bcea510c25ac2843af9a415de79dda89f88ca061dcd3e822 JSON shape")
 }
@@ -41189,19 +42225,26 @@ func (value wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff
 	return data, nil
 }
 func (value *wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire20f1c54ffa73b77cc06eedb8ca5ac195f905911e2c87fc813b71a5f0017e52a6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire20f1c54ffa73b77cc06eedb8ca5ac195f905911e2c87fc813b71a5f0017e52a6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire20f1c54ffa73b77cc06eedb8ca5ac195f905911e2c87fc813b71a5f0017e52a6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire640ed4bfbe2aa1bb9aab28d5e01f03276a18418590765795e36b53909af412ff JSON shape")
 }
@@ -41279,19 +42322,26 @@ func (value wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275
 	return data, nil
 }
 func (value *wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire69e8a870668545cae020654c107cfad8d68ea450bec78d195ca900b55878e8c7) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire69e8a870668545cae020654c107cfad8d68ea450bec78d195ca900b55878e8c7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire69e8a870668545cae020654c107cfad8d68ea450bec78d195ca900b55878e8c7
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire64bc05400fd6308bbf92eace69a3d6054e9d64c62b91ea3019e82555558c5275 JSON shape")
 }
@@ -41325,19 +42375,26 @@ func (value wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd
 	return data, nil
 }
 func (value *wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9d2ed4f6801147e3eb3c0484972444c030f46ad3888a25a3683ca3f7b907b7f3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9d2ed4f6801147e3eb3c0484972444c030f46ad3888a25a3683ca3f7b907b7f3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9d2ed4f6801147e3eb3c0484972444c030f46ad3888a25a3683ca3f7b907b7f3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd JSON shape")
 }
@@ -41516,19 +42573,26 @@ func (value wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05
 	return data, nil
 }
 func (value *wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire48f45098704dfff9aed7d8e764e3b0e091b132c5d263b437529542bd9996016f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire48f45098704dfff9aed7d8e764e3b0e091b132c5d263b437529542bd9996016f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire48f45098704dfff9aed7d8e764e3b0e091b132c5d263b437529542bd9996016f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire666db53ed55db403c9e5e4246a7ed3cf8c852a6fb874e5f5fe675883e9300a05 JSON shape")
 }
@@ -41617,26 +42681,33 @@ func (value wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c
 	return data, nil
 }
 func (value *wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire2471d004a9859c12592798ebe9c479acd6f42a5ce628236216cc584b6019ab71
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire671617575fdb88f99b671ee664bf1a844628e9e2e9d85a2abd2b2aa8aff5cb3c JSON shape")
 }
@@ -41702,47 +42773,54 @@ func (value wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43
 	return data, nil
 }
 func (value *wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43) UnmarshalJSON(data []byte) error {
-	if true || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb) }, func() interface{} { return new(wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0) }}, []bool{true, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire5483e69d7515873ac7f9b28ac1b811d84b0f3b39f47502525b326de468c887fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire678b6494ad51f40a4ad259a3a51aeff3c1ce7d54bad8efdbaac2ddc053142d43 JSON shape")
 }
@@ -41917,19 +42995,26 @@ func (value wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d
 	return data, nil
 }
 func (value *wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6910210b0bdd0a56fe77497f4488239993ff10cf48826d41bd8b03db5409841d JSON shape")
 }
@@ -41963,19 +43048,26 @@ func (value wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f
 	return data, nil
 }
 func (value *wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2718ac4bb5e8450252d2d7cd8aa9e5aefba727397a2bf8f411bf603151c2024c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2718ac4bb5e8450252d2d7cd8aa9e5aefba727397a2bf8f411bf603151c2024c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2718ac4bb5e8450252d2d7cd8aa9e5aefba727397a2bf8f411bf603151c2024c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f JSON shape")
 }
@@ -42077,19 +43169,26 @@ func (value wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85
 	return data, nil
 }
 func (value *wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire99657958e082811e5e5c0198ce1f46d08288fac618cff7c7c19db0518d1cf2ed) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire99657958e082811e5e5c0198ce1f46d08288fac618cff7c7c19db0518d1cf2ed
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire99657958e082811e5e5c0198ce1f46d08288fac618cff7c7c19db0518d1cf2ed
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85 JSON shape")
 }
@@ -42175,26 +43274,33 @@ func (value wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6
 	return data, nil
 }
 func (value *wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire188d6076f186891d1bb72ca4237523769128c4db171fd467d8d4b8ced046d83a) }, func() interface{} { return new(wire8b0d3df2bf4f34dae4cd32aff06f44a4e08845314b74ff94286531df2aa0ac1b) }, func() interface{} { return new(wiredfa72c34f3aebed53dbbb03b5c4d2eee4a769e3e3faffbddb9a71adcbdce4a34) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire188d6076f186891d1bb72ca4237523769128c4db171fd467d8d4b8ced046d83a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire8b0d3df2bf4f34dae4cd32aff06f44a4e08845314b74ff94286531df2aa0ac1b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiredfa72c34f3aebed53dbbb03b5c4d2eee4a769e3e3faffbddb9a71adcbdce4a34
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6 JSON shape")
 }
@@ -42252,19 +43358,26 @@ func (value wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89
 	return data, nil
 }
 func (value *wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wired6325d6164d286a6e04e05ae8c903dd96710b18ef812840cbe584e2d27fd57f0) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired6325d6164d286a6e04e05ae8c903dd96710b18ef812840cbe584e2d27fd57f0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wired6325d6164d286a6e04e05ae8c903dd96710b18ef812840cbe584e2d27fd57f0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89 JSON shape")
 }
@@ -42298,19 +43411,26 @@ func (value wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad
 	return data, nil
 }
 func (value *wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6af9c7a615a6032688ec46a1e060316c73d6805b189ec72f39afbd50d64939ad JSON shape")
 }
@@ -42400,26 +43520,33 @@ func (value wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94
 	return data, nil
 }
 func (value *wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6b2c80b305908d1ffebe120fd552ae8d4496be8045301bdd55a7b765501b2e94 JSON shape")
 }
@@ -42549,19 +43676,26 @@ func (value wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797
 	return data, nil
 }
 func (value *wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0abc87c0f0e71a1f8e0c2952a6e2ce660e5f08269dc17eac88e3c8e2a194c240
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0abc87c0f0e71a1f8e0c2952a6e2ce660e5f08269dc17eac88e3c8e2a194c240) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0abc87c0f0e71a1f8e0c2952a6e2ce660e5f08269dc17eac88e3c8e2a194c240
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf797 JSON shape")
 }
@@ -42684,19 +43818,26 @@ func (value wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015
 	return data, nil
 }
 func (value *wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire7e8215f8fb694e36d1dee961a1b0f78ecd99e70f5cf6d8fd28fc32f4e1dbcab7) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7e8215f8fb694e36d1dee961a1b0f78ecd99e70f5cf6d8fd28fc32f4e1dbcab7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire7e8215f8fb694e36d1dee961a1b0f78ecd99e70f5cf6d8fd28fc32f4e1dbcab7
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6cc0874fa95f27cdda65810aab7a8e62e48401caed0c27acf78df10416203015 JSON shape")
 }
@@ -42730,19 +43871,26 @@ func (value wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc
 	return data, nil
 }
 func (value *wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire666777e155aac4c714dc2fe3e9da146f115f2b0069fd57dfb40bac86fce9cae9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire666777e155aac4c714dc2fe3e9da146f115f2b0069fd57dfb40bac86fce9cae9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire666777e155aac4c714dc2fe3e9da146f115f2b0069fd57dfb40bac86fce9cae9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6d02fbca58553fa9b858dea07e908c120d98c3c298d30d473880ccde9f5887cc JSON shape")
 }
@@ -42776,19 +43924,26 @@ func (value wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380
 	return data, nil
 }
 func (value *wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire78c5ebfd2dc48dc562c54ab285f064031c96f88dd5a0c35802ffb01ab07b8a2d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire78c5ebfd2dc48dc562c54ab285f064031c96f88dd5a0c35802ffb01ab07b8a2d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire78c5ebfd2dc48dc562c54ab285f064031c96f88dd5a0c35802ffb01ab07b8a2d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6d0b78bad297abd5b1c5df2ec866d98a95616be147c7a16888a975a42956c380 JSON shape")
 }
@@ -42822,19 +43977,26 @@ func (value wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282
 	return data, nil
 }
 func (value *wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6b221a5a8c7d8b2d2884a606508d9948fc782c1edb2a5cc38028453c3f2dc714) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6b221a5a8c7d8b2d2884a606508d9948fc782c1edb2a5cc38028453c3f2dc714
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6b221a5a8c7d8b2d2884a606508d9948fc782c1edb2a5cc38028453c3f2dc714
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282 JSON shape")
 }
@@ -42889,19 +44051,26 @@ func (value wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847
 	return data, nil
 }
 func (value *wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate ValueStringOrStringOrNumber
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6db53c7cf54d6dfdaf30e4641c6f04ec36c850bb7d2667006696bd9695a2d847 JSON shape")
 }
@@ -42935,19 +44104,26 @@ func (value wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40
 	return data, nil
 }
 func (value *wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2d37044582e704119483341955d77c445dbc69546572c7cc2daded3801d29ddc) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2d37044582e704119483341955d77c445dbc69546572c7cc2daded3801d29ddc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2d37044582e704119483341955d77c445dbc69546572c7cc2daded3801d29ddc
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6dca7d77f31bf695438b35616f06faf65d3f3f6f980f4b9acfa684fd4a2c1e40 JSON shape")
 }
@@ -43013,26 +44189,33 @@ func (value wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa
 	return data, nil
 }
 func (value *wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1) }, func() interface{} { return new(wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6df386bf50e2d256062fdbca870664d15dadb1109f4f435bec7dbf527fcb74fa JSON shape")
 }
@@ -43114,19 +44297,26 @@ func (value wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e
 	return data, nil
 }
 func (value *wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire019170f8c575377f3a3919912ed1656637cf4e48f5a366aac109d16b946339f9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6e2828d367c3a788d5dcf5eb861f16476243ab035d4bf668dbf97d783c8a863e JSON shape")
 }
@@ -43168,26 +44358,33 @@ func (value wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5
 	return data, nil
 }
 func (value *wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e) }, func() interface{} { return new(string) }, func() interface{} { return new(wire3f161562db4a7237942681ccf41abd9a699b0260591ddd0d154bfca063f449bf) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire3f161562db4a7237942681ccf41abd9a699b0260591ddd0d154bfca063f449bf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6e3a35caa0273152f5dae8f87c99d9af8d77f93c88b0ca3449f5ff0c914abec5 JSON shape")
 }
@@ -43221,19 +44418,26 @@ func (value wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886
 	return data, nil
 }
 func (value *wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8dcb03fce87aa95b9173b2842fd287a9a41924f3f7e8610d82895c3844fbd627) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8dcb03fce87aa95b9173b2842fd287a9a41924f3f7e8610d82895c3844fbd627
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8dcb03fce87aa95b9173b2842fd287a9a41924f3f7e8610d82895c3844fbd627
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6eb289c2700b2b6da2bf872dfe441e5e717090e159bccdb56023b3f5318ce886 JSON shape")
 }
@@ -43267,19 +44471,26 @@ func (value wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238
 	return data, nil
 }
 func (value *wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire807679d0ee3dfc1952b99340e244dcc91c2e63d2bff88ad64bcf08e763cbdba2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire807679d0ee3dfc1952b99340e244dcc91c2e63d2bff88ad64bcf08e763cbdba2) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire807679d0ee3dfc1952b99340e244dcc91c2e63d2bff88ad64bcf08e763cbdba2
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238 JSON shape")
 }
@@ -43313,19 +44524,26 @@ func (value wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833
 	return data, nil
 }
 func (value *wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiree41faac6704d51587c68b3d61d8b571e8f9fcf1c1a0f0c9b53755f38a500a6ac) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiree41faac6704d51587c68b3d61d8b571e8f9fcf1c1a0f0c9b53755f38a500a6ac
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiree41faac6704d51587c68b3d61d8b571e8f9fcf1c1a0f0c9b53755f38a500a6ac
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6ee0c8646020ed39958874a80b4fb97f69bda080659a68bcaa383efbf6945833 JSON shape")
 }
@@ -43383,19 +44601,26 @@ func (value wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7
 	return data, nil
 }
 func (value *wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8c52ef2fe8de17d3a7786eb55b8768a640aa5d2d9b0cb198ddce13b2a1dec3ac) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8c52ef2fe8de17d3a7786eb55b8768a640aa5d2d9b0cb198ddce13b2a1dec3ac
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8c52ef2fe8de17d3a7786eb55b8768a640aa5d2d9b0cb198ddce13b2a1dec3ac
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire6fdc61cfebd2b2242d176e71eadbf783ecd6349d70031bfd53ea4ce81be098c7 JSON shape")
 }
@@ -43490,19 +44715,26 @@ func (value wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84
 	return data, nil
 }
 func (value *wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire97b32aa245c6d5fbd317abaaa084f666462cdb1220dda51262f5dab63fdc51ab) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire97b32aa245c6d5fbd317abaaa084f666462cdb1220dda51262f5dab63fdc51ab
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire97b32aa245c6d5fbd317abaaa084f666462cdb1220dda51262f5dab63fdc51ab
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire70777613c83348e0710dacffcc31a67ce84bf4b75f236a8cb812957f9efbdc84 JSON shape")
 }
@@ -43536,19 +44768,26 @@ func (value wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a
 	return data, nil
 }
 func (value *wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirefd6a0e07b2b91168dfd3bce4b5e48034035b55f4ffe637a875b3646d4024365f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirefd6a0e07b2b91168dfd3bce4b5e48034035b55f4ffe637a875b3646d4024365f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirefd6a0e07b2b91168dfd3bce4b5e48034035b55f4ffe637a875b3646d4024365f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a JSON shape")
 }
@@ -43582,19 +44821,26 @@ func (value wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4
 	return data, nil
 }
 func (value *wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredb456ef2c66d629588319e34cf31a16c163075f394cdfa85d06ed5cee6045655
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiredb456ef2c66d629588319e34cf31a16c163075f394cdfa85d06ed5cee6045655) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiredb456ef2c66d629588319e34cf31a16c163075f394cdfa85d06ed5cee6045655
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7122d12c5e19037d36ccd453715212295bde7fe54be6156e6c62c6d9da0e58e4 JSON shape")
 }
@@ -43628,19 +44874,26 @@ func (value wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a
 	return data, nil
 }
 func (value *wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec7226b2027900d2632c791ad9a5fe5ca2f800be0a004eca179c383e462aa49b5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec7226b2027900d2632c791ad9a5fe5ca2f800be0a004eca179c383e462aa49b5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec7226b2027900d2632c791ad9a5fe5ca2f800be0a004eca179c383e462aa49b5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire717f970ef92512a78a3def4c54b4c5b327a035749e2daacb28fc1cde39fd882a JSON shape")
 }
@@ -43763,19 +45016,26 @@ func (value wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b
 	return data, nil
 }
 func (value *wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire873411e28ace916f8d626cc141bf54e19f425bfeb638cab3a698e74138e2018e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire873411e28ace916f8d626cc141bf54e19f425bfeb638cab3a698e74138e2018e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire873411e28ace916f8d626cc141bf54e19f425bfeb638cab3a698e74138e2018e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire730e6bdb7ae01003f7d3f4580d3681c34c660f56ba5ed23c264c13a769812f9b JSON shape")
 }
@@ -43809,19 +45069,26 @@ func (value wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e
 	return data, nil
 }
 func (value *wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirefcfda595bb11d44b1bcbca5b1f3270232763c31aac1f8b19e263f805fa1337b4) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirefcfda595bb11d44b1bcbca5b1f3270232763c31aac1f8b19e263f805fa1337b4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirefcfda595bb11d44b1bcbca5b1f3270232763c31aac1f8b19e263f805fa1337b4
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire735d417aec6e999c18baa2058e8da454fd1280d2b58622fc5ee091f91f93179e JSON shape")
 }
@@ -43855,19 +45122,26 @@ func (value wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71
 	return data, nil
 }
 func (value *wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireafcc960ac3221534d793fee33421bd90ea099e68e54634a712bbf530a9c3340b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireafcc960ac3221534d793fee33421bd90ea099e68e54634a712bbf530a9c3340b) }, func() interface{} { return new(wireedd1d6e475402af22f5bd432e55e1b1c48e45ef562ef7a0529cedd5add67e1ae) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireedd1d6e475402af22f5bd432e55e1b1c48e45ef562ef7a0529cedd5add67e1ae
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wireafcc960ac3221534d793fee33421bd90ea099e68e54634a712bbf530a9c3340b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireedd1d6e475402af22f5bd432e55e1b1c48e45ef562ef7a0529cedd5add67e1ae
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71 JSON shape")
 }
@@ -43969,19 +45243,26 @@ func (value wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b
 	return data, nil
 }
 func (value *wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4de5934c6c62cde325ddb48504f809d92c7cc75293f9eed334630f864c9e3791
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire4de5934c6c62cde325ddb48504f809d92c7cc75293f9eed334630f864c9e3791) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire4de5934c6c62cde325ddb48504f809d92c7cc75293f9eed334630f864c9e3791
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b JSON shape")
 }
@@ -44035,19 +45316,26 @@ func (value wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24
 	return data, nil
 }
 func (value *wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire74785fc6e9675facdd58562eaf797a815a979980c9c1e35220ea03215aa05f24 JSON shape")
 }
@@ -44081,19 +45369,26 @@ func (value wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c
 	return data, nil
 }
 func (value *wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wire604373258c5e7b1e91b4436b3508e9b7f8e7edc3a8c2b0964215546b6a5584a9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire604373258c5e7b1e91b4436b3508e9b7f8e7edc3a8c2b0964215546b6a5584a9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate bool
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire604373258c5e7b1e91b4436b3508e9b7f8e7edc3a8c2b0964215546b6a5584a9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire74a22c9d51813fe1c5768494d030cf43361419068135a6bfc830e6224ea69d8c JSON shape")
 }
@@ -44127,19 +45422,26 @@ func (value wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596
 	return data, nil
 }
 func (value *wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb0ab566e75eb4d3ccf82280ed5fcddbf3311157651886fa65a3ab5a262a1fdd1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb0ab566e75eb4d3ccf82280ed5fcddbf3311157651886fa65a3ab5a262a1fdd1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb0ab566e75eb4d3ccf82280ed5fcddbf3311157651886fa65a3ab5a262a1fdd1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire74a67598ca3118052daba169aa311c126c3007f864fe9749989362e9cc136596 JSON shape")
 }
@@ -44205,26 +45507,33 @@ func (value wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4
 	return data, nil
 }
 func (value *wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire5fd949a67b3af7a62b50142a862cceced5b83b00db2407e5bd798f718999f14d) }, func() interface{} { return new(wiree5ebe3df853a59e82a2984ea5b9bf3e0e9bde0b2150e1e37e66796b9c6faec47) }, func() interface{} { return new(wire3133651003713a3ae2cbef1f339a2db0bd1d4551b4409949404f04e2982ba5dc) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire5fd949a67b3af7a62b50142a862cceced5b83b00db2407e5bd798f718999f14d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiree5ebe3df853a59e82a2984ea5b9bf3e0e9bde0b2150e1e37e66796b9c6faec47
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire3133651003713a3ae2cbef1f339a2db0bd1d4551b4409949404f04e2982ba5dc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4 JSON shape")
 }
@@ -44326,19 +45635,26 @@ func (value wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230
 	return data, nil
 }
 func (value *wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire77503291298a2430521985f9ba71ec5c71f86bb940cc597569c3f0a681f93230 JSON shape")
 }
@@ -44419,19 +45735,26 @@ func (value wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54
 	return data, nil
 }
 func (value *wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire04224ce77f6e24585e75cd1322f272c512b3513c858b744003c6786da9b36a62) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire04224ce77f6e24585e75cd1322f272c512b3513c858b744003c6786da9b36a62
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire04224ce77f6e24585e75cd1322f272c512b3513c858b744003c6786da9b36a62
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54 JSON shape")
 }
@@ -44532,19 +45855,26 @@ func (value wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269
 	return data, nil
 }
 func (value *wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6c9d05d476154b5f40b6b07f28f3bc44afc931aa73730f19ff844d2cb47857fb) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6c9d05d476154b5f40b6b07f28f3bc44afc931aa73730f19ff844d2cb47857fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6c9d05d476154b5f40b6b07f28f3bc44afc931aa73730f19ff844d2cb47857fb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire78248a8f7dc261a83105a2fe0f2ede9770edb1d19de96860eeb25275e2730269 JSON shape")
 }
@@ -44578,19 +45908,26 @@ func (value wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd
 	return data, nil
 }
 func (value *wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire25690dd53b05a099ce1d1e031e3dde0c99cafb70a6e783e84e7749fa2dd0cc9d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire25690dd53b05a099ce1d1e031e3dde0c99cafb70a6e783e84e7749fa2dd0cc9d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire25690dd53b05a099ce1d1e031e3dde0c99cafb70a6e783e84e7749fa2dd0cc9d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7866122776d69a348357771d49fbf87fa1eaa433e13762a877a8f16fb3966ffd JSON shape")
 }
@@ -44624,19 +45961,26 @@ func (value wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e
 	return data, nil
 }
 func (value *wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire75cf67f9077a4da6884e060d58ef70141a22d60227496c217d2f09370fa0663a) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire75cf67f9077a4da6884e060d58ef70141a22d60227496c217d2f09370fa0663a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire75cf67f9077a4da6884e060d58ef70141a22d60227496c217d2f09370fa0663a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7880615a0a2a2c588f99ada15d8d5dba7b004a4c916c9213b926940dc4f2d26e JSON shape")
 }
@@ -44670,19 +46014,26 @@ func (value wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066
 	return data, nil
 }
 func (value *wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0b2a6e1eb75c1d193219934233da1747baf3bea45f352cf791afcdb6a4a6c40b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0b2a6e1eb75c1d193219934233da1747baf3bea45f352cf791afcdb6a4a6c40b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0b2a6e1eb75c1d193219934233da1747baf3bea45f352cf791afcdb6a4a6c40b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire78a757e2abae9cc8532e4a5ca32c5f52f9f83be3f7e40e36cd34efb217a1b066 JSON shape")
 }
@@ -44880,19 +46231,26 @@ func (value wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd
 	return data, nil
 }
 func (value *wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref251f4a2b7e6e88e430d90ad19c1c6cf10d2a2e9fc2d82f841afcd5da58cc4ee) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref251f4a2b7e6e88e430d90ad19c1c6cf10d2a2e9fc2d82f841afcd5da58cc4ee
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref251f4a2b7e6e88e430d90ad19c1c6cf10d2a2e9fc2d82f841afcd5da58cc4ee
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd JSON shape")
 }
@@ -44990,19 +46348,26 @@ func (value wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d
 	return data, nil
 }
 func (value *wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec92918713a3ffeb6dee9d3cb329f63f92a0465669500a8d52d8c7188cce6bf51) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec92918713a3ffeb6dee9d3cb329f63f92a0465669500a8d52d8c7188cce6bf51
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec92918713a3ffeb6dee9d3cb329f63f92a0465669500a8d52d8c7188cce6bf51
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7b21c57b77988b4e8659e85a6dce8e0ac47b1720b5738df195fe8476182e291d JSON shape")
 }
@@ -45150,26 +46515,33 @@ func (value wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e
 	return data, nil
 }
 func (value *wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiredb456ef2c66d629588319e34cf31a16c163075f394cdfa85d06ed5cee6045655) }, func() interface{} { return new(wirea5c68f9af7dd42d8a047ac1d4d5eebb725c22559e02dc646c4303ea9e079eceb) }, func() interface{} { return new(wireb243edbe4b2e63b8d3f7cead31a363a5cc3d20eef4ef559ddba6303eb2547f57) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wiredb456ef2c66d629588319e34cf31a16c163075f394cdfa85d06ed5cee6045655
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wirea5c68f9af7dd42d8a047ac1d4d5eebb725c22559e02dc646c4303ea9e079eceb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wireb243edbe4b2e63b8d3f7cead31a363a5cc3d20eef4ef559ddba6303eb2547f57
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7cc8d8f776c1f7ce03f3b4dbd8d1e954038f256031ef8a62d19bbdac449d509e JSON shape")
 }
@@ -45203,19 +46575,26 @@ func (value wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e
 	return data, nil
 }
 func (value *wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7cd443d2a457c24dce8858235ca28802694c2812d038c7fff5d9bdff40df904e JSON shape")
 }
@@ -45311,19 +46690,26 @@ func (value wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82
 	return data, nil
 }
 func (value *wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireedfd9fae16a4c067f9a295eaeecc1f84d8f8100d1348353649c27c94129acb44) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireedfd9fae16a4c067f9a295eaeecc1f84d8f8100d1348353649c27c94129acb44
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireedfd9fae16a4c067f9a295eaeecc1f84d8f8100d1348353649c27c94129acb44
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7ddee24dc9f4700f84ff6c599f8d1f49db1015821bb725c4e6a4f8b799036d82 JSON shape")
 }
@@ -45381,19 +46767,26 @@ func (value wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340
 	return data, nil
 }
 func (value *wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired08d5abba502556f33b2e3fc0c7b290b298acb3eb29f77acd9a3ec7ad252dd79
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired08d5abba502556f33b2e3fc0c7b290b298acb3eb29f77acd9a3ec7ad252dd79) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wired08d5abba502556f33b2e3fc0c7b290b298acb3eb29f77acd9a3ec7ad252dd79
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7eb89a6e7e55c7d8113cd2799507b31454f6d575cd12c86eb4c9dac69cb7a340 JSON shape")
 }
@@ -45539,19 +46932,26 @@ func (value wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48
 	return data, nil
 }
 func (value *wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref13d0a2d7fd7015d562f4e65fb3f973d2873e50c0a65106b9d678f00bfe9e48e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref13d0a2d7fd7015d562f4e65fb3f973d2873e50c0a65106b9d678f00bfe9e48e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref13d0a2d7fd7015d562f4e65fb3f973d2873e50c0a65106b9d678f00bfe9e48e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48 JSON shape")
 }
@@ -45615,26 +47015,33 @@ func (value wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66
 	return data, nil
 }
 func (value *wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66 JSON shape")
 }
@@ -45700,26 +47107,33 @@ func (value wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea
 	return data, nil
 }
 func (value *wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70) }, func() interface{} { return new(wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire69f47e11afa9b8c14faf99c31d52ed4cc8696e988185253a2ed7495f7e79fe85
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8037bd1127f01db2f22d8028dc36ee868666d389ad22263a30900906ad4797ea JSON shape")
 }
@@ -45798,19 +47212,26 @@ func (value wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760
 	return data, nil
 }
 func (value *wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire24e434c4d121baaa90a7a5964a21dcf8d460ec77e0a24caf409ad117f64c4f09) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire24e434c4d121baaa90a7a5964a21dcf8d460ec77e0a24caf409ad117f64c4f09
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire24e434c4d121baaa90a7a5964a21dcf8d460ec77e0a24caf409ad117f64c4f09
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire812a41bd2865c878aba0306d1a93382fe6aadcdb1f8f7d62d3e4098ea0010760 JSON shape")
 }
@@ -45844,19 +47265,26 @@ func (value wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54
 	return data, nil
 }
 func (value *wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebe5ee2f9631910934befbd676cac163d19cba3e2978358d9941cf172f3dd08fa) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebe5ee2f9631910934befbd676cac163d19cba3e2978358d9941cf172f3dd08fa
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebe5ee2f9631910934befbd676cac163d19cba3e2978358d9941cf172f3dd08fa
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8132858150b72bac55f3d8ac64074617508bba7841583bf4ced9ebb6ae4c2a54 JSON shape")
 }
@@ -45994,19 +47422,26 @@ func (value wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee
 	return data, nil
 }
 func (value *wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6b838cbdcc0181d999e71bf2cba6d221a25e8c5b6a21087f392e06ba50359ff0) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6b838cbdcc0181d999e71bf2cba6d221a25e8c5b6a21087f392e06ba50359ff0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6b838cbdcc0181d999e71bf2cba6d221a25e8c5b6a21087f392e06ba50359ff0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire81ef7a95ac8d098b976f22d332235c9b270ebaa523c0a271d846fdf1f209a6ee JSON shape")
 }
@@ -46042,19 +47477,26 @@ func (value wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e
 	return data, nil
 }
 func (value *wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa) }, func() interface{} { return new(wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire1def12b4c6febc8be30c0266a8746fd28e4a5c6db9acfce36be853f6a68a4b48
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire82afef12d3330cfdefc66fb675a02d8c3fa3f179411544ef46d6037c8cd62c1e JSON shape")
 }
@@ -46220,26 +47662,33 @@ func (value wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623
 	return data, nil
 }
 func (value *wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire29d5edc0066ef2a5a2bde54238bc2a254d398bdd0a04099a95bec3b83d7b34e7) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wirea601573fd949dde89b63227c240eba4bdc6c6c3ca81e4640c847c6e8e182fad0) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire29d5edc0066ef2a5a2bde54238bc2a254d398bdd0a04099a95bec3b83d7b34e7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirea601573fd949dde89b63227c240eba4bdc6c6c3ca81e4640c847c6e8e182fad0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire845faa382b524ca6efaef744eedb70ebf1813a8d82de6553a9595c0bb4101623 JSON shape")
 }
@@ -46273,19 +47722,26 @@ func (value wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510
 	return data, nil
 }
 func (value *wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5e2c87e56e86bfd57ad9894ae3782d01610f0089989217cdef3dd1cf744633f8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire5e2c87e56e86bfd57ad9894ae3782d01610f0089989217cdef3dd1cf744633f8) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire5e2c87e56e86bfd57ad9894ae3782d01610f0089989217cdef3dd1cf744633f8
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8487d0e12453112ed39e75778476ded0f3ed8d298232989948a2717cd876b510 JSON shape")
 }
@@ -46447,19 +47903,26 @@ func (value wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3
 	return data, nil
 }
 func (value *wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9c679cfaf74d62164af2d84f62da89c0a8630ff80460284edfaa7907d906bb28
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire9c679cfaf74d62164af2d84f62da89c0a8630ff80460284edfaa7907d906bb28) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire9c679cfaf74d62164af2d84f62da89c0a8630ff80460284edfaa7907d906bb28
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3 JSON shape")
 }
@@ -46514,19 +47977,26 @@ func (value wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285
 	return data, nil
 }
 func (value *wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire97cba4e853a7df26f3a007df5970c26330a5495e521d64a30a6daa7e5caf3d42) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire97cba4e853a7df26f3a007df5970c26330a5495e521d64a30a6daa7e5caf3d42
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire97cba4e853a7df26f3a007df5970c26330a5495e521d64a30a6daa7e5caf3d42
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire869b63341f82c0cc227bef16944ff9494ad4803c52dbe5622d2401b1e27d3285 JSON shape")
 }
@@ -46624,26 +48094,33 @@ func (value wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7
 	return data, nil
 }
 func (value *wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire6c9ed6ae92ac0dd27795f11d3dd63f22af29214aae11b803ba30190e5f6a4059) }, func() interface{} { return new(wireff0adfebe915add93d20e02adf59d43f4a74634fa8dea9b087ccbcd78306fe5e) }, func() interface{} { return new(wire61a5faca9668c2c2910d7f9e6fda5bcd70b46d3732bbc18d3373e070825b1dda) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire6c9ed6ae92ac0dd27795f11d3dd63f22af29214aae11b803ba30190e5f6a4059
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wireff0adfebe915add93d20e02adf59d43f4a74634fa8dea9b087ccbcd78306fe5e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire61a5faca9668c2c2910d7f9e6fda5bcd70b46d3732bbc18d3373e070825b1dda
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7 JSON shape")
 }
@@ -46725,19 +48202,26 @@ func (value wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e
 	return data, nil
 }
 func (value *wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire55c7edb2554b56087e319114e03f170e19556ae4a6c8d6cf822a459c2aab6ebf) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire55c7edb2554b56087e319114e03f170e19556ae4a6c8d6cf822a459c2aab6ebf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire55c7edb2554b56087e319114e03f170e19556ae4a6c8d6cf822a459c2aab6ebf
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire883f529fa679d4f28107af733f099394bce8ee8e62b35adebec686405853872e JSON shape")
 }
@@ -47112,19 +48596,26 @@ func (value wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc
 	return data, nil
 }
 func (value *wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireedbfb2450563396729903e77a47e75d839fe9b71be732e25ecdf721bae60f33e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireedbfb2450563396729903e77a47e75d839fe9b71be732e25ecdf721bae60f33e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireedbfb2450563396729903e77a47e75d839fe9b71be732e25ecdf721bae60f33e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8c7e6139d1769c673be74dc7c74ecf98c15d99e7d2bbf149e355361e479614dc JSON shape")
 }
@@ -47220,26 +48711,33 @@ func (value wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327
 	return data, nil
 }
 func (value *wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire358a39c508e9669135a27c6cf01bdb362178f332d08d66ea303941647b522a9a) }, func() interface{} { return new(wire353156a3cb295a0e4f412bf6a96409f70e977054bfb3dbb0dd9bcbdea4224154) }, func() interface{} { return new(wireccdbff9749f6519712e1b7e0cd31a24d1061d866e5f14629f83d5d2bc56a856d) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire358a39c508e9669135a27c6cf01bdb362178f332d08d66ea303941647b522a9a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire353156a3cb295a0e4f412bf6a96409f70e977054bfb3dbb0dd9bcbdea4224154
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wireccdbff9749f6519712e1b7e0cd31a24d1061d866e5f14629f83d5d2bc56a856d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8da0c0be991369e75bcc68438ca3a66db4e18cee2793dfb9f99e52477bb1b327 JSON shape")
 }
@@ -47295,19 +48793,26 @@ func (value wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca
 	return data, nil
 }
 func (value *wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire881dacfa96dc3e5661b7b0d10e02f6c41cd7ef37107a6083ab5388f7216db22b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire881dacfa96dc3e5661b7b0d10e02f6c41cd7ef37107a6083ab5388f7216db22b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire881dacfa96dc3e5661b7b0d10e02f6c41cd7ef37107a6083ab5388f7216db22b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca JSON shape")
 }
@@ -47540,26 +49045,33 @@ func (value wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110
 	return data, nil
 }
 func (value *wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850) }, func() interface{} { return new(wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire5ccc919958d01ac7be28a2b5511c92f248729d123b8a7c92edae35f223217850
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire3e321b12b67c7af357b9db8db7a3600b37c891e0e9f0f5071852470bc42718b9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8eca499c6286050b853d724b343f85088f32ef2c781afb40dc51815106aee110 JSON shape")
 }
@@ -47595,19 +49107,26 @@ func (value wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb
 	return data, nil
 }
 func (value *wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirefae960f21c5b0e26896cceebe3890d6cd5ab95275eb75293f28c469506f7a0fe) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirefae960f21c5b0e26896cceebe3890d6cd5ab95275eb75293f28c469506f7a0fe
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirefae960f21c5b0e26896cceebe3890d6cd5ab95275eb75293f28c469506f7a0fe
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8f323f7a0a5fde90b14a9faa3d4924098adfbbc0b0bfeab3c37e8f1c7bb9dadb JSON shape")
 }
@@ -47641,19 +49160,26 @@ func (value wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713
 	return data, nil
 }
 func (value *wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire1adfd49910107cb78684abdba9e5cb3f82881a8cff7ec5011da87de48babcecb) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire1adfd49910107cb78684abdba9e5cb3f82881a8cff7ec5011da87de48babcecb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire1adfd49910107cb78684abdba9e5cb3f82881a8cff7ec5011da87de48babcecb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713 JSON shape")
 }
@@ -47711,19 +49237,26 @@ func (value wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9
 	return data, nil
 }
 func (value *wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire5897cf59ab423ed36a299cbe2edf703e5ea51a668f0f956683cf33f9ebd104aa) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5897cf59ab423ed36a299cbe2edf703e5ea51a668f0f956683cf33f9ebd104aa
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5897cf59ab423ed36a299cbe2edf703e5ea51a668f0f956683cf33f9ebd104aa
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9 JSON shape")
 }
@@ -47757,19 +49290,26 @@ func (value wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23
 	return data, nil
 }
 func (value *wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0300831bb61922e58c206556842fe74c4fed6b67f29375b1cd16c81447dedb9e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0300831bb61922e58c206556842fe74c4fed6b67f29375b1cd16c81447dedb9e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0300831bb61922e58c206556842fe74c4fed6b67f29375b1cd16c81447dedb9e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire90dfe53412023b4678654b677576ca06418bc55ddbb7e1b2d9f74c05772d4e23 JSON shape")
 }
@@ -47835,47 +49375,54 @@ func (value wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330
 	return data, nil
 }
 func (value *wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(wiref2ee31e8621cd6c7914ec5663159d9866acc8b7eb4d8b6c799bd18b414e8098c) }, func() interface{} { return new(wirefd2944b14ed1f85a51d4aff85648332cc243f158f938361d1ba2c44792599a23) }}, []bool{false, false, false, true, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wiref2ee31e8621cd6c7914ec5663159d9866acc8b7eb4d8b6c799bd18b414e8098c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wirefd2944b14ed1f85a51d4aff85648332cc243f158f938361d1ba2c44792599a23
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire914704873a0dbeb6116219fe8c7f96a8dfcb553d5a976cae86b81fa6a36d9330 JSON shape")
 }
@@ -47933,19 +49480,26 @@ func (value wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636
 	return data, nil
 }
 func (value *wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirecd4020199b5a867ceb4ea6fb8d4245a8010dac2518c97b8bb050964817571b02) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirecd4020199b5a867ceb4ea6fb8d4245a8010dac2518c97b8bb050964817571b02
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirecd4020199b5a867ceb4ea6fb8d4245a8010dac2518c97b8bb050964817571b02
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636 JSON shape")
 }
@@ -48144,117 +49698,124 @@ func (value wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6
 	return data, nil
 }
 func (value *wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483) }, func() interface{} { return new(wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc) }, func() interface{} { return new(wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd) }, func() interface{} { return new(wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1) }, func() interface{} { return new(wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914) }, func() interface{} { return new(wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a) }, func() interface{} { return new(wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd) }, func() interface{} { return new(wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f) }, func() interface{} { return new(wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386) }, func() interface{} { return new(wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad) }, func() interface{} { return new(wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418) }, func() interface{} { return new(wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0) }, func() interface{} { return new(wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a) }, func() interface{} { return new(wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1) }, func() interface{} { return new(wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41) }}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire1b900b8becdef406f5db46af84a2c4ea3fa8a90156cdfcefb523129401e92483
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire64d209b700f8e00cf30fbbdb3a1e2b03b5df41b854cc0a0eec1d26ae9397f4fd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire4cb033990db6d599ce418255313faa16fabef52826360a4e1e41db2a7e3da5b1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wire5eb4b8d113ca92ce71112fdfb4dbe41b4bb07ff9af43f467a2182dc78f264914
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice7: &candidate}
+		return nil
+	case 7:
 		var candidate wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcbd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice8: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice8: &candidate}
+		return nil
+	case 8:
 		var candidate wire691986221f8059f116fe715ad24ae75dbaef66e8b43d4e15ae0435d2f05cd74f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice9: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice9: &candidate}
+		return nil
+	case 9:
 		var candidate wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice10: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice10: &candidate}
+		return nil
+	case 10:
 		var candidate wire1e86a0e29badeb9b4c21c2bd96cf3e0a85f46ad8a6289564cb2ace31794ebcad
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice11: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice11: &candidate}
+		return nil
+	case 11:
 		var candidate wire4a79865de988e753ded186121b34dcab2367ad747ea527f29c0a771a6c3f4418
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice12: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice12: &candidate}
+		return nil
+	case 12:
 		var candidate wire29891324aab3615639d23af2a340afb691eefe96ea6cd20a8e6fb92c1276d4a0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice13: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice13: &candidate}
+		return nil
+	case 13:
 		var candidate wire01c2f9d01c86925bed22b43f803c2e2e355727e2f6dfcaff46247b7a98a8697a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice14: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice14: &candidate}
+		return nil
+	case 14:
 		var candidate wire2b5d2d36fe6a9860bcfd88020bdc9a2564927ee7147b635fb4acfdeab1e718d1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice15: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice15: &candidate}
+		return nil
+	case 15:
 		var candidate wire1757e41d89791e46f88199c2175472c80b505b9ea1cfde5d031282106b84dc41
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice16: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6{Choice16: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire91d0b80b625ca46deb3480886ac03fb782d3d858447085709060c9752c572ee6 JSON shape")
 }
@@ -48388,19 +49949,26 @@ func (value wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab
 	return data, nil
 }
 func (value *wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire1b47d0597c64e2cdc6160a5c96bfe9b4043291c12afbd63bb1a69c94423560c2) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire1b47d0597c64e2cdc6160a5c96bfe9b4043291c12afbd63bb1a69c94423560c2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire1b47d0597c64e2cdc6160a5c96bfe9b4043291c12afbd63bb1a69c94423560c2
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46ab JSON shape")
 }
@@ -48495,19 +50063,26 @@ func (value wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4
 	return data, nil
 }
 func (value *wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5b30a8b93c10555fd85d9500d4ea5d19b42c1cbafa87ba77f8fdd6af5ebaa540
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire93e47da6103c89eecdf21d4bf3081940ab1ec6f3b09d11713cd1a1e09a2c47f4 JSON shape")
 }
@@ -48596,19 +50171,26 @@ func (value wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5
 	return data, nil
 }
 func (value *wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4b1bbee4e9b17c66e1df56be9e5478337ac0864cc4d3291bfadc93bfe039ec14) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4b1bbee4e9b17c66e1df56be9e5478337ac0864cc4d3291bfadc93bfe039ec14
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4b1bbee4e9b17c66e1df56be9e5478337ac0864cc4d3291bfadc93bfe039ec14
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire947071fe31aa2d7cf3fa396b79351ee8c59127714085ead82fa3c8418b8f4ff5 JSON shape")
 }
@@ -49515,691 +51097,698 @@ func (value wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931
 	return data, nil
 }
 func (value *wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire9bc0e33a44a82cec1a23065c0362e035b6995219f15ddeef15e6e9176ffd7b3c) }, func() interface{} { return new(wire514164770ca66fb84baeba43de86451091caa591c720f2a9b88b9d11c4eb16ef) }, func() interface{} { return new(wire7000455d44a50c7df865cc5cfcee2930ce772b8b04cc1d9043ccbbe1789f4739) }, func() interface{} { return new(wire028ca1b92a88730665aaf47b4f91bab82946d0d6da7d6aabe3453a084235262c) }, func() interface{} { return new(wiree5d99f5e77eec214a114ee167ee5a187d67f607dca509f33e225840702c16623) }, func() interface{} { return new(wirea6ede54a7d278b8bbeb2aa9ea85a71816e9c79c738aac0e8ffdeaf40382d6211) }, func() interface{} { return new(wire98400782ee36c93e12c9851815ec1d6cefbd336f4f93995b3bb6e2ef365f4b6b) }, func() interface{} { return new(wirec744f1d9ca9c40f1aba83c9229e51824580073d0c4d56c76528b015ee864fe6a) }, func() interface{} { return new(wirebdbf74e53ea74cfc68a628ce1c74ef1b927849ee3dd44f52518784ca08b9f82a) }, func() interface{} { return new(wire12aa795cd90c3ae97cd00d8b94ab18c48609932a8114d17adc47746439ed015d) }, func() interface{} { return new(wire390e57a697c302c3315f317b6c8e3d0c83f7933a93ef3bdfda5c044f79b97798) }, func() interface{} { return new(wiref4bc397e952b92d131a0981a2df36abf41f89915efe536c0c8b1dc087b121bd5) }, func() interface{} { return new(wire871c85d4a45725f28d7c8287a12f8fd27cd24b43952f3cacc9fae2c77880b413) }, func() interface{} { return new(wiredcd1d34d41ec5ee7c11924a7b87ae10de68baca67b88486f6b167a98a83ca827) }, func() interface{} { return new(wire0974a92d203d18acbe8e20767ae9b847d723fc6ce6eefc0e7dc2dc56901ebde9) }, func() interface{} { return new(wireed1d3b305ecd7f7d7b7167dc4947a9063664c28c607fff5a6dd750fd84a388f3) }, func() interface{} { return new(wire36f8bf03532bc1b59b39637fc0727aacda000b087fbec57fef08e5f75f4c9339) }, func() interface{} { return new(wire4977570a503b17936ea0b12b9b33da88c6284c24b6f580fa8f5d8dcd446122ef) }, func() interface{} { return new(wireaa3b931fdf93feae9e099cbdd14e49af585e7173b94d1572d507f39c6f14c87c) }, func() interface{} { return new(wire0cbb4085eee080df58219402f224102866d6575a82ea7019f59ff74688a72c18) }, func() interface{} { return new(wire0d224b07cc9df00d7affe1dff812cd5674fd84058a9d7acc0f62a675659cc57b) }, func() interface{} { return new(wiref34a33b6f5afdf73616a7b904e0ae388668a5a16bd2cec63cbc0dd88df127d7a) }, func() interface{} { return new(wiread802205ce014c7ecf9d7c9880d87812e716f89db512fe657c679c7c8e0af50c) }, func() interface{} { return new(wiref9ed2ea4f88ecdc05a9bcb6a7d0524b78d771aa1a97a962dc51f92a8b6000ae6) }, func() interface{} { return new(wireaaae7a48472a0a2b09239b0ad341781fdf26c436734c56620054cd5f6c465d64) }, func() interface{} { return new(wirec5041c276615af89c77750fde2a615ba2eb76aa6c2165d79dd2eff21eb515d5b) }, func() interface{} { return new(wirea5c3d1cbca0e9e7f9626bce661533a0f1693496ca363ac025c8b693b0df46d1d) }, func() interface{} { return new(wirec84e4a45aca20dbe5108be2bf5c905ee1c21555f963b4f278bc60d32e7ec59f6) }, func() interface{} { return new(wire0ffa9a2c726a50fbd918cf8d71baf42735def7d8b4ded3dfeb53839d84321e70) }, func() interface{} { return new(wire41aaf8d51e2a2b6a3a9d9d6939166970e92f15d277bcdf66550b744385fc4132) }, func() interface{} { return new(wire8e6aca8cd84832e560f56138252c192d3ecef285b94135341a68885b5a35f7b9) }, func() interface{} { return new(wire4eadf65b9276598b76bbbfff6e7b7bca3a8872b660d2a00e0561ee42c3e212b0) }, func() interface{} { return new(wire7c6f2ab0948cea5a9dc674f0c664bda1e6e4231a31df4358188275e4c7d3d624) }, func() interface{} { return new(wire65b8e0ff010c223763f55d3b87d0e0c4af40a52bb0af0f2de43f6029cc61a8bf) }, func() interface{} { return new(wire32ead03f626606ed4a98b1219eda3363d5f9fc68f4c061d0d3a426ece901e582) }, func() interface{} { return new(wire5615e354670cd9617dd464cb2f76634d20262af5fdf209b4e9e106f85798e0fb) }, func() interface{} { return new(wireaecc084f2f4fc1c826655ff6792dc6af5e43f5bd43a7da4c80a57a08c79b7d96) }, func() interface{} { return new(wire84592263eadac9c47305c9ea2dd77304831babf9aff846497eec15290ac8ee3e) }, func() interface{} { return new(wiref5b137e4b110c6deab68f148dd4c4e79b2400794e81e97415acd04d640a70aca) }, func() interface{} { return new(wire57b7094a2ac184651f633fa0146dd6c82ef2faa9dce657cf14979e45866f015a) }, func() interface{} { return new(wireb2e18d512afb74f26e4787abe0cebe532a3fc5982aff18dd96226e2c859c2c91) }, func() interface{} { return new(wiree76ee50a2298a1e53088267953fd6a7aaef8c8bcf5d38718758e2a464cc8a460) }, func() interface{} { return new(wiredfdfd6e25472e5a2dbb74037f3d71f4527af5c3c7ef340151af27138d63ec122) }, func() interface{} { return new(wire8639d5624cc06da48e18d4c7b8fbd2636442bb3a85df9a2bcd83a83912f7d629) }, func() interface{} { return new(wirebcc42c5105ddd54007dd635420342710aefd790952e943622269d8ef9d543a4c) }, func() interface{} { return new(wire5e3f79fefa6c391c9989359e96c2756a98f822a35f394a23ad5b6774c4774b23) }, func() interface{} { return new(wire8bcd4358f141ad24656d7f965fb66ad158898842038aa54ff36e24f2bf5ca3d7) }, func() interface{} { return new(wire9ea2d1f3fd833393bca16155cf3cacb7a8556ed1edd7513b257683561abcb03f) }, func() interface{} { return new(wirebcefadc659045235cd3bfc5e43fce1761bdcafd5381d78436513cc72b9accfb6) }, func() interface{} { return new(wire097e02c4be320e02d0ee613ad131899760ba7e4b94b681c53e22b82915490d24) }, func() interface{} { return new(wire8d5526270fcd411c7f2507df4f6c0e319703b2bdeb454da14de6455c3d7bd4ee) }, func() interface{} { return new(wireee5e9f94aabdff5eddd985bd4003d5db883a58633b2de0123c1292cca9bf6062) }, func() interface{} { return new(wire7049737a5dfa3b9e93c184d618b6ea00f2132bc2f3d93597607db07721163969) }, func() interface{} { return new(wireb4c765a5aed27eff91d8566dcf6b844412b1c366382bd9197fec5e690d707088) }, func() interface{} { return new(wire19d3cbd89cd9251ab504f855481e2074c0c77f7530c63e8cf0647b39e6d74b83) }, func() interface{} { return new(wireb2a04db96e15775a8e3a99fbda5e7495e8d5710e96b3464d992f4eaab9b62891) }, func() interface{} { return new(wire41550fc13783dcf0af246ee896b126c98ffa6945d1d12ac9c231aa869474b5d8) }, func() interface{} { return new(wire23cf3b022fc07a85221955c268e69e618b73be546ead0aac9aad63524e671834) }, func() interface{} { return new(wiref4217c39f3aeeb9e68ec571f8ffc09b981b8950f4c34f497f111545be1c4710b) }, func() interface{} { return new(wireb87e23359bbe33a06ebaaed401eec82d5d949cd33df30b0e2d8c682de1884fe3) }, func() interface{} { return new(wire8ea2f42debf535263bf36b4d2088f43cccf56ae4703209f48c144b6cb1f8e449) }, func() interface{} { return new(wire39f270564113dce0ea06724a01cbd40b0371862afd94c1a05c348a847577f262) }, func() interface{} { return new(wire31355cbfc7adbbd011fba9e3744a22711af1abe5ba0848f8ccc86cbb4a5420f6) }, func() interface{} { return new(wirec831a86a11a0118937c5f34fd2adbbadb9d1e11c3814066a537fb5ee4f82183f) }, func() interface{} { return new(wire03c3b4342bf9b546aa97e20de620413b5ef9035fa5db0be76d82df7a39cc261e) }, func() interface{} { return new(wireb22515e7d96a11488e9b2f74acf42673e46afac04af6575dac27127fe3656f96) }, func() interface{} { return new(wireb9ce611a85b1adcb9d48e17856469adb611e3e3427d8fae38233188f69d58ed1) }, func() interface{} { return new(wiref887843cbbff64473b20dbe627a184376c8d4bcfea7f5fdecdc9989de57fee7e) }, func() interface{} { return new(wire18e0c96de4122b36feb819a12349e0f4acfb3fad15301ee21665ba9781c1bdd3) }, func() interface{} { return new(wired90871e9292ded7e073948545885e0be9a8e5e8f9b1605069b48406dd79c7125) }, func() interface{} { return new(wiredca81d8a7cdeebcc76163f63437f73249fe57551f2b903153b27ca41c1e09ac7) }, func() interface{} { return new(wired20afab36f281a97de166002203d5df45cec6c512c7d133a2c6b83fc40a2c24c) }, func() interface{} { return new(wirecce267f2c6e350b95a62c4f314b295cf5ca2a9aa15e558c47a34c124f6a00b98) }, func() interface{} { return new(wiref3ddce9424f65ecdb65778da79a4ab3153aaa5bf82d35c22fa7c20026c904bac) }, func() interface{} { return new(wire944529202f334d0d04692f00d01dac15671e7a6b7b6b96ceaaaa3f25eb0660ad) }, func() interface{} { return new(wirea002af675bf8b509c04473e9b31c6895ae3e9331b74baff5a4bd00c463034f65) }, func() interface{} { return new(wirefecc342315b64371470a83dcb0a1bfda6a8697342b09fd4851037bb881c0d035) }, func() interface{} { return new(wire7d389346316b37a4cca164638f7c740e16e324c1cb5e66f2530292f03ac9c9ba) }, func() interface{} { return new(wireefa6139b1909fdac6cb49c557c8f09b1acdc34658f2b986716ba4c4f72734a92) }, func() interface{} { return new(wire85782c67e8f4a74fde1efefbe55c6fb6b60fdc5d1c6f5b5f99255c9d4b252153) }, func() interface{} { return new(wire1494964f19a86d951018904072e6745402527f124202c889c02a1e360ed4247c) }, func() interface{} { return new(wire26295da0fdd6e646a91b66139dd34873472180118266a13ba69de56864987e66) }, func() interface{} { return new(wired5ee814a6fdf634cb15e58ecd8e2c7308d0725b5401487079becfb0ec4c365f8) }, func() interface{} { return new(wireec1b9cdf8330817de7edcbab88f80119023eb8fe4d27af87fbe6aa59fa3544ad) }, func() interface{} { return new(wireee4e9bc85eef64c1aea3169523759ac804bdc5d55ebbd2e758c75dc884787bb6) }, func() interface{} { return new(wire2b5ecd85d56bd76fc66fa59bbb501df38b67e92a5c46e05c7336114764e3e4dc) }, func() interface{} { return new(wirec3062cd42bcbbcec33f50c16283edc0f007c9f5f4299d5a4c6b315c7e19a23a7) }, func() interface{} { return new(wire8dc55deb25d5d448842068ef1cfded40c65f20f1871e05a569a5b0c62664e121) }, func() interface{} { return new(wire6420b5b78ad938acc58aee4a17e507e7d79fd5fd0d2600f5ca6652564c5a9691) }, func() interface{} { return new(wired8e375ce2037c386718f12cb4baacf67c73005b46bec92da8d36eabe8fbd69bf) }, func() interface{} { return new(wirebce1c86415bd3bac97bc77a6c8a75b77d80faa61f6bddebc9a2a741e00f454c6) }, func() interface{} { return new(wirea0b9c74b6c1109fa06cb42c0b6562fc820b2bf2eef7ba5fd9cf2da108d50ade9) }, func() interface{} { return new(wire258df19b90d17961f46eac763f8ac3ed57a54335e47ca77eb342cd5ae3fd3af0) }, func() interface{} { return new(wire781a7edc6e3d25dbf018647e78731b14a3a4daf96afe8fc75058fa68544b45ac) }, func() interface{} { return new(wire780cd1eecd995237921e805063550a1858e2927673a94970262d71f2494f0750) }, func() interface{} { return new(wiree582d862cd6af991667bdea72af25f0c8d488f170099265c0c7cc786eced3881) }, func() interface{} { return new(wire2351220f5987111af605eb6fcf315dd7365a3b6632b7cbf19312ddb9a480a2a5) }, func() interface{} { return new(wire31192d0ab5f77accfc5b1daf5b5862abbb0c2e4d5539908e9344432927a2a6ce) }}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire9bc0e33a44a82cec1a23065c0362e035b6995219f15ddeef15e6e9176ffd7b3c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire514164770ca66fb84baeba43de86451091caa591c720f2a9b88b9d11c4eb16ef
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire7000455d44a50c7df865cc5cfcee2930ce772b8b04cc1d9043ccbbe1789f4739
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire028ca1b92a88730665aaf47b4f91bab82946d0d6da7d6aabe3453a084235262c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wiree5d99f5e77eec214a114ee167ee5a187d67f607dca509f33e225840702c16623
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wirea6ede54a7d278b8bbeb2aa9ea85a71816e9c79c738aac0e8ffdeaf40382d6211
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wire98400782ee36c93e12c9851815ec1d6cefbd336f4f93995b3bb6e2ef365f4b6b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice7: &candidate}
+		return nil
+	case 7:
 		var candidate wirec744f1d9ca9c40f1aba83c9229e51824580073d0c4d56c76528b015ee864fe6a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice8: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice8: &candidate}
+		return nil
+	case 8:
 		var candidate wirebdbf74e53ea74cfc68a628ce1c74ef1b927849ee3dd44f52518784ca08b9f82a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice9: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice9: &candidate}
+		return nil
+	case 9:
 		var candidate wire12aa795cd90c3ae97cd00d8b94ab18c48609932a8114d17adc47746439ed015d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice10: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice10: &candidate}
+		return nil
+	case 10:
 		var candidate wire390e57a697c302c3315f317b6c8e3d0c83f7933a93ef3bdfda5c044f79b97798
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice11: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice11: &candidate}
+		return nil
+	case 11:
 		var candidate wiref4bc397e952b92d131a0981a2df36abf41f89915efe536c0c8b1dc087b121bd5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice12: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice12: &candidate}
+		return nil
+	case 12:
 		var candidate wire871c85d4a45725f28d7c8287a12f8fd27cd24b43952f3cacc9fae2c77880b413
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice13: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice13: &candidate}
+		return nil
+	case 13:
 		var candidate wiredcd1d34d41ec5ee7c11924a7b87ae10de68baca67b88486f6b167a98a83ca827
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice14: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice14: &candidate}
+		return nil
+	case 14:
 		var candidate wire0974a92d203d18acbe8e20767ae9b847d723fc6ce6eefc0e7dc2dc56901ebde9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice15: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice15: &candidate}
+		return nil
+	case 15:
 		var candidate wireed1d3b305ecd7f7d7b7167dc4947a9063664c28c607fff5a6dd750fd84a388f3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice16: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice16: &candidate}
+		return nil
+	case 16:
 		var candidate wire36f8bf03532bc1b59b39637fc0727aacda000b087fbec57fef08e5f75f4c9339
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice17: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice17: &candidate}
+		return nil
+	case 17:
 		var candidate wire4977570a503b17936ea0b12b9b33da88c6284c24b6f580fa8f5d8dcd446122ef
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice18: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice18: &candidate}
+		return nil
+	case 18:
 		var candidate wireaa3b931fdf93feae9e099cbdd14e49af585e7173b94d1572d507f39c6f14c87c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice19: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice19: &candidate}
+		return nil
+	case 19:
 		var candidate wire0cbb4085eee080df58219402f224102866d6575a82ea7019f59ff74688a72c18
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice20: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice20: &candidate}
+		return nil
+	case 20:
 		var candidate wire0d224b07cc9df00d7affe1dff812cd5674fd84058a9d7acc0f62a675659cc57b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice21: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice21: &candidate}
+		return nil
+	case 21:
 		var candidate wiref34a33b6f5afdf73616a7b904e0ae388668a5a16bd2cec63cbc0dd88df127d7a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice22: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice22: &candidate}
+		return nil
+	case 22:
 		var candidate wiread802205ce014c7ecf9d7c9880d87812e716f89db512fe657c679c7c8e0af50c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice23: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice23: &candidate}
+		return nil
+	case 23:
 		var candidate wiref9ed2ea4f88ecdc05a9bcb6a7d0524b78d771aa1a97a962dc51f92a8b6000ae6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice24: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice24: &candidate}
+		return nil
+	case 24:
 		var candidate wireaaae7a48472a0a2b09239b0ad341781fdf26c436734c56620054cd5f6c465d64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice25: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice25: &candidate}
+		return nil
+	case 25:
 		var candidate wirec5041c276615af89c77750fde2a615ba2eb76aa6c2165d79dd2eff21eb515d5b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice26: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice26: &candidate}
+		return nil
+	case 26:
 		var candidate wirea5c3d1cbca0e9e7f9626bce661533a0f1693496ca363ac025c8b693b0df46d1d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice27: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice27: &candidate}
+		return nil
+	case 27:
 		var candidate wirec84e4a45aca20dbe5108be2bf5c905ee1c21555f963b4f278bc60d32e7ec59f6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice28: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice28: &candidate}
+		return nil
+	case 28:
 		var candidate wire0ffa9a2c726a50fbd918cf8d71baf42735def7d8b4ded3dfeb53839d84321e70
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice29: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice29: &candidate}
+		return nil
+	case 29:
 		var candidate wire41aaf8d51e2a2b6a3a9d9d6939166970e92f15d277bcdf66550b744385fc4132
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice30: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice30: &candidate}
+		return nil
+	case 30:
 		var candidate wire8e6aca8cd84832e560f56138252c192d3ecef285b94135341a68885b5a35f7b9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice31: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice31: &candidate}
+		return nil
+	case 31:
 		var candidate wire4eadf65b9276598b76bbbfff6e7b7bca3a8872b660d2a00e0561ee42c3e212b0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice32: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice32: &candidate}
+		return nil
+	case 32:
 		var candidate wire7c6f2ab0948cea5a9dc674f0c664bda1e6e4231a31df4358188275e4c7d3d624
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice33: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice33: &candidate}
+		return nil
+	case 33:
 		var candidate wire65b8e0ff010c223763f55d3b87d0e0c4af40a52bb0af0f2de43f6029cc61a8bf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice34: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice34: &candidate}
+		return nil
+	case 34:
 		var candidate wire32ead03f626606ed4a98b1219eda3363d5f9fc68f4c061d0d3a426ece901e582
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice35: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice35: &candidate}
+		return nil
+	case 35:
 		var candidate wire5615e354670cd9617dd464cb2f76634d20262af5fdf209b4e9e106f85798e0fb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice36: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice36: &candidate}
+		return nil
+	case 36:
 		var candidate wireaecc084f2f4fc1c826655ff6792dc6af5e43f5bd43a7da4c80a57a08c79b7d96
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice37: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice37: &candidate}
+		return nil
+	case 37:
 		var candidate wire84592263eadac9c47305c9ea2dd77304831babf9aff846497eec15290ac8ee3e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice38: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice38: &candidate}
+		return nil
+	case 38:
 		var candidate wiref5b137e4b110c6deab68f148dd4c4e79b2400794e81e97415acd04d640a70aca
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice39: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice39: &candidate}
+		return nil
+	case 39:
 		var candidate wire57b7094a2ac184651f633fa0146dd6c82ef2faa9dce657cf14979e45866f015a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice40: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice40: &candidate}
+		return nil
+	case 40:
 		var candidate wireb2e18d512afb74f26e4787abe0cebe532a3fc5982aff18dd96226e2c859c2c91
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice41: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice41: &candidate}
+		return nil
+	case 41:
 		var candidate wiree76ee50a2298a1e53088267953fd6a7aaef8c8bcf5d38718758e2a464cc8a460
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice42: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice42: &candidate}
+		return nil
+	case 42:
 		var candidate wiredfdfd6e25472e5a2dbb74037f3d71f4527af5c3c7ef340151af27138d63ec122
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice43: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice43: &candidate}
+		return nil
+	case 43:
 		var candidate wire8639d5624cc06da48e18d4c7b8fbd2636442bb3a85df9a2bcd83a83912f7d629
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice44: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice44: &candidate}
+		return nil
+	case 44:
 		var candidate wirebcc42c5105ddd54007dd635420342710aefd790952e943622269d8ef9d543a4c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice45: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice45: &candidate}
+		return nil
+	case 45:
 		var candidate wire5e3f79fefa6c391c9989359e96c2756a98f822a35f394a23ad5b6774c4774b23
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice46: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice46: &candidate}
+		return nil
+	case 46:
 		var candidate wire8bcd4358f141ad24656d7f965fb66ad158898842038aa54ff36e24f2bf5ca3d7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice47: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice47: &candidate}
+		return nil
+	case 47:
 		var candidate wire9ea2d1f3fd833393bca16155cf3cacb7a8556ed1edd7513b257683561abcb03f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice48: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice48: &candidate}
+		return nil
+	case 48:
 		var candidate wirebcefadc659045235cd3bfc5e43fce1761bdcafd5381d78436513cc72b9accfb6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice49: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice49: &candidate}
+		return nil
+	case 49:
 		var candidate wire097e02c4be320e02d0ee613ad131899760ba7e4b94b681c53e22b82915490d24
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice50: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice50: &candidate}
+		return nil
+	case 50:
 		var candidate wire8d5526270fcd411c7f2507df4f6c0e319703b2bdeb454da14de6455c3d7bd4ee
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice51: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice51: &candidate}
+		return nil
+	case 51:
 		var candidate wireee5e9f94aabdff5eddd985bd4003d5db883a58633b2de0123c1292cca9bf6062
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice52: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice52: &candidate}
+		return nil
+	case 52:
 		var candidate wire7049737a5dfa3b9e93c184d618b6ea00f2132bc2f3d93597607db07721163969
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice53: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice53: &candidate}
+		return nil
+	case 53:
 		var candidate wireb4c765a5aed27eff91d8566dcf6b844412b1c366382bd9197fec5e690d707088
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice54: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice54: &candidate}
+		return nil
+	case 54:
 		var candidate wire19d3cbd89cd9251ab504f855481e2074c0c77f7530c63e8cf0647b39e6d74b83
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice55: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice55: &candidate}
+		return nil
+	case 55:
 		var candidate wireb2a04db96e15775a8e3a99fbda5e7495e8d5710e96b3464d992f4eaab9b62891
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice56: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice56: &candidate}
+		return nil
+	case 56:
 		var candidate wire41550fc13783dcf0af246ee896b126c98ffa6945d1d12ac9c231aa869474b5d8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice57: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice57: &candidate}
+		return nil
+	case 57:
 		var candidate wire23cf3b022fc07a85221955c268e69e618b73be546ead0aac9aad63524e671834
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice58: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice58: &candidate}
+		return nil
+	case 58:
 		var candidate wiref4217c39f3aeeb9e68ec571f8ffc09b981b8950f4c34f497f111545be1c4710b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice59: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice59: &candidate}
+		return nil
+	case 59:
 		var candidate wireb87e23359bbe33a06ebaaed401eec82d5d949cd33df30b0e2d8c682de1884fe3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice60: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice60: &candidate}
+		return nil
+	case 60:
 		var candidate wire8ea2f42debf535263bf36b4d2088f43cccf56ae4703209f48c144b6cb1f8e449
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice61: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice61: &candidate}
+		return nil
+	case 61:
 		var candidate wire39f270564113dce0ea06724a01cbd40b0371862afd94c1a05c348a847577f262
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice62: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice62: &candidate}
+		return nil
+	case 62:
 		var candidate wire31355cbfc7adbbd011fba9e3744a22711af1abe5ba0848f8ccc86cbb4a5420f6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice63: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice63: &candidate}
+		return nil
+	case 63:
 		var candidate wirec831a86a11a0118937c5f34fd2adbbadb9d1e11c3814066a537fb5ee4f82183f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice64: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice64: &candidate}
+		return nil
+	case 64:
 		var candidate wire03c3b4342bf9b546aa97e20de620413b5ef9035fa5db0be76d82df7a39cc261e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice65: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice65: &candidate}
+		return nil
+	case 65:
 		var candidate wireb22515e7d96a11488e9b2f74acf42673e46afac04af6575dac27127fe3656f96
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice66: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice66: &candidate}
+		return nil
+	case 66:
 		var candidate wireb9ce611a85b1adcb9d48e17856469adb611e3e3427d8fae38233188f69d58ed1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice67: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice67: &candidate}
+		return nil
+	case 67:
 		var candidate wiref887843cbbff64473b20dbe627a184376c8d4bcfea7f5fdecdc9989de57fee7e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice68: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice68: &candidate}
+		return nil
+	case 68:
 		var candidate wire18e0c96de4122b36feb819a12349e0f4acfb3fad15301ee21665ba9781c1bdd3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice69: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice69: &candidate}
+		return nil
+	case 69:
 		var candidate wired90871e9292ded7e073948545885e0be9a8e5e8f9b1605069b48406dd79c7125
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice70: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice70: &candidate}
+		return nil
+	case 70:
 		var candidate wiredca81d8a7cdeebcc76163f63437f73249fe57551f2b903153b27ca41c1e09ac7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice71: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice71: &candidate}
+		return nil
+	case 71:
 		var candidate wired20afab36f281a97de166002203d5df45cec6c512c7d133a2c6b83fc40a2c24c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice72: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice72: &candidate}
+		return nil
+	case 72:
 		var candidate wirecce267f2c6e350b95a62c4f314b295cf5ca2a9aa15e558c47a34c124f6a00b98
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice73: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice73: &candidate}
+		return nil
+	case 73:
 		var candidate wiref3ddce9424f65ecdb65778da79a4ab3153aaa5bf82d35c22fa7c20026c904bac
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice74: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice74: &candidate}
+		return nil
+	case 74:
 		var candidate wire944529202f334d0d04692f00d01dac15671e7a6b7b6b96ceaaaa3f25eb0660ad
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice75: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice75: &candidate}
+		return nil
+	case 75:
 		var candidate wirea002af675bf8b509c04473e9b31c6895ae3e9331b74baff5a4bd00c463034f65
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice76: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice76: &candidate}
+		return nil
+	case 76:
 		var candidate wirefecc342315b64371470a83dcb0a1bfda6a8697342b09fd4851037bb881c0d035
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice77: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice77: &candidate}
+		return nil
+	case 77:
 		var candidate wire7d389346316b37a4cca164638f7c740e16e324c1cb5e66f2530292f03ac9c9ba
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice78: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice78: &candidate}
+		return nil
+	case 78:
 		var candidate wireefa6139b1909fdac6cb49c557c8f09b1acdc34658f2b986716ba4c4f72734a92
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice79: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice79: &candidate}
+		return nil
+	case 79:
 		var candidate wire85782c67e8f4a74fde1efefbe55c6fb6b60fdc5d1c6f5b5f99255c9d4b252153
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice80: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice80: &candidate}
+		return nil
+	case 80:
 		var candidate wire1494964f19a86d951018904072e6745402527f124202c889c02a1e360ed4247c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice81: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice81: &candidate}
+		return nil
+	case 81:
 		var candidate wire26295da0fdd6e646a91b66139dd34873472180118266a13ba69de56864987e66
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice82: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice82: &candidate}
+		return nil
+	case 82:
 		var candidate wired5ee814a6fdf634cb15e58ecd8e2c7308d0725b5401487079becfb0ec4c365f8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice83: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice83: &candidate}
+		return nil
+	case 83:
 		var candidate wireec1b9cdf8330817de7edcbab88f80119023eb8fe4d27af87fbe6aa59fa3544ad
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice84: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice84: &candidate}
+		return nil
+	case 84:
 		var candidate wireee4e9bc85eef64c1aea3169523759ac804bdc5d55ebbd2e758c75dc884787bb6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice85: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice85: &candidate}
+		return nil
+	case 85:
 		var candidate wire2b5ecd85d56bd76fc66fa59bbb501df38b67e92a5c46e05c7336114764e3e4dc
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice86: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice86: &candidate}
+		return nil
+	case 86:
 		var candidate wirec3062cd42bcbbcec33f50c16283edc0f007c9f5f4299d5a4c6b315c7e19a23a7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice87: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice87: &candidate}
+		return nil
+	case 87:
 		var candidate wire8dc55deb25d5d448842068ef1cfded40c65f20f1871e05a569a5b0c62664e121
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice88: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice88: &candidate}
+		return nil
+	case 88:
 		var candidate wire6420b5b78ad938acc58aee4a17e507e7d79fd5fd0d2600f5ca6652564c5a9691
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice89: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice89: &candidate}
+		return nil
+	case 89:
 		var candidate wired8e375ce2037c386718f12cb4baacf67c73005b46bec92da8d36eabe8fbd69bf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice90: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice90: &candidate}
+		return nil
+	case 90:
 		var candidate wirebce1c86415bd3bac97bc77a6c8a75b77d80faa61f6bddebc9a2a741e00f454c6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice91: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice91: &candidate}
+		return nil
+	case 91:
 		var candidate wirea0b9c74b6c1109fa06cb42c0b6562fc820b2bf2eef7ba5fd9cf2da108d50ade9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice92: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice92: &candidate}
+		return nil
+	case 92:
 		var candidate wire258df19b90d17961f46eac763f8ac3ed57a54335e47ca77eb342cd5ae3fd3af0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice93: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice93: &candidate}
+		return nil
+	case 93:
 		var candidate wire781a7edc6e3d25dbf018647e78731b14a3a4daf96afe8fc75058fa68544b45ac
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice94: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice94: &candidate}
+		return nil
+	case 94:
 		var candidate wire780cd1eecd995237921e805063550a1858e2927673a94970262d71f2494f0750
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice95: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice95: &candidate}
+		return nil
+	case 95:
 		var candidate wiree582d862cd6af991667bdea72af25f0c8d488f170099265c0c7cc786eced3881
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice96: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice96: &candidate}
+		return nil
+	case 96:
 		var candidate wire2351220f5987111af605eb6fcf315dd7365a3b6632b7cbf19312ddb9a480a2a5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice97: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice97: &candidate}
+		return nil
+	case 97:
 		var candidate wire31192d0ab5f77accfc5b1daf5b5862abbb0c2e4d5539908e9344432927a2a6ce
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice98: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931{Choice98: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire950dec58e21503e7064d6ade04aa428dc9f9219a65f333a8d5d67b2fe2c1f931 JSON shape")
 }
@@ -50507,26 +52096,33 @@ func (value wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425
 	return data, nil
 }
 func (value *wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiree5e6bece0a1c8f573b9149827fda9faf5abc0af0009449a1cd03528e03e1fc08) }, func() interface{} { return new(wire03c5ff856a18fe88499b50405447fe7d71f16f0ed38700cfeeccdf01ccfba4b6) }, func() interface{} { return new(wire39d3515c242e689dcb38851e122d02a83f3984503de456afc6303621ec80773f) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wiree5e6bece0a1c8f573b9149827fda9faf5abc0af0009449a1cd03528e03e1fc08
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire03c5ff856a18fe88499b50405447fe7d71f16f0ed38700cfeeccdf01ccfba4b6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire39d3515c242e689dcb38851e122d02a83f3984503de456afc6303621ec80773f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425 JSON shape")
 }
@@ -50641,19 +52237,26 @@ func (value wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70
 	return data, nil
 }
 func (value *wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6aaf1fd91b6c87e618c7ed0e9bca0591b6e3ea1fde632612823aeee984049112) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6aaf1fd91b6c87e618c7ed0e9bca0591b6e3ea1fde632612823aeee984049112
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6aaf1fd91b6c87e618c7ed0e9bca0591b6e3ea1fde632612823aeee984049112
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire98e38384515d27aa01dd8a0728f748b1fd1f2c4eccd11342fc98b03b36d58c70 JSON shape")
 }
@@ -50719,26 +52322,33 @@ func (value wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9
 	return data, nil
 }
 func (value *wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire502955a9283960b747a90cc04232bedc7c265debb31c2b68f1a1492b5d81b1ea
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9 JSON shape")
 }
@@ -50798,19 +52408,26 @@ func (value wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9
 	return data, nil
 }
 func (value *wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire20b33a37d567fb5aa7c390889c14ed87e5c01874781dbd2d82cb33ab88913379
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire20b33a37d567fb5aa7c390889c14ed87e5c01874781dbd2d82cb33ab88913379) }, func() interface{} { return new(wirece27cb2f7f85bced4fb1d8ec6ff5e7eb971ed4609da394e770225dfe67a584e3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirece27cb2f7f85bced4fb1d8ec6ff5e7eb971ed4609da394e770225dfe67a584e3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire20b33a37d567fb5aa7c390889c14ed87e5c01874781dbd2d82cb33ab88913379
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirece27cb2f7f85bced4fb1d8ec6ff5e7eb971ed4609da394e770225dfe67a584e3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9a5dac87e5bde35d766318c596e100ecc1b36ecefab9caadff749e5c21bb33f9 JSON shape")
 }
@@ -50844,19 +52461,26 @@ func (value wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba
 	return data, nil
 }
 func (value *wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire652ba668e4cfb496d3efbf018d4162488d913c96ca28ee0bade258067ec98103
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire652ba668e4cfb496d3efbf018d4162488d913c96ca28ee0bade258067ec98103) }, func() interface{} { return new(wiree171c5d81125f235ff9a7ddeae01ed3ef1e8075d70dab4e36b0604b5b4439890) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiree171c5d81125f235ff9a7ddeae01ed3ef1e8075d70dab4e36b0604b5b4439890
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire652ba668e4cfb496d3efbf018d4162488d913c96ca28ee0bade258067ec98103
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiree171c5d81125f235ff9a7ddeae01ed3ef1e8075d70dab4e36b0604b5b4439890
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba JSON shape")
 }
@@ -50993,19 +52617,26 @@ func (value wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d
 	return data, nil
 }
 func (value *wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6bae92a5bfee20ae3b48aec26e3bab289f1b68a87f8b8330ec7b03217f494b71) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6bae92a5bfee20ae3b48aec26e3bab289f1b68a87f8b8330ec7b03217f494b71
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6bae92a5bfee20ae3b48aec26e3bab289f1b68a87f8b8330ec7b03217f494b71
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d JSON shape")
 }
@@ -51060,19 +52691,26 @@ func (value wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515
 	return data, nil
 }
 func (value *wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire146c0d2ff391268a1c8a044a2bed90ca338fa9558e5417fa14df4775378af630) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire146c0d2ff391268a1c8a044a2bed90ca338fa9558e5417fa14df4775378af630
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire146c0d2ff391268a1c8a044a2bed90ca338fa9558e5417fa14df4775378af630
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9cb221117d3316fe5250572a74ab3e89945ef12cd7036c887a868ab7475cf515 JSON shape")
 }
@@ -51106,19 +52744,26 @@ func (value wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859
 	return data, nil
 }
 func (value *wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6c3b68f964335e83809f3fc8cd028c8f8a9db12a920aebf2a80947efb7b366d5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire6c3b68f964335e83809f3fc8cd028c8f8a9db12a920aebf2a80947efb7b366d5) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire6c3b68f964335e83809f3fc8cd028c8f8a9db12a920aebf2a80947efb7b366d5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9cc73ce50a5335e730466bd37046b35b52a1a58581194be53cc60c9820b20859 JSON shape")
 }
@@ -51176,40 +52821,47 @@ func (value wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc
 	return data, nil
 }
 func (value *wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire96890af5478547dc0f99885ce3ceeeae0644cbeb7a2e5be1f05493f36e334aa4) }, func() interface{} { return new(wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1) }, func() interface{} { return new(wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926) }, func() interface{} { return new(wireb8bf0ecca3d0ed1a4ac055c66dff7a97ad7fd74d13ec153ccec3733de8431e4d) }, func() interface{} { return new(wirea688719fc58aee25b7b20fdf9b7049ac56f8cfea826c88eef2360494d9b638c1) }}, []bool{false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire96890af5478547dc0f99885ce3ceeeae0644cbeb7a2e5be1f05493f36e334aa4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wireb8bf0ecca3d0ed1a4ac055c66dff7a97ad7fd74d13ec153ccec3733de8431e4d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wirea688719fc58aee25b7b20fdf9b7049ac56f8cfea826c88eef2360494d9b638c1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9cd0c44b7fe4d97b99c4438dd02133ee0fbf58b96150eb3a2b3726772ab97ccc JSON shape")
 }
@@ -51243,19 +52895,26 @@ func (value wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85
 	return data, nil
 }
 func (value *wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire5918ba8dd71aef34f020c11c651c1d784a6f9e11304f15b0bf822ed181d2fdd3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5918ba8dd71aef34f020c11c651c1d784a6f9e11304f15b0bf822ed181d2fdd3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5918ba8dd71aef34f020c11c651c1d784a6f9e11304f15b0bf822ed181d2fdd3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9d05c920f9823a117a4f547d45d4f5d17e8fe8fc636a617abd2dfe0539296a85 JSON shape")
 }
@@ -51377,19 +53036,26 @@ func (value wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1
 	return data, nil
 }
 func (value *wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec3072a2fb2512997df5255960922741342da9a6f6bbe2ba4251743b48d6cc604) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec3072a2fb2512997df5255960922741342da9a6f6bbe2ba4251743b48d6cc604
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec3072a2fb2512997df5255960922741342da9a6f6bbe2ba4251743b48d6cc604
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9e758336614f0a3cb8d9c4f987216913bcd706fb3800d575c0d8e18b5c851af1 JSON shape")
 }
@@ -51458,19 +53124,26 @@ func (value wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c
 	return data, nil
 }
 func (value *wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb644bf464e9dfbda04e17370a52880051a685e041c603fb4c47348b6a28de67b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb644bf464e9dfbda04e17370a52880051a685e041c603fb4c47348b6a28de67b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb644bf464e9dfbda04e17370a52880051a685e041c603fb4c47348b6a28de67b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9ee9a4eaa197b3ba2b90883181508805f67c8ea21860c0f2405446fe7ba84c7c JSON shape")
 }
@@ -51569,19 +53242,26 @@ func (value wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12
 	return data, nil
 }
 func (value *wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire067ba9ed4c15c2c8dd75f71c9eaa14caf6c2905d1f72455fe38da85dfe84c334) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire067ba9ed4c15c2c8dd75f71c9eaa14caf6c2905d1f72455fe38da85dfe84c334
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire067ba9ed4c15c2c8dd75f71c9eaa14caf6c2905d1f72455fe38da85dfe84c334
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wire9f92d4918a9b84c04d646a4cabe327d5db563b6fa39854d2fcd93d1fdcecdd12 JSON shape")
 }
@@ -51818,26 +53498,33 @@ func (value wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d
 	return data, nil
 }
 func (value *wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea12b83d1a4b637b711206010c19c4f4bc8cfc179d1b759a7c78eb232dc28881d JSON shape")
 }
@@ -51871,19 +53558,26 @@ func (value wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489
 	return data, nil
 }
 func (value *wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2cee1da2f99aea79a57841e47fb8a1c077b8f393fc961d722c0c271517eda376) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2cee1da2f99aea79a57841e47fb8a1c077b8f393fc961d722c0c271517eda376
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2cee1da2f99aea79a57841e47fb8a1c077b8f393fc961d722c0c271517eda376
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea17d73ff41969484a9803f5c1f40b67b4ed294212fac46f4069d249baf452489 JSON shape")
 }
@@ -51996,26 +53690,33 @@ func (value wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e
 	return data, nil
 }
 func (value *wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca) }, func() interface{} { return new(wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire8dbf1197a34f6e3d5476c0a76536997e6a5697d578d6d5503c7f9d70e492cfca
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea35e832f0664c5f7a4bf607ca0de0da50e97d8d60d252d3d105a01f81589c27e JSON shape")
 }
@@ -52049,19 +53750,26 @@ func (value wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14
 	return data, nil
 }
 func (value *wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired21055cd14438c83a1581fefa613d92295c8a9e883ba1eb3dc6e4886c7438414
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired21055cd14438c83a1581fefa613d92295c8a9e883ba1eb3dc6e4886c7438414) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wired21055cd14438c83a1581fefa613d92295c8a9e883ba1eb3dc6e4886c7438414
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea4163ac384b0789356cc19102db7ca20f03c4ce61a1df9b3a11c732c06be6a14 JSON shape")
 }
@@ -52095,19 +53803,26 @@ func (value wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2
 	return data, nil
 }
 func (value *wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiree3c719cb315f9e1855dddba0d91559cd7b3e36bd1c9349eaac7da200fc285cd7) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiree3c719cb315f9e1855dddba0d91559cd7b3e36bd1c9349eaac7da200fc285cd7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiree3c719cb315f9e1855dddba0d91559cd7b3e36bd1c9349eaac7da200fc285cd7
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea480b487a0658a411764936334c9ad51e8312ec6c0effb1bd14915b4c4e3c7b2 JSON shape")
 }
@@ -52162,19 +53877,26 @@ func (value wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c
 	return data, nil
 }
 func (value *wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire74f43184184d45103c1e6511ab2784c506445503d330d9a6df42d0fdac7a847d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire74f43184184d45103c1e6511ab2784c506445503d330d9a6df42d0fdac7a847d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire74f43184184d45103c1e6511ab2784c506445503d330d9a6df42d0fdac7a847d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea4d77d5eb1d63f270468176cf5d34651e48e6159732b87385b44a3a904c0e88c JSON shape")
 }
@@ -52282,19 +54004,26 @@ func (value wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca
 	return data, nil
 }
 func (value *wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire71c80c32ffa2c31ccbe9ad45c2730de72a5b595f5aa35908302a572bbd47cd3f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire71c80c32ffa2c31ccbe9ad45c2730de72a5b595f5aa35908302a572bbd47cd3f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire71c80c32ffa2c31ccbe9ad45c2730de72a5b595f5aa35908302a572bbd47cd3f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea5c0ddb96fde42db183debf87447811bbf8d28ba3a96b18e07c6e87b315680ca JSON shape")
 }
@@ -52398,19 +54127,26 @@ func (value wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca
 	return data, nil
 }
 func (value *wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea64b429ef09018227e7b9274ac3bd2e24b7eee30ba141dc2ca6eec6ff04424ca JSON shape")
 }
@@ -52539,19 +54275,26 @@ func (value wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be
 	return data, nil
 }
 func (value *wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire832e9461ca8dcb71723c1c78fa178bdf1ce97a8a330a7f74f8995fb7e8f2ce40) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire832e9461ca8dcb71723c1c78fa178bdf1ce97a8a330a7f74f8995fb7e8f2ce40
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire832e9461ca8dcb71723c1c78fa178bdf1ce97a8a330a7f74f8995fb7e8f2ce40
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea700ab7b065b5e96f572549b9752715ef71150295f7eb573797d1953d9e3d2be JSON shape")
 }
@@ -52654,19 +54397,26 @@ func (value wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173
 	return data, nil
 }
 func (value *wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref337f25001d7ff61dcaa7b57be6ef98183aa3afdbc5a61a8f2e4de3f4eec7f21) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref337f25001d7ff61dcaa7b57be6ef98183aa3afdbc5a61a8f2e4de3f4eec7f21
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref337f25001d7ff61dcaa7b57be6ef98183aa3afdbc5a61a8f2e4de3f4eec7f21
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea8b7892071c35f9cb582b685218ec65ed93ae6ec5123d7f28cd665f0e66fb173 JSON shape")
 }
@@ -52716,33 +54466,40 @@ func (value wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126
 	return data, nil
 }
 func (value *wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527) }}, []bool{false, true, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if true || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire4a2965bed0b9d4e4f85a40018573743052f944fea0fc1841d33e57336153a527
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea8bc3663fa3eefad9a4c15b2f8eba21949d3ad1bf7ae1b401dc1212a85221126 JSON shape")
 }
@@ -52800,19 +54557,26 @@ func (value wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908
 	return data, nil
 }
 func (value *wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0f5db72b1293b96d15095905b4323db94557c951810d0a915d1dcd5e8b61fdeb) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0f5db72b1293b96d15095905b4323db94557c951810d0a915d1dcd5e8b61fdeb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0f5db72b1293b96d15095905b4323db94557c951810d0a915d1dcd5e8b61fdeb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirea9229c38c27320a23bd00d51934080bff7fd7d12600eb2536b34ebebce28a908 JSON shape")
 }
@@ -52870,19 +54634,26 @@ func (value wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8
 	return data, nil
 }
 func (value *wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83) }, func() interface{} { return new(wire09a80572a86c4d7e6f9be69369386bb5767761e2f950909728ef85667398cdbf) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire09a80572a86c4d7e6f9be69369386bb5767761e2f950909728ef85667398cdbf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire09a80572a86c4d7e6f9be69369386bb5767761e2f950909728ef85667398cdbf
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaa137f469abd467e19ebc12e60b5b9fbd58afb1a522069d3c50613a5a14d8ad8 JSON shape")
 }
@@ -52924,26 +54695,33 @@ func (value wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57
 	return data, nil
 }
 func (value *wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaa34bc1dc8e25712217c64b04d9f6d0a44b23e47d6234e25176f888eb2a13b57 JSON shape")
 }
@@ -53042,26 +54820,33 @@ func (value wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148
 	return data, nil
 }
 func (value *wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wirefab66a3387e62b4016f866e31cab1becf5e65a408b0fb4c9ff6ed01867224fbe) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirefab66a3387e62b4016f866e31cab1becf5e65a408b0fb4c9ff6ed01867224fbe
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaa9edb3bf262d47294619e0ec874e9fb1881d2ae355c33b049e1de6dcb921148 JSON shape")
 }
@@ -53154,19 +54939,26 @@ func (value wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23
 	return data, nil
 }
 func (value *wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire555956f826e11902356886c62803e760de3e26b233bc812ae6e685b378eac926) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire555956f826e11902356886c62803e760de3e26b233bc812ae6e685b378eac926
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire555956f826e11902356886c62803e760de3e26b233bc812ae6e685b378eac926
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaadb10e53925a4cc7b0ce3d2e44188a473119a229e328f2609cf826760baaf23 JSON shape")
 }
@@ -53291,19 +55083,26 @@ func (value wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11
 	return data, nil
 }
 func (value *wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredb0ab4bb3a96f7612b2a1f163a15965a937029d4fab6830ba2e1eab569056cd9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredb0ab4bb3a96f7612b2a1f163a15965a937029d4fab6830ba2e1eab569056cd9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiredb0ab4bb3a96f7612b2a1f163a15965a937029d4fab6830ba2e1eab569056cd9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireac2a1d52af83791940aaf57a4cde0ae1fa3de8ec79bfb3c0275ead9dd42bde11 JSON shape")
 }
@@ -53337,19 +55136,26 @@ func (value wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7
 	return data, nil
 }
 func (value *wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3184b5f68958d653a7bf79246fafa436196f3b8d545869699feed4487ab6cfca) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3184b5f68958d653a7bf79246fafa436196f3b8d545869699feed4487ab6cfca
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3184b5f68958d653a7bf79246fafa436196f3b8d545869699feed4487ab6cfca
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireac4ffbda22af3f28e6a535b38045ce2752b2140488cc12250858fdb8a1f174c7 JSON shape")
 }
@@ -53467,19 +55273,26 @@ func (value wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92
 	return data, nil
 }
 func (value *wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire95af235c26f25347181698816a9a4b11e2a06567ea1d4c04e28cb981a9a43c82) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire95af235c26f25347181698816a9a4b11e2a06567ea1d4c04e28cb981a9a43c82
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire95af235c26f25347181698816a9a4b11e2a06567ea1d4c04e28cb981a9a43c82
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireadc9a7173e49eb734b7c9d993dd16e0d6f91bd9f59b7ba600793dff163121a92 JSON shape")
 }
@@ -53537,19 +55350,26 @@ func (value wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c
 	return data, nil
 }
 func (value *wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire801804fee474807f6cd386f35d6c0cf21ce5b12a2754ec9617c154dca7878f66
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaeb7628f7bf8bb4057423b680067d9cffa69bd8df7887dc4c8f2d11c4e4a494c JSON shape")
 }
@@ -53635,19 +55455,26 @@ func (value wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11
 	return data, nil
 }
 func (value *wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaef1c0c9cbb7af06172a03e663bca0f5d676d78e172664be2566ee6378381f11 JSON shape")
 }
@@ -53705,19 +55532,26 @@ func (value wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c
 	return data, nil
 }
 func (value *wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3e62ea40ba5474a22fbd1d4c078ea2195c8a390e74081603f36db6212e3a21ce
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire3e62ea40ba5474a22fbd1d4c078ea2195c8a390e74081603f36db6212e3a21ce) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire3e62ea40ba5474a22fbd1d4c078ea2195c8a390e74081603f36db6212e3a21ce
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c JSON shape")
 }
@@ -53815,19 +55649,26 @@ func (value wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386
 	return data, nil
 }
 func (value *wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire7f6d2e7c15ab407827c52ea5b50ccce2db0abc3d33038d7b9e2f13555262ecb2) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7f6d2e7c15ab407827c52ea5b50ccce2db0abc3d33038d7b9e2f13555262ecb2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire7f6d2e7c15ab407827c52ea5b50ccce2db0abc3d33038d7b9e2f13555262ecb2
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireaffefaf181e1c1e0a12abbf7386497943e5fe1824492a4d1a7bf0edf05d47386 JSON shape")
 }
@@ -53945,19 +55786,26 @@ func (value wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247
 	return data, nil
 }
 func (value *wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0) }, func() interface{} { return new(string) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire31b84d65b2ac1f54250ce31f8192880d6eb6c67295e2fc2aad835f4ebfe1feb0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247 JSON shape")
 }
@@ -54007,33 +55855,40 @@ func (value wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75
 	return data, nil
 }
 func (value *wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b) }, func() interface{} { return new(wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16) }, func() interface{} { return new(wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483) }, func() interface{} { return new(wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire3f66a1a267f1fcaa20940233c2671bc5df72ebe053022b04984181f634879b16
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb1658a44edf120365a497d329ac998ab64ede8f075ded2da74119d58b85e2b75 JSON shape")
 }
@@ -54067,19 +55922,26 @@ func (value wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb
 	return data, nil
 }
 func (value *wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wired6f07e7e6084d4966fd7141989eff2098c4724c4948f5e6afbdeddec0c006b15
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired6f07e7e6084d4966fd7141989eff2098c4724c4948f5e6afbdeddec0c006b15) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wired6f07e7e6084d4966fd7141989eff2098c4724c4948f5e6afbdeddec0c006b15
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb JSON shape")
 }
@@ -54306,19 +56168,26 @@ func (value wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf
 	return data, nil
 }
 func (value *wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec5f8cdf84c9dddb214220ae710933ecee383f9676d43f1f61b1b46374384cde5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec5f8cdf84c9dddb214220ae710933ecee383f9676d43f1f61b1b46374384cde5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec5f8cdf84c9dddb214220ae710933ecee383f9676d43f1f61b1b46374384cde5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb3022b830d03fc7b91cb752c5aded2d02284efcd22cd2d49adf806cd7023f6bf JSON shape")
 }
@@ -54400,19 +56269,26 @@ func (value wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209
 	return data, nil
 }
 func (value *wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire7fc2f07e3bf281b586c27551a2a353e1953cc1de749a6995524d176ca79c5d48
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb44c0a8f135a99b00d82d4bbf2040a4fedfe6e34303a0862cecf89cfbead3209 JSON shape")
 }
@@ -54446,19 +56322,26 @@ func (value wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6
 	return data, nil
 }
 func (value *wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire52b00641600d1b0dbfd6a85dc80ab9ae3818bab24c613a8dce3907ee7ddd0bc6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire52b00641600d1b0dbfd6a85dc80ab9ae3818bab24c613a8dce3907ee7ddd0bc6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire52b00641600d1b0dbfd6a85dc80ab9ae3818bab24c613a8dce3907ee7ddd0bc6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb475cdc11d76fd62f6d83ca5d9af06b8026e03fb137283d9e73ad55ed01e69e6 JSON shape")
 }
@@ -54500,26 +56383,33 @@ func (value wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2
 	return data, nil
 }
 func (value *wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d) }, func() interface{} { return new(wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire9c4fc44a9b8b5019126e76ea2f7980bee42cc850aa80162d6c76e2196beb823d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire9170bcb5656d4b01b458d0c5fd81b8b8537c879bf7ca5a91b237d85cc882a636
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb484bb080f9eb60d9bb559930a64a53725815085ea47dee1dc55f652ed7a33e2 JSON shape")
 }
@@ -54748,19 +56638,26 @@ func (value wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a
 	return data, nil
 }
 func (value *wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3d45e20c55d4558feaba7f0377062d8a1d767b7b66b5bec527e04445292d16f6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3d45e20c55d4558feaba7f0377062d8a1d767b7b66b5bec527e04445292d16f6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3d45e20c55d4558feaba7f0377062d8a1d767b7b66b5bec527e04445292d16f6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb66efaee21827f0d305b353d6844914cc59ba31d1839906e8216729a18eb7a9a JSON shape")
 }
@@ -54870,19 +56767,26 @@ func (value wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448
 	return data, nil
 }
 func (value *wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire55fda9bc0b596fbd33406dc0d3209275286f51ecde0bb1f959aa6e8c9e2a8de3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb763a4972e2afcd30de9a1b18e570c9338d39b1200f4d00f016cf26392e91448 JSON shape")
 }
@@ -54940,19 +56844,26 @@ func (value wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2
 	return data, nil
 }
 func (value *wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredc4d5396c0654cfc0ef5819b7fe4cf526e5c29d53cb39d5e33a3240d39f2dbd5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredc4d5396c0654cfc0ef5819b7fe4cf526e5c29d53cb39d5e33a3240d39f2dbd5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiredc4d5396c0654cfc0ef5819b7fe4cf526e5c29d53cb39d5e33a3240d39f2dbd5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2 JSON shape")
 }
@@ -55247,19 +57158,26 @@ func (value wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638
 	return data, nil
 }
 func (value *wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire48846cc3bf660fc66a1844289636009a40a68d2eae08d688bd0eaf2c75be7433) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire48846cc3bf660fc66a1844289636009a40a68d2eae08d688bd0eaf2c75be7433
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire48846cc3bf660fc66a1844289636009a40a68d2eae08d688bd0eaf2c75be7433
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireba0c72b30d651892e867b8c42c372cbb14185fe147df50d4c37edd983be6b638 JSON shape")
 }
@@ -55566,19 +57484,26 @@ func (value wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d
 	return data, nil
 }
 func (value *wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9929031cf81c91cc40414d454f7d13f2744f10e85269b123539c0613e85f98b9) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9929031cf81c91cc40414d454f7d13f2744f10e85269b123539c0613e85f98b9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9929031cf81c91cc40414d454f7d13f2744f10e85269b123539c0613e85f98b9
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirebdb05858fc3ba426fe96779f7586df201b6db71334e02819c809d24d2d2d1f1d JSON shape")
 }
@@ -55612,19 +57537,26 @@ func (value wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6
 	return data, nil
 }
 func (value *wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire5463755d396153ceaffe5681a1fa5626e35d32722007238fac83a72b8dde6a5e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5463755d396153ceaffe5681a1fa5626e35d32722007238fac83a72b8dde6a5e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5463755d396153ceaffe5681a1fa5626e35d32722007238fac83a72b8dde6a5e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirebdbeed04754214d09d5b8a3a7a11a344a4ef9616ca304b71c01cbf2cbe1cb8e6 JSON shape")
 }
@@ -55718,19 +57650,26 @@ func (value wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1
 	return data, nil
 }
 func (value *wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wire160bf0806ead82f35afbe59282ff1f412e6d9ca2ffae089b0d008a461e918f02) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire160bf0806ead82f35afbe59282ff1f412e6d9ca2ffae089b0d008a461e918f02
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate bool
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire160bf0806ead82f35afbe59282ff1f412e6d9ca2ffae089b0d008a461e918f02
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirebdc9fd9db1c38c09086973b25b0d0a79fdbd0636e1d5947aa1b1ad80c33e9ca1 JSON shape")
 }
@@ -55837,19 +57776,26 @@ func (value wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578
 	return data, nil
 }
 func (value *wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire7bba1dcad56f7631f0d50aeb14d5ee7963d6e4bdf701d6f80716a2bd7a9c31d1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7bba1dcad56f7631f0d50aeb14d5ee7963d6e4bdf701d6f80716a2bd7a9c31d1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire7bba1dcad56f7631f0d50aeb14d5ee7963d6e4bdf701d6f80716a2bd7a9c31d1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirebfa456dbec3af71fcafe8b218b8e5e7310c3a76b2392bd636f7153a5d6aca578 JSON shape")
 }
@@ -56002,26 +57948,33 @@ func (value wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a
 	return data, nil
 }
 func (value *wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(wire78d24cf935407a8ff168a47a7e32855c7728385a4d322c5d15ed3fe4b11125d7) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire78d24cf935407a8ff168a47a7e32855c7728385a4d322c5d15ed3fe4b11125d7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec23fb17b25e3516a5464a5e23c31b1ab20e7209d72acf77053b054326a76427a JSON shape")
 }
@@ -56087,47 +58040,54 @@ func (value wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10
 	return data, nil
 }
 func (value *wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireffd5e72e9d892619c343673423d961a88a0d6be0fd04f6b50df3cb992579906d) }, func() interface{} { return new(wire46d4104998885cd72aed72e7e8f0bed4074883c778f38d0bf5190336b521f553) }, func() interface{} { return new(wiref4eda8f758ed2df6b1a63cf49df5c515bbd23becf8ef42a5789c4dbf3e57d28e) }, func() interface{} { return new(wireb04c4a1c43694537e8f72529d7603158e53e9d18aab4ed6642a590dcdcb8ff6e) }, func() interface{} { return new(wire55307ea3ed20311dc881a5d7a8d2b9734c8e0d9951deaae0111f20338b6b94af) }, func() interface{} { return new(wireea9aa3c1d002793014b14ce79a2f2a2db33ecbef49cc93608d1489a041d68398) }}, []bool{false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireffd5e72e9d892619c343673423d961a88a0d6be0fd04f6b50df3cb992579906d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire46d4104998885cd72aed72e7e8f0bed4074883c778f38d0bf5190336b521f553
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiref4eda8f758ed2df6b1a63cf49df5c515bbd23becf8ef42a5789c4dbf3e57d28e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wireb04c4a1c43694537e8f72529d7603158e53e9d18aab4ed6642a590dcdcb8ff6e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire55307ea3ed20311dc881a5d7a8d2b9734c8e0d9951deaae0111f20338b6b94af
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wireea9aa3c1d002793014b14ce79a2f2a2db33ecbef49cc93608d1489a041d68398
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10{Choice6: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec28fb7053c3b31723186cb9819a9a6b1b8dbe6af79adcbcb50267bfc1acd0e10 JSON shape")
 }
@@ -56265,19 +58225,26 @@ func (value wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b
 	return data, nil
 }
 func (value *wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9500a18ac4df50f5cc2c748d5230c3027fb3d383ff511caf19ce39917616446d) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9500a18ac4df50f5cc2c748d5230c3027fb3d383ff511caf19ce39917616446d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9500a18ac4df50f5cc2c748d5230c3027fb3d383ff511caf19ce39917616446d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b JSON shape")
 }
@@ -56319,26 +58286,33 @@ func (value wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06
 	return data, nil
 }
 func (value *wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrStringOrInteger
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec40f1c8188ba72a6f2990c211fd6281bf6f31d9900584f8dcc5e121769e3ce06 JSON shape")
 }
@@ -56396,19 +58370,26 @@ func (value wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac
 	return data, nil
 }
 func (value *wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate ValueStringOrNumber
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec47e55772b457c13c42cdcf7320194839cb8a46731a56fd0e253ee7935e3eaac JSON shape")
 }
@@ -56466,19 +58447,26 @@ func (value wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661
 	return data, nil
 }
 func (value *wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3fef3a53b2781897256da4bc5f93ffb857b0f5dbf4490e328b2ab5184c5a9e34) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3fef3a53b2781897256da4bc5f93ffb857b0f5dbf4490e328b2ab5184c5a9e34
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3fef3a53b2781897256da4bc5f93ffb857b0f5dbf4490e328b2ab5184c5a9e34
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661 JSON shape")
 }
@@ -56520,26 +58508,33 @@ func (value wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745
 	return data, nil
 }
 func (value *wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(wire60b56488a753bfdd714437ce03d3fcf24bb60123b112c75aa7d5167d4852d08c) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate float64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire60b56488a753bfdd714437ce03d3fcf24bb60123b112c75aa7d5167d4852d08c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec4f02239c5f967dfafafb5a7c0141745af556e226eb7d18e6ef97343ba458745 JSON shape")
 }
@@ -56703,19 +58698,26 @@ func (value wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16
 	return data, nil
 }
 func (value *wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireead173c654633560e077722d66d2539ab076eef3ffc0fa3b85aae9a77700d25b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireead173c654633560e077722d66d2539ab076eef3ffc0fa3b85aae9a77700d25b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireead173c654633560e077722d66d2539ab076eef3ffc0fa3b85aae9a77700d25b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec5fe52d6b94663b94ba947d51485763bc6aece4f7577aa68e0927ddf362f8c16 JSON shape")
 }
@@ -56773,19 +58775,26 @@ func (value wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804
 	return data, nil
 }
 func (value *wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire802f5407450fda55de637a0ac7d0c9bae184b08b90ab8aff1d87ae2554bf6c38) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire802f5407450fda55de637a0ac7d0c9bae184b08b90ab8aff1d87ae2554bf6c38
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire802f5407450fda55de637a0ac7d0c9bae184b08b90ab8aff1d87ae2554bf6c38
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec61fd0680fdfab62846375869a3cb90cd0dc9ec67905f00066960fcaa37ed804 JSON shape")
 }
@@ -57043,19 +59052,26 @@ func (value wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93
 	return data, nil
 }
 func (value *wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3844a7fcdf7c247c87a6a7023b3cbda4ba6b252aef4668059e13716292f031d6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3844a7fcdf7c247c87a6a7023b3cbda4ba6b252aef4668059e13716292f031d6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3844a7fcdf7c247c87a6a7023b3cbda4ba6b252aef4668059e13716292f031d6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirec8a5ebf473608ba41df6fa33ad7216fa0986dda102a7d79d48f66ede42d1ab93 JSON shape")
 }
@@ -57185,19 +59201,26 @@ func (value wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f
 	return data, nil
 }
 func (value *wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire9bdf616c804b7798cb16015898c0c4c4288a66a0f3d4b2b235815bd20859d2ba) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire9bdf616c804b7798cb16015898c0c4c4288a66a0f3d4b2b235815bd20859d2ba
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire9bdf616c804b7798cb16015898c0c4c4288a66a0f3d4b2b235815bd20859d2ba
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f JSON shape")
 }
@@ -57239,26 +59262,33 @@ func (value wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b
 	return data, nil
 }
 func (value *wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire3cfe0c1d78e1403b30384e3ce237c5937c3f3fe8ca8d2b3698025135bc1abecd) }, func() interface{} { return new(wire008cc4d50d5cfd8129e4dd890e07c43f5089d12eccc602c68f4385d19cc14ed6) }, func() interface{} { return new(wireab06a85d8cc5bd216e77597c1b1b7754d85a73d967360247bb1c597fb42d4714) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire3cfe0c1d78e1403b30384e3ce237c5937c3f3fe8ca8d2b3698025135bc1abecd
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire008cc4d50d5cfd8129e4dd890e07c43f5089d12eccc602c68f4385d19cc14ed6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wireab06a85d8cc5bd216e77597c1b1b7754d85a73d967360247bb1c597fb42d4714
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecb26345d20f2d66a5e3002222ddf225e4c7ae754c76276b1f113a34c38c5ef6b JSON shape")
 }
@@ -57374,26 +59404,33 @@ func (value wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483
 	return data, nil
 }
 func (value *wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireebd7ec62f89d67e76df9e8a5d7d2162214345a9c0c753ad9e77fb74cb92369d4) }, func() interface{} { return new(wire58a57fe7b7a2ee272bb7ced2f6e3d195cd2b8af87edc6435fa37de033ef5af64) }, func() interface{} { return new(wire9d3e3b0d131545cf57de47ba3ebd1e23bc26e8c0dfe39f0387d9c132d1e4a633) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireebd7ec62f89d67e76df9e8a5d7d2162214345a9c0c753ad9e77fb74cb92369d4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire58a57fe7b7a2ee272bb7ced2f6e3d195cd2b8af87edc6435fa37de033ef5af64
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire9d3e3b0d131545cf57de47ba3ebd1e23bc26e8c0dfe39f0387d9c132d1e4a633
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecc2adb24d850802ea2dac30a410583e7099cbcf959fe7a779a7afc4d1c883483 JSON shape")
 }
@@ -57475,19 +59512,26 @@ func (value wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe
 	return data, nil
 }
 func (value *wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire5733f5a65f689098561aa3af16960afca909f0b8d94e5a36022539169161dcbb) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5733f5a65f689098561aa3af16960afca909f0b8d94e5a36022539169161dcbb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire5733f5a65f689098561aa3af16960afca909f0b8d94e5a36022539169161dcbb
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireccbe5aeb6cdc12b455631d96ecd0a6294bee8cccadc407b088ec237b7e94eefe JSON shape")
 }
@@ -57587,26 +59631,33 @@ func (value wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba
 	return data, nil
 }
 func (value *wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire840cd993d5a856cffbf1e11e7c8fc65924d68ceb51ce48f0d7ecc0971d9c5e75) }, func() interface{} { return new(wire12414847a9dc9a4349270683b9891a13e5f8cef5ea67e7ce66e390bd34ace46f) }, func() interface{} { return new(wire865488e02ab5e2fdae0674d5055208e86348c23fec23be966f9adbcaf2e6eac8) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire840cd993d5a856cffbf1e11e7c8fc65924d68ceb51ce48f0d7ecc0971d9c5e75
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire12414847a9dc9a4349270683b9891a13e5f8cef5ea67e7ce66e390bd34ace46f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire865488e02ab5e2fdae0674d5055208e86348c23fec23be966f9adbcaf2e6eac8
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecd105d47882129daa95de6a47cf5d151e179e114177de88ba096750f78a3f0ba JSON shape")
 }
@@ -57720,68 +59771,75 @@ func (value wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463
 	return data, nil
 }
 func (value *wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af) }, func() interface{} { return new(wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425) }, func() interface{} { return new(wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847) }, func() interface{} { return new(wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7) }, func() interface{} { return new(wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6) }, func() interface{} { return new(wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19) }, func() interface{} { return new(wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7) }, func() interface{} { return new(wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a) }, func() interface{} { return new(wireb5bc6b9d01b2b99646fe49b2a107a8a8057513b35b644b13e241c97490c505e7) }}, []bool{false, false, false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire97bce7e24b2962dc68dfbc34977678afd0f27e3b815b36de7c351cf05827b425
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire12977f712386d47ebcfb772a35ba961d9d05729d01c4639ea75b7afa3eb82847
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire4bb77959dc1d70764b807255722366607c52c3e348068bea0f0c747c1dd9afe7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire6aadcdba14737873728a74aed8b390e7c8bcf055d396f3edf9fb7ac7c85d45f6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wire03fb9c4390f9bac8b512fc728faebb14fdadc981e050a8b68ac6aeea73c3fb19
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wire87b0f38881c120d939b19eabef038103fa10656e80f393f0fbfd007eb7159ae7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice7: &candidate}
+		return nil
+	case 7:
 		var candidate wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice8: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice8: &candidate}
+		return nil
+	case 8:
 		var candidate wireb5bc6b9d01b2b99646fe49b2a107a8a8057513b35b644b13e241c97490c505e7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice9: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463{Choice9: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecd3cab7a17578d3400f860bb184667a125c5fe066e48bb892405ba1a9320f463 JSON shape")
 }
@@ -57909,19 +59967,26 @@ func (value wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b
 	return data, nil
 }
 func (value *wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4349141dd673d1b1fc47f373b7d8969490bf2b6a4bbe83fb6e29aafa506a6625) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4349141dd673d1b1fc47f373b7d8969490bf2b6a4bbe83fb6e29aafa506a6625
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4349141dd673d1b1fc47f373b7d8969490bf2b6a4bbe83fb6e29aafa506a6625
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirece2106c625164353026ec1cdf3be73995017e583d76bf64efae253041227a05b JSON shape")
 }
@@ -57976,19 +60041,26 @@ func (value wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76
 	return data, nil
 }
 func (value *wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0010425b62dd9a8d49d7c6f24a2be5b2510d9baae424a6130d96e3f5cea305ed) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0010425b62dd9a8d49d7c6f24a2be5b2510d9baae424a6130d96e3f5cea305ed
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0010425b62dd9a8d49d7c6f24a2be5b2510d9baae424a6130d96e3f5cea305ed
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76 JSON shape")
 }
@@ -58022,19 +60094,26 @@ func (value wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba
 	return data, nil
 }
 func (value *wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire92d8e58c91b8e981858e8762e5efd4e1f482162797f4925a2d2b88801af0e055) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire92d8e58c91b8e981858e8762e5efd4e1f482162797f4925a2d2b88801af0e055
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire92d8e58c91b8e981858e8762e5efd4e1f482162797f4925a2d2b88801af0e055
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireced1f16d99d0aa58487102c5f3ee3dab7b6123b0d6f6826a96e9f14f96e104ba JSON shape")
 }
@@ -58068,19 +60147,26 @@ func (value wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42
 	return data, nil
 }
 func (value *wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireafb8519996a5501bedcf778c08838b4a1c45a3fdb8c0e95102e6c6f948de3a4c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecf5d6ab5a5091297fd563442be683cc8e7478de53ebfe8d491d657b5ae74fe42 JSON shape")
 }
@@ -58114,19 +60200,26 @@ func (value wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0
 	return data, nil
 }
 func (value *wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire38ef1780b33f964736fd349bed1060f3dfe12b1e0b6926af15ac395fe30a60ef
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecf9e9f4b9c0ed16d734f90e5bc92d4f6f8257dc732daffa384f9bab36353c7d0 JSON shape")
 }
@@ -58168,26 +60261,33 @@ func (value wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549
 	return data, nil
 }
 func (value *wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282) }, func() interface{} { return new(wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire6abc13c41efcadcccb45de9707b2c1c89290da2ce47ad6da68b70e377b1ebb89
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirecfe7039bc7ebaadd496c639864facd926a5d1e9975b9e83cc3c4054166a06549 JSON shape")
 }
@@ -58221,19 +60321,26 @@ func (value wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2
 	return data, nil
 }
 func (value *wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4fdac2153bc3dac2da3ba7aeda7423da029256b435e96dec23236bf1982affd0) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4fdac2153bc3dac2da3ba7aeda7423da029256b435e96dec23236bf1982affd0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4fdac2153bc3dac2da3ba7aeda7423da029256b435e96dec23236bf1982affd0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired00f3ed9da59f489a6db3ba0d6ce1bda363c3cfb6459350dd537a26a47d2eea2 JSON shape")
 }
@@ -58291,19 +60398,26 @@ func (value wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23
 	return data, nil
 }
 func (value *wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire3dab06310d31ed9196d7709e8ffd2202badad2c7815683a85c356647e2ff924b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire3dab06310d31ed9196d7709e8ffd2202badad2c7815683a85c356647e2ff924b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire3dab06310d31ed9196d7709e8ffd2202badad2c7815683a85c356647e2ff924b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired0394d5a85e3e5c35f09d13c81d8247590e621830e675d6e574f112409f8ad23 JSON shape")
 }
@@ -58337,19 +60451,26 @@ func (value wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663
 	return data, nil
 }
 func (value *wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire0d3c8fd95828fc24da65a97dc03a5c102489581ba1ef0ef550f1cd255a77e239) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0d3c8fd95828fc24da65a97dc03a5c102489581ba1ef0ef550f1cd255a77e239
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0d3c8fd95828fc24da65a97dc03a5c102489581ba1ef0ef550f1cd255a77e239
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired055187c3addfdd5e611cc628393b4bf10ceb18ee9f3dcec38233366eb752663 JSON shape")
 }
@@ -58462,26 +60583,33 @@ func (value wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b
 	return data, nil
 }
 func (value *wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire79ba738ff7ab801828d1afdf8d7712c7414f7c19dbe670ff1b8a49a945ffb92c) }, func() interface{} { return new(wire2bf37eefe9bd22fe13079bbf38385b2799f3cac958f5623c4dabd1de3936d62c) }, func() interface{} { return new(wire5ed5dd3cd7b0915241ef5b036cff6b6baa1805bc04c9a3430365bc297b069df2) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire79ba738ff7ab801828d1afdf8d7712c7414f7c19dbe670ff1b8a49a945ffb92c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire2bf37eefe9bd22fe13079bbf38385b2799f3cac958f5623c4dabd1de3936d62c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire5ed5dd3cd7b0915241ef5b036cff6b6baa1805bc04c9a3430365bc297b069df2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired112d74d7daf08cc80fed8a06a0e145b6dba2081ed990cc886a819a9146da18b JSON shape")
 }
@@ -58547,26 +60675,33 @@ func (value wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1
 	return data, nil
 }
 func (value *wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrStringOrNumber
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired128fc626145b50156a3095b0dfaed6950338f5daca4f4cb454ce5d979d521f1 JSON shape")
 }
@@ -58600,19 +60735,26 @@ func (value wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d
 	return data, nil
 }
 func (value *wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire015892d43137d44cd2c0394ef0df1d6e165e1528cf0ade84318791bc92da3dc6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire015892d43137d44cd2c0394ef0df1d6e165e1528cf0ade84318791bc92da3dc6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire015892d43137d44cd2c0394ef0df1d6e165e1528cf0ade84318791bc92da3dc6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired14aa2a78e370e4ac910ddf221ff8f7dfc292244a4eaf7cedf74c2d21204817d JSON shape")
 }
@@ -58879,19 +61021,26 @@ func (value wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc
 	return data, nil
 }
 func (value *wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrNumberOrBoolean) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate ValueStringOrNumberOrBoolean
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate ValueStringOrNumberOrBoolean
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired277cb060c5ac404c3c66cd456c95fdbf9fd7a0ad719902b10ec8ba1d9f41ddc JSON shape")
 }
@@ -58965,19 +61114,26 @@ func (value wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562
 	return data, nil
 }
 func (value *wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirea601573fd949dde89b63227c240eba4bdc6c6c3ca81e4640c847c6e8e182fad0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirea601573fd949dde89b63227c240eba4bdc6c6c3ca81e4640c847c6e8e182fad0) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirea601573fd949dde89b63227c240eba4bdc6c6c3ca81e4640c847c6e8e182fad0
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired30763a3e3d3f629127b97bb3205f2a9af0a53267a0b8115e4be85f15e8e0562 JSON shape")
 }
@@ -59032,19 +61188,26 @@ func (value wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599
 	return data, nil
 }
 func (value *wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wireb136d776878e0070c6822f977abd3aaededd48313daa686d73c0d50dbdca6247
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired3d8f2b9e13451b5453fdbe39598fc953e7be4e0c0b7df0d0cdb579d4ac0f599 JSON shape")
 }
@@ -59124,19 +61287,26 @@ func (value wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652
 	return data, nil
 }
 func (value *wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirefdeb8f87d94f053974e10dfe9a28ab69154b6d6211748ee75fe60944a8b60a2f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirefdeb8f87d94f053974e10dfe9a28ab69154b6d6211748ee75fe60944a8b60a2f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirefdeb8f87d94f053974e10dfe9a28ab69154b6d6211748ee75fe60944a8b60a2f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired504d4caa5c941ec5e1db1c492012c77868c434b944be8f767c5f0946ff34652 JSON shape")
 }
@@ -59221,40 +61391,47 @@ func (value wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01
 	return data, nil
 }
 func (value *wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1) }, func() interface{} { return new(wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926) }, func() interface{} { return new(wireb8bf0ecca3d0ed1a4ac055c66dff7a97ad7fd74d13ec153ccec3733de8431e4d) }, func() interface{} { return new(wirea688719fc58aee25b7b20fdf9b7049ac56f8cfea826c88eef2360494d9b638c1) }}, []bool{false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiredf21749ea7810debdb949ed5b88c8d3b55de6931b5e8371ecf88d405fc5331e1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wireb8bf0ecca3d0ed1a4ac055c66dff7a97ad7fd74d13ec153ccec3733de8431e4d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wirea688719fc58aee25b7b20fdf9b7049ac56f8cfea826c88eef2360494d9b638c1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired61629059b01d03949b4b8d9a64aa8b63c2dc08e3636c231585dee3e4f971f01 JSON shape")
 }
@@ -59312,40 +61489,47 @@ func (value wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4
 	return data, nil
 }
 func (value *wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9) }, func() interface{} { return new(wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3) }, func() interface{} { return new(wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb) }, func() interface{} { return new(wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f) }}, []bool{false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire588299ea3ed309dd686e48196b4c16b5b2338be0219a0d646159276c227f7ac9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire86456096286e651c675d3cc95c88e1e996ebc7d83034d81498dfce1a8a6912f3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wireb1ba623bf286289621f5db486ad9486df5ff8d46a2b9142b18ed7c9d6ead4ffb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire421c8e99b2fc73f81fe455e1e0634b6e80a78c797741a8613719fdd6ba9eab1f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired6322753a9ef9dbe3da08f3b6b705bf97261d3fcd0f7bc795291a831f5c310d4 JSON shape")
 }
@@ -59402,19 +61586,26 @@ func (value wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f
 	return data, nil
 }
 func (value *wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6eb2a3a029442a4ea750b2e30eea8a87d7f8f938021d10806abc51695e0c6238
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired7262ad0c9fa75f07ed4462f171c810c15ecbf647fb5abfffbdf90176167867f JSON shape")
 }
@@ -59448,19 +61639,26 @@ func (value wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc
 	return data, nil
 }
 func (value *wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireaefb229bd7595020b2b975d47c1c3e067825e79df97e23e2c85684bf9615986e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireaefb229bd7595020b2b975d47c1c3e067825e79df97e23e2c85684bf9615986e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireaefb229bd7595020b2b975d47c1c3e067825e79df97e23e2c85684bf9615986e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired7506dca0b8f75187e236790e06a3f5befe8bb7925343dd4e2af0d851005f4bc JSON shape")
 }
@@ -59502,26 +61700,33 @@ func (value wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93
 	return data, nil
 }
 func (value *wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirefd6a0e07b2b91168dfd3bce4b5e48034035b55f4ffe637a875b3646d4024365f) }, func() interface{} { return new(wirefa341d0c6a0b34a8056f6a9d037a4e657b26e657b9180355c22b62de9a9ce5e3) }, func() interface{} { return new(string) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wirefd6a0e07b2b91168dfd3bce4b5e48034035b55f4ffe637a875b3646d4024365f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wirefa341d0c6a0b34a8056f6a9d037a4e657b26e657b9180355c22b62de9a9ce5e3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired751cf23a0fd7bb6d81db9b3976e96c732cd5130694a8a5f3b7b8cc02b469b93 JSON shape")
 }
@@ -59608,26 +61813,33 @@ func (value wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b
 	return data, nil
 }
 func (value *wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9) }, func() interface{} { return new(wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire900074c3d2fc1ea6181f175c0b61ab6bee255e35eb3c13fe4e8f0e606d6e80c9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirec4ec6bab18a39731a5779a7ac3b913455daa9a7e98df7161be08c0bd24876661
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired787e90316ec495c7473c343f3ad100d05af09349531356efbfb67474a75f65b JSON shape")
 }
@@ -59741,26 +61953,33 @@ func (value wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83
 	return data, nil
 }
 func (value *wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire603cda279baadebf4b54aeab19cc79d6f0cfdf422417ed094a2705969a336c5f) }, func() interface{} { return new(wireb0ca9b7bbf283c53688e703ba38aa0a879010cf8679fe997b39f722c2ef41b62) }, func() interface{} { return new(wire486fc8c859d790c96ed07f1edefe4e5499e90176f74900282ecaeea5399c4f12) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire603cda279baadebf4b54aeab19cc79d6f0cfdf422417ed094a2705969a336c5f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wireb0ca9b7bbf283c53688e703ba38aa0a879010cf8679fe997b39f722c2ef41b62
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire486fc8c859d790c96ed07f1edefe4e5499e90176f74900282ecaeea5399c4f12
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83 JSON shape")
 }
@@ -59905,19 +62124,26 @@ func (value wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721
 	return data, nil
 }
 func (value *wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire965980270bcdd9cf4585a969d4635e1f0b3446822bdd93144697861104e92e25) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire965980270bcdd9cf4585a969d4635e1f0b3446822bdd93144697861104e92e25
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire965980270bcdd9cf4585a969d4635e1f0b3446822bdd93144697861104e92e25
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired93b312079b9330d352c946d227ef0c8a77b5d6c445e5d497f6475bc4f9ca721 JSON shape")
 }
@@ -59975,19 +62201,26 @@ func (value wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4
 	return data, nil
 }
 func (value *wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8fa655794c165b1bf7835bfd346e6b789b518b041a35e6e4285c129e57bcc3b6) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8fa655794c165b1bf7835bfd346e6b789b518b041a35e6e4285c129e57bcc3b6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8fa655794c165b1bf7835bfd346e6b789b518b041a35e6e4285c129e57bcc3b6
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wired9f7c48078329d91036d37d4aaf97300997db1e348da395cdadb5d65061496e4 JSON shape")
 }
@@ -60021,19 +62254,26 @@ func (value wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c
 	return data, nil
 }
 func (value *wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirecc381ae9fd6bda17aa9ba964b6ab78ec3ebe03f2e1b7e30157b54305e69b3621) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirecc381ae9fd6bda17aa9ba964b6ab78ec3ebe03f2e1b7e30157b54305e69b3621
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirecc381ae9fd6bda17aa9ba964b6ab78ec3ebe03f2e1b7e30157b54305e69b3621
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireda2f895a900d0bf5687a290046071fcaafba12c7ba5b8fcf3c0b315da64ef47c JSON shape")
 }
@@ -60115,19 +62355,26 @@ func (value wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01
 	return data, nil
 }
 func (value *wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6513f068f3211dda830748ca8e4d7b477096d8a2adb405310c5ea69a378eea06) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6513f068f3211dda830748ca8e4d7b477096d8a2adb405310c5ea69a378eea06
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6513f068f3211dda830748ca8e4d7b477096d8a2adb405310c5ea69a378eea06
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredb1b2e007360776b484b3ea0e900352ce41e0ad7a56276330d303944e3f61c01 JSON shape")
 }
@@ -60205,19 +62452,26 @@ func (value wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943
 	return data, nil
 }
 func (value *wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6b2b4a4abeae92ec2a0d8838532b90d2b1ecef174ea01ced9e8720e39d293e51) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire6b2b4a4abeae92ec2a0d8838532b90d2b1ecef174ea01ced9e8720e39d293e51
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire6b2b4a4abeae92ec2a0d8838532b90d2b1ecef174ea01ced9e8720e39d293e51
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943 JSON shape")
 }
@@ -60361,54 +62615,61 @@ func (value wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb
 	return data, nil
 }
 func (value *wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734) }, func() interface{} { return new(wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f) }, func() interface{} { return new(wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7) }, func() interface{} { return new(wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943) }, func() interface{} { return new(wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76) }, func() interface{} { return new(wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a) }}, []bool{false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire4cd179c0e6f9f8062f509418dab1d43675517d3939ec04ce46e3e1ed7d228734
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirecaee0c4d76c98ef206b8be3d5c3791d3cb8049c83588a1cfa7f29e392a86202f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire3c49339495964a1e3261bff22f0a45b022ca6d72a7b6f5b9e62fde2f67d095f7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wiredb64af82f848fbbeb20d0cb3e68a31c9ac0d85793a05c94617329524e853b943
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wirece3ee58575724274fdf187ccfcaf85163998b03314a903ff8e04a1d66fe6de76
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wire70a29441a62a2d10cc0594f97f21815a290d09b9cdd2d4a19750f53c2e95068a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb{Choice7: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredbead311f451845da11ea121d5d0a31e7586bc25513a001b9c9349ea89342aeb JSON shape")
 }
@@ -60521,26 +62782,33 @@ func (value wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef
 	return data, nil
 }
 func (value *wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282) }, func() interface{} { return new(wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire6d57223cdf6e5564151f056e677fbefad8250dd7fe80e784144519d3597cb282
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire780762f1eb7c8dff7df9323be043631072b4d9f4cb565f68e70c4d9fb6a7ef54
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredc5144b595282850d94f96949e27109e4771424c65066e4099fdb95e9f6a57ef JSON shape")
 }
@@ -60675,26 +62943,33 @@ func (value wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb
 	return data, nil
 }
 func (value *wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9) }, func() interface{} { return new(wire953c1dab6ba2efb45526d1b0870aac591aa3693bcdc628ac9762da99e38f6a27) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire681004346c78d5f384b654c986b4eda8fea28010db3be7da70b19aa0080f3ff9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire953c1dab6ba2efb45526d1b0870aac591aa3693bcdc628ac9762da99e38f6a27
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredce1096fff6767b5f477f31f13c4e33289b9e9f3a0fd3df2000b731877c8d4bb JSON shape")
 }
@@ -60728,19 +63003,26 @@ func (value wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e
 	return data, nil
 }
 func (value *wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire92e0f7f3651b6f5419b45c2ce0a415797b54094c17469119f2242a0ae15a5d27) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire92e0f7f3651b6f5419b45c2ce0a415797b54094c17469119f2242a0ae15a5d27
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire92e0f7f3651b6f5419b45c2ce0a415797b54094c17469119f2242a0ae15a5d27
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredcfee2004f5db161b2a799cd5bd5ddddfd59578be7732fc818d926c8c43d354e JSON shape")
 }
@@ -60803,19 +63085,26 @@ func (value wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5
 	return data, nil
 }
 func (value *wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire7afea06e053a42c48a0dd36687a2931aab869c384187be3043b216e80fb7fb9f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire7afea06e053a42c48a0dd36687a2931aab869c384187be3043b216e80fb7fb9f) }, func() interface{} { return new(wire92b5f880b9d29adce5902f9b2d697d37441fde07047368e80046b8963b2e0c5f) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire92b5f880b9d29adce5902f9b2d697d37441fde07047368e80046b8963b2e0c5f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire7afea06e053a42c48a0dd36687a2931aab869c384187be3043b216e80fb7fb9f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire92b5f880b9d29adce5902f9b2d697d37441fde07047368e80046b8963b2e0c5f
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireddac9e0275fea4e9c2688581b5f7389d18da7e6b06792838e2b1903f4515b6f5 JSON shape")
 }
@@ -60923,19 +63212,26 @@ func (value wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508
 	return data, nil
 }
 func (value *wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireeaeb6d31fe438f05648bc4b16b78788f1f02e3a9c033ed9db5556ecd85cb150e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireeaeb6d31fe438f05648bc4b16b78788f1f02e3a9c033ed9db5556ecd85cb150e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireeaeb6d31fe438f05648bc4b16b78788f1f02e3a9c033ed9db5556ecd85cb150e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredf3424750c4c139c733c9c3b980981670d366b8d0f4d5eaa40a9d9ee6ba07508 JSON shape")
 }
@@ -61057,96 +63353,103 @@ func (value wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053
 	return data, nil
 }
 func (value *wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af) }, func() interface{} { return new(wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0) }, func() interface{} { return new(wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4) }, func() interface{} { return new(wirefecef31ecb8699c8f13b213e9d1f46e61c7ce17061fe0b1d69f9f48f85eeea2b) }, func() interface{} { return new(wire65bd0d7b25457508f1265f202f88ab1ec7c284124022cd7a021c8a22d80e4140) }, func() interface{} { return new(wired4260219136db7fc0d29e0e9e6015a30d5b94099fbe722843412bb321496f9ad) }, func() interface{} { return new(wired3b010d2514309f35da724199a35048df42d0f2524ea74c3ac69fd2ba4cafe10) }, func() interface{} { return new(wire29798d97dc848c681fa2bf4754181e4c4c1113e831447d61174eebf9ee8734c6) }, func() interface{} { return new(wire68e91974e2c936c11d29c0a36fdc8ca4872220e4fa79086473fad77c6b80a4a1) }, func() interface{} { return new(wire1dc6fdbf5c300f2e1216f21f44b3013879817b0f678510a5970870eb93d24aa0) }, func() interface{} { return new(wired2ff40319630ebeffb8b92151f287c2c0c98a51cd6fabb4e7f5da1046a47b891) }, func() interface{} { return new(wirea6824647b671a163bb46d76196855f0514c8beeffaabecbe46c57b40b153c421) }, func() interface{} { return new(wire289f107a211385721cb5727a1423981b29daf4805aac0f79c4ebf9755f9226ff) }}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire41a1510f3c30a1e35a511f62f1a81b9057b4ae840e29441eccd6f5879cbea5b0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire74bb398bb5eeebb2027fdd7301fc291eaa328d12119dde6263c26eb4cb90fee4
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wirefecef31ecb8699c8f13b213e9d1f46e61c7ce17061fe0b1d69f9f48f85eeea2b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire65bd0d7b25457508f1265f202f88ab1ec7c284124022cd7a021c8a22d80e4140
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice5: &candidate}
+		return nil
+	case 5:
 		var candidate wired4260219136db7fc0d29e0e9e6015a30d5b94099fbe722843412bb321496f9ad
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice6: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice6: &candidate}
+		return nil
+	case 6:
 		var candidate wired3b010d2514309f35da724199a35048df42d0f2524ea74c3ac69fd2ba4cafe10
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice7: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice7: &candidate}
+		return nil
+	case 7:
 		var candidate wire29798d97dc848c681fa2bf4754181e4c4c1113e831447d61174eebf9ee8734c6
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice8: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice8: &candidate}
+		return nil
+	case 8:
 		var candidate wire68e91974e2c936c11d29c0a36fdc8ca4872220e4fa79086473fad77c6b80a4a1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice9: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice9: &candidate}
+		return nil
+	case 9:
 		var candidate wire1dc6fdbf5c300f2e1216f21f44b3013879817b0f678510a5970870eb93d24aa0
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice10: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice10: &candidate}
+		return nil
+	case 10:
 		var candidate wired2ff40319630ebeffb8b92151f287c2c0c98a51cd6fabb4e7f5da1046a47b891
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice11: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice11: &candidate}
+		return nil
+	case 11:
 		var candidate wirea6824647b671a163bb46d76196855f0514c8beeffaabecbe46c57b40b153c421
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice12: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice12: &candidate}
+		return nil
+	case 12:
 		var candidate wire289f107a211385721cb5727a1423981b29daf4805aac0f79c4ebf9755f9226ff
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice13: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053{Choice13: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredf75f171ec92de141b3529499e67bdc200107692f1b7de265b2e207b54c08053 JSON shape")
 }
@@ -61180,19 +63483,26 @@ func (value wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665
 	return data, nil
 }
 func (value *wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a) }, func() interface{} { return new(wire850b5ae0e9df32f7a24d83e4e6c043d75f87cce187c1529bf844e21b86add3f3) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire850b5ae0e9df32f7a24d83e4e6c043d75f87cce187c1529bf844e21b86add3f3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire2971a82759cfb5a2f1a06240f9c836a156489d7a9f2db4cb0adef641c51a002a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire850b5ae0e9df32f7a24d83e4e6c043d75f87cce187c1529bf844e21b86add3f3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiredf7eec03e05e5971b77b05f74d16beee528af718e844ec1d5da6bacff0745665 JSON shape")
 }
@@ -61513,19 +63823,26 @@ func (value wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28
 	return data, nil
 }
 func (value *wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire1f0c3de3b2282312927124300456ce271c334eb8b3f2476dbd395af3ae950312) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire1f0c3de3b2282312927124300456ce271c334eb8b3f2476dbd395af3ae950312
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire1f0c3de3b2282312927124300456ce271c334eb8b3f2476dbd395af3ae950312
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree2f7b119d7324f2a72ba4a3e30f70adf4afaf5db71ea0f15129d79e9d2064e28 JSON shape")
 }
@@ -61633,26 +63950,33 @@ func (value wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3
 	return data, nil
 }
 func (value *wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree4d1522900ca8457c3ca38afaa2faf0a72f3156a7d89fde74a63e197781ec6b3 JSON shape")
 }
@@ -61731,19 +64055,26 @@ func (value wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3
 	return data, nil
 }
 func (value *wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire01b2d025b4c0cfab8147e411925397b87020009b7ce69f661ba4bf499a23b55d
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree5750f5a0c32217a476f6db05e0dd9cbf27ee967b4a32e00a122d41eabaac7c3 JSON shape")
 }
@@ -62068,26 +64399,33 @@ func (value wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e
 	return data, nil
 }
 func (value *wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire995509f4ddc7d49a85771bb636af955cc08924dea186c8751aaa1e73601e0bf9
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree62a9620ff1da96fba83bb74d5d921dfa8536adc37f20e736040295353105f9e JSON shape")
 }
@@ -62144,19 +64482,26 @@ func (value wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6
 	return data, nil
 }
 func (value *wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8e8b847c42746d21cf37eeca245468d7e4610fadaa9b5e474722fd53aa40f708) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire8e8b847c42746d21cf37eeca245468d7e4610fadaa9b5e474722fd53aa40f708
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire8e8b847c42746d21cf37eeca245468d7e4610fadaa9b5e474722fd53aa40f708
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree7469f50f5f6caaa905dec32285a057b39da6105c01c7b8dda300f914cbe60d6 JSON shape")
 }
@@ -62220,19 +64565,26 @@ func (value wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd
 	return data, nil
 }
 func (value *wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb4cdad5b567e6f76baaa8192fe03325509faaca669d364cf9341f4066365665e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireb4cdad5b567e6f76baaa8192fe03325509faaca669d364cf9341f4066365665e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireb4cdad5b567e6f76baaa8192fe03325509faaca669d364cf9341f4066365665e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree790a0e61d353a3d9195af229b5196098c7a50d66ebc650d814055bab45993bd JSON shape")
 }
@@ -62266,19 +64618,26 @@ func (value wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268
 	return data, nil
 }
 func (value *wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire5ffc7dbbfff2ebb954c5e309876f4e56f3824f6de905a430d2afff04efb6835a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire5ffc7dbbfff2ebb954c5e309876f4e56f3824f6de905a430d2afff04efb6835a) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire5ffc7dbbfff2ebb954c5e309876f4e56f3824f6de905a430d2afff04efb6835a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree800536aa8f15a0d4951ce37e6762d17a7fbb45db0ddeeeb9eaca43410693268 JSON shape")
 }
@@ -62357,19 +64716,26 @@ func (value wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5
 	return data, nil
 }
 func (value *wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireaab7a8ca6b8aa860f70504bcf0b4d83d443b57f8b4f5ec977329729896af1118) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wireaab7a8ca6b8aa860f70504bcf0b4d83d443b57f8b4f5ec977329729896af1118
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wireaab7a8ca6b8aa860f70504bcf0b4d83d443b57f8b4f5ec977329729896af1118
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree888e5348fce67d9c792710f0bfb03dd66a92bcbff12fb3d1dcb37c935a164c5 JSON shape")
 }
@@ -62403,19 +64769,26 @@ func (value wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33
 	return data, nil
 }
 func (value *wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec58ff5aa192a4d0136d93573658110f8f4a27fe274b29f8cf2d1fb58065a5926
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree933a4a1964e2da5078967296c5cfbf5af3dc9feadec7e5a3c0898e8834cda33 JSON shape")
 }
@@ -62449,19 +64822,26 @@ func (value wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1
 	return data, nil
 }
 func (value *wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirecac34da01ad92056039e258da32df09a952bf06c86c19c398cc0c84b86981c4b) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirecac34da01ad92056039e258da32df09a952bf06c86c19c398cc0c84b86981c4b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirecac34da01ad92056039e258da32df09a952bf06c86c19c398cc0c84b86981c4b
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree93a6c25cdab2a38e049ca1206ae26b7762a646ffcbbdd2409d964698085e5d1 JSON shape")
 }
@@ -62495,19 +64875,26 @@ func (value wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643
 	return data, nil
 }
 func (value *wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire691aec9fb4a65888fb6fb059cfeff8cbcf8638ea2bd133eefd2a6338333d0ede) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire691aec9fb4a65888fb6fb059cfeff8cbcf8638ea2bd133eefd2a6338333d0ede
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire691aec9fb4a65888fb6fb059cfeff8cbcf8638ea2bd133eefd2a6338333d0ede
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree949336dc7e33848f29204f26158dd333626066ae334fdc3f9d77a5b6781d643 JSON shape")
 }
@@ -62549,26 +64936,33 @@ func (value wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912
 	return data, nil
 }
 func (value *wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire8f75fea7a91938217162c93f65b007faa394536af1cd5ab3a2eb4e2e687e3713
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiree9aeaf6450ddc77acc6a7a031ca00136f45ed6b3a5c8aa27382815762e9ca912 JSON shape")
 }
@@ -62892,26 +65286,33 @@ func (value wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c
 	return data, nil
 }
 func (value *wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2) }, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wireb869b034717143b48c5c9c755b5d1f0fdda36eb8bee7568ea376f43574d39aa2
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate ValueStringOrStringOrInteger
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireeb3248a911e1f9b8e3ca255c9e787cc263f3da7e0329d2f976a7443a8bf7266c JSON shape")
 }
@@ -63147,19 +65548,26 @@ func (value wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3
 	return data, nil
 }
 func (value *wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire248ebc43fbf5614c1dd2b70e077b89a4f34a5c30cf75424bf6fc485cdbcb9ca5) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire248ebc43fbf5614c1dd2b70e077b89a4f34a5c30cf75424bf6fc485cdbcb9ca5
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire248ebc43fbf5614c1dd2b70e077b89a4f34a5c30cf75424bf6fc485cdbcb9ca5
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireee0c98c9e99e8790ab3320410811d8274bdc9bfcb7f55e824dbc247c12c5bcf3 JSON shape")
 }
@@ -63256,19 +65664,26 @@ func (value wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065
 	return data, nil
 }
 func (value *wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }, func() interface{} { return new(wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire622d41faa528b11c6271f0434ee27a8e7ecd99b50700abf0d9c57ff1117a6388
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireeec282c21cbfd3b8589411763508daf1b3dd97d92b51def46a77ee4818dea065 JSON shape")
 }
@@ -63391,26 +65806,33 @@ func (value wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa
 	return data, nil
 }
 func (value *wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wireb9ac0d19930bde5de25bb419410c13eef4a721607593340a8542bc78afdbbf19) }, func() interface{} { return new(wire7c098c7d680ed440d859dda8047c550a7ecc63b8b54cb9d6f3e0abad2dd3144f) }, func() interface{} { return new(wirecdc8c75372efcc29d79732072cc1169f491f83d92c6cf58b553952f996140d7e) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wireb9ac0d19930bde5de25bb419410c13eef4a721607593340a8542bc78afdbbf19
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire7c098c7d680ed440d859dda8047c550a7ecc63b8b54cb9d6f3e0abad2dd3144f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirecdc8c75372efcc29d79732072cc1169f491f83d92c6cf58b553952f996140d7e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref0fb1f457aa38126df4780c8d3a7d3a7e3c5a6342de4017faac824b07c76faaa JSON shape")
 }
@@ -63566,19 +65988,26 @@ func (value wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83
 	return data, nil
 }
 func (value *wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate bool
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(wire2964fb4b2b040ca3a2b22ead1774e7270340893db5cf727e89c7b7324dbe5370) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2964fb4b2b040ca3a2b22ead1774e7270340893db5cf727e89c7b7324dbe5370
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate bool
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2964fb4b2b040ca3a2b22ead1774e7270340893db5cf727e89c7b7324dbe5370
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref33ab3bc271b232b4fdb6b570ea99f6d93c3988f48ac5b4789d1788de0360d83 JSON shape")
 }
@@ -63757,19 +66186,26 @@ func (value wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214
 	return data, nil
 }
 func (value *wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire57d1468d155d970667e089d6234859ab236e10d498c1830b83c46f16f4b7d74a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire57d1468d155d970667e089d6234859ab236e10d498c1830b83c46f16f4b7d74a) }, func() interface{} { return new(wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wire57d1468d155d970667e089d6234859ab236e10d498c1830b83c46f16f4b7d74a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire0baab915558b857f940f03d5c1a0835c14c5ca0ff8ea13d46670d49c399f8c36
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref454707de0a38a3bc64eb8eade9a4c9854936e227643fce83ebf1bf395cd5214 JSON shape")
 }
@@ -63859,19 +66295,26 @@ func (value wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
 	return data, nil
 }
 func (value *wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4748b44880cd487510ec7c4cb09732209106855afc2cf85b9a1517d3256db68e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4748b44880cd487510ec7c4cb09732209106855afc2cf85b9a1517d3256db68e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4748b44880cd487510ec7c4cb09732209106855afc2cf85b9a1517d3256db68e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb JSON shape")
 }
@@ -64050,19 +66493,26 @@ func (value wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70
 	return data, nil
 }
 func (value *wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirec8178afe97d6d216914ce4049e623d7f4bb241ad7e9eae38848ef1bf5c901721) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirec8178afe97d6d216914ce4049e623d7f4bb241ad7e9eae38848ef1bf5c901721
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirec8178afe97d6d216914ce4049e623d7f4bb241ad7e9eae38848ef1bf5c901721
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref78b9e86ec6ba51a7177ac8582e5bd54a6cf0b9d9dcb1b2052b0b15fa38a4d70 JSON shape")
 }
@@ -64156,19 +66606,26 @@ func (value wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b
 	return data, nil
 }
 func (value *wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire16a5c8084c41768efb474ee0fe8b7ffabb7b02519fbb95efb129dda017536b94) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire16a5c8084c41768efb474ee0fe8b7ffabb7b02519fbb95efb129dda017536b94
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire16a5c8084c41768efb474ee0fe8b7ffabb7b02519fbb95efb129dda017536b94
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref8e243c411366c81f89e0a4fa4131431407f9669457027e91c7777320e496a4b JSON shape")
 }
@@ -64313,33 +66770,40 @@ func (value wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850
 	return data, nil
 }
 func (value *wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb) }, func() interface{} { return new(wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wiref52b57af86938d743262ff7e5ac85994bdc4440f060bff2d9ccc3087d05437cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wirec324b1cdbaad868dd38e0fba9ca3673815c8f07585961a0edb4d903aba02930b
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate ValueStringOrString
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850{Choice4: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wiref9ef76826a3a7c408321f03616a9f845a564c88ba05419ec246a743e000d8850 JSON shape")
 }
@@ -64419,19 +66883,26 @@ func (value wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892
 	return data, nil
 }
 func (value *wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirea5b971dba3151ddbf9315ea3bbc10d37568004b70d02cec670aba82aa26684c3
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wirea5b971dba3151ddbf9315ea3bbc10d37568004b70d02cec670aba82aa26684c3) }, func() interface{} { return new(wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61) }}, []bool{false, true})
+	if err != nil {
+		return err
 	}
-	if true || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate wirea5b971dba3151ddbf9315ea3bbc10d37568004b70d02cec670aba82aa26684c3
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefad93354186adf621045c156dbc9f04e84adf34182bd55537e51ae06458c3892 JSON shape")
 }
@@ -64489,19 +66960,26 @@ func (value wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef
 	return data, nil
 }
 func (value *wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiredc16cfa298f69dda6092846b575c175a63a362010e20a723779f5addc66bfd9c) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiredc16cfa298f69dda6092846b575c175a63a362010e20a723779f5addc66bfd9c
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiredc16cfa298f69dda6092846b575c175a63a362010e20a723779f5addc66bfd9c
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefb5970d4a4106a1cdbb1dd6d17e120e129a7837c4ca98e38eef984b8e31e65ef JSON shape")
 }
@@ -64559,19 +67037,26 @@ func (value wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b
 	return data, nil
 }
 func (value *wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wiref70d4f5d19b93e41cd5c5f5cd25e879e0b11d378f3d53cc79263b245ad6dead1) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wiref70d4f5d19b93e41cd5c5f5cd25e879e0b11d378f3d53cc79263b245ad6dead1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wiref70d4f5d19b93e41cd5c5f5cd25e879e0b11d378f3d53cc79263b245ad6dead1
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefb99c6a8afee262973bea68dbdf64ea0bf80c4c5f308938f6ab2075c2ff74a9b JSON shape")
 }
@@ -64677,40 +67162,47 @@ func (value wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e
 	return data, nil
 }
 func (value *wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83) }, func() interface{} { return new(wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71) }, func() interface{} { return new(wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba) }, func() interface{} { return new(wire5b296d9890661a184cc7d177706e29171c820ce8a3713de574aae72e746025a1) }, func() interface{} { return new(wire0f9656400210aa76db3083c2bbd54cba84c9c287276ca64e49114f7bd54e9e9f) }}, []bool{false, false, false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wired8869dba01c5e95250becbc4e5e2473d88c7d74414614e64bbee6927a26cbb83
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wire739407ea882957473a13bd0220c88d40daf80ebb691d53cbee3f5b05634d8b71
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wire9b63ea7c86f40d7d886b97ef0d2f400c4d846b6a184094852cd41bc50f7d9eba
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice3: &candidate}
+		return nil
+	case 3:
 		var candidate wire5b296d9890661a184cc7d177706e29171c820ce8a3713de574aae72e746025a1
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice4: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice4: &candidate}
+		return nil
+	case 4:
 		var candidate wire0f9656400210aa76db3083c2bbd54cba84c9c287276ca64e49114f7bd54e9e9f
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice5: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e{Choice5: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefbfee8c3ea8b9ff1911795de8a47a0fb29e8ecbddb3a22aa3f39eeb54bf6a62e JSON shape")
 }
@@ -64744,19 +67236,26 @@ func (value wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad
 	return data, nil
 }
 func (value *wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire4b99fec3991aea1ad08dcecfac79a3fbe9b9c8523b08a6cffffa3bdf0e2f619a) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire4b99fec3991aea1ad08dcecfac79a3fbe9b9c8523b08a6cffffa3bdf0e2f619a
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire4b99fec3991aea1ad08dcecfac79a3fbe9b9c8523b08a6cffffa3bdf0e2f619a
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefc1b0a747ed695245e2c8feaeac7a9fee0e7530131deaf7913123cad1462b2ad JSON shape")
 }
@@ -64928,19 +67427,26 @@ func (value wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d
 	return data, nil
 }
 func (value *wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wirefc9db0653ac860cd0b7af97c4c53d62b7602bb1f864a0f87650f00204993a79e) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wirefc9db0653ac860cd0b7af97c4c53d62b7602bb1f864a0f87650f00204993a79e
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wirefc9db0653ac860cd0b7af97c4c53d62b7602bb1f864a0f87650f00204993a79e
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefdadd2ce1be3c0f1fa381be6f0e230deb81b9b680160957e34f11c94fc6ef98d JSON shape")
 }
@@ -64976,19 +67482,26 @@ func (value wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995
 	return data, nil
 }
 func (value *wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire2fa485efa9819b3dd340068f33d232a5228999e80b637460896d2df512f54e30) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire2fa485efa9819b3dd340068f33d232a5228999e80b637460896d2df512f54e30
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire2fa485efa9819b3dd340068f33d232a5228999e80b637460896d2df512f54e30
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefdee0e555be17e9265f86914e0641bf27a6c2c55fbc1b9eddc40fb8971cf8995 JSON shape")
 }
@@ -65094,19 +67607,26 @@ func (value wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a
 	return data, nil
 }
 func (value *wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate string
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a{Choice1: &candidate}
-			return nil
-		}
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(wire19079e9c370bb56e6997b9545a601cc0efc46c2f5a4506a1d8a67fc9f1ab8faf) }}, []bool{false, false})
+	if err != nil {
+		return err
 	}
-	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate wire19079e9c370bb56e6997b9545a601cc0efc46c2f5a4506a1d8a67fc9f1ab8faf
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a{Choice2: &candidate}
-			return nil
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
+		var candidate string
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a{Choice1: &candidate}
+		return nil
+	case 1:
+		var candidate wire19079e9c370bb56e6997b9545a601cc0efc46c2f5a4506a1d8a67fc9f1ab8faf
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
+		}
+		*value = wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a{Choice2: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wirefec7e856b7ab76aeb968cc8be3425b034c65bb937edee4fbbeb4ca79c929345a JSON shape")
 }
@@ -65255,26 +67775,33 @@ func (value wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af
 	return data, nil
 }
 func (value *wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af) UnmarshalJSON(data []byte) error {
-	if false || strings.TrimSpace(string(data)) != "null" {
+	choice, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(wire93bdc4e514bdfa8ae098529b1b1edf0204d10743a08eef6e7c02c47e4b0a98cb) }, func() interface{} { return new(wirecd3ec44675bf88f005b4d9cca1de37b65c7d4eb4e581998527bde66ab2f61a36) }, func() interface{} { return new(wiredb830bd0b3a7762abb5df5fba521880eeb4202faedc579e82cbf3f0347d4a8d7) }}, []bool{false, false, false})
+	if err != nil {
+		return err
+	}
+	// Decode the winner again instead of retaining every alternative's potentially large payload.
+	switch choice {
+	case 0:
 		var candidate wire93bdc4e514bdfa8ae098529b1b1edf0204d10743a08eef6e7c02c47e4b0a98cb
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice1: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice1: &candidate}
+		return nil
+	case 1:
 		var candidate wirecd3ec44675bf88f005b4d9cca1de37b65c7d4eb4e581998527bde66ab2f61a36
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice2: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
-	}
-	if false || strings.TrimSpace(string(data)) != "null" {
+		*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice2: &candidate}
+		return nil
+	case 2:
 		var candidate wiredb830bd0b3a7762abb5df5fba521880eeb4202faedc579e82cbf3f0347d4a8d7
-		if err := json.Unmarshal(data, &candidate); err == nil {
-			*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice3: &candidate}
-			return nil
+		if err := json.Unmarshal(data, &candidate); err != nil {
+			return err
 		}
+		*value = wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af{Choice3: &candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid wireff79c8f71a3217a1b38b7ba2ab1c6ac0c0d575c77c52a209daddad9ee51151af JSON shape")
 }
