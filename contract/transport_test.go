@@ -101,7 +101,7 @@ func TestAdditiveSuccessResponseFields(t *testing.T) {
 }
 
 func TestIntegralJSONRepresentations(t *testing.T) {
-	for _, source := range []string{"1.0", "1e3", "-2.00", "9223372036854775807.0"} {
+	for _, source := range []string{"1.0", "1e3", "-2.00", "9223372036854775807.0", "0e-9223372036854775808"} {
 		var value ValueIntegerOrString
 		if err := json.Unmarshal([]byte(source), &value); err != nil {
 			t.Fatalf("valid integral representation %s: %v", source, err)
@@ -115,6 +115,72 @@ func TestIntegralJSONRepresentations(t *testing.T) {
 		if err := json.Unmarshal([]byte(source), &value); err == nil {
 			t.Fatalf("non-integral or overflowing value accepted: %s", source)
 		}
+	}
+}
+
+func TestExtremeIntegerExponent(t *testing.T) {
+	var value Integer
+	if err := json.Unmarshal([]byte("1e-9223372036854775808"), &value); err == nil {
+		t.Fatal("extreme exponent was accepted")
+	}
+}
+
+func TestCanonicalLoopbackOrigins(t *testing.T) {
+	for _, origin := range []string{"http://LOCALHOST:8080", "http://localhost.:8080"} {
+		if _, err := NewClient(Config{Origin: origin, AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"}); err != nil {
+			t.Fatalf("canonical loopback origin rejected: %s: %v", origin, err)
+		}
+	}
+	for _, origin := range []string{"http://localhost.example.com", "http://127.0.0.1.", "http://127.0.0.1.example.com"} {
+		if _, err := NewClient(Config{Origin: origin, AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"}); err == nil {
+			t.Fatalf("non-loopback DNS name accepted: %s", origin)
+		}
+	}
+}
+
+func TestUnionFieldSelection(t *testing.T) {
+	type first struct {
+		A *string `json:"a,omitempty"`
+	}
+	type second struct {
+		B *string `json:"b,omitempty"`
+	}
+	candidates := []func() interface{}{
+		func() interface{} { return new(first) },
+		func() interface{} { return new(second) },
+	}
+	choice, err := unmarshalUnion([]byte(`{"b":"x","future":true}`), candidates, []bool{false, false})
+	if err != nil || choice != 1 {
+		t.Fatalf("did not retain the modeled field: %d, %v", choice, err)
+	}
+	if _, err := unmarshalUnion([]byte(`{"a":"x","b":"y"}`), candidates, []bool{false, false}); err == nil {
+		t.Fatal("accepted alternatives that each discard a modeled field")
+	}
+	if _, err := unmarshalUnion([]byte(`null`), candidates, []bool{false, false}); err == nil {
+		t.Fatal("accepted non-nullable union null")
+	}
+	// A raw alternative can preserve all fields without coercing large JSON numbers to float64.
+	candidates = append(candidates, func() interface{} { return new(json.RawMessage) })
+	choice, err = unmarshalUnion([]byte(`{"a":"x","b":"y","big":1e400}`), candidates, []bool{false, false, true})
+	if err != nil || choice != 2 {
+		t.Fatalf("did not select the lossless alternative: %d, %v", choice, err)
+	}
+}
+
+func TestUnionFieldPathEscaping(t *testing.T) {
+	paths := make(map[string]bool)
+	unionFieldPaths(map[string]interface{}{
+		"a/b":  true,
+		"a":    map[string]interface{}{"b": true},
+		"a~1b": []interface{}{map[string]interface{}{"x": true}},
+	}, "", paths)
+	for _, path := range []string{"/a~1b", "/a", "/a/b", "/a~01b", "/a~01b/0", "/a~01b/0/x"} {
+		if !paths[path] {
+			t.Fatalf("missing distinct field path: %s", path)
+		}
+	}
+	if len(paths) != 6 {
+		t.Fatalf("unexpected field paths: %v", paths)
 	}
 }
 

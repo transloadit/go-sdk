@@ -22,6 +22,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -95,7 +96,8 @@ func NewClient(config Config) (*Client, error) {
 		return nil, fmt.Errorf("contract client requires an HTTP(S) endpoint without credentials, query or fragment")
 	}
 	address := net.ParseIP(origin.Hostname())
-	if origin.Scheme == "http" && origin.Hostname() != "localhost" && (address == nil || !address.IsLoopback()) {
+	localhost := strings.TrimSuffix(strings.ToLower(origin.Hostname()), ".") == "localhost"
+	if origin.Scheme == "http" && !localhost && (address == nil || !address.IsLoopback()) {
 		return nil, fmt.Errorf("HTTPS is required except for loopback development endpoints")
 	}
 	if config.BearerToken == "" && (config.AuthKey == "" || config.AuthSecret == "") {
@@ -150,14 +152,99 @@ func unmarshalInteger(data []byte, destination *int64) error {
 	if !json.Valid(data) || len(text) == 0 || (text[0] != '-' && (text[0] < '0' || text[0] > '9')) {
 		return fmt.Errorf("expected a JSON integer")
 	}
-	// Exact rational parsing avoids rounding fractions or large values through float64. Go's parser
-	// bounds exponent growth; values outside native signed 64-bit storage are explicitly rejected.
+	if !strings.ContainsAny(text, ".eE") {
+		value, err := strconv.ParseInt(text, 10, 64)
+		if err != nil {
+			return fmt.Errorf("expected a signed 64-bit JSON integer")
+		}
+		*destination = value
+		return nil
+	}
+	if index := strings.IndexAny(text, "eE"); index >= 0 {
+		mantissa := text[:index]
+		if strings.Trim(mantissa, "-0.") == "" {
+			*destination = 0
+			return nil
+		}
+		exponent, err := strconv.ParseInt(text[index+1:], 10, 64)
+		// Go 1.15's abs(MinInt64) exponent guard overflows. A nonzero signed-64-bit integer cannot
+		// need a decimal shift beyond its encoded mantissa length plus 19 digits; reject it first.
+		limit := int64(len(mantissa)) + 19
+		if err != nil || exponent < -limit || exponent > limit {
+			return fmt.Errorf("expected a signed 64-bit JSON integer")
+		}
+	}
+	// Exact rational parsing avoids rounding fractions or large values through float64.
 	value, valid := new(big.Rat).SetString(text)
 	if !valid || !value.IsInt() || !value.Num().IsInt64() {
 		return fmt.Errorf("expected a signed 64-bit JSON integer")
 	}
 	*destination = value.Num().Int64()
 	return nil
+}
+
+// Tolerant response decoding must not let an earlier alternative swallow another one's fields.
+// Compare retained field paths, not values: integer normalization must not lose numeric precision.
+func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []bool) (int, error) {
+	if len(candidates) != len(nullable) {
+		return -1, fmt.Errorf("invalid union metadata")
+	}
+	isNull := strings.TrimSpace(string(data)) == "null"
+	combined := make(map[string]bool)
+	best, bestCount := -1, -1
+	for index, create := range candidates {
+		if isNull && !nullable[index] {
+			continue
+		}
+		candidate := create()
+		if err := json.Unmarshal(data, candidate); err != nil {
+			continue
+		}
+		encoded, err := json.Marshal(candidate)
+		if err != nil {
+			continue
+		}
+		decoder := json.NewDecoder(bytes.NewReader(encoded))
+		decoder.UseNumber()
+		var retained interface{}
+		if err := decoder.Decode(&retained); err != nil {
+			continue
+		}
+		paths := make(map[string]bool)
+		unionFieldPaths(retained, "", paths)
+		for path := range paths {
+			combined[path] = true
+		}
+		if len(paths) > bestCount {
+			best, bestCount = index, len(paths)
+		}
+	}
+	if best == -1 {
+		return -1, fmt.Errorf("invalid union JSON shape")
+	}
+	// Every candidate's paths are a subset of the union, so equal sizes prove complete coverage.
+	// Unknown additive fields absent from every model remain tolerated, as in ordinary responses.
+	if bestCount != len(combined) {
+		return -1, fmt.Errorf("union alternatives cannot retain all modeled fields")
+	}
+	return best, nil
+}
+
+func unionFieldPaths(value interface{}, prefix string, paths map[string]bool) {
+	switch value := value.(type) {
+	case map[string]interface{}:
+		for key, child := range value {
+			path := prefix + "/" + strings.ReplaceAll(strings.ReplaceAll(key, "~", "~0"), "/", "~1")
+			paths[path] = true
+			unionFieldPaths(child, path, paths)
+		}
+	case []interface{}:
+		for index, child := range value {
+			path := prefix + "/" + strconv.Itoa(index)
+			paths[path] = true
+			unionFieldPaths(child, path, paths)
+		}
+	}
 }
 
 // Reflection operates only on generated structs and their JSON tags, not an API field inventory.
