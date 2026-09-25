@@ -92,7 +92,7 @@ func NewClient(config Config) (*Client, error) {
 		config.Origin = defaultOrigin
 	}
 	origin, err := url.Parse(config.Origin)
-	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || origin.RawQuery != "" || origin.Fragment != "" {
+	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || origin.RawQuery != "" || origin.ForceQuery || origin.Fragment != "" {
 		return nil, fmt.Errorf("contract client requires an HTTP(S) endpoint without credentials, query or fragment")
 	}
 	address := net.ParseIP(origin.Hostname())

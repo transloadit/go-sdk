@@ -138,6 +138,14 @@ func TestCanonicalLoopbackOrigins(t *testing.T) {
 	}
 }
 
+func TestOriginRejectsEmptyQueryDelimiter(t *testing.T) {
+	for _, origin := range []string{"https://api.example/?", "https://api.example/proxy?", "http://localhost:8080/?"} {
+		if _, err := NewClient(Config{Origin: origin, AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"}); err == nil {
+			t.Fatalf("empty query delimiter would swallow appended operation paths: %s", origin)
+		}
+	}
+}
+
 func TestUnionFieldSelection(t *testing.T) {
 	type first struct {
 		A *string `json:"a,omitempty"`
