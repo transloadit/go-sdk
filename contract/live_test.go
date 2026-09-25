@@ -128,7 +128,7 @@ func TestContractDevdock(t *testing.T) {
 	if err := json.Unmarshal(encoded, &params); err != nil {
 		t.Fatal(err)
 	}
-	uploaded, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: bytes.NewReader(file), Filename: "smilie.gif"}}})
+	uploaded, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: ioutil.NopCloser(bytes.NewReader(file)), Filename: "smilie.gif"}}})
 	if err != nil {
 		t.Fatal(err)
 	}

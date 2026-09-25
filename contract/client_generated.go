@@ -14038,6 +14038,18 @@ type GetTemplateResult_RequireSignatureAuth = wirea9009f7cb1de878c85f18eaa542009
 
 type GetTemplateResult_TranscodingResultExpiry = ValueNullOrString
 
+// Integer stores a JSON Schema integer within the signed 64-bit range.
+type Integer int64
+
+func (value *Integer) UnmarshalJSON(data []byte) error {
+	var parsed int64
+	if err := unmarshalInteger(data, &parsed); err != nil {
+		return err
+	}
+	*value = Integer(parsed)
+	return nil
+}
+
 type IssueBearerTokenBody = wired77e867cbba50c1ae986759000a6803fd86bef3984d0078ecd3768087e188a7b
 
 type IssueBearerTokenBody_GrantType = wireaea4c5b2979009ac75e35b83bfaeefa6046cbdd5f8e9758691bb15b65e2caa58
@@ -26573,7 +26585,7 @@ func (value *ValueBooleanOrNull) UnmarshalJSON(data []byte) error {
 }
 
 type ValueIntegerOrNull struct {
-	Choice1 *int64
+	Choice1 *Integer
 	Choice2 *wirebcde375ebd4cbacf651311181173836b169d5a360c6ac158c6a2cdaf49be3f61
 }
 
@@ -26602,7 +26614,7 @@ func (value ValueIntegerOrNull) MarshalJSON() ([]byte, error) {
 }
 func (value *ValueIntegerOrNull) UnmarshalJSON(data []byte) error {
 	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate int64
+		var candidate Integer
 		if err := json.Unmarshal(data, &candidate); err == nil {
 			*value = ValueIntegerOrNull{Choice1: &candidate}
 			return nil
@@ -26619,7 +26631,7 @@ func (value *ValueIntegerOrNull) UnmarshalJSON(data []byte) error {
 }
 
 type ValueIntegerOrString struct {
-	Choice1 *int64
+	Choice1 *Integer
 	Choice2 *string
 }
 
@@ -26648,7 +26660,7 @@ func (value ValueIntegerOrString) MarshalJSON() ([]byte, error) {
 }
 func (value *ValueIntegerOrString) UnmarshalJSON(data []byte) error {
 	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate int64
+		var candidate Integer
 		if err := json.Unmarshal(data, &candidate); err == nil {
 			*value = ValueIntegerOrString{Choice1: &candidate}
 			return nil
@@ -26865,7 +26877,7 @@ func (value *ValueNumberOrStringOrNull) UnmarshalJSON(data []byte) error {
 
 type ValueStringOrInteger struct {
 	Choice1 *string
-	Choice2 *int64
+	Choice2 *Integer
 }
 
 func (value ValueStringOrInteger) MarshalJSON() ([]byte, error) {
@@ -26900,7 +26912,7 @@ func (value *ValueStringOrInteger) UnmarshalJSON(data []byte) error {
 		}
 	}
 	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate int64
+		var candidate Integer
 		if err := json.Unmarshal(data, &candidate); err == nil {
 			*value = ValueStringOrInteger{Choice2: &candidate}
 			return nil
@@ -27111,7 +27123,7 @@ func (value *ValueStringOrString) UnmarshalJSON(data []byte) error {
 type ValueStringOrStringOrInteger struct {
 	Choice1 *string
 	Choice2 *string
-	Choice3 *int64
+	Choice3 *Integer
 }
 
 func (value ValueStringOrStringOrInteger) MarshalJSON() ([]byte, error) {
@@ -27160,7 +27172,7 @@ func (value *ValueStringOrStringOrInteger) UnmarshalJSON(data []byte) error {
 		}
 	}
 	if false || strings.TrimSpace(string(data)) != "null" {
-		var candidate int64
+		var candidate Integer
 		if err := json.Unmarshal(data, &candidate); err == nil {
 			*value = ValueStringOrStringOrInteger{Choice3: &candidate}
 			return nil
@@ -28931,15 +28943,15 @@ func (value *wire09c0fbc5bda262b23f4c3bd59a892a04593f94343be3b414fd36b0be0d3a943
 type wire09eb6ac5da914d2c2833ec73e86cf5dbcb1607c94ad505212f090c1e6809fa01 struct {
 	AssetId              string                     `json:"asset_id"`
 	HasAlpha             *bool                      `json:"has_alpha,omitempty"`
-	Height               *int64                     `json:"height,omitempty"`
+	Height               *Integer                   `json:"height,omitempty"`
 	Md5hash              *string                    `json:"md5hash,omitempty"`
 	Mime                 ValueNullOrString          `json:"mime"`
 	Path                 string                     `json:"path"`
 	Sha256               *string                    `json:"sha256,omitempty"`
-	Size                 int64                      `json:"size"`
+	Size                 Integer                    `json:"size"`
 	Thumbhash            *string                    `json:"thumbhash,omitempty"`
 	VersionId            string                     `json:"version_id"`
-	Width                *int64                     `json:"width,omitempty"`
+	Width                *Integer                   `json:"width,omitempty"`
 	Workspace            string                     `json:"workspace"`
 	AdditionalProperties map[string]json.RawMessage `json:"-"`
 }
@@ -33089,7 +33101,7 @@ type wire2d5a996b6b88f14b6ebff6c0169bb8686f0f2e5ed706a411d1ec5b1cee8a7296 []wire
 
 type wire2d90666d1a565916d49f0afbe2a32e6f7522e679114aac958e60b8ac65d7b42e struct {
 	AccessToken string                                                               `json:"access_token"`
-	ExpiresIn   int64                                                                `json:"expires_in"`
+	ExpiresIn   Integer                                                              `json:"expires_in"`
 	Scope       string                                                               `json:"scope"`
 	TokenType   wire1dbc874154995b8a2ed6cf41fe15845de364f261d0cbc3f0de4c9606c4d6e268 `json:"token_type"`
 }
@@ -33821,9 +33833,9 @@ func (value *wire33321388c7ac121a814132e401cd01947404eaffd7a7606ed019ad3cb340ccd
 }
 
 type wire3333012e398f039b029d9075a869eb73316c9fe505dac5821373b666adcfac2c struct {
-	DataFromTs             int64  `json:"data_from_ts"`
-	Error                  string `json:"error"`
-	NumErroneousAssemblies int64  `json:"num_erroneous_assemblies"`
+	DataFromTs             Integer `json:"data_from_ts"`
+	Error                  string  `json:"error"`
+	NumErroneousAssemblies Integer `json:"num_erroneous_assemblies"`
 }
 
 func (value wire3333012e398f039b029d9075a869eb73316c9fe505dac5821373b666adcfac2c) MarshalJSON() ([]byte, error) {
@@ -38226,7 +38238,7 @@ func (value *wire4ee482042200f6a941609ba2ef6d66f5349516775f23ceaefc17feb57cd68c2
 }
 
 type wire4fd103156a809caa525cd53b2a1abc86c773e2aa29c63f44dd718c53917adcf3 struct {
-	Count int64                                                                `json:"count"`
+	Count Integer                                                              `json:"count"`
 	Slots wire02200ad761bbebeef7b19a84937b4e90f170e7456596e16f2cee8b9db9831bcb `json:"slots"`
 }
 
@@ -41993,7 +42005,7 @@ func (value *wire691aec9fb4a65888fb6fb059cfeff8cbcf8638ea2bd133eefd2a6338333d0ed
 }
 
 type wire69c554005fc31ba58490bdbbe28ace50334d0fec3298a32e8596956b2de3c071 struct {
-	Count                int64                                                                `json:"count"`
+	Count                Integer                                                              `json:"count"`
 	Items                wiredcd9347f0d889f3e52d3238fcab2993d74e6ecb91ce62079a33f3275339a0461 `json:"items"`
 	AdditionalProperties map[string]json.RawMessage                                           `json:"-"`
 }
@@ -42555,7 +42567,7 @@ func (value *wire6bd209b332dcb5e99218e73e52e0d822c05a877565e87f792d58c645c3ccf79
 }
 
 type wire6c0c57913db9ddd0670efd15a4de9f5879f2ec0b8db3b10f2bda4c15feecd8bb struct {
-	AdditionalProperties map[string]int64 `json:"-"`
+	AdditionalProperties map[string]Integer `json:"-"`
 }
 
 func (value wire6c0c57913db9ddd0670efd15a4de9f5879f2ec0b8db3b10f2bda4c15feecd8bb) MarshalJSON() ([]byte, error) {
@@ -43975,7 +43987,7 @@ func (value *wire7460708ddc6ae417ae1d020b848525c02257e0526b0e968a55d6ba0f87ac362
 }
 
 type wire747026719ed3979712ca2fb589d7d9bd6247b5f0fac4154ad7d4f9b93defd7f9 struct {
-	MaxNumberOfFiles *int64   `json:"max_number_of_files,omitempty"`
+	MaxNumberOfFiles *Integer `json:"max_number_of_files,omitempty"`
 	MaxSize          *float64 `json:"max_size,omitempty"`
 	Referer          *string  `json:"referer,omitempty"`
 }
@@ -44223,7 +44235,7 @@ type wire74f43184184d45103c1e6511ab2784c506445503d330d9a6df42d0fdac7a847d []wire
 
 type wire7552348d757acb2b95530d6771e41877c3a9b0674fa3daf85849df7ea79359f1 struct {
 	Cursor *string               `json:"cursor,omitempty"`
-	Limit  *int64                `json:"limit,omitempty"`
+	Limit  *Integer              `json:"limit,omitempty"`
 	Nonce  *ValueStringOrInteger `json:"nonce,omitempty"`
 	Prefix *string               `json:"prefix,omitempty"`
 }
@@ -44243,7 +44255,7 @@ func (value *wire7552348d757acb2b95530d6771e41877c3a9b0674fa3daf85849df7ea79359f
 }
 
 type wire759fd9a82fb1adb9cba824da938a4becb49c32c477a5f9077a76516df33f381f struct {
-	Count int64                                                                `json:"count"`
+	Count Integer                                                              `json:"count"`
 	Items wire1c95100754b50edba8a90231330065cfe5b4845e03a38599bad8100579ca4118 `json:"items"`
 }
 
@@ -44888,7 +44900,7 @@ func (value *wire7a863799df1f77d347681efaa9a2506ff16b5ae3e985a2a760e4e244a2f1bcb
 type wire7a8dd102c7d123f2ae8c5f797fe5487b9d02da6e894093a1e334505fbc8cbb25 struct {
 	Expires          *string  `json:"expires,omitempty"`
 	Key              *string  `json:"key,omitempty"`
-	MaxNumberOfFiles *int64   `json:"max_number_of_files,omitempty"`
+	MaxNumberOfFiles *Integer `json:"max_number_of_files,omitempty"`
 	MaxSize          *float64 `json:"max_size,omitempty"`
 	Referer          *string  `json:"referer,omitempty"`
 }
@@ -45934,8 +45946,8 @@ func (value *wire8194b734446d2abdf9e4fe54964ce1bd93e95b8e617eab9c8ec32d210c6a60f
 
 type wire81c4458fd476edd919bcf45a2da661d55731c2ecfa0d92bae8e42fe9f62dce18 struct {
 	AvgSlotCount float64 `json:"avg_slot_count"`
-	DataFromTs   int64   `json:"data_from_ts"`
-	MaxSlotCount int64   `json:"max_slot_count"`
+	DataFromTs   Integer `json:"data_from_ts"`
+	MaxSlotCount Integer `json:"max_slot_count"`
 	SlotCount    float64 `json:"slot_count"`
 }
 
@@ -46984,21 +46996,21 @@ func (value *wire8bb3bebbf7500810530301ac17193961f1976c9f6be551c974ea194b3279af0
 
 type wire8bc7b23bb8edb7c1ee148ab40ce07d60fb649c0eceeece2bd328427ca5ebd36c struct {
 	ErrorStats                wiref9214ebdfc56da7c6d4adb0c20add924824b89459debc8550f14375c055e5a3d `json:"errorStats"`
-	ErrorStatsGranularity     int64                                                                `json:"errorStatsGranularity"`
+	ErrorStatsGranularity     Integer                                                              `json:"errorStatsGranularity"`
 	ErrorStatsTotals          wireab3587422d83957d644a371c6299b01e91dfacb337d501b96b36ec31033198e1 `json:"errorStatsTotals"`
-	Granularity               int64                                                                `json:"granularity"`
+	Granularity               Integer                                                              `json:"granularity"`
 	Ok                        wire320e1ab51f08ccd4a8acb1ade95df48cf338cd5899fca5f3bfc835648f2002b7 `json:"ok"`
 	Stats                     wireeebfdae1c28dc11997238c4ae91d898656034e3e291a0834ac5246d78838d712 `json:"stats"`
-	TotalAssemblies           int64                                                                `json:"totalAssemblies"`
-	TotalBytesProcessed       int64                                                                `json:"totalBytesProcessed"`
-	TotalBytesUploaded        int64                                                                `json:"totalBytesUploaded"`
+	TotalAssemblies           Integer                                                              `json:"totalAssemblies"`
+	TotalBytesProcessed       Integer                                                              `json:"totalBytesProcessed"`
+	TotalBytesUploaded        Integer                                                              `json:"totalBytesUploaded"`
 	TotalExecutionDuration    float64                                                              `json:"totalExecutionDuration"`
-	TotalFilesProcessed       int64                                                                `json:"totalFilesProcessed"`
+	TotalFilesProcessed       Integer                                                              `json:"totalFilesProcessed"`
 	TotalLiveQueueDuration    float64                                                              `json:"totalLiveQueueDuration"`
-	TotalOutputBytesProcessed int64                                                                `json:"totalOutputBytesProcessed"`
-	TotalOutputFilesProcessed int64                                                                `json:"totalOutputFilesProcessed"`
+	TotalOutputBytesProcessed Integer                                                              `json:"totalOutputBytesProcessed"`
+	TotalOutputFilesProcessed Integer                                                              `json:"totalOutputFilesProcessed"`
 	TotalUploadDuration       float64                                                              `json:"totalUploadDuration"`
-	TotalUsage                int64                                                                `json:"totalUsage"`
+	TotalUsage                Integer                                                              `json:"totalUsage"`
 }
 
 func (value wire8bc7b23bb8edb7c1ee148ab40ce07d60fb649c0eceeece2bd328427ca5ebd36c) MarshalJSON() ([]byte, error) {
@@ -48395,26 +48407,26 @@ func (value *wire930ee4094267ac403b02fd5eef109dfcc46c8783f7c5c37f304a6b66cc5a46a
 
 type wire9388ec16bce63405afc7a0348a4476bdaaf1848362a94d653466a7ea6469b17a struct {
 	AvgExecutionDuration        float64 `json:"avg_execution_duration"`
-	AvgInputFileSizes           int64   `json:"avg_input_file_sizes"`
+	AvgInputFileSizes           Integer `json:"avg_input_file_sizes"`
 	AvgLiveQueueDuration        float64 `json:"avg_live_queue_duration"`
-	AvgOutputFileSizes          int64   `json:"avg_output_file_sizes"`
+	AvgOutputFileSizes          Integer `json:"avg_output_file_sizes"`
 	AvgProcessingSpeed          float64 `json:"avg_processing_speed"`
 	AvgUploadDuration           float64 `json:"avg_upload_duration"`
 	AvgUploadSpeed              float64 `json:"avg_upload_speed"`
-	DataFromTs                  int64   `json:"data_from_ts"`
-	NumAssemblies               int64   `json:"num_assemblies"`
-	NumBytes                    int64   `json:"num_bytes"`
-	NumCancelledAssemblies      int64   `json:"num_cancelled_assemblies"`
-	NumErroneousAssemblies      int64   `json:"num_erroneous_assemblies"`
-	NumFiles                    int64   `json:"num_files"`
-	NumRequestAbortedAssemblies int64   `json:"num_request_aborted_assemblies"`
-	NumSuccessfulAssemblies     int64   `json:"num_successful_assemblies"`
-	TotalBytesUsage             int64   `json:"total_bytes_usage"`
+	DataFromTs                  Integer `json:"data_from_ts"`
+	NumAssemblies               Integer `json:"num_assemblies"`
+	NumBytes                    Integer `json:"num_bytes"`
+	NumCancelledAssemblies      Integer `json:"num_cancelled_assemblies"`
+	NumErroneousAssemblies      Integer `json:"num_erroneous_assemblies"`
+	NumFiles                    Integer `json:"num_files"`
+	NumRequestAbortedAssemblies Integer `json:"num_request_aborted_assemblies"`
+	NumSuccessfulAssemblies     Integer `json:"num_successful_assemblies"`
+	TotalBytesUsage             Integer `json:"total_bytes_usage"`
 	TotalExecutionDuration      float64 `json:"total_execution_duration"`
 	TotalLiveQueueDuration      float64 `json:"total_live_queue_duration"`
-	TotalNumOutputFiles         int64   `json:"total_num_output_files"`
-	TotalNumUploadedBytes       int64   `json:"total_num_uploaded_bytes"`
-	TotalOutputFileSizes        int64   `json:"total_output_file_sizes"`
+	TotalNumOutputFiles         Integer `json:"total_num_output_files"`
+	TotalNumUploadedBytes       Integer `json:"total_num_uploaded_bytes"`
+	TotalOutputFileSizes        Integer `json:"total_output_file_sizes"`
 	TotalUploadDuration         float64 `json:"total_upload_duration"`
 }
 
@@ -52173,8 +52185,8 @@ type wirea50b6ceef6be6560fcdb20a848b6b37ac7717a6308bfa98265fad17a1c9992a1 struct
 	Keywords       *wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038 `json:"keywords,omitempty"`
 	Nonce          *ValueStringOrInteger                                                 `json:"nonce,omitempty"`
 	Order          *wire9b8522343e904a6908f65ec7db95490a63e30e948de8cb97c708687370b0bb03 `json:"order,omitempty"`
-	Page           *int64                                                                `json:"page,omitempty"`
-	Pagesize       *int64                                                                `json:"pagesize,omitempty"`
+	Page           *Integer                                                              `json:"page,omitempty"`
+	Pagesize       *Integer                                                              `json:"pagesize,omitempty"`
 	Sort           *wire11d5cfc62bbc62c9c10eb79b233fefd0188ad25a4da9b0ddc702e90aadb339b4 `json:"sort,omitempty"`
 	Todate         *string                                                               `json:"todate,omitempty"`
 }
@@ -52571,8 +52583,8 @@ func (value *wirea796a48a45d3e61ca2afbb9276c03abdd3b5d5fc086232170c76d9b5bcb4b4e
 type wirea7dc37e4cf02ca93b49d2dc12ae85b7830652bbe452426c63590945639daa1a8 []wire6374c68c5ab3ba96066dbbc3c770bff3cdab7cafd38abb2fa77b4df670432341
 
 type wirea7df90a9288d491db21d52e53f7d1179de08ad6546aa3963a07b24876475716f struct {
-	Error                  string `json:"error"`
-	NumErroneousAssemblies int64  `json:"num_erroneous_assemblies"`
+	Error                  string  `json:"error"`
+	NumErroneousAssemblies Integer `json:"num_erroneous_assemblies"`
 }
 
 func (value wirea7df90a9288d491db21d52e53f7d1179de08ad6546aa3963a07b24876475716f) MarshalJSON() ([]byte, error) {
@@ -54759,8 +54771,8 @@ type wireb6b3207af67e7ba5c57fdfdd1fa37fbf14a07cd8c3112b260ba38e13a5f1ee6f struct
 	Keywords   *wire49f240701831daf4a4a6dd6a5eaf7db35c283f9d694d8370f679fff79215a038 `json:"keywords,omitempty"`
 	Nonce      *ValueStringOrInteger                                                 `json:"nonce,omitempty"`
 	Order      *wire9b8522343e904a6908f65ec7db95490a63e30e948de8cb97c708687370b0bb03 `json:"order,omitempty"`
-	Page       *int64                                                                `json:"page,omitempty"`
-	Pagesize   *int64                                                                `json:"pagesize,omitempty"`
+	Page       *Integer                                                              `json:"page,omitempty"`
+	Pagesize   *Integer                                                              `json:"pagesize,omitempty"`
 	Region     *ValueStringOrString                                                  `json:"region,omitempty"`
 	Sort       *wired4af3ccee4e128fd3c5e950fd6b5516649589a76d2fd3d1fc31d57d8c83a61ef `json:"sort,omitempty"`
 	TemplateId *string                                                               `json:"template_id,omitempty"`
@@ -61452,8 +61464,8 @@ func (value *wiree28f6186420db3c1bfc0301aa7656cddff652e895594112818986be5fc9d2b5
 type wiree291923558cddb9102e3ae01a1102dab75fa2e7c1b5df57332ca4008d4631680 struct {
 	Aggregation  wire8e0d4eef1d41d9e9678e09143a2a36f7a7649bb1a25c52c195667975674a7beb `json:"aggregation"`
 	AvgSlotCount float64                                                              `json:"avgSlotCount"`
-	Granularity  int64                                                                `json:"granularity"`
-	MaxSlotCount int64                                                                `json:"maxSlotCount"`
+	Granularity  Integer                                                              `json:"granularity"`
+	MaxSlotCount Integer                                                              `json:"maxSlotCount"`
 	Ok           wire174415a52d107e1c44a60667d6e55ccd410dc51cfda3ffbf8f507c6dbd23a6ca `json:"ok"`
 	Stats        wire235f6f012f4f12282b7382499b68c700126688dc09ffeb092bc11077e3119b36 `json:"stats"`
 }

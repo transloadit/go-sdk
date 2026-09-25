@@ -15,6 +15,7 @@ import (
 	"hash"
 	"io"
 	"io/ioutil"
+	"math/big"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -22,6 +23,7 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -41,10 +43,30 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// UploadFile streams a caller-owned reader as one multipart field.
+// UploadFile transfers ownership of a stream to one API call, which closes it before returning.
+// Close must unblock a concurrent Read, as for an HTTP request body. For in-memory readers,
+// ioutil.NopCloser is sufficient; blocking sources must implement cancellation in Close.
 type UploadFile struct {
-	Reader   io.Reader
+	Reader   io.ReadCloser
 	Filename string
+}
+
+type multipartBody struct {
+	reader     *io.PipeReader
+	closeFiles func()
+	done       <-chan struct{}
+	once       sync.Once
+}
+
+func (body *multipartBody) Read(data []byte) (int, error) { return body.reader.Read(data) }
+func (body *multipartBody) Close() error {
+	body.once.Do(func() {
+		body.reader.Close()
+		body.closeFiles()
+		// Returning ownership before the producer exits races callers that reuse upload state.
+		<-body.done
+	})
+	return nil
 }
 
 // ResponseError retains decoded error data without including it in diagnostic messages.
@@ -86,7 +108,8 @@ func NewClient(config Config) (*Client, error) {
 	if config.SignatureAlgorithm == "" {
 		config.SignatureAlgorithm = defaultAlgorithm
 	}
-	transport := http.Client{Timeout: time.Minute}
+	// A total default timeout also limits the time spent streaming uploads. Callers own deadlines.
+	transport := http.Client{}
 	if config.HTTPClient != nil {
 		transport = *config.HTTPClient
 	}
@@ -119,6 +142,21 @@ func rejectNull(data []byte) error {
 	if strings.TrimSpace(string(data)) == "null" {
 		return fmt.Errorf("unexpected JSON null")
 	}
+	return nil
+}
+
+func unmarshalInteger(data []byte, destination *int64) error {
+	text := strings.TrimSpace(string(data))
+	if !json.Valid(data) || len(text) == 0 || (text[0] != '-' && (text[0] < '0' || text[0] > '9')) {
+		return fmt.Errorf("expected a JSON integer")
+	}
+	// Exact rational parsing avoids rounding fractions or large values through float64. Go's parser
+	// bounds exponent growth; values outside native signed 64-bit storage are explicitly rejected.
+	value, valid := new(big.Rat).SetString(text)
+	if !valid || !value.IsInt() || !value.Num().IsInt64() {
+		return fmt.Errorf("expected a signed 64-bit JSON integer")
+	}
+	*destination = value.Num().Int64()
 	return nil
 }
 
@@ -206,9 +244,8 @@ func unmarshalObject(data []byte, destination interface{}, required []string, nu
 	}
 	extra := object.FieldByName("AdditionalProperties")
 	if !extra.IsValid() {
-		if len(fields) != 0 {
-			return fmt.Errorf("unknown object property")
-		}
+		// Client decoding must tolerate additive server fields, including OAuth token extensions.
+		// This is not a full JSON Schema validator; known required fields and values still decode.
 		return nil
 	}
 	if len(fields) != 0 {
@@ -252,6 +289,17 @@ func (client *Client) signature(data []byte) (string, error) {
 }
 
 func (client *Client) request(ctx context.Context, operation operation, path map[string]string, input interface{}, files map[string]UploadFile, extraFields map[string]string, result interface{}) error {
+	var closeOnce sync.Once
+	closeFiles := func() {
+		closeOnce.Do(func() {
+			for _, file := range files {
+				if file.Reader != nil {
+					file.Reader.Close()
+				}
+			}
+		})
+	}
+	defer closeFiles()
 	target := operation.Path
 	for name, value := range path {
 		// The generator only supplies the owner's portable ASCII path grammar here, not arbitrary
@@ -375,11 +423,14 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 			}
 		}
 		reader, writer := io.Pipe()
-		defer reader.Close()
+		done := make(chan struct{})
+		upload := &multipartBody{reader: reader, closeFiles: closeFiles, done: done}
+		defer upload.Close()
 		multipartWriter := multipart.NewWriter(writer)
 		contentType = multipartWriter.FormDataContentType()
-		body = reader
+		body = upload
 		go func() {
+			defer close(done)
 			err := writeMultipart(multipartWriter, fields, extraFields, files)
 			if err == nil {
 				err = multipartWriter.Close()

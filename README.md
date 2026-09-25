@@ -90,10 +90,17 @@ SSE, capability URLs and Webhook receivers are separate work. Go 1.15 remains su
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
 one implicitly. Pass raw, unencoded path values. Signed requests authenticate the exact serialized
-`params` bytes sent. Multipart files use caller-owned `io.Reader` values. Optional fields are
+`params` bytes sent. Multipart files transfer `io.ReadCloser` ownership to the API call, which closes
+every supplied stream before returning, including on cancellation or early responses. `Close` must
+unblock a concurrent `Read`; wrap in-memory readers with `ioutil.NopCloser`. The default client has
+no total upload deadline: use a context deadline or an explicitly configured HTTP client. Optional
+fields are
 pointers so `false` and `0` are not lost. Nullable fields use generated union wrappers so explicit
 `null` differs from omission. Set exactly one union choice (or its null choice). These wire types
-are not a full JSON Schema validator. `ResponseError` retains status and decoded JSON without
+are not a full JSON Schema validator. `Integer` uses signed 64-bit storage and accepts integral
+decimal/exponent JSON representations without rounding. Unknown response fields are tolerated;
+fields explicitly modeled as additional properties are retained. `ResponseError` retains status and
+decoded JSON without
 printing response data. Redirects are rejected and responses are limited to 128 MiB.
 
 Maintainers: `contract/client_generated.go` and its JSON manifests come from API2. Never edit them

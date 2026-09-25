@@ -8,13 +8,16 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestOptionalNullablePresence(t *testing.T) {
@@ -76,6 +79,107 @@ func (failedBody) Close() error                  { return nil }
 type staticBody struct{ io.Reader }
 
 func (staticBody) Close() error { return nil }
+
+func TestDefaultDeadlineBelongsToCaller(t *testing.T) {
+	client, err := NewClient(Config{AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if client.httpClient.Timeout != 0 {
+		t.Fatal("default client imposes a total upload deadline")
+	}
+}
+
+func TestAdditiveSuccessResponseFields(t *testing.T) {
+	var token IssueBearerTokenResult
+	if err := json.Unmarshal([]byte(`{"access_token":"synthetic","expires_in":60,"scope":"templates:read","token_type":"Bearer","future_field":true}`), &token); err != nil {
+		t.Fatal(err)
+	}
+	if token.AccessToken != "synthetic" {
+		t.Fatal("lost known response fields")
+	}
+}
+
+func TestIntegralJSONRepresentations(t *testing.T) {
+	for _, source := range []string{"1.0", "1e3", "-2.00", "9223372036854775807.0"} {
+		var value ValueIntegerOrString
+		if err := json.Unmarshal([]byte(source), &value); err != nil {
+			t.Fatalf("valid integral representation %s: %v", source, err)
+		}
+		if value.Choice1 == nil {
+			t.Fatalf("numeric token became another alternative: %s", source)
+		}
+	}
+	for _, source := range []string{"1.5", "1.00000000000000000001", "9223372036854775808.0", "1e1000000000"} {
+		var value ValueIntegerOrString
+		if err := json.Unmarshal([]byte(source), &value); err == nil {
+			t.Fatalf("non-integral or overflowing value accepted: %s", source)
+		}
+	}
+}
+
+type blockingUpload struct {
+	started   chan struct{}
+	closed    chan struct{}
+	readDone  chan struct{}
+	startOnce sync.Once
+	closeOnce sync.Once
+}
+
+func (reader *blockingUpload) Read([]byte) (int, error) {
+	reader.startOnce.Do(func() { close(reader.started) })
+	<-reader.closed
+	close(reader.readDone)
+	return 0, io.EOF
+}
+
+func (reader *blockingUpload) Close() error {
+	reader.closeOnce.Do(func() { close(reader.closed) })
+	return nil
+}
+
+func TestMultipartReaderFinishesBeforeReturn(t *testing.T) {
+	for _, cancelRequest := range []bool{false, true} {
+		t.Run(fmt.Sprintf("cancel=%t", cancelRequest), func(t *testing.T) {
+			reader := &blockingUpload{started: make(chan struct{}), closed: make(chan struct{}), readDone: make(chan struct{})}
+			defer reader.Close()
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+			defer cancel()
+			consumed := make(chan struct{})
+			client, err := NewClient(Config{AuthKey: "synthetic-key", AuthSecret: "synthetic-secret", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				go func() { io.Copy(ioutil.Discard, request.Body); close(consumed) }()
+				defer request.Body.Close()
+				select {
+				case <-reader.started:
+				case <-ctx.Done():
+					return nil, ctx.Err()
+				}
+				if cancelRequest {
+					cancel()
+					return nil, ctx.Err()
+				}
+				return &http.Response{StatusCode: 400, Body: staticBody{strings.NewReader(`{"error":"TEST_ERROR"}`)}, Header: http.Header{}}, nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			var params CreateAssemblyParams
+			if err := json.Unmarshal([]byte(`{"template_id":"synthetic-template"}`), &params); err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: reader, Filename: "file.bin"}}})
+			<-consumed
+			if err == nil {
+				t.Fatal("expected early-response or cancellation error")
+			}
+			select {
+			case <-reader.readDone:
+			default:
+				t.Fatal("SDK returned while still reading the caller's upload")
+			}
+		})
+	}
+}
 
 func TestBodyReadTransportError(t *testing.T) {
 	cause := errors.New("synthetic read failure")
@@ -321,7 +425,7 @@ func TestMultipartAndRedirectRejection(t *testing.T) {
 	if err := json.Unmarshal([]byte(`{"template_id":"synthetic-template"}`), &params); err != nil {
 		t.Fatal(err)
 	}
-	_, err = client.CreateAssembly(context.Background(), CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: bytes.NewReader([]byte{0, 255, 1}), Filename: "test.bin"}}})
+	_, err = client.CreateAssembly(context.Background(), CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: ioutil.NopCloser(bytes.NewReader([]byte{0, 255, 1})), Filename: "test.bin"}}})
 	if err == nil || calls != 1 {
 		t.Fatalf("redirect policy failed: %v, calls=%d", err, calls)
 	}
