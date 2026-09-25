@@ -18,6 +18,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/transloadit/go-sdk/contract"
 )
 
 // Config defines the configuration options for a client.
@@ -38,6 +40,12 @@ type Client struct {
 	config     Config
 	httpClient *http.Client
 	random     *rand.Rand
+}
+
+// Contract returns the generated ordinary HTTP API with this client's credentials and origin.
+// Existing higher-level methods and their request behavior are unchanged.
+func (client *Client) Contract() (*contract.Client, error) {
+	return contract.NewClient(contract.Config{Origin: client.config.Endpoint, AuthKey: client.config.AuthKey, AuthSecret: client.config.AuthSecret, HTTPClient: client.httpClient})
 }
 
 // ListOptions defines criteria used when a list is being retrieved. Details
