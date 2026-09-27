@@ -4,7 +4,7 @@ test-examples:
 	go build ./examples/...
 
 test-package:
-	go test -v -coverprofile=coverage.out -covermode=atomic . ./contract
+	go test -v -coverprofile=coverage.out -covermode=atomic . ./contract ./examples/contract-workflow
 
 test: test-package test-examples
 

@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -17,7 +19,16 @@ var templatesSetup bool
 var templateIDOptimizeResize string
 
 func TestContractImportIsOptIn(t *testing.T) {
-	output, err := exec.Command("go", "list", "-deps", ".").Output()
+	originalPath := os.Getenv("PATH")
+	if err := os.Setenv("PATH", t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Setenv("PATH", originalPath)
+	goExecutable := filepath.Join(runtime.GOROOT(), "bin", "go")
+	if runtime.GOOS == "windows" {
+		goExecutable += ".exe"
+	}
+	output, err := exec.Command(goExecutable, "list", "-deps", ".").Output()
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -13,6 +13,10 @@ import (
 	"github.com/transloadit/go-sdk/contract"
 )
 
+func assemblyFailed(status *contract.CreateAssemblyResult) bool {
+	return status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" || status.GetOk() == "REQUEST_ABORTED"
+}
+
 func run() (err error) {
 	if len(os.Args) != 2 {
 		return errors.New("pass the path to an image")
@@ -100,7 +104,7 @@ func run() (err error) {
 	}()
 	// Polling is application logic, not an implicit retry or lifecycle engine in the HTTP client.
 	for status.GetOk() != "ASSEMBLY_COMPLETED" {
-		if status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" {
+		if assemblyFailed(status) {
 			finished = true
 			return errors.New("Assembly processing did not complete successfully")
 		}

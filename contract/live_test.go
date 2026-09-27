@@ -130,9 +130,9 @@ func TestContractDevdock(t *testing.T) {
 	if assemblyID == "" {
 		t.Fatal("missing Assembly identity")
 	}
-	completed := false
+	finished := false
 	defer func() {
-		if !completed {
+		if !finished {
 			cleanup, stop := context.WithTimeout(context.Background(), 15*time.Second)
 			defer stop()
 			if _, err := client.CancelAssembly(cleanup, CancelAssemblyInput{AssemblyId: assemblyID}); err != nil {
@@ -141,7 +141,8 @@ func TestContractDevdock(t *testing.T) {
 		}
 	}()
 	for status.GetOk() != "ASSEMBLY_COMPLETED" {
-		if status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" {
+		if status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" || status.GetOk() == "REQUEST_ABORTED" {
+			finished = true
 			t.Fatal("Assembly processing failed")
 		}
 		select {
@@ -155,7 +156,7 @@ func TestContractDevdock(t *testing.T) {
 		}
 		status = result
 	}
-	completed = true
+	finished = true
 	digest := md5.Sum(file)
 	uploads, results := status.GetUploads(), status.GetResults()
 	if uploads == nil || len(*uploads) != 1 || (*uploads)[0].GetMd5hash().GetString() != hex.EncodeToString(digest[:]) || results == nil || len(results.AdditionalProperties["passed"]) != 1 || results.AdditionalProperties["passed"][0].Md5hash.GetString() != hex.EncodeToString(digest[:]) {
