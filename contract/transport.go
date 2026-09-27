@@ -15,7 +15,6 @@ import (
 	"hash"
 	"io"
 	"io/ioutil"
-	"math/big"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -177,38 +176,54 @@ func unmarshalInteger(data []byte, destination *int64) error {
 		*destination = value
 		return nil
 	}
-	if index := strings.IndexAny(text, "eE"); index >= 0 {
-		mantissa := text[:index]
-		if strings.Trim(mantissa, "-0.") == "" {
-			*destination = 0
-			return nil
-		}
-		exponent, err := strconv.ParseInt(text[index+1:], 10, 64)
-		// Go 1.15's abs(MinInt64) exponent guard overflows. A nonzero signed-64-bit integer cannot
-		// need a decimal shift beyond its encoded mantissa length plus 19 digits; reject it first.
-		limit := int64(len(mantissa)) + 19
-		if err != nil || exponent < -limit || exponent > limit {
-			return fmt.Errorf("expected a signed 64-bit JSON integer")
-		}
+	negative := strings.HasPrefix(text, "-")
+	mantissa := strings.TrimPrefix(text, "-")
+	exponentText := "0"
+	if index := strings.IndexAny(mantissa, "eE"); index >= 0 {
+		exponentText, mantissa = mantissa[index+1:], mantissa[:index]
 	}
-	// Exact rational parsing avoids rounding fractions or large values through float64.
-	value, valid := new(big.Rat).SetString(text)
-	if !valid || !value.IsInt() || !value.Num().IsInt64() {
+	fractionDigits := 0
+	if index := strings.IndexByte(mantissa, '.'); index >= 0 {
+		fractionDigits = len(mantissa) - index - 1
+	}
+	digits := strings.TrimLeft(strings.ReplaceAll(mantissa, ".", ""), "0")
+	if digits == "" {
+		*destination = 0
+		return nil
+	}
+	significant := strings.TrimRight(digits, "0")
+	// Cancel decimal zeros before conversion. Arbitrary-precision parsing would allocate huge
+	// integers even for a tiny result such as 1 followed by many zeros with a cancelling exponent.
+	if len(significant) > 19 {
 		return fmt.Errorf("expected a signed 64-bit JSON integer")
 	}
-	*destination = value.Num().Int64()
+	exponent, err := strconv.ParseInt(exponentText, 10, 64)
+	required := int64(fractionDigits - (len(digits) - len(significant)))
+	if err != nil || exponent < required || exponent > required+19-int64(len(significant)) {
+		return fmt.Errorf("expected a signed 64-bit JSON integer")
+	}
+	normalized := significant + strings.Repeat("0", int(exponent-required))
+	if negative {
+		normalized = "-" + normalized
+	}
+	value, err := strconv.ParseInt(normalized, 10, 64)
+	if err != nil {
+		return fmt.Errorf("expected a signed 64-bit JSON integer")
+	}
+	*destination = value
 	return nil
 }
 
 // Tolerant response decoding must not let an earlier alternative swallow another one's fields.
 // Compare retained field paths, not values: integer normalization must not lose numeric precision.
-func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []bool) (int, error) {
+func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []bool) (int, interface{}, error) {
 	if len(candidates) != len(nullable) {
-		return -1, fmt.Errorf("invalid union metadata")
+		return -1, nil, fmt.Errorf("invalid union metadata")
 	}
 	isNull := strings.TrimSpace(string(data)) == "null"
 	combined := make(map[string]bool)
 	best, bestCount := -1, -1
+	var winner interface{}
 	for index, create := range candidates {
 		if isNull && !nullable[index] {
 			continue
@@ -234,17 +249,19 @@ func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []boo
 		}
 		if len(paths) > bestCount {
 			best, bestCount = index, len(paths)
+			winner = candidate
 		}
 	}
 	if best == -1 {
-		return -1, fmt.Errorf("invalid union JSON shape")
+		return -1, nil, fmt.Errorf("invalid union JSON shape")
 	}
 	// Every candidate's paths are a subset of the union, so equal sizes prove complete coverage.
 	// Unknown additive fields absent from every model remain tolerated, as in ordinary responses.
 	if bestCount != len(combined) {
-		return -1, fmt.Errorf("union alternatives cannot retain all modeled fields")
+		return -1, nil, fmt.Errorf("union alternatives cannot retain all modeled fields")
 	}
-	return best, nil
+	// Retain only the best candidate. Decoding it again would multiply work in recursive unions.
+	return best, winner, nil
 }
 
 func unionFieldPaths(value interface{}, prefix string, paths map[string]bool) {
@@ -511,11 +528,17 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 		uri += "?" + fields.Encode()
 	} else if operation.Encoding == "multipart/form-data" {
 		for key := range extraFields {
+			if strings.ContainsAny(key, "\r\n") {
+				return fmt.Errorf("multipart field names cannot contain line breaks")
+			}
 			if _, ok := fields[key]; ok {
 				return fmt.Errorf("reserved form field: %s", key)
 			}
 		}
 		for key, file := range files {
+			if strings.ContainsAny(key, "\r\n") || strings.ContainsAny(file.Filename, "\r\n") {
+				return fmt.Errorf("multipart file names and field names cannot contain line breaks")
+			}
 			if _, ok := fields[key]; ok {
 				return fmt.Errorf("reserved file field: %s", key)
 			}

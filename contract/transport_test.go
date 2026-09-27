@@ -137,6 +137,99 @@ func TestIntegralJSONRepresentations(t *testing.T) {
 	}
 }
 
+func TestIntegerNormalizationHasBoundedAllocations(t *testing.T) {
+	// A long mantissa and a cancelling exponent still represent the small integer 1.
+	data := []byte("1" + strings.Repeat("0", 10000) + "e-10000")
+	allocations := testing.AllocsPerRun(1, func() {
+		var value int64
+		if err := unmarshalInteger(data, &value); err != nil || value != 1 {
+			t.Fatalf("valid cancelling exponent: %d, %v", value, err)
+		}
+	})
+	if allocations > 32 {
+		t.Fatalf("integer normalization allocated %.0f times for a 10 KB token", allocations)
+	}
+}
+
+func TestExactIntegerNormalization(t *testing.T) {
+	for _, test := range []struct {
+		source string
+		value  int64
+	}{
+		{"10.0", 10}, {"1.2300e2", 123}, {"1200e-2", 12}, {"0.001E+3", 1},
+		{"-0.001e3", -1}, {"9223372036854775807.0", 9223372036854775807},
+		{"-9223372036854775808.0", -9223372036854775808},
+		{"-0e99999999999999999999999999999999", 0},
+		{"1" + strings.Repeat("0", 1000000) + "e-1000000", 1},
+	} {
+		var value int64
+		if err := unmarshalInteger([]byte(test.source), &value); err != nil || value != test.value {
+			t.Fatalf("integer normalization: got %d, want %d, error %v", value, test.value, err)
+		}
+	}
+	for _, source := range []string{"1.2300e1", "9223372036854775808e0", "-9223372036854775809e0", "1e9223372036854775807", "1e-9223372036854775808", "1.0e999999999999999999999", "01", `"1"`, "true"} {
+		var value int64
+		if err := unmarshalInteger([]byte(source), &value); err == nil {
+			t.Fatalf("invalid integer accepted: %s", source)
+		}
+	}
+}
+
+func TestRecursiveUnionDecodingDoesNotMultiplyWork(t *testing.T) {
+	allocations := func(depth int) float64 {
+		data := []byte(strings.Repeat("[", depth) + "0" + strings.Repeat("]", depth))
+		return testing.AllocsPerRun(1, func() {
+			var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty
+			if err := json.Unmarshal(data, &value); err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+	shallow, deep := allocations(5), allocations(10)
+	// Compare allocations rather than wall time so busy CI hosts cannot make this flaky.
+	if deep > shallow*8 {
+		t.Fatalf("doubling nesting multiplied decoder work: %.0f -> %.0f allocations", shallow, deep)
+	}
+}
+
+type trackedUpload struct {
+	io.Reader
+	closed bool
+}
+
+func (reader *trackedUpload) Close() error { reader.closed = true; return nil }
+
+func TestMultipartRejectsHeaderLineBreaks(t *testing.T) {
+	for _, test := range []struct{ name, fileKey, filename, extraKey string }{
+		{"filename CR", "file", "image\r.jpg", "field"},
+		{"filename LF", "file", "image\n.jpg", "field"},
+		{"file key CR", "file\rname", "image.jpg", "field"},
+		{"file key LF", "file\nname", "image.jpg", "field"},
+		{"extra key CR", "file", "image.jpg", "field\rname"},
+		{"extra key LF", "file", "image.jpg", "field\nname"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			requests := 0
+			client, err := NewClient(Config{BearerToken: "synthetic-token", HTTPClient: &http.Client{
+				Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests++
+					return nil, errors.New("unexpected request")
+				}),
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			reader := &trackedUpload{Reader: strings.NewReader("synthetic")}
+			err = client.request(context.Background(), operation{Method: "POST", Path: "/upload", Encoding: "multipart/form-data", ParamsField: "params"}, nil, struct{}{},
+				map[string]UploadFile{test.fileKey: {Reader: reader, Filename: test.filename}},
+				map[string]string{test.extraKey: "value"}, nil)
+			if err == nil || requests != 0 || !reader.closed {
+				t.Fatalf("invalid multipart input must fail before HTTP and close its stream: err=%v requests=%d closed=%v", err, requests, reader.closed)
+			}
+		})
+	}
+}
+
 func TestGeneratedReadableAccessors(t *testing.T) {
 	var absent *ValueNullOrString
 	if absent.GetString() != "" {
@@ -216,19 +309,23 @@ func TestUnionFieldSelection(t *testing.T) {
 		func() interface{} { return new(first) },
 		func() interface{} { return new(second) },
 	}
-	choice, err := unmarshalUnion([]byte(`{"b":"x","future":true}`), candidates, []bool{false, false})
+	choice, decoded, err := unmarshalUnion([]byte(`{"b":"x","future":true}`), candidates, []bool{false, false})
 	if err != nil || choice != 1 {
 		t.Fatalf("did not retain the modeled field: %d, %v", choice, err)
 	}
-	if _, err := unmarshalUnion([]byte(`{"a":"x","b":"y"}`), candidates, []bool{false, false}); err == nil {
+	winner, ok := decoded.(*second)
+	if !ok || winner.B == nil || *winner.B != "x" {
+		t.Fatal("decoded winner was not preserved")
+	}
+	if _, _, err := unmarshalUnion([]byte(`{"a":"x","b":"y"}`), candidates, []bool{false, false}); err == nil {
 		t.Fatal("accepted alternatives that each discard a modeled field")
 	}
-	if _, err := unmarshalUnion([]byte(`null`), candidates, []bool{false, false}); err == nil {
+	if _, _, err := unmarshalUnion([]byte(`null`), candidates, []bool{false, false}); err == nil {
 		t.Fatal("accepted non-nullable union null")
 	}
 	// A raw alternative can preserve all fields without coercing large JSON numbers to float64.
 	candidates = append(candidates, func() interface{} { return new(json.RawMessage) })
-	choice, err = unmarshalUnion([]byte(`{"a":"x","b":"y","big":1e400}`), candidates, []bool{false, false, true})
+	choice, _, err = unmarshalUnion([]byte(`{"a":"x","b":"y","big":1e400}`), candidates, []bool{false, false, true})
 	if err != nil || choice != 2 {
 		t.Fatalf("did not select the lossless alternative: %d, %v", choice, err)
 	}
