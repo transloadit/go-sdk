@@ -80,6 +80,23 @@ func (err *ResponseError) Error() string {
 	return fmt.Sprintf("API request failed with HTTP %d", err.Status)
 }
 
+// Code returns a recognized public contract error code, or empty for an unknown body/code.
+// It does not expose arbitrary response text through routine diagnostics.
+func (err *ResponseError) Code() string {
+	if err == nil {
+		return ""
+	}
+	var body map[string]json.RawMessage
+	if json.Unmarshal(err.Data, &body) != nil {
+		return ""
+	}
+	var code string
+	if json.Unmarshal(body["error"], &code) != nil || !isResponseErrorCode(code) {
+		return ""
+	}
+	return code
+}
+
 // TransportError preserves the cause without printing a signed query URL in ordinary logs.
 type TransportError struct{ Cause error }
 

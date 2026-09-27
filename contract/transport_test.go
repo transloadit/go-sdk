@@ -100,13 +100,32 @@ func TestAdditiveSuccessResponseFields(t *testing.T) {
 	}
 }
 
+func TestResponseErrorCode(t *testing.T) {
+	for _, test := range []struct{ body, code string }{
+		{`{"error":"TEMPLATE_NOT_FOUND","message":"synthetic-private"}`, "TEMPLATE_NOT_FOUND"},
+		{`{"error":"synthetic-private"}`, ""},
+		{`{"error":["TEMPLATE_NOT_FOUND"]}`, ""},
+		{`{"message":"synthetic-private"}`, ""},
+		{`null`, ""},
+		{`invalid JSON`, ""},
+	} {
+		err := &ResponseError{Status: 400, Data: []byte(test.body)}
+		if err.Code() != test.code {
+			t.Fatalf("unexpected admitted error code: %q", err.Code())
+		}
+		if err.Error() != "API request failed with HTTP 400" {
+			t.Fatal("response content entered error message")
+		}
+	}
+}
+
 func TestIntegralJSONRepresentations(t *testing.T) {
 	for _, source := range []string{"1.0", "1e3", "-2.00", "9223372036854775807.0", "0e-9223372036854775808"} {
 		var value ValueIntegerOrString
 		if err := json.Unmarshal([]byte(source), &value); err != nil {
 			t.Fatalf("valid integral representation %s: %v", source, err)
 		}
-		if value.Choice1 == nil {
+		if value.Integer == nil {
 			t.Fatalf("numeric token became another alternative: %s", source)
 		}
 	}
@@ -114,6 +133,46 @@ func TestIntegralJSONRepresentations(t *testing.T) {
 		var value ValueIntegerOrString
 		if err := json.Unmarshal([]byte(source), &value); err == nil {
 			t.Fatalf("non-integral or overflowing value accepted: %s", source)
+		}
+	}
+}
+
+func TestGeneratedReadableAccessors(t *testing.T) {
+	var absent *ValueNullOrString
+	if absent.GetString() != "" {
+		t.Fatal("nil scalar accessor")
+	}
+	for _, source := range []string{
+		`{"ok":"ASSEMBLY_UPLOADING","assembly_id":"canonical","assemblyId":"legacy"}`,
+		`{"ok":"ASSEMBLY_COMPLETED","assembly_id":"canonical","assemblyId":"legacy"}`,
+		`{"error":"ASSEMBLY_CRASHED","assembly_id":"canonical","assemblyId":"legacy"}`,
+	} {
+		var status GetAssemblyResult
+		if err := json.Unmarshal([]byte(source), &status); err != nil {
+			t.Fatal(err)
+		}
+		if status.GetAssemblyId() != "canonical" || status.GetAssemblyIdCamelCase() != "legacy" {
+			t.Fatal("Assembly ID spellings were confused")
+		}
+		encoded, err := json.Marshal(status)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var roundtrip GetAssemblyResult
+		if err := json.Unmarshal(encoded, &roundtrip); err != nil {
+			t.Fatal(err)
+		}
+		if roundtrip.GetAssemblyId() != "canonical" || roundtrip.GetAssemblyIdCamelCase() != "legacy" {
+			t.Fatal("Assembly ID was discarded on marshal")
+		}
+	}
+	for _, source := range []string{`"workspace-template"`, `"builtin/example@latest"`} {
+		var id CreateTemplateResult_Id
+		if err := json.Unmarshal([]byte(source), &id); err != nil {
+			t.Fatal(err)
+		}
+		if id.GetString() == "" {
+			t.Fatal("Template ID requires positional variant knowledge")
 		}
 	}
 }

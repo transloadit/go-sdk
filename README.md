@@ -100,8 +100,26 @@ are not a full JSON Schema validator. `Integer` uses signed 64-bit storage and a
 decimal/exponent JSON representations without rounding. Unknown response fields are tolerated;
 fields explicitly modeled as additional properties are retained. Union decoding selects an alternative
 that retains the fields represented by the successful alternatives, or fails if none can retain them
-all. `ResponseError` retains status and decoded JSON without printing response data. Redirects are
+all. Generated union members use schema discriminants such as `ImageResize` where available.
+Public type aliases can be followed with `go doc`; comments come from the contract. Assembly unions
+provide `GetAssemblyId()`, `GetOk()` and `GetResults()` so callers need not guess which success
+variant was decoded. Scalar wrappers offer methods such as `GetString()`. These accessors return
+zero values for absent/null fields or an inactive scalar variant; inspect the variant pointers when
+the distinction matters. Both wire spellings of the legacy Assembly ID remain represented:
+`AssemblyId` is `assembly_id`, and `AssemblyIdCamelCase` is `assemblyId`.
+
+`ResponseError` retains status and decoded JSON without printing response data. Use
+`errors.As(err, &response)` with `var response *contract.ResponseError`, then `response.Code()`
+to classify recognized public codes. Unknown or malformed codes return an empty string. For example,
+`TEMPLATE_NOT_FOUND` uses HTTP 400, not 404; the SDK preserves that API behavior. Redirects are
 rejected and responses are limited to 128 MiB.
+
+The [complete generated-client example](examples/contract-workflow/main.go) builds typed Template
+Steps, uploads an image, polls to completion and reads a typed result. With server-side
+`TRANSLOADIT_KEY` and `TRANSLOADIT_SECRET` set, run `go run ./examples/contract-workflow ./image.jpg`
+from this checkout. It creates one billable Assembly and removes its temporary Template; completed
+results expire normally. Its deadline, polling and cleanup are application logic, not automatic
+SDK retries or a replacement for the existing high-level client.
 
 Maintainers: `contract/client_generated.go` and its JSON manifests come from API2. Never edit them
 directly. From the matching API2 checkout's `api2/` directory run `./bin/cli.ts contracts sdks

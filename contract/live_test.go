@@ -5,7 +5,6 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/url"
@@ -13,19 +12,6 @@ import (
 	"testing"
 	"time"
 )
-
-func nativeJSONString(t *testing.T, value interface{}) string {
-	t.Helper()
-	data, err := json.Marshal(value)
-	if err != nil {
-		t.Fatal(err)
-	}
-	var text string
-	if err := json.Unmarshal(data, &text); err != nil {
-		t.Fatal(err)
-	}
-	return text
-}
 
 func TestContractDevdock(t *testing.T) {
 	origin := os.Getenv("API2_CONTRACT_TEST_ORIGIN")
@@ -42,12 +28,30 @@ func TestContractDevdock(t *testing.T) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
 	defer cancel()
-	template := `{"steps":{"passed":{"robot":"/file/filter","use":":original","result":true}}}`
-	created, err := client.CreateTemplate(ctx, CreateTemplateInput{Params: CreateTemplateParams{Name: fmt.Sprintf("contract-go-%d", time.Now().UnixNano()), Template: CreateTemplateParams_Template{Choice2: &template}}})
+	original, yes := ":original", true
+	template := CreateTemplateParams_Template{Object: &CreateTemplateParams_Template_Object{
+		Steps: &CreateTemplateParams_Template_Object_Steps{
+			AdditionalProperties: map[string]CreateTemplateParams_Template_Object_Steps_AdditionalProperty{
+				"passed": {FileFilter: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter{
+					Robot: "/file/filter",
+					Use: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter_Use{
+						Variant: &CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant{String: &original},
+					},
+					Result: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter_Result{
+						Variant: &CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant{Boolean: &yes},
+					},
+				}},
+			},
+		},
+	}}
+	created, err := client.CreateTemplate(ctx, CreateTemplateInput{Params: CreateTemplateParams{Name: fmt.Sprintf("contract-go-%d", time.Now().UnixNano()), Template: template}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	id := nativeJSONString(t, created.Id)
+	id := created.Id.GetString()
+	if id == "" {
+		t.Fatal("missing Template identity")
+	}
 	deleted := false
 	defer func() {
 		if !deleted {
@@ -62,17 +66,11 @@ func TestContractDevdock(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if nativeJSONString(t, got.Id) != id {
+	if got.Id.GetString() != id {
 		t.Fatal("wrong retrieved Template")
 	}
-	var listParams ListTemplatesParams
-	encoded, err := json.Marshal(map[string]interface{}{"keywords": []string{created.Name}, "include_builtin": "none"})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := json.Unmarshal(encoded, &listParams); err != nil {
-		t.Fatal(err)
-	}
+	none := ListTemplatesParams_IncludeBuiltin("none")
+	listParams := ListTemplatesParams{Keywords: &ListTemplatesParams_Keywords{String: &created.Name}, IncludeBuiltin: &none}
 	listed, err := client.ListTemplates(ctx, ListTemplatesInput{Params: listParams})
 	if err != nil {
 		t.Fatal(err)
@@ -80,10 +78,8 @@ func TestContractDevdock(t *testing.T) {
 	if listed.Count != 1 {
 		t.Fatal("query filter was not honored")
 	}
-	var builtinParams ListTemplatesParams
-	if err := json.Unmarshal([]byte(`{"include_builtin":"exclusively-latest"}`), &builtinParams); err != nil {
-		t.Fatal(err)
-	}
+	exclusively := ListTemplatesParams_IncludeBuiltin("exclusively-latest")
+	builtinParams := ListTemplatesParams{IncludeBuiltin: &exclusively}
 	builtins, err := client.ListTemplates(ctx, ListTemplatesInput{Params: builtinParams})
 	if err != nil {
 		t.Fatal(err)
@@ -91,12 +87,12 @@ func TestContractDevdock(t *testing.T) {
 	if len(builtins.Items) == 0 {
 		t.Fatal("missing built-in Templates")
 	}
-	builtinID := nativeJSONString(t, builtins.Items[0].Id)
+	builtinID := builtins.Items[0].Id.GetString()
 	builtin, err := client.GetTemplate(ctx, GetTemplateInput{TemplateIdOrName: builtinID})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if nativeJSONString(t, builtin.Id) != builtinID {
+	if builtin.Id.GetString() != builtinID {
 		t.Fatal("wrong built-in Template")
 	}
 	scope := "templates:read"
@@ -120,41 +116,17 @@ func TestContractDevdock(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	var params CreateAssemblyParams
-	encoded, err = json.Marshal(map[string]interface{}{"template_id": id, "auth": map[string]int{"max_size": 10000000, "max_number_of_files": 1}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := json.Unmarshal(encoded, &params); err != nil {
-		t.Fatal(err)
-	}
+	maxSize, maxFiles := float64(10000000), Integer(1)
+	params := CreateAssemblyParams{Object2: &CreateAssemblyParams_Object2{
+		TemplateId: &id,
+		Auth:       &CreateAssemblyParams_Object2_Auth{MaxSize: &maxSize, MaxNumberOfFiles: &maxFiles},
+	}}
 	uploaded, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: ioutil.NopCloser(bytes.NewReader(file)), Filename: "smilie.gif"}}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	// The typed union is deliberately not reduced to one happy-path response model.
-	var status struct {
-		AssemblyID string `json:"assembly_id"`
-		OK         string `json:"ok"`
-		Error      string `json:"error"`
-		Uploads    []struct {
-			MD5 string `json:"md5hash"`
-		} `json:"uploads"`
-		Results map[string][]struct {
-			MD5 string `json:"md5hash"`
-		} `json:"results"`
-	}
-	readStatus := func(value interface{}) {
-		data, err := json.Marshal(value)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := json.Unmarshal(data, &status); err != nil {
-			t.Fatal(err)
-		}
-	}
-	readStatus(uploaded)
-	assemblyID := status.AssemblyID
+	status := uploaded
+	assemblyID := status.GetAssemblyId()
 	if assemblyID == "" {
 		t.Fatal("missing Assembly identity")
 	}
@@ -168,8 +140,8 @@ func TestContractDevdock(t *testing.T) {
 			}
 		}
 	}()
-	for status.OK != "ASSEMBLY_COMPLETED" {
-		if status.Error != "" || status.OK == "ASSEMBLY_CANCELED" {
+	for status.GetOk() != "ASSEMBLY_COMPLETED" {
+		if status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" {
 			t.Fatal("Assembly processing failed")
 		}
 		select {
@@ -181,11 +153,12 @@ func TestContractDevdock(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		readStatus(result)
+		status = result
 	}
 	completed = true
 	digest := md5.Sum(file)
-	if len(status.Uploads) != 1 || status.Uploads[0].MD5 != hex.EncodeToString(digest[:]) || len(status.Results["passed"]) != 1 || status.Results["passed"][0].MD5 != hex.EncodeToString(digest[:]) {
+	uploads, results := status.GetUploads(), status.GetResults()
+	if uploads == nil || len(*uploads) != 1 || (*uploads)[0].GetMd5hash().GetString() != hex.EncodeToString(digest[:]) || results == nil || len(results.AdditionalProperties["passed"]) != 1 || results.AdditionalProperties["passed"][0].Md5hash.GetString() != hex.EncodeToString(digest[:]) {
 		t.Fatal("processed file digest mismatch")
 	}
 	removed, err := client.DeleteTemplate(ctx, DeleteTemplateInput{TemplateIdOrName: id})
@@ -196,5 +169,10 @@ func TestContractDevdock(t *testing.T) {
 		t.Fatal("Template was not deleted")
 	}
 	deleted = true
+	_, err = client.GetTemplate(ctx, GetTemplateInput{TemplateIdOrName: id})
+	missing, ok := err.(*ResponseError)
+	if !ok || missing.Status != 400 || missing.Code() != "TEMPLATE_NOT_FOUND" {
+		t.Fatalf("expected a classified missing Template error, got %v", err)
+	}
 	t.Log("SdkHttpCanaryVerified")
 }
