@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -192,6 +193,45 @@ func TestRecursiveUnionDecodingDoesNotMultiplyWork(t *testing.T) {
 	}
 }
 
+func TestUnionRejectsExcessiveNesting(t *testing.T) {
+	data := []byte(strings.Repeat("[", 65) + "0" + strings.Repeat("]", 65))
+	var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty
+	if err := json.Unmarshal(data, &value); err == nil {
+		t.Fatal("union decoding accepted more than 64 nested containers")
+	}
+	if err := json.Unmarshal([]byte(strings.Repeat("[", 64)+"0"+strings.Repeat("]", 64)), &value); err != nil {
+		t.Fatalf("documented maximum depth must remain usable: %v", err)
+	}
+	quoted, err := json.Marshal(strings.Repeat(`[{\"\\`, 100))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(quoted, &value); err != nil {
+		t.Fatalf("quoted delimiters must not count as nesting: %v", err)
+	}
+}
+
+func TestUnionPathsDoNotCopyLongParents(t *testing.T) {
+	children := make(map[string]interface{})
+	for index := 0; index < 128; index++ {
+		children[fmt.Sprint(index)] = true
+	}
+	value := map[string]interface{}{strings.Repeat("p", 256*1024): children}
+	paths := make(map[unionPath]int)
+	var before, after runtime.MemStats
+	runtime.ReadMemStats(&before)
+	unionFieldPaths(value, 0, paths)
+	runtime.ReadMemStats(&after)
+	// The old full-prefix representation allocates over 32 MiB for this 256 KiB object.
+	// Leave ample room for map growth and runtime bookkeeping without a timing assertion.
+	if allocated := after.TotalAlloc - before.TotalAlloc; allocated > 4*1024*1024 {
+		t.Fatalf("field paths copied their long parent names: %d allocated bytes", allocated)
+	}
+	if len(paths) != 129 {
+		t.Fatal("lost a nested field path")
+	}
+}
+
 type trackedUpload struct {
 	io.Reader
 	closed bool
@@ -332,15 +372,20 @@ func TestUnionFieldSelection(t *testing.T) {
 }
 
 func TestUnionFieldPathEscaping(t *testing.T) {
-	paths := make(map[string]bool)
+	paths := make(map[unionPath]int)
 	unionFieldPaths(map[string]interface{}{
 		"a/b":  true,
 		"a":    map[string]interface{}{"b": true},
 		"a~1b": []interface{}{map[string]interface{}{"x": true}},
-	}, "", paths)
-	for _, path := range []string{"/a~1b", "/a", "/a/b", "/a~01b", "/a~01b/0", "/a~01b/0/x"} {
-		if !paths[path] {
-			t.Fatalf("missing distinct field path: %s", path)
+	}, 0, paths)
+	array := paths[unionPath{key: "a~1b"}]
+	item := paths[unionPath{parent: array, key: "0", array: true}]
+	for _, path := range []unionPath{
+		{key: "a/b"}, {key: "a"}, {parent: paths[unionPath{key: "a"}], key: "b"},
+		{key: "a~1b"}, {parent: array, key: "0", array: true}, {parent: item, key: "x"},
+	} {
+		if paths[path] == 0 {
+			t.Fatalf("missing distinct field path: %v", path)
 		}
 	}
 	if len(paths) != 6 {

@@ -220,8 +220,11 @@ func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []boo
 	if len(candidates) != len(nullable) {
 		return -1, nil, fmt.Errorf("invalid union metadata")
 	}
+	if err := checkUnionDepth(data); err != nil {
+		return -1, nil, err
+	}
 	isNull := strings.TrimSpace(string(data)) == "null"
-	combined := make(map[string]bool)
+	combined := make(map[unionPath]int)
 	best, bestCount := -1, -1
 	var winner interface{}
 	for index, create := range candidates {
@@ -242,13 +245,9 @@ func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []boo
 		if err := decoder.Decode(&retained); err != nil {
 			continue
 		}
-		paths := make(map[string]bool)
-		unionFieldPaths(retained, "", paths)
-		for path := range paths {
-			combined[path] = true
-		}
-		if len(paths) > bestCount {
-			best, bestCount = index, len(paths)
+		count := unionFieldPaths(retained, 0, combined)
+		if count > bestCount {
+			best, bestCount = index, count
 			winner = candidate
 		}
 	}
@@ -264,21 +263,67 @@ func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []boo
 	return best, winner, nil
 }
 
-func unionFieldPaths(value interface{}, prefix string, paths map[string]bool) {
+// This native resource limit bounds repeated subtree inspection, not the server's JSON schema.
+// The allocation-free scan ignores delimiters inside strings; encoding/json still validates JSON.
+func checkUnionDepth(data []byte) error {
+	depth := 0
+	inString, escaped := false, false
+	for _, character := range data {
+		if inString {
+			if escaped {
+				escaped = false
+			} else if character == '\\' {
+				escaped = true
+			} else if character == '"' {
+				inString = false
+			}
+			continue
+		}
+		switch character {
+		case '"':
+			inString = true
+		case '[', '{':
+			depth++
+			if depth > 64 {
+				return fmt.Errorf("union JSON exceeds 64 nested containers")
+			}
+		case ']', '}':
+			depth--
+		}
+	}
+	return nil
+}
+
+// Intern parent identities instead of copying full JSON pointers for every descendant.
+// Raw property names need no escaping, and array positions remain distinct from object keys.
+type unionPath struct {
+	parent int
+	key    string
+	array  bool
+}
+
+func unionFieldPath(value interface{}, path unionPath, paths map[unionPath]int) int {
+	id, exists := paths[path]
+	if !exists {
+		id = len(paths) + 1
+		paths[path] = id
+	}
+	return 1 + unionFieldPaths(value, id, paths)
+}
+
+func unionFieldPaths(value interface{}, parent int, paths map[unionPath]int) int {
+	count := 0
 	switch value := value.(type) {
 	case map[string]interface{}:
 		for key, child := range value {
-			path := prefix + "/" + strings.ReplaceAll(strings.ReplaceAll(key, "~", "~0"), "/", "~1")
-			paths[path] = true
-			unionFieldPaths(child, path, paths)
+			count += unionFieldPath(child, unionPath{parent: parent, key: key}, paths)
 		}
 	case []interface{}:
 		for index, child := range value {
-			path := prefix + "/" + strconv.Itoa(index)
-			paths[path] = true
-			unionFieldPaths(child, path, paths)
+			count += unionFieldPath(child, unionPath{parent: parent, key: strconv.Itoa(index), array: true}, paths)
 		}
 	}
+	return count
 }
 
 // Reflection operates only on generated structs and their JSON tags, not an API field inventory.

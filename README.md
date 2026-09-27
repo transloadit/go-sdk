@@ -112,7 +112,8 @@ the distinction matters. Both wire spellings of the legacy Assembly ID remain re
 `errors.As(err, &response)` with `var response *contract.ResponseError`, then `response.Code()`
 to classify recognized public codes. Unknown or malformed codes return an empty string. For example,
 `TEMPLATE_NOT_FOUND` uses HTTP 400, not 404; the SDK preserves that API behavior. Redirects are
-rejected and responses are limited to 128 MiB.
+rejected and responses are limited to 128 MiB. Union decoding rejects values deeper than 64 nested
+objects/arrays to bound native decoding work. This is a client resource limit, not an API schema rule.
 
 The [complete generated-client example](examples/contract-workflow/main.go) builds typed Template
 Steps, uploads an image, polls to completion and reads a typed result. With server-side
