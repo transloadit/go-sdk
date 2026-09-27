@@ -338,6 +338,36 @@ func TestOriginRejectsEmptyQueryDelimiter(t *testing.T) {
 	}
 }
 
+func TestOriginTrailingSeparators(t *testing.T) {
+	for _, test := range []struct{ suffix, path string }{
+		{"/", "/templates"},
+		{"//", "/templates"},
+		{"/proxy", "/proxy/templates"},
+		{"/proxy/", "/proxy/templates"},
+		{"/proxy//", "/proxy/templates"},
+		{"/a//b///", "/a//b/templates"},
+	} {
+		t.Run(test.suffix, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != test.path {
+					t.Errorf("request path = %q, want %q", r.URL.Path, test.path)
+				}
+				w.WriteHeader(400)
+				w.Write([]byte(`{"error":"TEST_ERROR"}`))
+			}))
+			defer server.Close()
+			client, err := NewClient(Config{Origin: server.URL + test.suffix, BearerToken: "synthetic-token"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.ListTemplates(context.Background(), ListTemplatesInput{})
+			if _, ok := err.(*ResponseError); !ok {
+				t.Fatalf("request did not reach the configured server: %v", err)
+			}
+		})
+	}
+}
+
 func TestUnionFieldSelection(t *testing.T) {
 	type first struct {
 		A *string `json:"a,omitempty"`

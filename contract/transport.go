@@ -132,7 +132,8 @@ func NewClient(config Config) (*Client, error) {
 	if config.BearerToken != "" && (config.AuthKey != "" || config.AuthSecret != "") {
 		return nil, fmt.Errorf("choose signed or bearer authentication")
 	}
-	config.Origin = strings.TrimSuffix(origin.String(), "/")
+	// Normalize only the join boundary; internal proxy path segments remain significant.
+	config.Origin = strings.TrimRight(origin.String(), "/")
 	if config.SignatureAlgorithm == "" {
 		config.SignatureAlgorithm = defaultAlgorithm
 	}
