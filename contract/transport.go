@@ -96,11 +96,21 @@ func (err *ResponseError) Code() string {
 	return code
 }
 
-// TransportError preserves the cause without printing a signed query URL in ordinary logs.
+// TransportError preserves the cause with the standard HTTP request URL redacted.
 type TransportError struct{ Cause error }
 
 func (err *TransportError) Error() string { return "API transport failed" }
 func (err *TransportError) Unwrap() error { return err.Cause }
+
+func redactRequestURL(err error) error {
+	requestError, ok := err.(*url.Error)
+	if !ok {
+		return err
+	}
+	// Do not mutate the caller's error. The request URL can contain signed parameters;
+	// the nested cause retains cancellation, timeout and connection error identities.
+	return &url.Error{Op: requestError.Op, URL: "[redacted]", Err: redactRequestURL(requestError.Err)}
+}
 
 // NewClient creates a client without changing the caller's HTTP client or following redirects.
 func NewClient(config Config) (*Client, error) {
@@ -216,19 +226,31 @@ func unmarshalInteger(data []byte, destination *int64) error {
 
 // Tolerant response decoding must not let an earlier alternative swallow another one's fields.
 // Compare retained field paths, not values: integer normalization must not lose numeric precision.
-func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []bool) (int, interface{}, error) {
-	if len(candidates) != len(nullable) {
+func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []bool, discriminants []map[string]string) (int, interface{}, error) {
+	if len(candidates) != len(nullable) || (discriminants != nil && len(discriminants) != len(candidates)) {
 		return -1, nil, fmt.Errorf("invalid union metadata")
 	}
 	if err := checkUnionDepth(data); err != nil {
 		return -1, nil, err
 	}
-	isNull := strings.TrimSpace(string(data)) == "null"
+	trimmed := bytes.TrimSpace(data)
+	isNull := bytes.Equal(trimmed, []byte("null"))
+	var fields map[string]json.RawMessage
+	if discriminants != nil && len(trimmed) > 0 && trimmed[0] == '{' {
+		if err := json.Unmarshal(data, &fields); err != nil {
+			return -1, nil, err
+		}
+	}
 	combined := make(map[unionPath]int)
 	best, bestCount := -1, -1
 	var winner interface{}
 	for index, create := range candidates {
 		if isNull && !nullable[index] {
+			continue
+		}
+		// Required singleton string fields come from the generator, not an SDK Robot registry.
+		// Reject other branches before decoding their potentially large shared subtrees.
+		if !isNull && discriminants != nil && !matchesDiscriminants(fields, discriminants[index]) {
 			continue
 		}
 		candidate := create()
@@ -261,6 +283,16 @@ func unmarshalUnion(data []byte, candidates []func() interface{}, nullable []boo
 	}
 	// Retain only the best candidate. Decoding it again would multiply work in recursive unions.
 	return best, winner, nil
+}
+
+func matchesDiscriminants(fields map[string]json.RawMessage, expected map[string]string) bool {
+	for key, wanted := range expected {
+		var actual string
+		if err := json.Unmarshal(fields[key], &actual); err != nil || actual != wanted || bytes.Equal(bytes.TrimSpace(fields[key]), []byte("null")) {
+			return false
+		}
+	}
+	return true
 }
 
 // This native resource limit bounds repeated subtree inspection, not the server's JSON schema.
@@ -634,14 +666,14 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 	}
 	response, err := client.httpClient.Do(req)
 	if err != nil {
-		return &TransportError{Cause: err}
+		return &TransportError{Cause: redactRequestURL(err)}
 	}
 	defer response.Body.Close()
 	// Bounded independently of Content-Length, which can be absent or untrusted.
 	const limit = 128 * 1024 * 1024
 	data, err := ioutil.ReadAll(io.LimitReader(response.Body, limit+1))
 	if err != nil {
-		return &TransportError{Cause: err}
+		return &TransportError{Cause: redactRequestURL(err)}
 	}
 	if len(data) > limit {
 		return fmt.Errorf("API response exceeds size limit")

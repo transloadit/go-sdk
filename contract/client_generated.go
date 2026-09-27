@@ -60,7 +60,7 @@ func (value AssemblyStatsError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *AssemblyStatsError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant2) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant2) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -119,7 +119,7 @@ func (value AssemblyStatsError_Variant1) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *AssemblyStatsError_Variant1) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -173,7 +173,7 @@ func (value AssemblyStatsError_Variant1_Variant1) MarshalJSON() ([]byte, error) 
 	return data, nil
 }
 func (value *AssemblyStatsError_Variant1_Variant1) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant1_AssemblyStatsInvalidTime) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant1_AssemblyStatsMissingRegion) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant1_AssemblyStatsInvalidTime) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant1_AssemblyStatsMissingRegion) }}, []bool{false, false}, []map[string]string{{"error": "ASSEMBLY_STATS_INVALID_TIME"}, {"error": "ASSEMBLY_STATS_MISSING_REGION"}})
 	if err != nil {
 		return err
 	}
@@ -448,7 +448,7 @@ func (value AssemblyStatsError_Variant1_Variant2_Reason) MarshalJSON() ([]byte, 
 	return data, nil
 }
 func (value *AssemblyStatsError_Variant1_Variant2_Reason) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{true, false, false, false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{true, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -601,7 +601,7 @@ func (value AssemblyStatsError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *AssemblyStatsError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant2_AssemblyStatsError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant2_AssemblyStatsError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "ASSEMBLY_STATS_ERROR"}, nil})
 	if err != nil {
 		return err
 	}
@@ -971,7 +971,7 @@ func (value BulkDeleteDamAssetsError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *BulkDeleteDamAssetsError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant2) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant3) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant4) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant5) }}, []bool{false, false, false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant2) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant3) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant4) }, func() interface{} { return new(BulkDeleteDamAssetsError_Variant5) }}, []bool{false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -1061,7 +1061,7 @@ func (value BulkDeleteDamAssetsError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *BulkDeleteDamAssetsError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant2_DamInvalidRequest) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant2_DamInvalidRequest) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "DAM_INVALID_REQUEST"}, nil})
 	if err != nil {
 		return err
 	}
@@ -1195,7 +1195,7 @@ func (value BulkDeleteDamAssetsError_Variant3) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *BulkDeleteDamAssetsError_Variant3) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant3_DamResourceNotFound) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant3_DamResourceNotFound) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "DAM_RESOURCE_NOT_FOUND"}, nil})
 	if err != nil {
 		return err
 	}
@@ -1351,7 +1351,7 @@ func (value BulkDeleteDamAssetsError_Variant4) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *BulkDeleteDamAssetsError_Variant4) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant4_DamMutationConflict) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant4_DamMutationConflict) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "DAM_MUTATION_CONFLICT"}, nil})
 	if err != nil {
 		return err
 	}
@@ -1507,7 +1507,7 @@ func (value BulkDeleteDamAssetsError_Variant5) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *BulkDeleteDamAssetsError_Variant5) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant5_DamMutationFailed) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(BulkDeleteDamAssetsError_Variant5_DamMutationFailed) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "DAM_MUTATION_FAILED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -1976,7 +1976,7 @@ func (value CancelAssemblyResult) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CancelAssemblyResult) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1) }, func() interface{} { return new(CancelAssemblyResult_WithOk2) }, func() interface{} { return new(CancelAssemblyResult_WithError) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1) }, func() interface{} { return new(CancelAssemblyResult_WithOk2) }, func() interface{} { return new(CancelAssemblyResult_WithError) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -3426,7 +3426,7 @@ func (value CancelAssemblyResult_WithError_Cmd) MarshalJSON() ([]byte, error) {
 func (value *CancelAssemblyResult_WithError_Cmd) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Cmd_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -3597,7 +3597,7 @@ func (value CancelAssemblyResult_WithError_Reason) MarshalJSON() ([]byte, error)
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithError_Reason) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{true, false, false, false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{true, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -4021,7 +4021,7 @@ func (value CancelAssemblyResult_WithOk1_ParentAssemblyStatus) MarshalJSON() ([]
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_ParentAssemblyStatus) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array_Item) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{true, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array_Item) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{true, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4195,7 +4195,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_As) Mar
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_As) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_As_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4249,7 +4249,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_As_Vari
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_As_Variant) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -4340,7 +4340,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta) M
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4619,7 +4619,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Album) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4681,7 +4681,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Artist) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4756,7 +4756,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Author) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4834,7 +4834,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Cmd) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Cmd_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -4915,7 +4915,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Copyright) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Copyright_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -4968,7 +4968,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_CopyrightNotice) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5036,7 +5036,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Copyright_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Copyright_Variant_Object)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -5154,7 +5154,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Creator) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Creator_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5216,7 +5216,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Creator_Variant) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -5302,7 +5302,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_DateFileCreated) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5361,7 +5361,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_DateRecorded) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5418,7 +5418,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Description) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5478,7 +5478,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Descriptions_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Descriptions_Item_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -5563,7 +5563,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_DeviceName) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5620,7 +5620,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_DeviceSoftware) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5681,7 +5681,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_DominantColors) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5752,7 +5752,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_ExposureCompensation) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5811,7 +5811,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_ExposureTime) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5871,7 +5871,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Faces) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Faces_Array)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -5979,7 +5979,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_InterlaceDetection) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_InterlaceDetection_Object)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6068,7 +6068,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Keywords) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Keywords_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6132,7 +6132,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Keywords_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Keywords_Variant_Array)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -6261,7 +6261,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_RecognizedText) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_RecognizedText_Array2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -6374,7 +6374,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_ShutterSpeed) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6436,7 +6436,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Streams) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Streams_Object)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6525,7 +6525,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_ThumbOffset) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6584,7 +6584,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Ob
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Meta_Object_Title) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6675,7 +6675,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_Origina
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_OriginalId) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_OriginalId_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -6835,7 +6835,7 @@ func (value CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_UserMet
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Results_AdditionalProperty_Item_UserMeta) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -6960,7 +6960,7 @@ func (value CancelAssemblyResult_WithOk1_Uploads_Item) MarshalJSON() ([]byte, er
 	return data, nil
 }
 func (value *CancelAssemblyResult_WithOk1_Uploads_Item) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1_Uploads_Item_Object) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_Uploads_Item_WithOriginalId) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CancelAssemblyResult_WithOk1_Uploads_Item_Object) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_Uploads_Item_WithOriginalId) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -8537,7 +8537,7 @@ func (value CreateAssemblyError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAssemblyError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateAssemblyError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateAssemblyError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -8606,7 +8606,7 @@ func (value CreateAssemblyError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAssemblyError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAssemblyError_Variant2_InvalidParamsField) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAssemblyError_Variant2_InvalidParamsField) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "INVALID_PARAMS_FIELD"}, nil})
 	if err != nil {
 		return err
 	}
@@ -8742,7 +8742,7 @@ func (value CreateAssemblyParams) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAssemblyParams) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAssemblyParams_Object1) }, func() interface{} { return new(CreateAssemblyParams_Object2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAssemblyParams_Object1) }, func() interface{} { return new(CreateAssemblyParams_Object2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -10186,7 +10186,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty) UnmarshalJSO
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentAutorotate)
 	}, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentMerge) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileRead) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentSplit) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DropboxImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DropboxStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_EdglyDeliver) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileDecompress) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileServe) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileVerify) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileVirusscan) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect)
-	}, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOcr) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MetaWrite) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MinioImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MinioStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ScriptRun) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SupabaseImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SupabaseStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TigrisImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TigrisStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TlcdnDeliver) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TusStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_UploadHandle) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoArtwork) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoGenerate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSplit) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_WasabiImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_WasabiStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_YoutubeStore) }}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false})
+	}, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOcr) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MetaWrite) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MinioImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MinioStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ScriptRun) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SupabaseImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SupabaseStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TigrisImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TigrisStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TlcdnDeliver) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TusStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_UploadHandle) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoArtwork) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoGenerate) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSplit) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_WasabiImport) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_WasabiStore) }, func() interface{} { return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_YoutubeStore) }}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}, []map[string]string{{"robot": "/transloadit/import"}, {"robot": "/transloadit/import"}, {"robot": "/audio/artwork"}, {"robot": "/audio/concat"}, {"robot": "/audio/split"}, {"robot": "/audio/encode"}, {"robot": "/audio/loop"}, {"robot": "/audio/merge"}, {"robot": "/audio/waveform"}, {"robot": "/azure/import"}, {"robot": "/azure/store"}, {"robot": "/backblaze/import"}, {"robot": "/backblaze/store"}, {"robot": "/box/import"}, {"robot": "/box/store"}, {"robot": "/mega/import"}, {"robot": "/mega/store"}, {"robot": "/cloudfiles/import"}, {"robot": "/cloudfiles/store"}, {"robot": "/cloudflare/import"}, {"robot": "/cloudflare/store"}, {"robot": "/digitalocean/import"}, {"robot": "/digitalocean/store"}, {"robot": "/document/autorotate"}, {"robot": "/document/convert"}, {"robot": "/document/extract"}, {"robot": "/document/merge"}, {"robot": "/document/ocr"}, {"robot": "/document/optimize"}, {"robot": "/file/read"}, {"robot": "/document/split"}, {"robot": "/document/thumbs"}, {"robot": "/dropbox/import"}, {"robot": "/dropbox/store"}, {"robot": "/edgly/deliver"}, {"robot": "/file/compress"}, {"robot": "/file/decompress"}, {"robot": "/file/filter"}, {"robot": "/file/hash"}, {"robot": "/file/preview"}, {"robot": "/file/serve"}, {"robot": "/file/verify"}, {"robot": "/file/virusscan"}, {"robot": "/ftp/import"}, {"robot": "/ftp/store"}, {"robot": "/google/import"}, {"robot": "/google/store"}, {"robot": "/html/convert"}, {"robot": "/http/import"}, {"robot": "/http/request"}, {"robot": "/image/bgremove"}, {"robot": "/image/copyrightdetect"}, {"robot": "/image/describe"}, {"robot": "/image/enhance"}, {"robot": "/image/facedetect"}, {"robot": "/image/generate"}, {"robot": "/image/upscale"}, {"robot": "/image/merge"}, {"robot": "/image/ocr"}, {"robot": "/image/optimize"}, {"robot": "/image/resize"}, {"robot": "/meta/write"}, {"robot": "/minio/import"}, {"robot": "/minio/store"}, {"robot": "/s3/import"}, {"robot": "/s3/store"}, {"robot": "/script/run"}, {"robot": "/sftp/import"}, {"robot": "/sftp/store"}, {"robot": "/speech/transcribe"}, {"robot": "/supabase/import"}, {"robot": "/supabase/store"}, {"robot": "/swift/import"}, {"robot": "/swift/store"}, {"robot": "/text/speak"}, {"robot": "/text/translate"}, {"robot": "/ai/chat"}, {"robot": "/tigris/import"}, {"robot": "/tigris/store"}, {"robot": "/tlcdn/deliver"}, {"robot": "/transloadit/store"}, {"robot": "/tus/store"}, {"robot": "/upload/handle"}, {"robot": "/video/adaptive"}, {"robot": "/video/artwork"}, {"robot": "/video/concat"}, {"robot": "/video/encode"}, {"robot": "/video/generate"}, {"robot": "/video/merge"}, {"robot": "/video/ondemand"}, {"robot": "/video/split"}, {"robot": "/video/subtitle"}, {"robot": "/video/thumbs"}, {"robot": "/vimeo/import"}, {"robot": "/vimeo/store"}, {"robot": "/wasabi/import"}, {"robot": "/wasabi/store"}, {"robot": "/youtube/store"}})
 	if err != nil {
 		return err
 	}
@@ -13185,7 +13185,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Credent
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Credentials) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13264,7 +13264,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Format)
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13340,7 +13340,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServ
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13408,7 +13408,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServ
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13499,7 +13499,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServ
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object_AllowedTools) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13567,7 +13567,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServ
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object_Auth) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object_Auth_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13662,7 +13662,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServ
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object_Type) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_McpServers_Array_Item_Object_Type_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13766,7 +13766,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13841,7 +13841,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13909,7 +13909,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -13997,7 +13997,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant4)
-	}}, []bool{false, false, false, false})
+	}}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -14077,7 +14077,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"role": "system"}, {"role": "system"}, {"role": "system"}})
 	if err != nil {
 		return err
 	}
@@ -14268,7 +14268,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty_Array)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty_Object)
-	}}, []bool{false, false, false, true, false, false})
+	}}, []bool{false, false, false, true, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -14502,7 +14502,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"role": "user"}, {"role": "user"}, {"role": "user"}})
 	if err != nil {
 		return err
 	}
@@ -14621,7 +14621,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -14711,7 +14711,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant4)
-	}}, []bool{false, false, false, false})
+	}}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -14791,7 +14791,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant1_Text2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant1_Text3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "text"}, {"type": "text"}, {"type": "text"}})
 	if err != nil {
 		return err
 	}
@@ -14994,7 +14994,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -15060,7 +15060,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1_Image2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1_Image3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "image"}, {"type": "image"}, {"type": "image"}})
 	if err != nil {
 		return err
 	}
@@ -15219,7 +15219,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1_Image1_Image) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1_Image1_Image_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -15409,7 +15409,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant2_Image2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant2_Image3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "image"}, {"type": "image"}, {"type": "image"}})
 	if err != nil {
 		return err
 	}
@@ -15648,7 +15648,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "file"}, {"type": "file"}, {"type": "file"}})
 	if err != nil {
 		return err
 	}
@@ -15815,7 +15815,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File1_Data_Variant)
 	}, func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant2_Variant1_Image1_Image_Object)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -15902,7 +15902,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File1_Data_Variant_Reference)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File1_Data_Variant_Text)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "data"}, {"type": "reference"}, {"type": "text"}})
 	if err != nil {
 		return err
 	}
@@ -16195,7 +16195,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant4_Media2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant4_Media3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "media"}, {"type": "media"}, {"type": "media"}})
 	if err != nil {
 		return err
 	}
@@ -16536,7 +16536,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"role": "assistant"}, {"role": "assistant"}, {"role": "assistant"}})
 	if err != nil {
 		return err
 	}
@@ -16655,7 +16655,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -16795,7 +16795,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_ToolApprovalRequest)
-	}}, []bool{false, false, false, false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false, false, false, false}, []map[string]string{nil, nil, nil, nil, nil, nil, nil, nil, {"type": "tool-approval-request"}})
 	if err != nil {
 		return err
 	}
@@ -16959,7 +16959,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant2_Custom2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant2_Custom3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "custom"}, {"type": "custom"}, {"type": "custom"}})
 	if err != nil {
 		return err
 	}
@@ -17176,7 +17176,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant5_Reasoning2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant5_Reasoning3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "reasoning"}, {"type": "reasoning"}, {"type": "reasoning"}})
 	if err != nil {
 		return err
 	}
@@ -17389,7 +17389,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant6_ReasoningFile2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant6_ReasoningFile3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "reasoning-file"}, {"type": "reasoning-file"}, {"type": "reasoning-file"}})
 	if err != nil {
 		return err
 	}
@@ -17527,7 +17527,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Message
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant6_ReasoningFile1_Data) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant2_User1_Content_Array_Item_Variant3_File1_Data_Variant_Data)
-	}, func() interface{} { return new(string) }}, []bool{false, false})
+	}, func() interface{} { return new(string) }}, []bool{false, false}, []map[string]string{{"type": "data"}, nil})
 	if err != nil {
 		return err
 	}
@@ -17695,7 +17695,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant7_ToolCall2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant7_ToolCall3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "tool-call"}, {"type": "tool-call"}, {"type": "tool-call"}})
 	if err != nil {
 		return err
 	}
@@ -18004,7 +18004,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "tool-result"}, {"type": "tool-result"}, {"type": "tool-result"}})
 	if err != nil {
 		return err
 	}
@@ -18266,7 +18266,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_ErrorJson)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content)
-	}}, []bool{false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false}, []map[string]string{{"type": "text"}, {"type": "json"}, {"type": "execution-denied"}, {"type": "error-text"}, {"type": "error-json"}, {"type": "content"}})
 	if err != nil {
 		return err
 	}
@@ -18533,7 +18533,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_ImageFileReference)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_Custom)
-	}}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false}, []map[string]string{nil, nil, nil, {"type": "file"}, {"type": "file-data"}, {"type": "file-url"}, {"type": "file-id"}, {"type": "file-reference"}, {"type": "image-data"}, {"type": "image-url"}, {"type": "image-file-id"}, {"type": "image-file-reference"}, {"type": "custom"}})
 	if err != nil {
 		return err
 	}
@@ -19119,7 +19119,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_Variant2_Image2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_Variant2_Image3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "image"}, {"type": "image"}, {"type": "image"}})
 	if err != nil {
 		return err
 	}
@@ -19337,7 +19337,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_Variant3_Media2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8_ToolResult1_Output_Content_Value_Item_Variant3_Media3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"type": "media"}, {"type": "media"}, {"type": "media"}})
 	if err != nil {
 		return err
 	}
@@ -19960,7 +19960,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant4_Tool2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant4_Tool3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"role": "tool"}, {"role": "tool"}, {"role": "tool"}})
 	if err != nil {
 		return err
 	}
@@ -20083,7 +20083,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messag
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant3_Assistant1_Content_Array_Item_Variant8)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant4_Tool1_Content_Item_ToolApprovalResponse)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, []map[string]string{nil, {"type": "tool-approval-response"}})
 	if err != nil {
 		return err
 	}
@@ -20283,7 +20283,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Model)
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Model_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Rotation_Variant3)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20356,7 +20356,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Model_V
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Model_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Model_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20456,7 +20456,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Reasoni
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_ReasoningEffort) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_ReasoningEffort_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20551,7 +20551,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_ReturnM
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_ReturnMessages) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_ReturnMessages_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20673,7 +20673,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_TestCre
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_TestCredentials) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20891,7 +20891,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_C
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_ChangeFormatIfNecessary) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -20960,7 +20960,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21035,7 +21035,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_FfmpegStack) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_FfmpegStack_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21108,7 +21108,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_FfmpegStack_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_FfmpegStack_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21310,7 +21310,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_B) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_B_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21389,7 +21389,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_BA) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21468,7 +21468,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_B_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_B_Variant1_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21567,7 +21567,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Bt) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21652,7 +21652,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Codec) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Codec_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21765,7 +21765,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21900,7 +21900,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_ProfileV) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_ProfileV_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -21975,7 +21975,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_ProfileV_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_ProfileV_Variant2_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22082,7 +22082,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_R) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Bt)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -22150,7 +22150,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Shortest) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -22210,7 +22210,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Svtav1Params) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Svtav1Params_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22313,7 +22313,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Transloaditffpreset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_Transloaditffpreset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22422,7 +22422,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_X265Params) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_X265Params_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22526,7 +22526,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_I
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_IgnoreErrors) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_IgnoreErrors_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22592,7 +22592,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_I
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_IgnoreErrors_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_IgnoreErrors_Variant_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22687,7 +22687,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_M
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Method) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Method_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22787,7 +22787,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_P
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Preset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Preset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -22941,7 +22941,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_WithSteps)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -23003,7 +23003,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_U
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant_Array2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -23302,7 +23302,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioConcat_Cr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioConcat_Crossfade) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -23419,7 +23419,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioConcat_So
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioConcat_SortBy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioConcat_SortBy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24054,7 +24054,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Dur
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Duration) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Duration_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24158,7 +24158,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Loo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Loop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24265,7 +24265,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Vol
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Volume) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioMerge_Volume_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24551,7 +24551,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Seg
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24619,7 +24619,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Seg
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments_Array_Item_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24713,7 +24713,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Seg
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments_Array_Item_Object_From) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -24797,7 +24797,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Seg
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioSplit_Segments_Array_Item_Object_To) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25163,7 +25163,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
-	}}, []bool{false, false, false, false})
+	}}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25243,7 +25243,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant1_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25345,7 +25345,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25456,7 +25456,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_BarStyle) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_BarStyle_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25562,7 +25562,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25635,7 +25635,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant1_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25737,7 +25737,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Bits_Variant2_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25844,7 +25844,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_ColorMap) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_ColorMap_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -25938,7 +25938,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Colors) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Colors_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26043,7 +26043,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26141,7 +26141,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_FrequencyScale) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_FrequencyScale_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26243,7 +26243,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Legend) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26312,7 +26312,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_NoAxisLabels) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26381,7 +26381,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Orientation) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Orientation_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26509,7 +26509,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_SplitChannels) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26595,7 +26595,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26700,7 +26700,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style_Variant_String2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style_Variant_String3)
-	}}, []bool{false, false, false, false, false})
+	}}, []bool{false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26889,7 +26889,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_WaveformStyle) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_WaveformStyle_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -26985,7 +26985,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_WithAxisLabels) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -27214,7 +27214,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureImport_Pa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -27294,7 +27294,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureImport_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -27591,7 +27591,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureStore_Met
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_AzureStore_Metadata_AdditionalProperty) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrNumberOrBoolean) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrNumberOrBoolean) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -27868,7 +27868,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_BackblazeImpor
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_BackblazeImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -27950,7 +27950,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_BackblazeImpor
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_BackblazeImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -28403,7 +28403,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_BoxImport_Path
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_BoxImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -28644,7 +28644,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_BoxStore_Creat
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_BoxStore_CreateSharingLink) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -28882,7 +28882,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImpo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImport_AccountType) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImport_AccountType_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -29014,7 +29014,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImpo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -29096,7 +29096,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImpo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_CloudfilesImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -29957,7 +29957,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DigitaloceanIm
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DigitaloceanImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -30039,7 +30039,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DigitaloceanIm
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DigitaloceanImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -30768,7 +30768,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -30866,7 +30866,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_MarkdownFormat) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_MarkdownFormat_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -30960,7 +30960,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_MarkdownTheme) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_MarkdownTheme_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31058,7 +31058,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_PdfDisplayHeaderFooter) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31131,7 +31131,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_PdfFormat) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_PdfFormat_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31231,7 +31231,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConver
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentConvert_PdfPrintBackground) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31522,7 +31522,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_DedupeImages) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31601,7 +31601,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtra
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31674,7 +31674,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31767,7 +31767,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_Extract_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31846,7 +31846,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_ImageFormat) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_ImageFormat_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -31940,7 +31940,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_IncludeImageMasks) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32017,7 +32017,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_OcrProvider) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_OcrProvider_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32145,7 +32145,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextFormat) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextFormat_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32244,7 +32244,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextGranularity) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextGranularity_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32344,7 +32344,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtrac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextMethod) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentExtract_TextMethod_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32585,7 +32585,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentMerge_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentMerge_InputPasswords) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32835,7 +32835,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Fo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -32929,7 +32929,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Gr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Granularity) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Granularity_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33032,7 +33032,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Pr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Provider) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Provider_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33339,7 +33339,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_Compatibility) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_Compatibility_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33433,7 +33433,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_CompressFonts) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33510,7 +33510,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_Linearize) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33586,7 +33586,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_Preset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_Preset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33682,7 +33682,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_RemoveMetadata) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33777,7 +33777,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOptimize_SubsetFonts) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -33983,7 +33983,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentSplit_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentSplit_Pages) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34318,7 +34318,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Alpha) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Alpha_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34412,7 +34412,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Antialiasing) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34485,7 +34485,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Colorspace) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Colorspace_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34587,7 +34587,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34692,7 +34692,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ImagemagickStack) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ImagemagickStack_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34765,7 +34765,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ImagemagickStack_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ImagemagickStack_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -34863,7 +34863,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Page) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -34920,7 +34920,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_PageRange) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -34983,7 +34983,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_PdfUseCropbox) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -35054,7 +35054,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -35182,7 +35182,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Stack) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Stack_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -35278,7 +35278,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_TrimWhitespace) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -35357,7 +35357,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Turbo) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -35573,7 +35573,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_DropboxImport_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_DropboxImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -36136,7 +36136,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_FileLayout) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_FileLayout_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -36234,7 +36234,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -36328,7 +36328,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_G
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_Gzip) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -36403,7 +36403,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_P
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileCompress_Password) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -36676,7 +36676,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileDecompress
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileDecompress_IgnoreErrors) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_IgnoreErrors_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -36785,7 +36785,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileDecompress
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileDecompress_Turbo) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37094,7 +37094,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2)
-	}}, []bool{false, true, false, false})
+	}}, []bool{false, true, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37178,7 +37178,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37246,7 +37246,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37367,7 +37367,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item1_Variant3)
-	}}, []bool{false, false, false, true, false})
+	}}, []bool{false, false, false, true, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37460,7 +37460,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item1_Variant3) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item1_Variant3_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37542,7 +37542,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item1_Variant3_Array_Item) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -37783,7 +37783,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Ac
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant14)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant15)
-	}}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -37949,7 +37949,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38020,7 +38020,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant10) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant10_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38115,7 +38115,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant11) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant11_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38210,7 +38210,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant12) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant12_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38305,7 +38305,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant13) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant13_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38400,7 +38400,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant14) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant14_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38495,7 +38495,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant15) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant15_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38614,7 +38614,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant2_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38709,7 +38709,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant3) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant3_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38804,7 +38804,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant4) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant4_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38899,7 +38899,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant5) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant5_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -38994,7 +38994,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant6) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant6_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39089,7 +39089,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant7) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant7_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39184,7 +39184,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant8) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant8_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39279,7 +39279,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Acc
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant9) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2_Array_Item_Array_Item2_Variant9_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39375,7 +39375,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Con
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_ConditionType) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_ConditionType_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39494,7 +39494,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Dec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Declines) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Accepts_Variant2)
-	}}, []bool{false, true, false, false})
+	}}, []bool{false, true, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39583,7 +39583,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_Err
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileFilter_ErrorOnDecline) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39834,7 +39834,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Algor
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Algorithm) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Algorithm_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -39943,7 +39943,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Parti
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Partial) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileHash_Partial_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40329,7 +40329,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Cl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_ClipFormat) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_ClipFormat_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40425,7 +40425,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Cl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_ClipLoop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40498,7 +40498,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Fo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40590,7 +40590,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_He
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Height) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40664,7 +40664,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Ic
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_IconStyle) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_IconStyle_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40760,7 +40760,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Ic
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_IconTextContent) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_IconTextContent_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40860,7 +40860,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Op
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Optimize) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -40927,7 +40927,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Op
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_OptimizePriority) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_OptimizePriority_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -41021,7 +41021,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Op
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_OptimizeProgressive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -41098,7 +41098,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_ResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -41214,7 +41214,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_St
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Strategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Strategy_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -41330,7 +41330,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Wi
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Width) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -41401,7 +41401,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Zo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_Zoom) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -42015,7 +42015,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileVerify_Rep
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FileVerify_RepairPdf) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -42413,7 +42413,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpImport_Pass
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpImport_PassiveMode) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -42492,7 +42492,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpImport_Path
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -42794,7 +42794,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpStore_Secur
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_FtpStore_Secure) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43036,7 +43036,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleImport_P
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43297,7 +43297,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Ac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Acl) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Acl_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -43353,7 +43353,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Ac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Acl_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_GoogleStore_Acl_Variant_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43666,7 +43666,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Fo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43764,7 +43764,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Fu
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Fullpage) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43864,7 +43864,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Om
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_OmitBackground) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -43961,7 +43961,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Ur
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Url) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -44026,7 +44026,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_WaitUntil) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HtmlConvert_WaitUntil_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -44284,7 +44284,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Fai
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_FailFast) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -44390,7 +44390,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_He
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Headers_Variant2)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -44472,7 +44472,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Hea
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Headers_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Headers_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -44580,7 +44580,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Ran
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Range) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -44698,7 +44698,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Url
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpImport_Url) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45000,7 +45000,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_H
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Headers_Variant2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Headers_Variant2_Array_Item)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45091,7 +45091,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_He
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Headers_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Headers_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45201,7 +45201,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_He
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Headers_Variant2_Array_Item_AdditionalProperty) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
-	}, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, false, true})
+	}, func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -45309,7 +45309,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Me
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Method) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Method_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45416,7 +45416,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Pa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Payload) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_HttpRequest_Payload_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45675,7 +45675,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45779,7 +45779,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Provider) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Provider_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -45901,7 +45901,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Select) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageBgremove_Select_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46155,7 +46155,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyright
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Categories) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Categories_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46223,7 +46223,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyright
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Categories_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Categories_Array_Item_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46321,7 +46321,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyright
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_ErrorOnDecline) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46395,7 +46395,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyright
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageCopyrightdetect_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46671,7 +46671,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_ExplicitDescriptions) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46745,7 +46745,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46817,7 +46817,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_Granularity) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Granularity_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -46897,7 +46897,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageDescribe_Provider) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Provider_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47177,7 +47177,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_A
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_AiPreset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_AiPreset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47276,7 +47276,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_E
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Engine) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Engine_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47370,7 +47370,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_E
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Enhance) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Enhance_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47489,7 +47489,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_P
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Preset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageEnhance_Preset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47815,7 +47815,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Crop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -47935,7 +47935,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Faces) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Faces_Variant1)
-	}, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48008,7 +48008,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Faces_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Faces_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48108,7 +48108,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageFacedetect_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48367,7 +48367,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48527,7 +48527,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageGenerate
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_WithSteps)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48813,7 +48813,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Ada
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_AdaptiveFiltering) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48894,7 +48894,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Bac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -48969,7 +48969,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Bac
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49077,7 +49077,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Dir
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Direction) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Direction_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49173,7 +49173,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Eff
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Effect) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Effect_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49269,7 +49269,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_For
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49405,7 +49405,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Shu
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Shuffle) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49816,7 +49816,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_FixBreakingImages) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49896,7 +49896,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_Lossy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -49967,7 +49967,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_PreserveMetaData) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50036,7 +50036,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_Priority) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_FilePreview_OptimizePriority_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50108,7 +50108,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageOptimize_Progressive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50625,7 +50625,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Al
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Alpha) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Alpha_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50729,7 +50729,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Ba
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Background) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50805,7 +50805,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Bl
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Blur) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -50860,7 +50860,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Bl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -50916,7 +50916,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Bl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -50984,7 +50984,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Bl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant_Array_Item_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51070,7 +51070,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Bl
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_BlurRegions_Variant_Array_Item_Object_Height) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51159,7 +51159,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Cl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Clip) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51270,7 +51270,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Cl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Clut) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51339,7 +51339,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Co
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Colorspace) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_Colorspace_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51413,7 +51413,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Co
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Compress) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Compress_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -51469,7 +51469,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Co
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Compress_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Compress_Variant_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51565,7 +51565,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Co
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_CorrectGamma) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51665,7 +51665,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Cr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51738,7 +51738,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Cr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop_Variant1_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -51825,7 +51825,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Cr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop_Variant1_Object_X1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_BA)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -51894,7 +51894,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_De
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Density) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -51955,7 +51955,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Fl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Flatten) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52030,7 +52030,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Fo
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Format) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -52087,7 +52087,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Fr
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Frame) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -52158,7 +52158,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_G
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52231,7 +52231,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52324,7 +52324,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant2_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52416,7 +52416,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_He
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Height) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52493,7 +52493,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Mo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Monochrome) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52562,7 +52562,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Ne
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Negate) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52633,7 +52633,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Pr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_PreclipAlpha) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Alpha_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52705,7 +52705,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Pr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Progressive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52844,7 +52844,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_R
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant5)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant6)
-	}}, []bool{false, false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -52951,7 +52951,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53050,7 +53050,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant2_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53149,7 +53149,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant3) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant3_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53248,7 +53248,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant4) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant4_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53347,7 +53347,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant5) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant5_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53442,7 +53442,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant6) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_ResizeStrategy_Variant6_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53580,7 +53580,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_R
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Rotation_Variant3)
-	}}, []bool{false, false, false, false})
+	}}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53664,7 +53664,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Rotation_Variant3) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Rotation_Variant3_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53758,7 +53758,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Se
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Sepia) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -53823,7 +53823,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Sh
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Shave) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrInteger) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrInteger) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -53901,7 +53901,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_St
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Strip) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54001,7 +54001,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_T
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54074,7 +54074,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54207,7 +54207,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Align) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Align_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54309,7 +54309,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_BackgroundColor) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54395,7 +54395,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Color) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54487,7 +54487,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_StrokeColor) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54569,7 +54569,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Valign) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Valign_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54666,7 +54666,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Te
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Text_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54745,7 +54745,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Tr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Transparent) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Transparent_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54826,7 +54826,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Tr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Transparent_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageMerge_Background_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54906,7 +54906,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Tr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_TrimWhitespace) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -54975,7 +54975,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Ty
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Type) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Type_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55089,7 +55089,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_W
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkPosition_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55164,7 +55164,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkPosition_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkPosition_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55237,7 +55237,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkRepeatX) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55308,7 +55308,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkRepeatY) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55387,7 +55387,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55487,7 +55487,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Wi
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Width) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueIntegerOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55556,7 +55556,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Zo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Zoom) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55746,7 +55746,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_F
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_FaceEnhance) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55821,7 +55821,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_M
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Model) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Model_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -55955,7 +55955,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56028,7 +56028,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_S
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant1_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56130,7 +56130,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_S
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageUpscale_Scale_Variant2_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56414,7 +56414,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Pat
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56496,7 +56496,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Rec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56567,7 +56567,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Ret
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_ReturnFileStubs) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_ReturnFileStubs_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56636,7 +56636,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_Ret
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaImport_ReturnFileStubs_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant_String)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -56894,7 +56894,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaStore_Acl)
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaStore_Acl) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_MegaStore_Acl_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -57911,7 +57911,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import_Path)
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -58014,7 +58014,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import_Range
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Import_Range) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -58341,7 +58341,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_Acl) M
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_Acl) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_Acl_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -58441,7 +58441,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_CheckI
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_CheckIntegrity) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -58545,7 +58545,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_NoVhos
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_S3Store_NoVhost) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -59018,7 +59018,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpImport_Rec
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SftpImport_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -59523,7 +59523,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscri
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -59617,7 +59617,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscri
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_Granularity) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentOcr_Granularity_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -59701,7 +59701,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscri
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_Provider) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_Provider_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -59827,7 +59827,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscri
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SpeechTranscribe_SpeakerLabels) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -60497,7 +60497,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftImport_Pa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_SwiftImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -60986,7 +60986,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Prom
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Prompt) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -61077,7 +61077,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Ssml
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Ssml) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -61152,7 +61152,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Voic
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Voice) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextSpeak_Voice_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -61426,7 +61426,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_SourceLanguage) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_SourceLanguage_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -61522,7 +61522,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_TargetLanguage) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TextTranslate_SourceLanguage_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62110,7 +62110,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TlcdnDeliver_E
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TlcdnDeliver_EnableHipaaCompliance) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62342,7 +62342,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62408,7 +62408,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant_String)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62511,7 +62511,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -62575,7 +62575,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62650,7 +62650,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62729,7 +62729,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_IgnoreErrors) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_IgnoreErrors_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62795,7 +62795,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_IgnoreErrors_Variant) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_IgnoreErrors_Variant_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62888,7 +62888,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ImportOnErrors) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ImportOnErrors_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -62956,7 +62956,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ImportOnErrors_Array_Item) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ImportOnErrors_Array_Item_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63056,7 +63056,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditIm
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_Interpolate_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63169,7 +63169,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditIm
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false, false})
+	}}, []bool{false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63267,7 +63267,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_OutputMeta_Object_AdditionalProperty) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63342,7 +63342,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_Queue) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_Queue_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63445,7 +63445,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_Recursive) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant_String)
-	}, func() interface{} { return new(string) }}, []bool{false, false, false})
+	}, func() interface{} { return new(string) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63536,7 +63536,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImp
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_Result) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -63801,7 +63801,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditIm
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport2_Recursive_Boolean)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport2_Recursive_String1)
-	}, func() interface{} { return new(string) }}, []bool{false, false, false})
+	}, func() interface{} { return new(string) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -64086,7 +64086,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditSto
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditStore_ConflictStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditStore_ConflictStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -64798,7 +64798,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_AudioGroup) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -64867,7 +64867,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_ClosedCaptions) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -64942,7 +64942,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Height) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -65013,7 +65013,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Preset) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Preset_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -65137,7 +65137,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Technique) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Technique_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -65235,7 +65235,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoAdaptive_Width) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -65445,7 +65445,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoArtwork_M
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoArtwork_Method) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Method_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -65751,7 +65751,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_Ch
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_ChapterMarkers) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -65872,7 +65872,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_Tr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_Transition) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_Transition_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66324,7 +66324,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Cr
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Crop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Crop_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66414,7 +66414,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Hi
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Hint) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66493,7 +66493,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_ResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66641,7 +66641,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_R
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant5)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant6)
-	}}, []bool{false, false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66744,7 +66744,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant2) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant2_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66846,7 +66846,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant3) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant3_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -66948,7 +66948,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant4) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant4_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67050,7 +67050,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant5) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant5_Number)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67152,7 +67152,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Ro
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant6) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport2_Recursive_Boolean)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67233,7 +67233,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Se
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Segment) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67312,7 +67312,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Tu
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Turbo) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67403,7 +67403,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_W
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_WatermarkPosition_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67487,7 +67487,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67593,7 +67593,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkUrl) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkUrl_Variant1)
-	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	}, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67666,7 +67666,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Wa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkUrl_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_WatermarkUrl_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67768,7 +67768,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Zo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Zoom) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -67990,7 +67990,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoGenerate_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoGenerate_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoGenerate_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68355,7 +68355,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Dur
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Duration) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrStringOrNumber) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -68426,7 +68426,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Fra
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Framerate) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrStringOrInteger) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68508,7 +68508,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Ima
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_ImageDurations) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_ImageDurations_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68583,7 +68583,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Loo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Loop) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68658,7 +68658,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Rep
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_ReplaceAudio) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68727,7 +68727,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Res
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_ResizeStrategy) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_DocumentThumbs_ResizeStrategy_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68831,7 +68831,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Tra
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Transition) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoConcat_Transition_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -68909,7 +68909,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Vst
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_Vstack) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -69119,7 +69119,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand_EnabledVariants) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -69259,7 +69259,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_Object)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -69736,7 +69736,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSplit_Seg
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSplit_Segments) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSplit_Segments_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70010,7 +70010,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Bold) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70081,7 +70081,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_BorderStyle) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_BorderStyle_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70187,7 +70187,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_FontColor) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70275,7 +70275,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Italic) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70344,7 +70344,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_KeepSubtitles) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70413,7 +70413,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Language) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Language_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -70467,7 +70467,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Language_Variant) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrString) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70524,7 +70524,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Name) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Language_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -70583,7 +70583,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_OutlineWidth) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_OutlineWidth_Variant)
-	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	}, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -70637,7 +70637,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_OutlineWidth_Variant) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(impossibleValue) }, func() interface{} { return new(ValueStringOrStringOrInteger) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70696,7 +70696,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_Position) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize_Gravity_Variant1_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -70798,7 +70798,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_SubtitlesType) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoSubtitle_SubtitlesType_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71116,7 +71116,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Fo
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Format) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Format_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71232,7 +71232,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_O
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Offsets_Variant1)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71305,7 +71305,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Of
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Offsets_Variant1) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoMerge_ImageDurations_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71448,7 +71448,7 @@ func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_R
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant4)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoEncode_Rotate_Variant5)
-	}}, []bool{false, false, false, false, false, false})
+	}}, []bool{false, false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71566,7 +71566,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Sm
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VideoThumbs_Smart) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71790,7 +71790,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport_Pa
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport_Path) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(ValueStringOrString) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -71870,7 +71870,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport_Re
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport_Rendition) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoImport_Rendition_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -72174,7 +72174,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Acl
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Acl) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Acl_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -72274,7 +72274,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Dow
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Downloadable) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -72343,7 +72343,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Fol
 	return data, nil
 }
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_FolderId) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueStringOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -72442,7 +72442,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Sho
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_VimeoStore_Showcases) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2_Array)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -73164,7 +73164,7 @@ func (value CreateAssemblyParams_Object2_Steps_AdditionalProperty_YoutubeStore_V
 func (value *CreateAssemblyParams_Object2_Steps_AdditionalProperty_YoutubeStore_Visibility) UnmarshalJSON(data []byte) error {
 	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_YoutubeStore_Visibility_String2)
-	}}, []bool{false, false})
+	}}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -74365,7 +74365,7 @@ func (value CreateAuthKeyError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAuthKeyError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateAuthKeyError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateAuthKeyError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -74434,7 +74434,7 @@ func (value CreateAuthKeyError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAuthKeyError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAuthKeyError_Variant2_AuthKeyNotCreated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAuthKeyError_Variant2_AuthKeyNotCreated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "AUTH_KEY_NOT_CREATED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -74611,7 +74611,7 @@ func (value *CreateAuthKeyParams_CanShowAuthSecret) UnmarshalJSON(data []byte) e
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant1_Number)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2_Number)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -74714,7 +74714,7 @@ func (value *CreateAuthKeyParams_IsAllowedForSmartcdn) UnmarshalJSON(data []byte
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant1_Number)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2_Number)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -74808,7 +74808,7 @@ func (value CreateAuthKeyParams_SignatureAlgo) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateAuthKeyParams_SignatureAlgo) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAuthKeyParams_SignatureAlgo_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateAuthKeyParams_SignatureAlgo_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -74989,7 +74989,7 @@ func (value CreateTemplateCredentialError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateTemplateCredentialError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateTemplateCredentialError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateTemplateCredentialError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -75058,7 +75058,7 @@ func (value CreateTemplateCredentialError_Variant2) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *CreateTemplateCredentialError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateCredentialError_Variant2_TemplateCredentialsNotCreated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateCredentialError_Variant2_TemplateCredentialsNotCreated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_CREDENTIALS_NOT_CREATED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -75217,7 +75217,7 @@ func (value CreateTemplateCredentialParams_Content) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *CreateTemplateCredentialParams_Content) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -75370,7 +75370,7 @@ func (value CreateTemplateCredentialResult_Credential_Created) MarshalJSON() ([]
 	return data, nil
 }
 func (value *CreateTemplateCredentialResult_Credential_Created) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ValueNumberOrString) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -75454,7 +75454,7 @@ func (value CreateTemplateError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateTemplateError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateTemplateError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(CreateTemplateError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -75523,7 +75523,7 @@ func (value CreateTemplateError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateTemplateError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateError_Variant2_TemplateValidationError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateError_Variant2_TemplateValidationError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_VALIDATION_ERROR"}, nil})
 	if err != nil {
 		return err
 	}
@@ -75738,7 +75738,7 @@ func (value CreateTemplateParams_Template) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateTemplateParams_Template) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateParams_Template_Object) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(CreateTemplateParams_Template_Object) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -81657,7 +81657,7 @@ func (value CreateTemplateResult_Content) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *CreateTemplateResult_Content) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, false, false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, false, false, false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -81835,7 +81835,7 @@ func (value DeleteAuthKeyError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *DeleteAuthKeyError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(DeleteAuthKeyError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(DeleteAuthKeyError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -81904,7 +81904,7 @@ func (value DeleteAuthKeyError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *DeleteAuthKeyError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(DeleteAuthKeyError_Variant2_AuthKeyNotDeleted) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(DeleteAuthKeyError_Variant2_AuthKeyNotDeleted) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "AUTH_KEY_NOT_DELETED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -82210,7 +82210,7 @@ func (value DeleteTemplateCredentialError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *DeleteTemplateCredentialError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(DeleteTemplateCredentialError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(DeleteTemplateCredentialError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -82279,7 +82279,7 @@ func (value DeleteTemplateCredentialError_Variant2) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *DeleteTemplateCredentialError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(DeleteTemplateCredentialError_Variant2_TemplateCredentialsNotDeleted) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(DeleteTemplateCredentialError_Variant2_TemplateCredentialsNotDeleted) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_CREDENTIALS_NOT_DELETED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -83649,7 +83649,7 @@ func (value GetBillError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetBillError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetBillError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetBillError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -83718,7 +83718,7 @@ func (value GetBillError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetBillError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillError_Variant2_SignatureReuseDetected) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillError_Variant2_SignatureReuseDetected) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "SIGNATURE_REUSE_DETECTED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -83863,7 +83863,7 @@ func (value GetBillResult) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetBillResult) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillResult_BillFound1) }, func() interface{} { return new(GetBillResult_BillFound2) }, func() interface{} { return new(GetBillResult_BillNotFound) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillResult_BillFound1) }, func() interface{} { return new(GetBillResult_BillFound2) }, func() interface{} { return new(GetBillResult_BillNotFound) }}, []bool{false, false, false}, []map[string]string{{"ok": "BILL_FOUND"}, {"ok": "BILL_FOUND"}, {"error": "BILL_NOT_FOUND"}})
 	if err != nil {
 		return err
 	}
@@ -84064,7 +84064,7 @@ func (value GetBillResult_BillFound1_Plan_HasLifetimeLimit) MarshalJSON() ([]byt
 	return data, nil
 }
 func (value *GetBillResult_BillFound1_Plan_HasLifetimeLimit) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillResult_BillFound1_Plan_HasLifetimeLimit_Variant) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetBillResult_BillFound1_Plan_HasLifetimeLimit_Variant) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -84150,7 +84150,7 @@ func (value *GetBillResult_BillFound1_Plan_HasLifetimeLimit_Variant) UnmarshalJS
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style_Variant_String2)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Style_Variant_String3)
-	}}, []bool{false, false, false, false, false})
+	}}, []bool{false, false, false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -84465,7 +84465,7 @@ func (value GetBillResult_BillFound2_Robots) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetBillResult_BillFound2_Robots) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{false, false, false, true, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Array) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }}, []bool{false, false, false, true, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -84765,7 +84765,7 @@ func (value GetTemplateCredentialError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetTemplateCredentialError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetTemplateCredentialError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetTemplateCredentialError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -84834,7 +84834,7 @@ func (value GetTemplateCredentialError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *GetTemplateCredentialError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetTemplateCredentialError_Variant2_TemplateCredentialsNotRead) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(GetTemplateCredentialError_Variant2_TemplateCredentialsNotRead) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_CREDENTIALS_NOT_READ"}, nil})
 	if err != nil {
 		return err
 	}
@@ -85230,7 +85230,7 @@ func (value IssueBearerTokenError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *IssueBearerTokenError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1) }, func() interface{} { return new(IssueBearerTokenError_Variant2) }, func() interface{} { return new(IssueBearerTokenError_Variant3) }, func() interface{} { return new(IssueBearerTokenError_RateLimitReached) }, func() interface{} { return new(IssueBearerTokenError_Server500) }}, []bool{false, false, false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1) }, func() interface{} { return new(IssueBearerTokenError_Variant2) }, func() interface{} { return new(IssueBearerTokenError_Variant3) }, func() interface{} { return new(IssueBearerTokenError_RateLimitReached) }, func() interface{} { return new(IssueBearerTokenError_Server500) }}, []bool{false, false, false, false, false}, []map[string]string{nil, nil, nil, {"error": "RATE_LIMIT_REACHED"}, {"error": "SERVER_500"}})
 	if err != nil {
 		return err
 	}
@@ -85434,7 +85434,7 @@ func (value IssueBearerTokenError_Variant1) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *IssueBearerTokenError_Variant1) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1_GetAccountUnknownAuthKey) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidGrantType) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidRequest) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1_GetAccountUnknownAuthKey) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidGrantType) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidRequest) }}, []bool{false, false, false}, []map[string]string{{"error": "GET_ACCOUNT_UNKNOWN_AUTH_KEY"}, {"error": "TOKEN_INVALID_GRANT_TYPE"}, {"error": "TOKEN_INVALID_REQUEST"}})
 	if err != nil {
 		return err
 	}
@@ -85696,7 +85696,7 @@ func (value IssueBearerTokenError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *IssueBearerTokenError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant2_Server401) }, func() interface{} { return new(IssueBearerTokenError_Variant2_TokenInvalidCredentials) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant2_Server401) }, func() interface{} { return new(IssueBearerTokenError_Variant2_TokenInvalidCredentials) }}, []bool{false, false}, []map[string]string{{"error": "SERVER_401"}, {"error": "TOKEN_INVALID_CREDENTIALS"}})
 	if err != nil {
 		return err
 	}
@@ -85915,7 +85915,7 @@ func (value IssueBearerTokenError_Variant3) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *IssueBearerTokenError_Variant3) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant3_TokenInvalidAudience) }, func() interface{} { return new(IssueBearerTokenError_Variant3_TokenInvalidScope) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant3_TokenInvalidAudience) }, func() interface{} { return new(IssueBearerTokenError_Variant3_TokenInvalidScope) }}, []bool{false, false}, []map[string]string{{"error": "TOKEN_INVALID_AUDIENCE"}, {"error": "TOKEN_INVALID_SCOPE"}})
 	if err != nil {
 		return err
 	}
@@ -86180,7 +86180,7 @@ func (value ListAssembliesError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListAssembliesError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListAssembliesError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListAssembliesError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -86249,7 +86249,7 @@ func (value ListAssembliesError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListAssembliesError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListAssembliesError_Variant2_AssemblyListError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListAssembliesError_Variant2_AssemblyListError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "ASSEMBLY_LIST_ERROR"}, nil})
 	if err != nil {
 		return err
 	}
@@ -86424,7 +86424,7 @@ func (value ListAssembliesParams_Keywords) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListAssembliesParams_Keywords) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -86769,7 +86769,7 @@ func (value ListAssemblyNotificationsResult_Notifications_Item_Status) MarshalJS
 	return data, nil
 }
 func (value *ListAssemblyNotificationsResult_Notifications_Item_Status) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListAssemblyNotificationsResult_Notifications_Item_Status_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListAssemblyNotificationsResult_Notifications_Item_Status_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -87482,7 +87482,7 @@ func (value ListTemplateCredentialsError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListTemplateCredentialsError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListTemplateCredentialsError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListTemplateCredentialsError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -87560,7 +87560,7 @@ func (value ListTemplateCredentialsError_Variant2) MarshalJSON() ([]byte, error)
 	return data, nil
 }
 func (value *ListTemplateCredentialsError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListTemplateCredentialsError_Variant2_TemplateCredentialsNotFound) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetBillError_Variant2_SignatureReuseDetected) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListTemplateCredentialsError_Variant2_TemplateCredentialsNotFound) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(GetBillError_Variant2_SignatureReuseDetected) }}, []bool{false, false, false}, []map[string]string{{"error": "TEMPLATE_CREDENTIALS_NOT_FOUND"}, nil, {"error": "SIGNATURE_REUSE_DETECTED"}})
 	if err != nil {
 		return err
 	}
@@ -87787,7 +87787,7 @@ func (value ListTemplatesError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListTemplatesError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListTemplatesError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ListTemplatesError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -87856,7 +87856,7 @@ func (value ListTemplatesError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListTemplatesError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListTemplatesError_Variant2_TemplateListError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ListTemplatesError_Variant2_TemplateListError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_LIST_ERROR"}, nil})
 	if err != nil {
 		return err
 	}
@@ -88049,7 +88049,7 @@ func (value ListTemplatesParams_Keywords) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ListTemplatesParams_Keywords) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(CancelAssemblyResult_WithOk1_ExecutingJobs) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -88502,7 +88502,7 @@ func (value PriorityJobSlotStatsError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *PriorityJobSlotStatsError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant1) }, func() interface{} { return new(PriorityJobSlotStatsError_Variant2) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant1) }, func() interface{} { return new(PriorityJobSlotStatsError_Variant2) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -88561,7 +88561,7 @@ func (value PriorityJobSlotStatsError_Variant1) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *PriorityJobSlotStatsError_Variant1) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant1_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant1_Variant1) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -88630,7 +88630,7 @@ func (value *PriorityJobSlotStatsError_Variant1_Variant1) UnmarshalJSON(data []b
 		return new(PriorityJobSlotStatsError_Variant1_Variant1_PriorityJobSlotStatsInvalidTime)
 	}, func() interface{} {
 		return new(PriorityJobSlotStatsError_Variant1_Variant1_PriorityJobSlotStatsMissingRegion)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, []map[string]string{{"error": "PRIORITY_JOB_SLOT_STATS_INVALID_AGGREGATION"}, {"error": "PRIORITY_JOB_SLOT_STATS_INVALID_TIME"}, {"error": "PRIORITY_JOB_SLOT_STATS_MISSING_REGION"}})
 	if err != nil {
 		return err
 	}
@@ -88907,7 +88907,7 @@ func (value PriorityJobSlotStatsError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *PriorityJobSlotStatsError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant2_PriorityJobSlotStatsError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsError_Variant2_PriorityJobSlotStatsError) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "PRIORITY_JOB_SLOT_STATS_ERROR"}, nil})
 	if err != nil {
 		return err
 	}
@@ -89068,7 +89068,7 @@ func (value PriorityJobSlotStatsParams_Aggregation) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *PriorityJobSlotStatsParams_Aggregation) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsParams_Aggregation_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(PriorityJobSlotStatsParams_Aggregation_String) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -96320,7 +96320,7 @@ func (value ReplayAssemblyParams_Steps) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ReplayAssemblyParams_Steps) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ReplayAssemblyParams_Steps_Object) }, func() interface{} { return new(ReplayAssemblyParams_Steps_Array) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ReplayAssemblyParams_Steps_Object) }, func() interface{} { return new(ReplayAssemblyParams_Steps_Array) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -96518,7 +96518,7 @@ func (value ShowAuthKeySecretError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ShowAuthKeySecretError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ShowAuthKeySecretError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(ShowAuthKeySecretError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -96587,7 +96587,7 @@ func (value ShowAuthKeySecretError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ShowAuthKeySecretError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ShowAuthKeySecretError_Variant2_AuthSecretNotRetrieved) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(ShowAuthKeySecretError_Variant2_AuthSecretNotRetrieved) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "AUTH_SECRET_NOT_RETRIEVED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -96774,7 +96774,7 @@ func (value UpdateAuthKeyError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *UpdateAuthKeyError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(UpdateAuthKeyError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(UpdateAuthKeyError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -96843,7 +96843,7 @@ func (value UpdateAuthKeyError_Variant2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *UpdateAuthKeyError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateAuthKeyError_Variant2_AuthKeyNotUpdated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateAuthKeyError_Variant2_AuthKeyNotUpdated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "AUTH_KEY_NOT_UPDATED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -97018,7 +97018,7 @@ func (value *UpdateAuthKeyParams_IsActive) UnmarshalJSON(data []byte) error {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant1_Number)
 	}, func() interface{} {
 		return new(CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioWaveform_Antialiasing_Variant2_Number)
-	}}, []bool{false, false, false})
+	}}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -97185,7 +97185,7 @@ func (value UpdateTemplateCredentialError) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *UpdateTemplateCredentialError) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(UpdateTemplateCredentialError_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }, func() interface{} { return new(UpdateTemplateCredentialError_Variant2) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -97254,7 +97254,7 @@ func (value UpdateTemplateCredentialError_Variant2) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *UpdateTemplateCredentialError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateTemplateCredentialError_Variant2_TemplateCredentialsNotUpdated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateTemplateCredentialError_Variant2_TemplateCredentialsNotUpdated) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2) }}, []bool{false, false}, []map[string]string{{"error": "TEMPLATE_CREDENTIALS_NOT_UPDATED"}, nil})
 	if err != nil {
 		return err
 	}
@@ -97413,7 +97413,7 @@ func (value UpdateTemplateCredentialParams_Content) MarshalJSON() ([]byte, error
 	return data, nil
 }
 func (value *UpdateTemplateCredentialParams_Content) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateTemplateCredentialParams_Content_Variant) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(UpdateTemplateCredentialParams_Content_Variant) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -97467,7 +97467,7 @@ func (value UpdateTemplateCredentialParams_Content_Variant) MarshalJSON() ([]byt
 	return data, nil
 }
 func (value *UpdateTemplateCredentialParams_Content_Variant) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Object) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -103440,7 +103440,7 @@ func (value ValueBooleanOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueBooleanOrNull) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(bool) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -103504,7 +103504,7 @@ func (value ValueIntegerOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueIntegerOrNull) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -103568,7 +103568,7 @@ func (value ValueIntegerOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueIntegerOrString) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(Integer) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -103644,7 +103644,7 @@ func (value ValueNullOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNullOrString) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }}, []bool{true, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }, func() interface{} { return new(string) }}, []bool{true, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -103711,7 +103711,7 @@ func (value ValueNumberOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrNull) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -103775,7 +103775,7 @@ func (value ValueNumberOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrString) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -103861,7 +103861,7 @@ func (value ValueNumberOrStringOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueNumberOrStringOrNull) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(float64) }, func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -103945,7 +103945,7 @@ func (value ValueStringOrInteger) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrInteger) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -104021,7 +104021,7 @@ func (value ValueStringOrNull) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNull) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(AssemblyStatsError_Variant1_Variant2_Reason_Null) }}, []bool{false, true}, nil)
 	if err != nil {
 		return err
 	}
@@ -104085,7 +104085,7 @@ func (value ValueStringOrNumber) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNumber) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -104169,7 +104169,7 @@ func (value ValueStringOrNumberOrBoolean) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrNumberOrBoolean) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(float64) }, func() interface{} { return new(bool) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -104264,7 +104264,7 @@ func (value ValueStringOrString) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrString) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }}, []bool{false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }}, []bool{false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -104340,7 +104340,7 @@ func (value ValueStringOrStringOrInteger) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrStringOrInteger) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(Integer) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}
@@ -104434,7 +104434,7 @@ func (value ValueStringOrStringOrNumber) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 func (value *ValueStringOrStringOrNumber) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false, false})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(string) }, func() interface{} { return new(string) }, func() interface{} { return new(float64) }}, []bool{false, false, false}, nil)
 	if err != nil {
 		return err
 	}

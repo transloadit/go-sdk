@@ -71,13 +71,12 @@ func main() {
 
 ## Contract-generated API methods (experimental)
 
-`client.Contract()` creates a typed low-level client using the existing SDK credentials, endpoint
-and HTTP client. Existing methods keep their behavior. You can also construct
-`contract.NewClient(contract.Config{AuthKey: key, AuthSecret: secret})` from
-`github.com/transloadit/go-sdk/contract`.
+Import `github.com/transloadit/go-sdk/contract` explicitly to use the typed low-level client.
+Existing SDK consumers do not compile the generated package unless they import it. Existing
+methods keep their behavior.
 
 ```go
-api, err := client.Contract()
+api, err := contract.NewClient(contract.Config{AuthKey: key, AuthSecret: secret})
 if err != nil {
     return err
 }

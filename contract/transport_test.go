@@ -349,7 +349,7 @@ func TestUnionFieldSelection(t *testing.T) {
 		func() interface{} { return new(first) },
 		func() interface{} { return new(second) },
 	}
-	choice, decoded, err := unmarshalUnion([]byte(`{"b":"x","future":true}`), candidates, []bool{false, false})
+	choice, decoded, err := unmarshalUnion([]byte(`{"b":"x","future":true}`), candidates, []bool{false, false}, nil)
 	if err != nil || choice != 1 {
 		t.Fatalf("did not retain the modeled field: %d, %v", choice, err)
 	}
@@ -357,17 +357,45 @@ func TestUnionFieldSelection(t *testing.T) {
 	if !ok || winner.B == nil || *winner.B != "x" {
 		t.Fatal("decoded winner was not preserved")
 	}
-	if _, _, err := unmarshalUnion([]byte(`{"a":"x","b":"y"}`), candidates, []bool{false, false}); err == nil {
+	if _, _, err := unmarshalUnion([]byte(`{"a":"x","b":"y"}`), candidates, []bool{false, false}, nil); err == nil {
 		t.Fatal("accepted alternatives that each discard a modeled field")
 	}
-	if _, _, err := unmarshalUnion([]byte(`null`), candidates, []bool{false, false}); err == nil {
+	if _, _, err := unmarshalUnion([]byte(`null`), candidates, []bool{false, false}, nil); err == nil {
 		t.Fatal("accepted non-nullable union null")
 	}
 	// A raw alternative can preserve all fields without coercing large JSON numbers to float64.
 	candidates = append(candidates, func() interface{} { return new(json.RawMessage) })
-	choice, _, err = unmarshalUnion([]byte(`{"a":"x","b":"y","big":1e400}`), candidates, []bool{false, false, true})
+	choice, _, err = unmarshalUnion([]byte(`{"a":"x","b":"y","big":1e400}`), candidates, []bool{false, false, true}, nil)
 	if err != nil || choice != 2 {
 		t.Fatalf("did not select the lossless alternative: %d, %v", choice, err)
+	}
+}
+
+func TestUnionDiscriminants(t *testing.T) {
+	candidates := []func() interface{}{
+		func() interface{} { t.Fatal("decoded a mismatched branch"); return nil },
+		func() interface{} { return new(map[string]string) },
+		func() interface{} { return new(string) },
+	}
+	discriminants := []map[string]string{{"kind": "first"}, {"kind": "second"}, nil}
+	choice, _, err := unmarshalUnion([]byte(`{"kind":"sec\u006fnd"}`), candidates, []bool{false, false, false}, discriminants)
+	if err != nil || choice != 1 {
+		t.Fatalf("escaped discriminator rejected: %d, %v", choice, err)
+	}
+	choice, _, err = unmarshalUnion([]byte(`"ordinary"`), candidates, []bool{false, false, false}, discriminants)
+	if err != nil || choice != 2 {
+		t.Fatalf("non-discriminated alternative rejected: %d, %v", choice, err)
+	}
+	for _, raw := range []string{`{}`, `{"kind":null}`, `{"kind":1}`, `{"kind":"unknown"}`} {
+		if _, _, err := unmarshalUnion([]byte(raw), candidates, []bool{false, false, false}, discriminants); err == nil {
+			t.Fatalf("invalid discriminator accepted: %s", raw)
+		}
+	}
+	if matchesDiscriminants(map[string]json.RawMessage{"kind": json.RawMessage(`null`)}, map[string]string{"kind": ""}) {
+		t.Fatal("null coerced to an empty-string discriminator")
+	}
+	if _, _, err := unmarshalUnion([]byte(`{}`), candidates, []bool{false, false, false}, discriminants[:1]); err == nil {
+		t.Fatal("inconsistent discriminator metadata accepted")
 	}
 }
 
@@ -549,6 +577,47 @@ func TestTransportErrorDoesNotPrintSignedURL(t *testing.T) {
 	_, err = client.GetTemplate(ctx, GetTemplateInput{TemplateIdOrName: "test"})
 	if err == nil || strings.Contains(err.Error(), "params") || strings.Contains(err.Error(), "synthetic-key") || !errors.Is(err, context.Canceled) {
 		t.Fatalf("transport error was not safely wrapped: %v", err)
+	}
+	var requestError *url.Error
+	if !errors.As(err, &requestError) {
+		t.Fatal("request error cause was not retained")
+	}
+	if strings.Contains(requestError.URL, "?") || strings.Contains(requestError.Error(), "synthetic-key") {
+		t.Fatal("request error cause exposes a signed query")
+	}
+}
+
+func TestRequestURLRedactionPreservesOriginalAndNestedCause(t *testing.T) {
+	nested := &url.Error{Op: "Get", URL: "https://example.invalid/?params=secret", Err: context.DeadlineExceeded}
+	original := &url.Error{Op: "Get", URL: "https://example.invalid/?signature=secret", Err: nested}
+	sanitized := redactRequestURL(original)
+	if !errors.Is(sanitized, context.DeadlineExceeded) || strings.Contains(sanitized.Error(), "secret") {
+		t.Fatal("nested request URL was not redacted while preserving its cause")
+	}
+	if !strings.Contains(original.URL, "signature=secret") || !strings.Contains(nested.URL, "params=secret") {
+		t.Fatal("redaction mutated the caller's error")
+	}
+}
+
+func TestUnionFiltersRobotBeforeLargeFields(t *testing.T) {
+	data := []byte(`{"robot":"/image/resize","use":":original","output_meta":"` + strings.Repeat("x", 64*1024) + `"}`)
+	direct := testing.AllocsPerRun(1, func() {
+		var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize
+		if err := json.Unmarshal(data, &value); err != nil {
+			t.Fatal(err)
+		}
+	})
+	union := testing.AllocsPerRun(1, func() {
+		var value CreateAssemblyParams_Object2_Steps_AdditionalProperty
+		if err := json.Unmarshal(data, &value); err != nil {
+			t.Fatal(err)
+		}
+		if value.ImageResize == nil {
+			t.Fatal("did not select the matching Robot")
+		}
+	})
+	if union > direct*8 {
+		t.Fatalf("union repeats large-field decoding: %.0f allocations vs %.0f directly", union, direct)
 	}
 }
 

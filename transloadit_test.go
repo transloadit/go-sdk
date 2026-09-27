@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/url"
 	"os"
+	"os/exec"
 	"strings"
 	"testing"
 	"time"
@@ -14,6 +15,18 @@ import (
 var ctx = context.Background()
 var templatesSetup bool
 var templateIDOptimizeResize string
+
+func TestContractImportIsOptIn(t *testing.T) {
+	output, err := exec.Command("go", "list", "-deps", ".").Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, dependency := range strings.Fields(string(output)) {
+		if dependency == "github.com/transloadit/go-sdk/contract" {
+			t.Fatal("legacy consumers must not compile the opt-in generated contract package")
+		}
+	}
+}
 
 func TestNewClient_MissingAuthKey(t *testing.T) {
 	t.Parallel()
