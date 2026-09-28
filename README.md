@@ -84,8 +84,9 @@ templates, err := api.ListTemplates(ctx, contract.ListTemplatesInput{})
 ```
 
 The generated namespace covers ordinary HTTP operations. It returns the HTTP response, not a
-completed Assembly. Keep using existing SDK methods for multipart uploads and polling. Resumable
-tus upload is not implemented in either Go API.
+completed Assembly. `CreateAssembly.Files` supports multipart uploads. Polling and upload
+orchestration remain caller-owned, as shown in the example below, or use the existing high-level
+SDK methods. Resumable tus upload is not implemented in either Go API.
 SSE, capability URLs and Webhook receivers are separate work. Go 1.15 remains supported.
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
