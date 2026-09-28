@@ -23,8 +23,9 @@ var templateIDOptimizeResize string
 
 func TestContractImportIsOptIn(t *testing.T) {
 	goExecutable := filepath.Join(runtime.GOROOT(), "bin", "go")
-	if runtime.GOROOT() == "" {
-		// Trimmed binaries omit the embedded GOROOT; use the caller's toolchain in that case.
+	if !filepath.IsAbs(runtime.GOROOT()) {
+		// Trimmed builds embed "go" on Go 1.15 and nothing on newer versions. Neither is a
+		// usable toolchain root; preserve the caller's PATH instead of guessing a relative binary.
 		resolved, err := exec.LookPath("go")
 		if err != nil {
 			t.Fatal(err)
