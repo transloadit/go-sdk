@@ -108,7 +108,7 @@
     {
       "id": "wait-deadline-during-request",
       "kind": "deadline",
-      "responseDelayMs": 200
+      "responseDelayMs": 2000
     },
     {
       "id": "cancel-remote-assembly",

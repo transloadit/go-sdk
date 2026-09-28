@@ -73,7 +73,7 @@ func main() {
 
 Import `github.com/transloadit/go-sdk/contract` explicitly to use the typed low-level client.
 Existing SDK consumers do not compile the generated package unless they import it. Existing
-methods keep their behavior.
+APIs remain available alongside the opt-in package.
 
 ```go
 api, err := contract.NewClient(contract.Config{AuthKey: key, AuthSecret: secret})
@@ -84,7 +84,8 @@ templates, err := api.ListTemplates(ctx, contract.ListTemplatesInput{})
 ```
 
 The generated namespace covers ordinary HTTP operations. It returns the HTTP response, not a
-completed Assembly. Keep using existing SDK methods for upload orchestration, tus and polling.
+completed Assembly. Keep using existing SDK methods for multipart uploads and polling. Resumable
+tus upload is not implemented in either Go API.
 SSE, capability URLs and Webhook receivers are separate work. Go 1.15 remains supported.
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
@@ -136,6 +137,13 @@ the root tests. **Resumable tus upload is explicitly unsupported in this Go SDK*
 case reports `SKIP`, not a pass. New unclassified cases fail. Passing fixture tests is not proof of
 live-server behavior or of workflows in the generated `contract` package. Change shared scenarios
 in API2's `api2/lib/contract/sdk/workflowVectors.ts` and regenerate rather than editing the JSON.
+
+The workflow tests also correct existing SDK behavior: Smart CDN signing now uses the server's
+path/query encoding and UTF-16 key order, preserves an explicit expiry's milliseconds, and replaces
+stale authentication fields. Default expiry also retains millisecond precision, so generated URLs
+can differ from earlier SDK versions. Waiting continues through `ASSEMBLY_REPLAYING` and preserves
+identifiable context cancellation/deadline errors. A canceled or failed Assembly remains a terminal
+result, not a successful completion.
 
 ## Example
 

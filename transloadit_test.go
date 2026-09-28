@@ -22,13 +22,15 @@ var templatesSetup bool
 var templateIDOptimizeResize string
 
 func TestContractImportIsOptIn(t *testing.T) {
-	originalPath := os.Getenv("PATH")
-	if err := os.Setenv("PATH", t.TempDir()); err != nil {
-		t.Fatal(err)
-	}
-	defer os.Setenv("PATH", originalPath)
 	goExecutable := filepath.Join(runtime.GOROOT(), "bin", "go")
-	if runtime.GOOS == "windows" {
+	if runtime.GOROOT() == "" {
+		// Trimmed binaries omit the embedded GOROOT; use the caller's toolchain in that case.
+		resolved, err := exec.LookPath("go")
+		if err != nil {
+			t.Fatal(err)
+		}
+		goExecutable = resolved
+	} else if runtime.GOOS == "windows" {
 		goExecutable += ".exe"
 	}
 	output, err := exec.Command(goExecutable, "list", "-deps", ".").Output()
