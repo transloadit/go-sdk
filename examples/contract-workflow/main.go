@@ -30,23 +30,23 @@ func run() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 	width, original, yes := contract.Integer(120), ":original", true
-	step := contract.CreateTemplateParams_Template_Object_Steps_AdditionalProperty_ImageResize{
+	step := contract.AssemblySteps_AdditionalProperty_ImageResize{
 		Robot: "/image/resize",
-		Width: &contract.CreateTemplateParams_Template_Object_Steps_AdditionalProperty_ImageResize_Width{
+		Width: &contract.AssemblySteps_AdditionalProperty_ImageResize_Width{
 			Variant: &contract.ValueIntegerOrString{Integer: &width},
 		},
-		Use: &contract.CreateTemplateParams_Template_Object_Steps_AdditionalProperty_ImageResize_Use{
-			Variant: &contract.CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant{String: &original},
+		Use: &contract.AssemblySteps_AdditionalProperty_ImageResize_Use{
+			Variant: &contract.AssemblySteps_AdditionalProperty_ImageResize_Use_Variant{String: &original},
 		},
-		Result: &contract.CreateTemplateParams_Template_Object_Steps_AdditionalProperty_ImageResize_Result{
-			Variant: &contract.CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant{Boolean: &yes},
+		Result: &contract.AssemblySteps_AdditionalProperty_ImageResize_Result{
+			Variant: &contract.AssemblySteps_AdditionalProperty_ImageResize_Result_Variant{Boolean: &yes},
 		},
 	}
 	created, err := client.CreateTemplate(ctx, contract.CreateTemplateInput{Params: contract.CreateTemplateParams{
 		Name: fmt.Sprintf("sdk-example-%d", time.Now().UnixNano()),
 		Template: contract.CreateTemplateParams_Template{Object: &contract.CreateTemplateParams_Template_Object{
-			Steps: &contract.CreateTemplateParams_Template_Object_Steps{
-				AdditionalProperties: map[string]contract.CreateTemplateParams_Template_Object_Steps_AdditionalProperty{
+			Steps: &contract.AssemblySteps{
+				AdditionalProperties: map[string]contract.AssemblySteps_AdditionalProperty{
 					"resize": {ImageResize: &step},
 				},
 			},

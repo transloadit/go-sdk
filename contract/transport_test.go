@@ -180,7 +180,7 @@ func TestRecursiveUnionDecodingDoesNotMultiplyWork(t *testing.T) {
 	allocations := func(depth int) float64 {
 		data := []byte(strings.Repeat("[", depth) + "0" + strings.Repeat("]", depth))
 		return testing.AllocsPerRun(1, func() {
-			var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty
+			var value JsonDocument
 			if err := json.Unmarshal(data, &value); err != nil {
 				t.Fatal(err)
 			}
@@ -195,7 +195,7 @@ func TestRecursiveUnionDecodingDoesNotMultiplyWork(t *testing.T) {
 
 func TestUnionRejectsExcessiveNesting(t *testing.T) {
 	data := []byte(strings.Repeat("[", 65) + "0" + strings.Repeat("]", 65))
-	var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_AiChat_Messages_Variant2_Array_Item_Variant_Variant1_System1_ProviderOptions_AdditionalProperty_AdditionalProperty
+	var value JsonDocument
 	if err := json.Unmarshal(data, &value); err == nil {
 		t.Fatal("union decoding accepted more than 64 nested containers")
 	}
@@ -632,13 +632,13 @@ func TestRequestURLRedactionPreservesOriginalAndNestedCause(t *testing.T) {
 func TestUnionFiltersRobotBeforeLargeFields(t *testing.T) {
 	data := []byte(`{"robot":"/image/resize","use":":original","output_meta":"` + strings.Repeat("x", 64*1024) + `"}`)
 	direct := testing.AllocsPerRun(1, func() {
-		var value CreateAssemblyParams_Object2_Steps_AdditionalProperty_ImageResize
+		var value AssemblySteps_AdditionalProperty_ImageResize
 		if err := json.Unmarshal(data, &value); err != nil {
 			t.Fatal(err)
 		}
 	})
 	union := testing.AllocsPerRun(1, func() {
-		var value CreateAssemblyParams_Object2_Steps_AdditionalProperty
+		var value AssemblySteps_AdditionalProperty
 		if err := json.Unmarshal(data, &value); err != nil {
 			t.Fatal(err)
 		}

@@ -129,6 +129,11 @@ contract digest. Native behavior belongs in `contract/transport.go` and its test
 sources for regeneration and local-server acceptance. Update that pin when changing them. The
 coverage report keeps missing targets and protocols visible; generated does not mean runtime-proven.
 
+The experimental types use API2-owned domains such as `AssemblySteps`, `ApiError` and
+`JsonDocument`. Their names do not depend on which endpoint happens to be generated first. This
+unreleased draft intentionally replaces earlier operation-prefixed type names; existing SDK APIs
+are unchanged. Model naming belongs in API2's `api2/lib/contract/schemaModels.ts`, not local aliases.
+
 API2 also owns `contract/workflow-vectors.json`. `go test -race . -run '^TestSharedWorkflow' -v`
 exercises the existing public upload, wait, cancellation and Smart CDN methods with the same
 observations used by the Node SDK. Tests use synthetic credentials and loopback HTTP servers;

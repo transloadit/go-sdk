@@ -30,15 +30,15 @@ func TestContractDevdock(t *testing.T) {
 	defer cancel()
 	original, yes := ":original", true
 	template := CreateTemplateParams_Template{Object: &CreateTemplateParams_Template_Object{
-		Steps: &CreateTemplateParams_Template_Object_Steps{
-			AdditionalProperties: map[string]CreateTemplateParams_Template_Object_Steps_AdditionalProperty{
-				"passed": {FileFilter: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter{
+		Steps: &AssemblySteps{
+			AdditionalProperties: map[string]AssemblySteps_AdditionalProperty{
+				"passed": {FileFilter: &AssemblySteps_AdditionalProperty_FileFilter{
 					Robot: "/file/filter",
-					Use: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter_Use{
-						Variant: &CreateAssemblyParams_Object2_Steps_AdditionalProperty_AudioArtwork_Use_Variant{String: &original},
+					Use: &AssemblySteps_AdditionalProperty_FileFilter_Use{
+						Variant: &AssemblySteps_AdditionalProperty_FileFilter_Use_Variant{String: &original},
 					},
-					Result: &CreateTemplateParams_Template_Object_Steps_AdditionalProperty_FileFilter_Result{
-						Variant: &CreateAssemblyParams_Object2_Steps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant{Boolean: &yes},
+					Result: &AssemblySteps_AdditionalProperty_FileFilter_Result{
+						Variant: &AssemblySteps_AdditionalProperty_FileFilter_Result_Variant{Boolean: &yes},
 					},
 				}},
 			},
