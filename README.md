@@ -128,6 +128,15 @@ contract digest. Native behavior belongs in `contract/transport.go` and its test
 sources for regeneration and local-server acceptance. Update that pin when changing them. The
 coverage report keeps missing targets and protocols visible; generated does not mean runtime-proven.
 
+API2 also owns `contract/workflow-vectors.json`. `go test -race . -run '^TestSharedWorkflow' -v`
+exercises the existing public upload, wait, cancellation and Smart CDN methods with the same
+observations used by the Node SDK. Tests use synthetic credentials and loopback HTTP servers;
+adapters may not implement missing SDK polling, retries or signing. CI runs these cases as part of
+the root tests. **Resumable tus upload is explicitly unsupported in this Go SDK**, so that named
+case reports `SKIP`, not a pass. New unclassified cases fail. Passing fixture tests is not proof of
+live-server behavior or of workflows in the generated `contract` package. Change shared scenarios
+in API2's `api2/lib/contract/sdk/workflowVectors.ts` and regenerate rather than editing the JSON.
+
 ## Example
 
 For fully working examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/main/examples).

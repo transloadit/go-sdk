@@ -1,8 +1,16 @@
 package transloadit
 
 import (
+	"bytes"
 	"context"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -58,5 +66,160 @@ func TestWaitForAssembly_Cancel(t *testing.T) {
 	// Therefore we also accept i/o timeouts as errors here.
 	if !strings.Contains(err.Error(), "context deadline exceeded") && !strings.Contains(err.Error(), "request canceled") && !strings.Contains(err.Error(), "i/o timeout") {
 		t.Fatalf("operation's deadline should be exceeded: %s", err)
+	}
+}
+
+func TestSharedWorkflows(t *testing.T) {
+	fixtures := sharedWorkflows(t)
+	for _, scenario := range fixtures.Cases {
+		scenario := scenario
+		t.Run(scenario.ID, func(t *testing.T) {
+			t.Parallel()
+			if scenario.Kind == "resume" {
+				if scenario.ID != "resume-interrupted-upload" {
+					t.Fatal("unclassified resume scenario")
+				}
+				t.Skip("UNSUPPORTED: the public Go SDK has multipart upload, but no tus/resume API; not generated workflow proof")
+			}
+			var mu sync.Mutex
+			polls, deletes := 0, 0
+			var uploaded []byte
+			var server *httptest.Server
+			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if scenario.ResponseDelayMs > 0 {
+					select {
+					case <-time.After(time.Duration(scenario.ResponseDelayMs) * time.Millisecond):
+					case <-r.Context().Done():
+						return
+					}
+				}
+				mu.Lock()
+				defer mu.Unlock()
+				state := AssemblyInfo{AssemblyID: fixtures.AssemblyID,
+					AssemblyURL:    server.URL + "/assemblies/" + fixtures.AssemblyID,
+					AssemblySSLURL: server.URL + "/assemblies/" + fixtures.AssemblyID,
+					Ok:             "ASSEMBLY_UPLOADING"}
+				if r.Method == "POST" && scenario.Kind == "upload" {
+					if r.URL.Path != "/assemblies" {
+						t.Error("unexpected Assembly upload path")
+					}
+					if err := r.ParseMultipartForm(1 << 20); err != nil {
+						t.Error(err)
+						w.WriteHeader(500)
+						return
+					}
+					defer r.MultipartForm.RemoveAll()
+					file, header, err := r.FormFile("file")
+					if err != nil {
+						t.Error(err)
+						w.WriteHeader(500)
+						return
+					}
+					defer file.Close()
+					if header.Filename != scenario.Filename {
+						t.Error("upload filename changed")
+					}
+					uploaded, err = ioutil.ReadAll(file)
+					if err != nil {
+						t.Error(err)
+					}
+				} else if r.URL.Path != "/assemblies/"+fixtures.AssemblyID {
+					t.Error("unexpected Assembly path")
+				} else if r.Method == "DELETE" {
+					deletes++
+					state.Ok = "ASSEMBLY_CANCELED"
+				} else if r.Method == "GET" {
+					if scenario.Kind == "wait" {
+						if polls >= len(scenario.Responses) {
+							t.Error("SDK polled past the terminal response")
+							w.WriteHeader(500)
+							return
+						}
+						state.Ok, state.Error = scenario.Responses[polls].Ok, scenario.Responses[polls].Error
+					} else if deletes > 0 {
+						state.Ok = "ASSEMBLY_CANCELED"
+					} else if scenario.Kind == "upload" {
+						state.Ok = "ASSEMBLY_COMPLETED"
+					} else if scenario.ResponseDelayMs > 0 {
+						state.Ok = "ASSEMBLY_COMPLETED"
+					}
+					polls++
+				} else {
+					t.Error("unexpected workflow method")
+				}
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(state); err != nil {
+					t.Error(err)
+				}
+			}))
+			defer server.Close()
+			client := NewClient(Config{AuthKey: fixtures.Credentials.Key, AuthSecret: fixtures.Credentials.Secret, Endpoint: server.URL})
+			input := &AssemblyInfo{AssemblySSLURL: server.URL + "/assemblies/" + fixtures.AssemblyID}
+			deadline, stop := context.WithTimeout(context.Background(), 5*time.Second)
+			defer stop()
+			switch scenario.Kind {
+			case "wait", "cancel":
+				if scenario.Kind == "cancel" {
+					result, err := client.CancelAssembly(deadline, input.AssemblySSLURL)
+					if err != nil || result.Ok != scenario.Expected.Ok {
+						t.Fatalf("cancellation failed: %v %#v", err, result)
+					}
+				}
+				result, err := client.WaitForAssembly(deadline, input)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.Ok != scenario.Expected.Ok || result.Error != scenario.Expected.Error {
+					t.Fatalf("wrong terminal result: %#v", result)
+				}
+				mu.Lock()
+				defer mu.Unlock()
+				if scenario.Kind == "wait" && polls != len(scenario.Responses) {
+					t.Fatalf("workflow returned early: %d/%d responses", polls, len(scenario.Responses))
+				}
+				if scenario.Kind == "cancel" && deletes != 1 {
+					t.Fatalf("expected one cancellation, received %d", deletes)
+				}
+			case "abort", "deadline":
+				control, cancel := context.WithTimeout(deadline, 25*time.Millisecond)
+				defer cancel()
+				expected := context.DeadlineExceeded
+				if scenario.Kind == "abort" {
+					cancel()
+					expected = context.Canceled
+				}
+				_, err := client.WaitForAssembly(control, input)
+				if !errors.Is(err, expected) {
+					t.Fatalf("expected %v, received %v", expected, err)
+				}
+				mu.Lock()
+				defer mu.Unlock()
+				if scenario.Kind == "abort" && polls != 0 {
+					t.Fatal("aborted SDK performed an HTTP request")
+				}
+			case "upload":
+				data, err := hex.DecodeString(scenario.Hex)
+				if err != nil {
+					t.Fatal(err)
+				}
+				assembly := NewAssembly()
+				assembly.AddReader("file", scenario.Filename, ioutil.NopCloser(bytes.NewReader(data)))
+				result, err := client.StartAssembly(deadline, assembly)
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err = client.WaitForAssembly(deadline, result)
+				if err != nil || result.Ok != "ASSEMBLY_COMPLETED" {
+					t.Fatalf("upload did not complete: %v", err)
+				}
+				mu.Lock()
+				defer mu.Unlock()
+				if !bytes.Equal(data, uploaded) {
+					t.Fatal("uploaded bytes changed")
+				}
+			default:
+				t.Fatalf("unclassified shared workflow kind %q", scenario.Kind)
+			}
+		})
 	}
 }
