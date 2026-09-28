@@ -82,10 +82,13 @@ func TestSharedWorkflows(t *testing.T) {
 				t.Skip("UNSUPPORTED: the public Go SDK has multipart upload, but no tus/resume API; not generated workflow proof")
 			}
 			var mu sync.Mutex
-			polls, deletes := 0, 0
+			requests, polls, deletes := 0, 0, 0
 			var uploaded []byte
 			var server *httptest.Server
 			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				mu.Lock()
+				requests++
+				mu.Unlock()
 				if scenario.ResponseDelayMs > 0 {
 					select {
 					case <-time.After(time.Duration(scenario.ResponseDelayMs) * time.Millisecond):
@@ -181,7 +184,9 @@ func TestSharedWorkflows(t *testing.T) {
 					t.Fatalf("expected one cancellation, received %d", deletes)
 				}
 			case "abort", "deadline":
-				control, cancel := context.WithTimeout(deadline, 25*time.Millisecond)
+				// Leave time to reach the fixture even on loaded CI runners; delayed responses
+				// still arrive well after this deadline.
+				control, cancel := context.WithTimeout(deadline, 500*time.Millisecond)
 				defer cancel()
 				expected := context.DeadlineExceeded
 				if scenario.Kind == "abort" {
@@ -194,8 +199,11 @@ func TestSharedWorkflows(t *testing.T) {
 				}
 				mu.Lock()
 				defer mu.Unlock()
-				if scenario.Kind == "abort" && polls != 0 {
+				if scenario.Kind == "abort" && requests != 0 {
 					t.Fatal("aborted SDK performed an HTTP request")
+				}
+				if scenario.Kind == "deadline" && requests == 0 {
+					t.Fatal("deadline case never reached the HTTP server")
 				}
 			case "upload":
 				data, err := hex.DecodeString(scenario.Hex)
