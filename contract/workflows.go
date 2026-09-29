@@ -518,28 +518,43 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	httpClient := *client.httpClient
 	httpClient.Jar = nil
 	connection := &Client{config: client.config, httpClient: &httpClient}
-	var status *AssemblyWorkflowResult
-	for {
-		status, err = connection.readWorkflowAssembly(ctx, input.AssemblyID)
-		if err == nil {
-			break
-		}
-		if err := recover(err); err != nil {
-			return nil, err
+	discover := func() (*AssemblyWorkflowResult, error) {
+		for {
+			status, err := connection.readWorkflowAssembly(ctx, input.AssemblyID)
+			if err == nil {
+				return status, nil
+			}
+			if err := recover(err); err != nil {
+				return nil, err
+			}
 		}
 	}
-	if status == nil || workflowIdentity(status) != input.AssemblyID {
-		return nil, invalidUpload()
-	}
-	canWrite := hasWorkflowCode(policy.Assembly.BusyCodes, status.GetOk())
-	if !canWrite {
+	inspect := func(status *AssemblyWorkflowResult) (bool, error) {
+		if status == nil || workflowIdentity(status) != input.AssemblyID {
+			return false, invalidUpload()
+		}
+		if hasWorkflowCode(policy.Assembly.BusyCodes, status.GetOk()) {
+			return true, nil
+		}
 		assemblyCode = status.GetOk()
 		if status.WithError != nil {
 			assemblyCode = string(status.WithError.Error)
 		}
 		if session == nil || status.WithError != nil || hasWorkflowCode(policy.Assembly.UnconfirmedOkCodes, assemblyCode) {
-			return nil, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
+			return false, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
 		}
+		if !hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode) {
+			return false, invalidUpload()
+		}
+		return false, nil
+	}
+	status, err := discover()
+	if err != nil {
+		return nil, err
+	}
+	canWrite, err := inspect(status)
+	if err != nil {
+		return nil, err
 	}
 	owner, err := admittedAssemblyOwner(workflowOwner(status), input.AssemblyID, policy.Assembly, client.config)
 	if err != nil {
@@ -602,6 +617,33 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		for {
 			response, err := connection.requestTus(ctx, policy.Head, uploadURL, headers(), nil)
 			if err != nil {
+				var missing *ResponseError
+				if errors.As(err, &missing) && missing.Status == 404 {
+					// API2 retains finished tus receipts after temporary files disappear. Absence or
+					// Assembly completion alone is not proof, and must never create another upload.
+					refreshed, refreshErr := discover()
+					if refreshErr != nil {
+						return 0, refreshErr
+					}
+					if _, refreshErr := inspect(refreshed); refreshErr != nil {
+						return 0, refreshErr
+					}
+					matches, complete := 0, false
+					if uploads := refreshed.GetTusUploads(); uploads != nil {
+						for _, upload := range *uploads {
+							if upload.UploadUrl != uploadURL {
+								continue
+							}
+							matches++
+							complete = upload.Finished && upload.Size == float64(input.Size) && upload.Offset == float64(input.Size) &&
+								upload.Filename == input.Filename && upload.Fieldname == input.Fieldname
+						}
+					}
+					if matches == 1 && complete {
+						return input.Size, workflowDeadline(ctx)
+					}
+					return 0, err
+				}
 				if err := recover(err); err != nil {
 					return 0, err
 				}

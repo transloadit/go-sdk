@@ -190,6 +190,32 @@ func TestContractDevdock(t *testing.T) {
 	if uploads == nil || len(*uploads) != 1 || (*uploads)[0].GetMd5hash().GetString() != hex.EncodeToString(digest[:]) || results == nil || len(results.AdditionalProperties["passed"]) != 1 || results.AdditionalProperties["passed"][0].Md5hash.GetString() != hex.EncodeToString(digest[:]) {
 		t.Fatal("processed file digest mismatch")
 	}
+	reconciliation := []string{}
+	afterCleanupConfig := configuration
+	afterCleanupConfig.HTTPClient = &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		reconciliation = append(reconciliation, request.Method)
+		if request.Method == "HEAD" {
+			if request.URL.String() != checkpoint.UploadURL {
+				t.Fatal("wrong upload resource")
+			}
+			// Simulate only the missing temporary resource; the receipt comes from real API2.
+			return &http.Response{StatusCode: 404, Header: http.Header{}, Body: ioutil.NopCloser(bytes.NewReader(nil))}, nil
+		}
+		if request.Method != "GET" {
+			t.Fatal("reconciliation must never write")
+		}
+		return configuration.HTTPClient.Transport.RoundTrip(request)
+	})}
+	afterCleanup, err := NewClient(afterCleanupConfig)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := afterCleanup.ResumeAssemblyFile(ctx, uploadInput, checkpoint); err != nil {
+		t.Fatal(err)
+	}
+	if len(reconciliation) != 3 || reconciliation[0] != "GET" || reconciliation[1] != "HEAD" || reconciliation[2] != "GET" {
+		t.Fatalf("wrong reconciliation requests: %v", reconciliation)
+	}
 	pending, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Fields: map[string]string{"num_expected_upload_files": "1"}})
 	if err != nil {
 		t.Fatal(err)

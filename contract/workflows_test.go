@@ -185,6 +185,63 @@ func TestTusWorkflowConfirmsCompletedTransferAfterAssemblyCompletion(t *testing.
 	}
 }
 
+func TestTusWorkflowReconcilesMissingResourceOnlyWithExactReceipt(t *testing.T) {
+	for _, changed := range []string{"", "finished", "offset", "size", "filename", "fieldname", "upload_url", "assembly_id", "missing", "duplicate"} {
+		t.Run(changed, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			input := tusFixtureInput()
+			session, err := client.UploadAssemblyFile(context.Background(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			*methods = (*methods)[:0]
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				*methods = append(*methods, request.Method)
+				if request.Method == "HEAD" {
+					return &http.Response{StatusCode: 404, Header: http.Header{}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+				}
+				if request.Method != "GET" {
+					t.Fatalf("unexpected write: %s", request.Method)
+				}
+				reads++
+				body := map[string]interface{}{"assembly_id": input.AssemblyID, "ok": "ASSEMBLY_COMPLETED",
+					"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
+					"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+				if reads > 1 && changed != "missing" {
+					receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
+						"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
+					switch changed {
+					case "finished":
+						receipt[changed] = false
+					case "size", "offset":
+						receipt[changed] = input.Size - 1
+					case "filename", "fieldname", "upload_url":
+						receipt[changed] = "other"
+					case "assembly_id":
+						body[changed] = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+					}
+					body["tus_uploads"] = []interface{}{receipt}
+					if changed == "duplicate" {
+						body["tus_uploads"] = []interface{}{receipt, receipt}
+					}
+				}
+				return workflowJSON(t, body), nil
+			})
+			_, err = client.ResumeAssemblyFile(context.Background(), input, *session)
+			if changed == "" && err != nil {
+				t.Fatal(err)
+			}
+			if changed != "" && err == nil {
+				t.Fatal("accepted mismatched receipt")
+			}
+			if strings.Join(*methods, ",") != "GET,HEAD,GET" {
+				t.Fatalf("wrong reconciliation requests: %v", *methods)
+			}
+		})
+	}
+}
+
 type observedTusBody struct {
 	io.Reader
 	bytes  int

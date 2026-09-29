@@ -115,6 +115,9 @@ inspect the Assembly before starting another upload. `errors.As` with `*contract
 provides the saved `Session` when available; `errors.Is` still recognizes caller cancellation.
 An observed stopped or unconfirmed Assembly prevents new upload writes; `AssemblyCode` preserves
 that status. A resume can still confirm an already complete transfer without sending more bytes.
+If HEAD returns 404 after temporary upload cleanup, the workflow refreshes Assembly status and
+requires one finished `tus_uploads` receipt matching the saved URL, filename, fieldname, size and
+completed offset. Missing or mismatched receipts remain errors; no replacement upload is created.
 Stopping locally does not delete bytes or cancel the Assembly. Use `CancelAndWaitForAssembly`
 explicitly when abandoning the job. Deferred lengths, concatenation and non-seekable streams are
 not supported by these bounded fixed-size helpers.
