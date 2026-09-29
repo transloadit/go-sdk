@@ -106,6 +106,8 @@ upload. Already completed transfers send no more bytes. Transfer completion is n
 processing success: call `WaitForAssembly` afterward and inspect its terminal status.
 
 `ChunkSize` defaults to 5 MiB, `Timeout` to five minutes and `MaxRetries` to five recovery attempts.
+The timeout includes hashing the complete file, discovery, session persistence, transfer and backoff.
+Choose a larger `Timeout` for files or connections that cannot finish that work within five minutes.
 Caller-owned `ReaderAt` and synchronous `OnSession` code must return promptly; the SDK cannot
 interrupt that code. Honor your caller context in any external persistence I/O.
 A pointer to zero disables recovery. Ambiguous PATCH failures require a fresh offset read before
@@ -126,6 +128,9 @@ Workflow `Timeout` defaults to five minutes and `Interval` to one second. An ear
 deadline wins. Cancel-and-wait sends one cancellation attempt, then polls; a timeout or caller
 cancellation stops waiting but does not prove remote cleanup. Private deployments may set
 `Config.AssemblyOrigins` to preconfigured trusted origins, never values copied from response data.
+These origins are additional to the public Transloadit uploader hosts admitted by the contract.
+A custom `Origin` is not an exclusive egress policy: returned public uploaders can still receive
+workflow requests directly. Enforce mandatory proxy routing in your network or custom transport.
 When a response points back to the exact configured `Origin` plus the Assembly path, its proxy
 prefix is retained. Prefixes are never inferred from an untrusted response URL.
 Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
