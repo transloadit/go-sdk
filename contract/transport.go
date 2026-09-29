@@ -746,6 +746,9 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 		return &TransportError{Cause: redactRequestURL(err)}
 	}
 	if len(data) > limit {
+		// This resource-safety failure is deliberately not a ResponseError: workflow retries of
+		// 429/5xx must not repeatedly download oversized bodies. Status-bearing size-limit errors
+		// would need a separate, explicitly non-retriable error contract.
 		return fmt.Errorf("API response exceeds size limit")
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
