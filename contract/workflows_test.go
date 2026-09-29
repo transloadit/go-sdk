@@ -205,6 +205,91 @@ func TestWorkflowDoesNotSendCookieJar(t *testing.T) {
 	}
 }
 
+func TestWorkflowRejectsInvalidConfiguredOrigins(t *testing.T) {
+	for _, origin := range []string{
+		"https://user:secret@[::1]", "https://[::1]?query=1", "https://[::1]#fragment",
+		"https://[::1]/proxy", "http://[2001:db8::1]",
+	} {
+		t.Run(origin, func(t *testing.T) {
+			if _, err := NewClient(Config{BearerToken: "synthetic", AssemblyOrigins: []string{origin}}); err == nil {
+				t.Fatal("invalid uploader configuration accepted")
+			}
+		})
+	}
+}
+
+func TestWorkflowNullableTerminalError(t *testing.T) {
+	for _, cancel := range []bool{false, true} {
+		t.Run(fmt.Sprint(cancel), func(t *testing.T) {
+			id := strings.Repeat("a", 32)
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+				return workflowJSON(t, map[string]interface{}{"assembly_id": id, "error": "FILE_FILTER_DECLINED_FILE", "ok": nil}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			workflow := client.WaitForAssembly
+			if cancel {
+				workflow = client.CancelAndWaitForAssembly
+			}
+			result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.WithError == nil || result.WithError.Error != "FILE_FILTER_DECLINED_FILE" {
+				t.Fatal("terminal processing error lost")
+			}
+		})
+	}
+}
+
+func TestWorkflowExplicitIPv6Owner(t *testing.T) {
+	for _, origin := range []string{"http://[::1]:8081", "https://[2001:db8::1]"} {
+		for _, trusted := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/trusted=%t", origin, trusted), func(t *testing.T) {
+				id := strings.Repeat("a", 32)
+				owner := origin + "/assemblies/" + id
+				var requests []string
+				config := Config{Origin: "https://entry.example.com", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					if request.Header.Get("Authorization") != "" {
+						t.Error("credential forwarded")
+					}
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == 3 {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner, "ok": state}), nil
+				})}}
+				if trusted {
+					config.AssemblyOrigins = []string{origin}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if !trusted {
+					if err == nil || len(requests) != 1 {
+						t.Fatalf("followed untrusted uploader: err=%v requests=%v", err, requests)
+					}
+					return
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				expected := []string{"GET https://entry.example.com/assemblies/" + id, "DELETE " + owner, "GET " + owner}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
 func TestWorkflowPreservesConfiguredEndpoint(t *testing.T) {
 	id := "11111111111111111111111111111111"
 	for _, endpoint := range []string{

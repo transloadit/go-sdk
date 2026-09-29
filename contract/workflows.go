@@ -97,6 +97,13 @@ func admittedAssemblyOwner(raw, id string, policy assemblyWorkflowPolicy, config
 	if raw == config.Origin+expectedPath {
 		return config.Origin, nil
 	}
+	// These deployment-owned origins received the same transport validation. Admit exact IPv6
+	// matches without expanding the grammar for destinations supplied only by an API response.
+	for _, origin := range config.AssemblyOrigins {
+		if raw == origin+expectedPath {
+			return origin, nil
+		}
+	}
 	destination, err := parseAssemblyDestination(raw)
 	if err != nil {
 		return "", err
@@ -112,11 +119,7 @@ func admittedAssemblyOwner(raw, id string, policy assemblyWorkflowPolicy, config
 	}
 	allowed := origin == assemblyOrigin(entry)
 	for _, trusted := range config.AssemblyOrigins {
-		parsed, err := parseAssemblyDestination(trusted)
-		if err != nil || (parsed.Path != "" && parsed.Path != "/") {
-			return "", invalidAssemblyWorkflow()
-		}
-		allowed = allowed || origin == assemblyOrigin(parsed)
+		allowed = allowed || origin == trusted
 	}
 	public, err := regexp.MatchString(policy.PublicHostPattern, destination.Hostname())
 	if err != nil {

@@ -133,13 +133,8 @@ func redactRequestURL(err error) error {
 	return &url.Error{Op: requestError.Op, URL: "[redacted]", Err: redactRequestURL(requestError.Err)}
 }
 
-// NewClient creates a client without changing the caller's HTTP client or following redirects.
-func NewClient(config Config) (*Client, error) {
-	config.AssemblyOrigins = append([]string(nil), config.AssemblyOrigins...)
-	if config.Origin == "" {
-		config.Origin = defaultOrigin
-	}
-	origin, err := url.Parse(config.Origin)
+func parseConfiguredEndpoint(value string) (*url.URL, error) {
+	origin, err := url.Parse(value)
 	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || origin.RawQuery != "" || origin.ForceQuery || origin.Fragment != "" {
 		return nil, fmt.Errorf("contract client requires an HTTP(S) endpoint without credentials, query or fragment")
 	}
@@ -147,6 +142,29 @@ func NewClient(config Config) (*Client, error) {
 	localhost := strings.TrimSuffix(strings.ToLower(origin.Hostname()), ".") == "localhost"
 	if origin.Scheme == "http" && !localhost && (address == nil || !address.IsLoopback()) {
 		return nil, fmt.Errorf("HTTPS is required except for loopback development endpoints")
+	}
+	return origin, nil
+}
+
+// NewClient creates a client without changing the caller's HTTP client or following redirects.
+func NewClient(config Config) (*Client, error) {
+	config.AssemblyOrigins = append([]string(nil), config.AssemblyOrigins...)
+	for index, value := range config.AssemblyOrigins {
+		origin, err := parseConfiguredEndpoint(value)
+		if err != nil {
+			return nil, err
+		}
+		if origin.Path != "" && origin.Path != "/" {
+			return nil, fmt.Errorf("Assembly uploader origins cannot include a path")
+		}
+		config.AssemblyOrigins[index] = assemblyOrigin(origin)
+	}
+	if config.Origin == "" {
+		config.Origin = defaultOrigin
+	}
+	origin, err := parseConfiguredEndpoint(config.Origin)
+	if err != nil {
+		return nil, err
 	}
 	if config.BearerToken == "" && (config.AuthKey == "" || config.AuthSecret == "") {
 		return nil, fmt.Errorf("Auth Key credentials or bearer token required")
