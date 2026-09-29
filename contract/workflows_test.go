@@ -204,3 +204,65 @@ func TestWorkflowDoesNotSendCookieJar(t *testing.T) {
 		t.Fatal("caller cookie jar changed")
 	}
 }
+
+func TestWorkflowPreservesConfiguredEndpoint(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	for _, endpoint := range []string{
+		"https://example.com/proxy", "https://example.com/a%20b",
+		"http://[::1]:8080", "http://127.0.0.2", "http://localhost.",
+	} {
+		for _, publicOwner := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/public=%t", endpoint, publicOwner), func(t *testing.T) {
+				owner := endpoint + "/assemblies/" + id
+				if publicOwner {
+					owner = "https://api2-owner.transloadit.com/assemblies/" + id
+				}
+				var requests []string
+				client, err := NewClient(Config{Origin: endpoint, BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == 3 {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner, "ok": state}), nil
+				})}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				expected := []string{"GET " + endpoint + "/assemblies/" + id, "DELETE " + owner, "GET " + owner}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowDoesNotInferProxyPrefixes(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	for _, owner := range []string{
+		"https://example.com/other/assemblies/", "https://api2-owner.transloadit.com/proxy/assemblies/",
+		"https://example.com/proxy/../proxy/assemblies/", "https://example.com/%70roxy/assemblies/",
+	} {
+		t.Run(owner, func(t *testing.T) {
+			calls := 0
+			client, err := NewClient(Config{Origin: "https://example.com/proxy", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+				calls++
+				return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner + id, "ok": "ASSEMBLY_EXECUTING"}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); err == nil || calls != 1 {
+				t.Fatalf("followed undeclared prefix: err=%v calls=%d", err, calls)
+			}
+		})
+	}
+}

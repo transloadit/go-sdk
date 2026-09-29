@@ -93,6 +93,8 @@ Workflow `Timeout` defaults to five minutes and `Interval` to one second. An ear
 deadline wins. Cancel-and-wait sends one cancellation attempt, then polls; a timeout or caller
 cancellation stops waiting but does not prove remote cleanup. Private deployments may set
 `Config.AssemblyOrigins` to preconfigured trusted origins, never values copied from response data.
+When a response points back to the exact configured `Origin` plus the Assembly path, its proxy
+prefix is retained. Prefixes are never inferred from an untrusted response URL.
 Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
 Upload orchestration and resumable tus upload remain separate work. SSE and Webhook receivers
 are separate too. Go 1.15 remains supported.

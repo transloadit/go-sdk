@@ -90,15 +90,22 @@ func parseAssemblyDestination(raw string) (*url.URL, error) {
 func assemblyOrigin(value *url.URL) string { return value.Scheme + "://" + value.Host }
 
 func admittedAssemblyOwner(raw, id string, policy assemblyWorkflowPolicy, config Config) (string, error) {
+	expectedPath := strings.ReplaceAll(policy.Path, "{"+policy.Parameter+"}", id)
+	// NewClient already validated this caller-owned endpoint. An exact match preserves its proxy
+	// prefix/encoding or loopback spelling without trusting any new response-supplied destination.
+	if raw == config.Origin+expectedPath {
+		return config.Origin, nil
+	}
 	destination, err := parseAssemblyDestination(raw)
 	if err != nil {
 		return "", err
 	}
-	if destination.Path != strings.ReplaceAll(policy.Path, "{"+policy.Parameter+"}", id) {
+	if destination.Path != expectedPath {
 		return "", invalidAssemblyWorkflow()
 	}
 	origin := assemblyOrigin(destination)
-	entry, err := parseAssemblyDestination(config.Origin)
+	// The configured entrypoint need not satisfy the stricter grammar for untrusted owner URLs.
+	entry, err := url.Parse(config.Origin)
 	if err != nil {
 		return "", invalidAssemblyWorkflow()
 	}
@@ -209,8 +216,12 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 		return nil, err
 	}
 	terminal, rawOwner, err := inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
-	if err != nil { return nil, err }
-	if terminal { return result, nil }
+	if err != nil {
+		return nil, err
+	}
+	if terminal {
+		return result, nil
+	}
 	origin, err := admittedAssemblyOwner(rawOwner, input.AssemblyID, policy, client.config)
 	if err != nil {
 		return nil, err
@@ -229,8 +240,12 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
 	}
 	for {
-		if err != nil { return nil, err }
-		if terminal { return result, nil }
+		if err != nil {
+			return nil, err
+		}
+		if terminal {
+			return result, nil
+		}
 		current, admissionErr := admittedAssemblyOwner(rawOwner, input.AssemblyID, policy, client.config)
 		if admissionErr != nil || current != origin {
 			return nil, invalidAssemblyWorkflow()
