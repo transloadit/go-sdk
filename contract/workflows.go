@@ -537,14 +537,18 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			return true, nil
 		}
 		assemblyCode = status.GetOk()
+		known := hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode) || hasWorkflowCode(policy.Assembly.UnconfirmedOkCodes, assemblyCode)
 		if status.WithError != nil {
 			assemblyCode = string(status.WithError.Error)
+			known = hasWorkflowCode(policy.Assembly.ErrorCodes, assemblyCode)
 		}
-		if session == nil || status.WithError != nil || hasWorkflowCode(policy.Assembly.UnconfirmedOkCodes, assemblyCode) {
-			return false, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
-		}
-		if !hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode) {
+		if !known {
 			return false, invalidUpload()
+		}
+		// File receipt and processing success are separate outcomes. A saved session can verify
+		// completion even after processing fails, but no stopped state authorizes another write.
+		if session == nil || workflowOwner(status) == "" || workflowCollection(status) == "" {
+			return false, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
 		}
 		return false, nil
 	}
@@ -631,7 +635,8 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 					matches, complete := 0, false
 					if uploads := refreshed.GetTusUploads(); uploads != nil {
 						for _, upload := range *uploads {
-							if upload.UploadUrl != uploadURL {
+							receiptURL, admissionErr := admitUploadURL(upload.UploadUrl, policy.Head, policy, client.config)
+							if admissionErr != nil || receiptURL != uploadURL {
 								continue
 							}
 							matches++
@@ -762,7 +767,7 @@ func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, 
 	if hasWorkflowCode(policy.UnconfirmedOkCodes, ok) {
 		// Only initial cancellation discovery can proceed to the one owner-routed DELETE.
 		// A repeated connection outcome still cannot prove that remote cleanup succeeded.
-		if !allowUnconfirmed {
+		if !allowUnconfirmed || workflowOwner(status) == "" {
 			return false, "", ErrAssemblyWorkflowUnconfirmed
 		}
 		return false, workflowOwner(status), nil

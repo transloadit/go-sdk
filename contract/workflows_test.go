@@ -159,7 +159,14 @@ func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
 	}
 }
 
-func TestTusWorkflowConfirmsCompletedTransferAfterAssemblyCompletion(t *testing.T) {
+func TestTusWorkflowConfirmsCompletedTransferAfterProcessingStops(t *testing.T) {
+	for _, code := range []string{"ASSEMBLY_COMPLETED", "FILE_FILTER_DECLINED_FILE", "REQUEST_ABORTED"} {
+		t.Run(code, func(t *testing.T) { testTusCompletedTransfer(t, code) })
+	}
+}
+
+func testTusCompletedTransfer(t *testing.T, code string) {
+	t.Helper()
 	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
 	input := tusFixtureInput()
 	session, err := client.UploadAssemblyFile(context.Background(), input)
@@ -173,9 +180,14 @@ func TestTusWorkflowConfirmsCompletedTransferAfterAssemblyCompletion(t *testing.
 			return transport.RoundTrip(request)
 		}
 		*methods = append(*methods, "GET")
-		return workflowJSON(t, map[string]string{"assembly_id": input.AssemblyID, "ok": "ASSEMBLY_COMPLETED",
+		body := map[string]string{"assembly_id": input.AssemblyID, "ok": code,
 			"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
-			"tus_url":          "http://127.0.0.1:4000/resumable/files/"}), nil
+			"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+		if code == "FILE_FILTER_DECLINED_FILE" {
+			delete(body, "ok")
+			body["error"] = code
+		}
+		return workflowJSON(t, body), nil
 	})
 	if _, err := client.ResumeAssemblyFile(context.Background(), input, *session); err != nil {
 		t.Fatal(err)
@@ -186,9 +198,10 @@ func TestTusWorkflowConfirmsCompletedTransferAfterAssemblyCompletion(t *testing.
 }
 
 func TestTusWorkflowReconcilesMissingResourceOnlyWithExactReceipt(t *testing.T) {
-	for _, changed := range []string{"", "finished", "offset", "size", "filename", "fieldname", "upload_url", "assembly_id", "missing", "duplicate"} {
+	for _, changed := range []string{"", "equivalent", "processing_failed", "connection_aborted", "finished", "offset", "size", "filename", "fieldname", "upload_url", "assembly_id", "missing", "duplicate"} {
 		t.Run(changed, func(t *testing.T) {
-			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			origin := "https://api2-owner.transloadit.com"
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204, origin)
 			input := tusFixtureInput()
 			session, err := client.UploadAssemblyFile(context.Background(), input)
 			if err != nil {
@@ -206,12 +219,21 @@ func TestTusWorkflowReconcilesMissingResourceOnlyWithExactReceipt(t *testing.T) 
 				}
 				reads++
 				body := map[string]interface{}{"assembly_id": input.AssemblyID, "ok": "ASSEMBLY_COMPLETED",
-					"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
-					"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+					"assembly_ssl_url": origin + "/assemblies/" + input.AssemblyID,
+					"tus_url":          origin + "/resumable/files/"}
+				if changed == "processing_failed" {
+					delete(body, "ok")
+					body["error"] = "FILE_FILTER_DECLINED_FILE"
+				}
+				if changed == "connection_aborted" {
+					body["ok"] = "REQUEST_ABORTED"
+				}
 				if reads > 1 && changed != "missing" {
 					receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
 						"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
 					switch changed {
+					case "equivalent":
+						receipt["upload_url"] = strings.Replace(session.UploadURL, origin, "https://API2-OWNER.transloadit.com:443", 1)
 					case "finished":
 						receipt[changed] = false
 					case "size", "offset":
@@ -229,10 +251,11 @@ func TestTusWorkflowReconcilesMissingResourceOnlyWithExactReceipt(t *testing.T) 
 				return workflowJSON(t, body), nil
 			})
 			_, err = client.ResumeAssemblyFile(context.Background(), input, *session)
-			if changed == "" && err != nil {
+			valid := changed == "" || changed == "equivalent" || changed == "processing_failed" || changed == "connection_aborted"
+			if valid && err != nil {
 				t.Fatal(err)
 			}
-			if changed != "" && err == nil {
+			if !valid && err == nil {
 				t.Fatal("accepted mismatched receipt")
 			}
 			if strings.Join(*methods, ",") != "GET,HEAD,GET" {
@@ -1071,6 +1094,24 @@ func TestWorkflowDoesNotConfirmCleanupForAbortedConnection(t *testing.T) {
 				t.Fatalf("expected %s, got %v", want, methods)
 			}
 		})
+	}
+}
+
+func TestWorkflowRetainsUnconfirmedOutcomeWithoutOwner(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	calls := 0
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		calls++
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED"}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); !errors.Is(err, ErrAssemblyWorkflowUnconfirmed) {
+		t.Fatalf("lost unconfirmed connection outcome: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("unexpected request without an owner: %d", calls)
 	}
 }
 
