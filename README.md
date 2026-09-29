@@ -84,10 +84,18 @@ templates, err := api.ListTemplates(ctx, contract.ListTemplatesInput{})
 ```
 
 The generated namespace covers ordinary HTTP operations. It returns the HTTP response, not a
-completed Assembly. `CreateAssembly.Files` supports multipart uploads. Polling and upload
-orchestration remain caller-owned, as shown in the example below, or use the existing high-level
-SDK methods. Resumable tus upload is not implemented in either Go API.
-SSE, capability URLs and Webhook receivers are separate work. Go 1.15 remains supported.
+completed Assembly. `CreateAssembly.Files` supports multipart uploads. The explicit
+`WaitForAssembly(ctx, contract.AssemblyWorkflowOptions{AssemblyID: id})` and
+`CancelAndWaitForAssembly(ctx, options)` workflows safely follow the owning uploader and return
+only after confirming a terminal status. Check `status.GetOk() == "ASSEMBLY_COMPLETED"` for
+successful processing; cancellation and processing errors are terminal too.
+Workflow `Timeout` defaults to five minutes and `Interval` to one second. An earlier context
+deadline wins. Cancel-and-wait sends one cancellation attempt, then polls; a timeout or caller
+cancellation stops waiting but does not prove remote cleanup. Private deployments may set
+`Config.AssemblyOrigins` to preconfigured trusted origins, never values copied from response data.
+Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
+Upload orchestration and resumable tus upload remain separate work. SSE and Webhook receivers
+are separate too. Go 1.15 remains supported.
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
 one implicitly. Pass raw, unencoded path values. Signed requests authenticate the exact serialized
@@ -120,8 +128,8 @@ The [complete generated-client example](examples/contract-workflow/main.go) buil
 Steps, uploads an image, polls to completion and reads a typed result. With server-side
 `TRANSLOADIT_KEY` and `TRANSLOADIT_SECRET` set, run `go run ./examples/contract-workflow ./image.jpg`
 from this checkout. It creates one billable Assembly and removes its temporary Template; completed
-results expire normally. Its deadline, polling and cleanup are application logic, not automatic
-SDK retries or a replacement for the existing high-level client.
+results expire normally. The example uses the contract-client wait/cancel workflows and reports
+cleanup failures. It does not automatically retry writes or replace the existing upload API.
 
 Maintainers: `contract/client_generated.go` and its JSON manifests come from API2. Never edit them
 directly. From the matching API2 checkout's `api2/` directory run `./bin/cli.ts contracts sdks
@@ -136,12 +144,12 @@ unreleased draft intentionally replaces earlier operation-prefixed type names; e
 are unchanged. Model naming belongs in API2's `api2/lib/contract/schemaModels.ts`, not local aliases.
 
 API2 also owns `contract/workflow-vectors.json`. `go test -race . -run '^TestSharedWorkflow' -v`
-exercises the existing public upload, wait, cancellation and Smart CDN methods with the same
+exercises contract-client wait/cancel and the existing upload and Smart CDN methods with the same
 observations used by the Node SDK. Tests use synthetic credentials and loopback HTTP servers;
 adapters may not implement missing SDK polling, retries or signing. CI runs these cases as part of
 the root tests. **Resumable tus upload is explicitly unsupported in this Go SDK**, so that named
 case reports `SKIP`, not a pass. New unclassified cases fail. Passing fixture tests is not proof of
-live-server behavior or of workflows in the generated `contract` package. Change shared scenarios
+live-server behavior or complete generated-client upload/resume parity. Change shared scenarios
 in API2's `api2/lib/contract/sdk/workflowVectors.ts` and regenerate rather than editing the JSON.
 
 The workflow tests also correct existing SDK behavior: Smart CDN signing now uses the server's

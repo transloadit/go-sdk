@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"testing"
@@ -22,7 +23,14 @@ func TestContractDevdock(t *testing.T) {
 	if err != nil || parsed.Hostname() != "localhost" {
 		t.Fatal("canary requires localhost")
 	}
-	client, err := NewClient(Config{Origin: origin, AuthKey: os.Getenv("API2_CONTRACT_TEST_KEY"), AuthSecret: os.Getenv("API2_CONTRACT_TEST_SECRET")})
+	capabilityOrigin := os.Getenv("API2_CONTRACT_TEST_CAPABILITY_ORIGIN")
+	client, err := NewClient(Config{Origin: origin, AssemblyOrigins: []string{capabilityOrigin}, AuthKey: os.Getenv("API2_CONTRACT_TEST_KEY"), AuthSecret: os.Getenv("API2_CONTRACT_TEST_SECRET"), HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		target := request.URL.Scheme + "://" + request.URL.Host
+		if target != origin && target != capabilityOrigin {
+			return nil, fmt.Errorf("non-local canary destination")
+		}
+		return http.DefaultTransport.RoundTrip(request)
+	})}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,32 +143,48 @@ func TestContractDevdock(t *testing.T) {
 		if !finished {
 			cleanup, stop := context.WithTimeout(context.Background(), 15*time.Second)
 			defer stop()
-			if _, err := client.CancelAssembly(cleanup, CancelAssemblyInput{AssemblyId: assemblyID}); err != nil {
+			if _, err := client.CancelAndWaitForAssembly(cleanup, AssemblyWorkflowOptions{AssemblyID: assemblyID}); err != nil {
 				t.Error(err)
 			}
 		}
 	}()
-	for status.GetOk() != "ASSEMBLY_COMPLETED" {
-		if status.WithError != nil || status.GetOk() == "ASSEMBLY_CANCELED" || status.GetOk() == "REQUEST_ABORTED" {
-			finished = true
-			t.Fatal("Assembly processing failed")
-		}
-		select {
-		case <-ctx.Done():
-			t.Fatal("Assembly deadline exceeded")
-		case <-time.After(250 * time.Millisecond):
-		}
-		result, err := client.GetAssembly(ctx, GetAssemblyInput{AssemblyId: assemblyID})
-		if err != nil {
-			t.Fatal(err)
-		}
-		status = result
+	status, err = client.WaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: assemblyID, Interval: 250 * time.Millisecond})
+	if err != nil {
+		t.Fatal(err)
 	}
 	finished = true
+	if status.GetOk() != "ASSEMBLY_COMPLETED" {
+		t.Fatal("Assembly processing failed")
+	}
 	digest := md5.Sum(file)
 	uploads, results := status.GetUploads(), status.GetResults()
 	if uploads == nil || len(*uploads) != 1 || (*uploads)[0].GetMd5hash().GetString() != hex.EncodeToString(digest[:]) || results == nil || len(results.AdditionalProperties["passed"]) != 1 || results.AdditionalProperties["passed"][0].Md5hash.GetString() != hex.EncodeToString(digest[:]) {
 		t.Fatal("processed file digest mismatch")
+	}
+	pending, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Fields: map[string]string{"num_expected_upload_files": "1"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pendingID := pending.GetAssemblyId()
+	if pendingID == "" {
+		t.Fatal("missing pending Assembly ID")
+	}
+	defer func() {
+		cleanup, stop := context.WithTimeout(context.Background(), 15*time.Second)
+		defer stop()
+		if _, err := client.CancelAndWaitForAssembly(cleanup, AssemblyWorkflowOptions{AssemblyID: pendingID}); err != nil {
+			t.Error(err)
+		}
+	}()
+	if pending.GetOk() != "ASSEMBLY_UPLOADING" {
+		t.Fatal("expected an active Assembly")
+	}
+	canceled, err := client.CancelAndWaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: pendingID, Interval: 250 * time.Millisecond})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if canceled.GetOk() != "ASSEMBLY_CANCELED" {
+		t.Fatal("cancellation was not confirmed")
 	}
 	removed, err := client.DeleteTemplate(ctx, DeleteTemplateInput{TemplateIdOrName: id})
 	if err != nil {

@@ -29,7 +29,9 @@ import (
 
 // Config selects signed requests or bearer authentication, never an implicit token exchange.
 type Config struct {
-	Origin             string
+	Origin string
+	// AssemblyOrigins contains deployment-owned origins, never values copied from API responses.
+	AssemblyOrigins    []string
 	AuthKey            string
 	AuthSecret         string
 	BearerToken        string
@@ -114,6 +116,7 @@ func redactRequestURL(err error) error {
 
 // NewClient creates a client without changing the caller's HTTP client or following redirects.
 func NewClient(config Config) (*Client, error) {
+	config.AssemblyOrigins = append([]string(nil), config.AssemblyOrigins...)
 	if config.Origin == "" {
 		config.Origin = defaultOrigin
 	}

@@ -197,6 +197,7 @@ type workflowFixture struct {
 	Version     int
 	Credentials struct{ Key, Secret string }
 	AssemblyID  string
+	Admission   json.RawMessage
 	Cases       []workflowVector
 	SmartCdn    []struct {
 		ID, Workspace, Template, Input, ExpectedURL string

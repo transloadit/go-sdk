@@ -13,6 +13,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/transloadit/go-sdk/contract"
 )
 
 func TestWaitForAssembly(t *testing.T) {
@@ -151,28 +153,43 @@ func TestSharedWorkflows(t *testing.T) {
 					t.Error("unexpected workflow method")
 				}
 				w.Header().Set("Content-Type", "application/json")
-				if err := json.NewEncoder(w).Encode(state); err != nil {
+				// Emit the shared scenario's actual wire fields, not zero-valued legacy SDK fields
+				// such as null arrays that the public response contract never promises.
+				body := map[string]string{"assembly_id": state.AssemblyID, "assembly_ssl_url": state.AssemblySSLURL, "assembly_url": state.AssemblyURL}
+				if state.Error != "" {
+					body["error"] = state.Error
+				} else {
+					body["ok"] = state.Ok
+				}
+				if err := json.NewEncoder(w).Encode(body); err != nil {
 					t.Error(err)
 				}
 			}))
 			defer server.Close()
 			client := NewClient(Config{AuthKey: fixtures.Credentials.Key, AuthSecret: fixtures.Credentials.Secret, Endpoint: server.URL})
-			input := &AssemblyInfo{AssemblySSLURL: server.URL + "/assemblies/" + fixtures.AssemblyID}
+			generated, err := contract.NewClient(contract.Config{AuthKey: fixtures.Credentials.Key, AuthSecret: fixtures.Credentials.Secret, Origin: server.URL})
+			if err != nil {
+				t.Fatal(err)
+			}
+			input := contract.AssemblyWorkflowOptions{AssemblyID: fixtures.AssemblyID, Interval: time.Millisecond}
 			deadline, stop := context.WithTimeout(context.Background(), 5*time.Second)
 			defer stop()
 			switch scenario.Kind {
 			case "wait", "cancel":
+				var result *contract.AssemblyWorkflowResult
 				if scenario.Kind == "cancel" {
-					result, err := client.CancelAssembly(deadline, input.AssemblySSLURL)
-					if err != nil || result.Ok != scenario.Expected.Ok {
-						t.Fatalf("cancellation failed: %v %#v", err, result)
-					}
+					result, err = generated.CancelAndWaitForAssembly(deadline, input)
+				} else {
+					result, err = generated.WaitForAssembly(deadline, input)
 				}
-				result, err := client.WaitForAssembly(deadline, input)
 				if err != nil {
 					t.Fatal(err)
 				}
-				if result.Ok != scenario.Expected.Ok || result.Error != scenario.Expected.Error {
+				failure := ""
+				if result.WithError != nil {
+					failure = string(result.WithError.Error)
+				}
+				if result.GetOk() != scenario.Expected.Ok || failure != scenario.Expected.Error {
 					t.Fatalf("wrong terminal result: %#v", result)
 				}
 				mu.Lock()
@@ -193,7 +210,7 @@ func TestSharedWorkflows(t *testing.T) {
 					cancel()
 					expected = context.Canceled
 				}
-				_, err := client.WaitForAssembly(control, input)
+				_, err := generated.WaitForAssembly(control, input)
 				if !errors.Is(err, expected) {
 					t.Fatalf("expected %v, received %v", expected, err)
 				}

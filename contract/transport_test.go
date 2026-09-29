@@ -808,3 +808,46 @@ func TestMultipartAndRedirectRejection(t *testing.T) {
 		t.Fatal("dot path reached transport")
 	}
 }
+func TestOwnerRoutedCancellationWaitsForTerminal(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	var requests []string
+	var mu sync.Mutex
+	var owner *httptest.Server
+	owner = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
+		defer mu.Unlock()
+		requests = append(requests, r.Method+" owner")
+		if r.Header.Get("Authorization") != "" || r.Header.Get("Cookie") != "" {
+			t.Error("credentials reached owner")
+		}
+		state := "ASSEMBLY_EXECUTING"
+		if r.Method == "GET" {
+			state = "ASSEMBLY_CANCELED"
+		}
+		json.NewEncoder(w).Encode(map[string]string{"assembly_id": id, "assembly_ssl_url": owner.URL + "/assemblies/" + id, "ok": state})
+	}))
+	defer owner.Close()
+	entry := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
+		defer mu.Unlock()
+		requests = append(requests, r.Method+" entry")
+		json.NewEncoder(w).Encode(map[string]string{"assembly_id": id, "assembly_ssl_url": owner.URL + "/assemblies/" + id, "ok": "ASSEMBLY_EXECUTING"})
+	}))
+	defer entry.Close()
+	client, err := NewClient(Config{Origin: entry.URL, BearerToken: "must-not-leak", AssemblyOrigins: []string{owner.URL}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.GetOk() != "ASSEMBLY_CANCELED" {
+		t.Fatal("nonterminal cleanup")
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if strings.Join(requests, ",") != "GET entry,DELETE owner,GET owner" {
+		t.Fatal(requests)
+	}
+}
