@@ -860,6 +860,32 @@ func TestWorkflowRetriesRateLimitedReads(t *testing.T) {
 	}
 }
 
+func TestWorkflowDoesNotConfirmCleanupForAbortedConnection(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, cancel := range []bool{false, true} {
+		t.Run(fmt.Sprint(cancel), func(t *testing.T) {
+			var methods []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			workflow, want := client.WaitForAssembly, "GET"
+			if cancel {
+				workflow, want = client.CancelAndWaitForAssembly, "GET,DELETE"
+			}
+			if _, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); !errors.Is(err, ErrAssemblyWorkflowUnconfirmed) {
+				t.Fatalf("aborted connection falsely confirmed cleanup: %v", err)
+			}
+			if strings.Join(methods, ",") != want {
+				t.Fatalf("expected %s, got %v", want, methods)
+			}
+		})
+	}
+}
+
 func TestWorkflowRetriesTransientReadFailures(t *testing.T) {
 	id := strings.Repeat("a", 32)
 	for _, failure := range []error{io.EOF, syscall.ECONNRESET, context.DeadlineExceeded} {

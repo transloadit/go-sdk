@@ -126,6 +126,9 @@ Uploader requests carry no credentials or cookie jar; redirects and changed owne
 Status GETs retry transient network failures and HTTP 429/5xx within the overall deadline,
 honoring `Retry-After`. An HTTP
 error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
+`REQUEST_ABORTED` describes the connection, not confirmed completion. Waiting returns
+`ErrAssemblyWorkflowUnconfirmed` (check with `errors.Is`). Cancel-and-wait still attempts the
+owner-routed cancellation once, but returns that error if cleanup remains unconfirmed.
 Fixed-size upload and resume use the new contract client; SSE and Webhook receivers remain
 separate work. Go 1.15 remains supported.
 

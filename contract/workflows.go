@@ -33,6 +33,7 @@ type AssemblyWorkflowOptions struct {
 type assemblyWorkflowPolicy struct {
 	BusyCodes            []string `json:"busyCodes"`
 	TerminalOkCodes      []string `json:"terminalOkCodes"`
+	UnconfirmedOkCodes   []string `json:"unconfirmedOkCodes"`
 	ErrorCodes           []string `json:"errorCodes"`
 	PublicHostPattern    string   `json:"publicHostPattern"`
 	RejectedHostPrefixes []string `json:"rejectedHostPrefixes"`
@@ -42,6 +43,9 @@ type assemblyWorkflowPolicy struct {
 	Parameter            string   `json:"parameter"`
 	Pattern              string   `json:"pattern"`
 }
+
+// ErrAssemblyWorkflowUnconfirmed means the connection outcome cannot establish remote cleanup.
+var ErrAssemblyWorkflowUnconfirmed = errors.New("Assembly connection ended; remote completion or cleanup is not confirmed")
 
 func invalidAssemblyWorkflow() error {
 	// URLs are capabilities. Do not include raw destinations, parser errors or response data.
@@ -660,7 +664,7 @@ func (client *Client) readWorkflowStatus(ctx context.Context, id string, interva
 	}
 }
 
-func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy) (bool, string, error) {
+func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy, allowUnconfirmed bool) (bool, string, error) {
 	if err := workflowDeadline(ctx); err != nil {
 		return false, "", err
 	}
@@ -681,6 +685,14 @@ func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, 
 		return true, "", workflowDeadline(ctx)
 	}
 	ok := status.GetOk()
+	if hasWorkflowCode(policy.UnconfirmedOkCodes, ok) {
+		// Only initial cancellation discovery can proceed to the one owner-routed DELETE.
+		// A repeated connection outcome still cannot prove that remote cleanup succeeded.
+		if !allowUnconfirmed {
+			return false, "", ErrAssemblyWorkflowUnconfirmed
+		}
+		return false, workflowOwner(status), nil
+	}
 	if hasWorkflowCode(policy.TerminalOkCodes, ok) {
 		return true, "", workflowDeadline(ctx)
 	}
@@ -725,7 +737,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 		}
 		return nil, err
 	}
-	terminal, rawOwner, err := inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
+	terminal, rawOwner, err := inspectWorkflowStatus(ctx, result, input.AssemblyID, policy, cancelAssembly)
 	if err != nil {
 		return nil, err
 	}
@@ -753,7 +765,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 				if readErr != nil {
 					return nil, readErr
 				}
-				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy)
+				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, false)
 				if inspectionErr != nil {
 					return nil, inspectionErr
 				}
@@ -763,7 +775,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 			}
 			return nil, err
 		}
-		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
+		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy, false)
 	}
 	for {
 		if err != nil {
@@ -786,6 +798,6 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 			}
 			return nil, err
 		}
-		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
+		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy, false)
 	}
 }
