@@ -1115,6 +1115,42 @@ func TestWorkflowRetainsUnconfirmedOutcomeWithoutOwner(t *testing.T) {
 	}
 }
 
+func TestWorkflowRequiresExplicitAdmissionToDropProxyPrefix(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, origin := range []string{"https://proxy.example.com", "https://api2-owner.transloadit.com"} {
+		for _, explicit := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/explicit=%t", origin, explicit), func(t *testing.T) {
+				urls := []string{}
+				config := Config{Origin: origin + "/prefix", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					urls = append(urls, request.URL.String())
+					code := "ASSEMBLY_EXECUTING"
+					if len(urls) > 1 {
+						code = "ASSEMBLY_COMPLETED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "ok": code, "assembly_ssl_url": origin + "/assemblies/" + id}), nil
+				})}}
+				if explicit {
+					config.AssemblyOrigins = []string{origin}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+				if explicit && err != nil {
+					t.Fatal(err)
+				}
+				if !explicit && err == nil {
+					t.Fatal("dropped proxy prefix without explicit admission")
+				}
+				if urls[0] != origin+"/prefix/assemblies/"+id || (explicit && (len(urls) != 2 || urls[1] != origin+"/assemblies/"+id)) || (!explicit && len(urls) != 1) {
+					t.Fatalf("wrong proxy requests: %v", urls)
+				}
+			})
+		}
+	}
+}
+
 func TestWorkflowRetriesTransientReadFailures(t *testing.T) {
 	id := strings.Repeat("a", 32)
 	for _, failure := range []error{io.EOF, syscall.ECONNRESET, context.DeadlineExceeded} {

@@ -121,9 +121,13 @@ func admittedWorkflowDestination(raw, expectedPath string, policy assemblyWorkfl
 	if err != nil {
 		return "", invalidAssemblyWorkflow()
 	}
-	allowed := origin == assemblyOrigin(entry)
+	allowed := origin == assemblyOrigin(entry) && (entry.Path == "" || entry.Path == "/")
 	for _, trusted := range config.AssemblyOrigins {
 		allowed = allowed || origin == trusted
+	}
+	// A proxy path is part of the trusted endpoint, not implicit permission for its bare origin.
+	if origin == assemblyOrigin(entry) && !allowed {
+		return "", invalidAssemblyWorkflow()
 	}
 	public, err := regexp.MatchString(policy.PublicHostPattern, destination.Hostname())
 	if err != nil {
