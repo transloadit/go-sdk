@@ -133,6 +133,30 @@ func redactRequestURL(err error) error {
 	return &url.Error{Op: requestError.Op, URL: "[redacted]", Err: redactRequestURL(requestError.Err)}
 }
 
+func normalizeEndpointAuthority(origin *url.URL) error {
+	hostname := strings.ToLower(origin.Hostname())
+	port := origin.Port()
+	if port != "" {
+		value, err := strconv.Atoi(port)
+		if err != nil || value > 65535 {
+			return fmt.Errorf("invalid endpoint port")
+		}
+		if (origin.Scheme == "https" && value == 443) || (origin.Scheme == "http" && value == 80) {
+			port = ""
+		} else {
+			port = strconv.Itoa(value)
+		}
+	}
+	origin.Host = hostname
+	if strings.Contains(hostname, ":") {
+		origin.Host = "[" + hostname + "]"
+	}
+	if port != "" {
+		origin.Host = net.JoinHostPort(hostname, port)
+	}
+	return nil
+}
+
 func parseConfiguredEndpoint(value string) (*url.URL, error) {
 	origin, err := url.Parse(value)
 	if err != nil || (origin.Scheme != "https" && origin.Scheme != "http") || origin.Host == "" || origin.User != nil || origin.RawQuery != "" || origin.ForceQuery || origin.Fragment != "" {
@@ -142,6 +166,11 @@ func parseConfiguredEndpoint(value string) (*url.URL, error) {
 	localhost := strings.TrimSuffix(strings.ToLower(origin.Hostname()), ".") == "localhost"
 	if origin.Scheme == "http" && !localhost && (address == nil || !address.IsLoopback()) {
 		return nil, fmt.Errorf("HTTPS is required except for loopback development endpoints")
+	}
+	// Go's URL parser preserves host case and default ports. Compare configured and returned
+	// authorities consistently, without normalizing away significant proxy path/encoding bytes.
+	if err := normalizeEndpointAuthority(origin); err != nil {
+		return nil, err
 	}
 	return origin, nil
 }

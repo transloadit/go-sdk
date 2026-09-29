@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -69,21 +68,8 @@ func parseAssemblyDestination(raw string) (*url.URL, error) {
 	if parsed.Scheme != "https" && !(parsed.Scheme == "http" && (hostname == "localhost" || hostname == "127.0.0.1")) {
 		return nil, invalidAssemblyWorkflow()
 	}
-	port := parsed.Port()
-	if port != "" {
-		value, err := strconv.Atoi(port)
-		if err != nil || value > 65535 {
-			return nil, invalidAssemblyWorkflow()
-		}
-		if (parsed.Scheme == "https" && value == 443) || (parsed.Scheme == "http" && value == 80) {
-			port = ""
-		} else {
-			port = strconv.Itoa(value)
-		}
-	}
-	parsed.Host = hostname
-	if port != "" {
-		parsed.Host += ":" + port
+	if err := normalizeEndpointAuthority(parsed); err != nil {
+		return nil, invalidAssemblyWorkflow()
 	}
 	return parsed, nil
 }

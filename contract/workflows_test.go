@@ -330,6 +330,61 @@ func TestWorkflowPreservesConfiguredEndpoint(t *testing.T) {
 	}
 }
 
+func TestWorkflowNormalizesConfiguredAuthority(t *testing.T) {
+	for _, scenario := range []struct{ entry, trusted, owner, expectedEntry string }{
+		{"https://UPLOADER.EXAMPLE:443", "", "https://uploader.example", "https://uploader.example"},
+		{"https://UPLOADER.EXAMPLE:443/proxy", "", "https://uploader.example/proxy", "https://uploader.example/proxy"},
+		{"https://entry.example", "https://UPLOADER.EXAMPLE:443", "https://uploader.example", "https://entry.example"},
+		{"http://LOCALHOST:80/proxy", "", "http://localhost/proxy", "http://localhost/proxy"},
+		{"https://[2001:DB8::1]:443/proxy", "", "https://[2001:db8::1]/proxy", "https://[2001:db8::1]/proxy"},
+		{"https://entry.example", "https://[2001:DB8::1]:443", "https://[2001:db8::1]", "https://entry.example"},
+	} {
+		for _, cancel := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/%s/cancel=%t", scenario.entry, scenario.trusted, cancel), func(t *testing.T) {
+				id := strings.Repeat("a", 32)
+				path := "/assemblies/" + id
+				var requests []string
+				terminalCall := 2
+				if cancel {
+					terminalCall = 3
+				}
+				config := Config{Origin: scenario.entry, BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == terminalCall {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": scenario.owner + path, "ok": state}), nil
+				})}}
+				if scenario.trusted != "" {
+					config.AssemblyOrigins = []string{scenario.trusted}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				workflow := client.WaitForAssembly
+				expected := []string{"GET " + scenario.expectedEntry + path}
+				if cancel {
+					workflow = client.CancelAndWaitForAssembly
+					expected = append(expected, "DELETE "+scenario.owner+path)
+				}
+				expected = append(expected, "GET "+scenario.owner+path)
+				result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
 func TestWorkflowDoesNotInferProxyPrefixes(t *testing.T) {
 	id := "11111111111111111111111111111111"
 	for _, owner := range []string{
