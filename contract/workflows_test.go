@@ -112,6 +112,137 @@ func TestTusWorkflowRejectsHeaders(t *testing.T) {
 	}
 }
 
+func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
+	for _, code := range []string{"ASSEMBLY_COMPLETED", "ASSEMBLY_CANCELED", "REQUEST_ABORTED", "FILE_FILTER_DECLINED_FILE"} {
+		for _, resume := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/resume=%t", code, resume), func(t *testing.T) {
+				client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+				input := tusFixtureInput()
+				var session *AssemblyUploadSession
+				if resume {
+					input.OnSession = func(value AssemblyUploadSession) error {
+						session = &value
+						return errors.New("checkpoint only")
+					}
+					if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || session == nil {
+						t.Fatal("missing checkpoint")
+					}
+					input.OnSession = nil
+				}
+				*methods = (*methods)[:0]
+				transport := client.httpClient.Transport
+				client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					if request.Method != "GET" {
+						return transport.RoundTrip(request)
+					}
+					*methods = append(*methods, "GET")
+					body := map[string]string{"assembly_id": input.AssemblyID, "ok": code,
+						"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
+						"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+					if code == "FILE_FILTER_DECLINED_FILE" {
+						body = map[string]string{"assembly_id": input.AssemblyID, "error": code}
+					}
+					return workflowJSON(t, body), nil
+				})
+				_, err := client.runTusUpload(context.Background(), input, session)
+				var failure *AssemblyUploadError
+				if !errors.As(err, &failure) || failure.AssemblyCode != code || !strings.Contains(failure.Cause.Error(), code) {
+					t.Fatalf("lost stopped Assembly status %s: %v", code, err)
+				}
+				for _, method := range *methods {
+					if method == "POST" || method == "PATCH" {
+						t.Fatalf("wrote to stopped Assembly: %v", *methods)
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestTusWorkflowConfirmsCompletedTransferAfterAssemblyCompletion(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	session, err := client.UploadAssemblyFile(context.Background(), input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	*methods = (*methods)[:0]
+	transport := client.httpClient.Transport
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "GET" {
+			return transport.RoundTrip(request)
+		}
+		*methods = append(*methods, "GET")
+		return workflowJSON(t, map[string]string{"assembly_id": input.AssemblyID, "ok": "ASSEMBLY_COMPLETED",
+			"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
+			"tus_url":          "http://127.0.0.1:4000/resumable/files/"}), nil
+	})
+	if _, err := client.ResumeAssemblyFile(context.Background(), input, *session); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,HEAD" {
+		t.Fatalf("completed resume wrote bytes: %v", *methods)
+	}
+}
+
+type observedTusBody struct {
+	io.Reader
+	bytes  int
+	closed bool
+	eof    bool
+}
+
+func (body *observedTusBody) Read(buffer []byte) (int, error) {
+	count, err := body.Reader.Read(buffer)
+	body.bytes += count
+	body.eof = body.eof || err == io.EOF
+	return count, err
+}
+
+func (body *observedTusBody) Close() error { body.closed = true; return nil }
+
+func TestTusWorkflowBoundsAndReadsResponseBodies(t *testing.T) {
+	for _, payload := range []string{`{"error":"INVALID_UPLOAD_METADATA"}`, "plain text error", strings.Repeat("x", 128*1024)} {
+		t.Run(fmt.Sprint(len(payload)), func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 403, 204)
+			body := &observedTusBody{Reader: strings.NewReader(payload)}
+			transport := client.httpClient.Transport
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if response != nil && request.Method == "POST" {
+					response.Body.Close()
+					response.Body = body
+				}
+				return response, err
+			})
+			_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+			wantBytes := len(payload)
+			if wantBytes > 65537 {
+				wantBytes = 65537
+			}
+			if !body.closed || body.bytes != wantBytes {
+				t.Fatalf("response not consumed/closed: read=%d closed=%t", body.bytes, body.closed)
+			}
+			var response *ResponseError
+			if len(payload) > 65536 {
+				if err == nil || errors.As(err, &response) {
+					t.Fatalf("oversized body must not become retryable HTTP error: %v", err)
+				}
+				return
+			}
+			if !body.eof || !errors.As(err, &response) || response.Status != 403 {
+				t.Fatalf("missing drained HTTP error: %v", err)
+			}
+			if json.Valid([]byte(payload)) && string(response.Data) != payload {
+				t.Fatalf("JSON error details lost: %s", response.Data)
+			}
+			if !json.Valid([]byte(payload)) && len(response.Data) != 0 {
+				t.Fatal("invalid JSON retained")
+			}
+		})
+	}
+}
+
 func TestTusWorkflowPersistenceAndChangedFile(t *testing.T) {
 	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
 	input := tusFixtureInput()

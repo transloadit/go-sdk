@@ -36,7 +36,9 @@ type Config struct {
 	AuthSecret         string
 	BearerToken        string
 	SignatureAlgorithm string
-	HTTPClient         *http.Client
+	// HTTPClient.Transport also carries uploader/tus requests. The SDK does not add API
+	// credentials to these capability requests and excludes the configured cookie jar.
+	HTTPClient *http.Client
 }
 
 // Client binds generated methods to one explicitly configured API origin.

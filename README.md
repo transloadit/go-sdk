@@ -90,8 +90,8 @@ completed Assembly. `CreateAssembly.Files` supports multipart uploads. The expli
 only after confirming a terminal status. Check `status.GetOk() == "ASSEMBLY_COMPLETED"` for
 successful processing; cancellation and processing errors are terminal too.
 
-For a resumable upload, create an Assembly with
-`Fields: map[string]string{"num_expected_upload_files": "1"}`, then call
+For a resumable upload, set the top-level `CreateAssemblyInput.Fields` (not `Params.Fields`) to
+`map[string]string{"num_expected_upload_files": "1"}`, then call
 `UploadAssemblyFile(ctx, contract.AssemblyUploadOptions{AssemblyID: id, Reader: file,
 Size: size, Filename: "example.jpg", OnSession: persistSession})`.
 `Reader` is a caller-owned `io.ReaderAt`, such as an open `*os.File`; keep it open and unchanged
@@ -113,6 +113,8 @@ more bytes are sent. Safe discovery and tus recovery share that budget and honor
 Creation never retries; if its response is lost before a session is saved,
 inspect the Assembly before starting another upload. `errors.As` with `*contract.AssemblyUploadError`
 provides the saved `Session` when available; `errors.Is` still recognizes caller cancellation.
+An observed stopped or unconfirmed Assembly prevents new upload writes; `AssemblyCode` preserves
+that status. A resume can still confirm an already complete transfer without sending more bytes.
 Stopping locally does not delete bytes or cancel the Assembly. Use `CancelAndWaitForAssembly`
 explicitly when abandoning the job. Deferred lengths, concatenation and non-seekable streams are
 not supported by these bounded fixed-size helpers.
@@ -123,6 +125,8 @@ cancellation stops waiting but does not prove remote cleanup. Private deployment
 When a response points back to the exact configured `Origin` plus the Assembly path, its proxy
 prefix is retained. Prefixes are never inferred from an untrusted response URL.
 Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
+`Config.HTTPClient.Transport` handles both API and uploader/tus requests, so the same observation
+or fault-injection transport works for the whole workflow.
 Status GETs retry transient network failures and HTTP 429/5xx within the overall deadline,
 honoring `Retry-After`. An HTTP
 error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
@@ -131,6 +135,8 @@ error from DELETE can be followed by a status GET to confirm a terminal race; DE
 owner-routed cancellation once, but returns that error if cleanup remains unconfirmed.
 Fixed-size upload and resume use the new contract client; SSE and Webhook receivers remain
 separate work. Go 1.15 remains supported.
+Smart CDN signing remains a local helper in the root package; see the
+[Smart CDN example](examples/smart-cdn-signature/main.go).
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
 one implicitly. Pass raw, unencoded path values. Signed requests authenticate the exact serialized

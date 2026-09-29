@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -205,6 +206,8 @@ type AssemblyUploadOptions struct {
 type AssemblyUploadError struct {
 	Session *AssemblyUploadSession
 	Cause   error
+	// AssemblyCode is the observed stopped or unconfirmed state, when it prevented upload writes.
+	AssemblyCode string
 }
 
 func (err *AssemblyUploadError) Error() string {
@@ -298,8 +301,21 @@ func (client *Client) requestTus(ctx context.Context, operation tusOperation, ta
 		return nil, &TransportError{Cause: redactRequestURL(err)}
 	}
 	defer response.Body.Close()
+	// Protocol replies are small. Draining bounded bodies permits connection reuse without
+	// accepting unbounded error data or embedding that data in diagnostic messages.
+	const limit = 64 * 1024
+	data, err := ioutil.ReadAll(io.LimitReader(response.Body, limit+1))
+	if err != nil {
+		return nil, &TransportError{Cause: redactRequestURL(err)}
+	}
+	if len(data) > limit {
+		return nil, fmt.Errorf("tus response exceeds size limit")
+	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return nil, &ResponseError{Status: response.StatusCode, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now())}
+		if !json.Valid(data) {
+			data = nil
+		}
+		return nil, &ResponseError{Status: response.StatusCode, Data: data, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now())}
 	}
 	if response.StatusCode != operation.Success {
 		return nil, invalidUpload()
@@ -438,6 +454,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	ctx, stop := context.WithTimeout(parent, input.Timeout)
 	defer stop()
 	var session *AssemblyUploadSession
+	assemblyCode := ""
 	if resume != nil {
 		copy := *resume
 		session = &copy
@@ -447,7 +464,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			if deadline := workflowDeadline(ctx); deadline != nil {
 				failure = deadline
 			}
-			failure = &AssemblyUploadError{Session: session, Cause: failure}
+			failure = &AssemblyUploadError{Session: session, Cause: failure, AssemblyCode: assemblyCode}
 		}
 	}()
 	if err := workflowDeadline(ctx); err != nil {
@@ -513,6 +530,16 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	}
 	if status == nil || workflowIdentity(status) != input.AssemblyID {
 		return nil, invalidUpload()
+	}
+	canWrite := hasWorkflowCode(policy.Assembly.BusyCodes, status.GetOk())
+	if !canWrite {
+		assemblyCode = status.GetOk()
+		if status.WithError != nil {
+			assemblyCode = string(status.WithError.Error)
+		}
+		if session == nil || status.WithError != nil || hasWorkflowCode(policy.Assembly.UnconfirmedOkCodes, assemblyCode) {
+			return nil, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
+		}
 	}
 	owner, err := admittedAssemblyOwner(workflowOwner(status), input.AssemblyID, policy.Assembly, client.config)
 	if err != nil {
@@ -590,6 +617,11 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	position, err := head()
 	if err != nil {
 		return nil, err
+	}
+	// A completed transfer may be confirmed idempotently, but a stopped Assembly must not
+	// receive any more bytes. This is the observed state; the server still arbitrates later races.
+	if position < input.Size && !canWrite {
+		return nil, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
 	}
 	for position < input.Size {
 		if err := workflowDeadline(ctx); err != nil {
