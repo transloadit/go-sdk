@@ -16,6 +16,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 	"unicode"
 )
@@ -188,7 +189,8 @@ type AssemblyUploadOptions struct {
 	ChunkSize int64
 	// Timeout defaults to five minutes, including hashing and discovery.
 	Timeout time.Duration
-	// OnSession must persist the private checkpoint before any bytes are sent. Errors stop uploading.
+	// OnSession synchronously persists before any bytes. It must return promptly and observe the
+	// caller context; the SDK cannot interrupt caller-owned synchronous I/O. Errors stop uploading.
 	OnSession func(AssemblyUploadSession) error
 	// MaxRetries defaults to five; a pointer to zero disables recovery. Creation never retries.
 	MaxRetries *int
@@ -305,7 +307,7 @@ func (client *Client) requestTus(ctx context.Context, operation tusOperation, ta
 }
 
 func admitUploadURL(raw string, operation tusOperation, policy tusWorkflowPolicy, config Config) (string, error) {
-	if strings.ContainsAny(raw, "\\%?#") || strings.IndexFunc(raw, unicode.IsSpace) >= 0 {
+	if strings.ContainsAny(raw, "\\?#") || strings.IndexFunc(raw, unicode.IsSpace) >= 0 {
 		return "", invalidUpload()
 	}
 	for _, segment := range strings.Split(raw, "/") {
@@ -319,8 +321,9 @@ func admitUploadURL(raw string, operation tusOperation, policy tusWorkflowPolicy
 	}
 	path := operation.Path
 	if len(operation.Parameters) == 1 {
-		id := parsed.Path[strings.LastIndex(parsed.Path, "/")+1:]
-		if id == "" || id == "." || id == ".." {
+		escaped := parsed.EscapedPath()
+		id := escaped[strings.LastIndex(escaped, "/")+1:]
+		if id == "" || strings.Contains(id, "%") || id == "." || id == ".." {
 			return "", invalidUpload()
 		}
 		path = strings.ReplaceAll(path, "{"+operation.Parameters[0].Name+"}", id)
@@ -373,6 +376,22 @@ func verifyUploadMetadata(raw string, expected map[string]string) bool {
 		}
 	}
 	return true
+}
+
+func retryableUploadTransport(failure error) bool {
+	// url.Error implements net.Error even for certificate or redirect-policy failures.
+	// Unwrap that context before asking whether the actual cause can recover.
+	for {
+		var requestError *url.Error
+		if !errors.As(failure, &requestError) {
+			break
+		}
+		failure = requestError.Err
+	}
+	var network net.Error
+	return errors.Is(failure, io.EOF) || errors.Is(failure, io.ErrUnexpectedEOF) ||
+		errors.Is(failure, syscall.ECONNRESET) || errors.Is(failure, syscall.ECONNREFUSED) || errors.Is(failure, syscall.EPIPE) ||
+		(errors.As(failure, &network) && (network.Timeout() || network.Temporary()))
 }
 
 func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadOptions, resume *AssemblyUploadSession) (result *AssemblyUploadSession, failure error) {
@@ -455,12 +474,38 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			return nil, err
 		}
 	}
+	retries := 0
+	recover := func(failure error) error {
+		if err := workflowDeadline(ctx); err != nil {
+			return err
+		}
+		var response *ResponseError
+		retry := retryableUploadTransport(failure)
+		if errors.As(failure, &response) {
+			retry = response.Status == 409 || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
+		}
+		if !retry || retries >= maxRetries {
+			return failure
+		}
+		retries++
+		delay := input.RetryDelay
+		if response != nil && response.RetryAfter > delay {
+			delay = response.RetryAfter
+		}
+		return waitWorkflowDelay(ctx, delay)
+	}
 	httpClient := *client.httpClient
 	httpClient.Jar = nil
 	connection := &Client{config: client.config, httpClient: &httpClient}
-	status, err := connection.readWorkflowAssembly(ctx, input.AssemblyID)
-	if err != nil {
-		return nil, err
+	var status *AssemblyWorkflowResult
+	for {
+		status, err = connection.readWorkflowAssembly(ctx, input.AssemblyID)
+		if err == nil {
+			break
+		}
+		if err := recover(err); err != nil {
+			return nil, err
+		}
 	}
 	if status == nil || workflowIdentity(status) != input.AssemblyID {
 		return nil, invalidUpload()
@@ -489,11 +534,15 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		if err != nil {
 			return nil, err
 		}
+		if response.Get(wire.Headers["resumable"]) != wire.Version {
+			return nil, invalidUpload()
+		}
 		locations := response.Values(wire.Headers["location"])
-		if len(locations) != 1 || locations[0] == "" || strings.ContainsAny(locations[0], "\\%?#") || strings.IndexFunc(locations[0], unicode.IsSpace) >= 0 {
+		if len(locations) != 1 || locations[0] == "" || strings.ContainsAny(locations[0], "\\?#") || strings.IndexFunc(locations[0], unicode.IsSpace) >= 0 {
 			return nil, invalidUpload()
 		}
 		for _, segment := range strings.Split(locations[0], "/") {
+			segment = strings.ReplaceAll(strings.ToLower(segment), "%2e", ".")
 			if segment == "." || segment == ".." {
 				return nil, invalidUpload()
 			}
@@ -517,27 +566,6 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	uploadURL, err := admitUploadURL(session.UploadURL, policy.Head, policy, client.config)
 	if err != nil {
 		return nil, err
-	}
-	retries := 0
-	recover := func(failure error) error {
-		if err := workflowDeadline(ctx); err != nil {
-			return err
-		}
-		var response *ResponseError
-		var network net.Error
-		retry := errors.As(failure, &network) || errors.Is(failure, io.EOF) || errors.Is(failure, io.ErrUnexpectedEOF)
-		if errors.As(failure, &response) {
-			retry = response.Status == 409 || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
-		}
-		if !retry || retries >= maxRetries {
-			return failure
-		}
-		retries++
-		delay := input.RetryDelay
-		if response != nil && response.RetryAfter > delay {
-			delay = response.RetryAfter
-		}
-		return waitWorkflowDelay(ctx, delay)
 	}
 	head := func() (int64, error) {
 		for {
@@ -567,13 +595,16 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		if remaining := input.Size - position; remaining < count {
 			count = remaining
 		}
-		if _, err := io.ReadFull(io.NewSectionReader(input.Reader, position, count), buffer[:count]); err != nil {
+		// RoundTripper may finish reading a body after returning its response. Each PATCH owns its
+		// bytes until transport closure, so a later chunk cannot overwrite an in-flight request.
+		chunk := make([]byte, count)
+		if _, err := io.ReadFull(io.NewSectionReader(input.Reader, position, count), chunk); err != nil {
 			return nil, err
 		}
 		patchHeaders := headers()
 		patchHeaders[wire.Headers["offset"]] = strconv.FormatInt(position, 10)
 		patchHeaders[wire.Headers["contentType"]] = wire.MediaType
-		response, err := connection.requestTus(ctx, policy.Patch, uploadURL, patchHeaders, buffer[:count])
+		response, err := connection.requestTus(ctx, policy.Patch, uploadURL, patchHeaders, chunk)
 		if err != nil {
 			if err := recover(err); err != nil {
 				return nil, err
@@ -637,6 +668,8 @@ func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, 
 	// Generated union decoding rejects ambiguous ok+error bodies. Read its typed variant without
 	// serializing the complete files/results graph again on every poll.
 	if status.WithError != nil {
+		// The producer and generated union use a closed error enum. Open-enum evolution needs a
+		// source-owned type change, not an unchecked cast of new wire values into this snapshot.
 		if !hasWorkflowCode(policy.ErrorCodes, string(status.WithError.Error)) {
 			return false, "", invalidAssemblyWorkflow()
 		}

@@ -106,8 +106,11 @@ upload. Already completed transfers send no more bytes. Transfer completion is n
 processing success: call `WaitForAssembly` afterward and inspect its terminal status.
 
 `ChunkSize` defaults to 5 MiB, `Timeout` to five minutes and `MaxRetries` to five recovery attempts.
+Caller-owned `ReaderAt` and synchronous `OnSession` code must return promptly; the SDK cannot
+interrupt that code. Honor your caller context in any external persistence I/O.
 A pointer to zero disables recovery. Ambiguous PATCH failures require a fresh offset read before
-more bytes are sent. Creation never retries; if its response is lost before a session is saved,
+more bytes are sent. Safe discovery and tus recovery share that budget and honor `Retry-After`.
+Creation never retries; if its response is lost before a session is saved,
 inspect the Assembly before starting another upload. `errors.As` with `*contract.AssemblyUploadError`
 provides the saved `Session` when available; `errors.Is` still recognizes caller cancellation.
 Stopping locally does not delete bytes or cancel the Assembly. Use `CancelAndWaitForAssembly`
@@ -122,8 +125,8 @@ prefix is retained. Prefixes are never inferred from an untrusted response URL.
 Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
 Status GETs retry HTTP 429 and 5xx within the overall deadline, honoring `Retry-After`. An HTTP
 error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
-Upload orchestration and resumable tus upload remain separate work. SSE and Webhook receivers
-are separate too. Go 1.15 remains supported.
+Fixed-size upload and resume use the new contract client; SSE and Webhook receivers remain
+separate work. Go 1.15 remains supported.
 
 Set `BearerToken` instead of Auth Key credentials to use an existing token; the client never mints
 one implicitly. Pass raw, unencoded path values. Signed requests authenticate the exact serialized

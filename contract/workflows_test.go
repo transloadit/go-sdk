@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"crypto/x509"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -18,13 +20,19 @@ import (
 	"time"
 )
 
-func tusFixtureClient(t *testing.T, location string, overrides map[string]string, creationStatus, patchStatus int) (*Client, *[]string) {
+func tusFixtureClient(t *testing.T, location string, overrides map[string]string, creationStatus, patchStatus int, endpoints ...string) (*Client, *[]string) {
 	t.Helper()
 	origin := "http://127.0.0.1:4000"
+	if len(endpoints) != 0 {
+		origin = endpoints[0]
+	}
 	id := strings.Repeat("1", 32)
 	metadata, position := "", 0
 	methods := []string{}
 	client, err := NewClient(Config{Origin: origin, BearerToken: "never-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Body != nil {
+			defer request.Body.Close()
+		}
 		methods = append(methods, request.Method)
 		if request.Header.Get("Authorization") != "" || request.Header.Get("Cookie") != "" {
 			t.Error("credentials forwarded")
@@ -73,6 +81,7 @@ func TestTusWorkflowRejectsDestinations(t *testing.T) {
 	for _, location := range []string{
 		"https://evil.example/resumable/files/one", "//evil.example/resumable/files/one",
 		"http://127.0.0.1:4000/resumable/files/../one", "http://127.0.0.1:4000/resumable/files/%2e%2e",
+		"http://127.0.0.1:4000/resumable/files/%2e%2e/files/one",
 		"http://127.0.0.1:4000/resumable/files/one?override=DELETE", "http://127.0.0.1:4000/resumable/files/one#fragment",
 		"http://127.0.0.1:4000/resumable/files/one/two", "https://user:secret@api2-uploader.transloadit.com/resumable/files/one",
 	} {
@@ -137,6 +146,188 @@ func TestTusWorkflowRecoveryIsOffsetBasedAndBounded(t *testing.T) {
 	cancel()
 	if _, err := client.UploadAssemblyFile(ctx, tusFixtureInput()); !errors.Is(err, context.Canceled) || len(*methods) != 0 {
 		t.Fatal("aborted workflow performed requests")
+	}
+}
+
+func TestTusWorkflowOwnsEachPatchBuffer(t *testing.T) {
+	client, _ := tusFixtureClient(t, "/resumable/files/one", map[string]string{"Upload-Length": "8"}, 201, 204)
+	base := client.httpClient.Transport
+	var previous io.ReadCloser
+	defer func() {
+		if previous != nil {
+			previous.Close()
+		}
+	}()
+	patches := 0
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "PATCH" {
+			return base.RoundTrip(request)
+		}
+		patches++
+		if patches == 1 {
+			// A RoundTripper may finish consuming/closing the body after returning a response.
+			previous = request.Body
+		} else {
+			data, err := ioutil.ReadAll(previous)
+			if err != nil || string(data) != "abcd" {
+				t.Errorf("first request body overwritten before Close: %q, %v", data, err)
+			}
+			previous.Close()
+			previous = nil
+			data, err = ioutil.ReadAll(request.Body)
+			request.Body.Close()
+			if err != nil || string(data) != "efgh" {
+				t.Errorf("second body: %q, %v", data, err)
+			}
+		}
+		response := workflowJSON(t, nil)
+		response.StatusCode = 204
+		response.Header.Set("Tus-Resumable", "1.0.0")
+		response.Header.Set("Upload-Offset", strconv.Itoa(patches*4))
+		return response, nil
+	})
+	input := tusFixtureInput()
+	input.Size, input.ChunkSize, input.Reader = 8, 4, strings.NewReader("abcdefgh")
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err != nil {
+		t.Fatal(err)
+	}
+	if patches != 2 {
+		t.Fatalf("PATCH count: %d", patches)
+	}
+}
+
+func TestTusWorkflowRetriesDiscovery(t *testing.T) {
+	for _, resume := range []bool{false, true} {
+		t.Run(fmt.Sprint(resume), func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			var saved *AssemblyUploadSession
+			if resume {
+				var err error
+				saved, err = client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+				if err != nil {
+					t.Fatal(err)
+				}
+			}
+			base := client.httpClient.Transport
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				if request.Method == "GET" {
+					reads++
+					if reads == 1 {
+						response := workflowJSON(t, nil)
+						response.StatusCode = 503
+						return response, nil
+					}
+				}
+				return base.RoundTrip(request)
+			})
+			if _, err := client.runTusUpload(context.Background(), tusFixtureInput(), saved); err != nil {
+				t.Fatal(err)
+			}
+			if reads != 2 {
+				t.Fatalf("discovery attempts: %d", reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowDoesNotRetryPermanentTransportErrors(t *testing.T) {
+	for _, mode := range []string{"redirect", "certificate"} {
+		t.Run(mode, func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			base := client.httpClient.Transport
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				if request.Method != "HEAD" {
+					return base.RoundTrip(request)
+				}
+				reads++
+				if mode == "certificate" {
+					return nil, x509.UnknownAuthorityError{}
+				}
+				response := workflowJSON(t, nil)
+				response.StatusCode = 307
+				response.Header.Set("Location", "https://evil.example/resumable/files/one")
+				return response, nil
+			})
+			if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err == nil || reads != 1 {
+				t.Fatalf("permanent failure was retried: err=%v reads=%d", err, reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowBoundsDiscoveryRecovery(t *testing.T) {
+	for _, mode := range []string{"disabled", "budget", "server-delay"} {
+		t.Run(mode, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				reads++
+				if request.Method != "GET" {
+					t.Error("write after failed discovery")
+				}
+				response := workflowJSON(t, nil)
+				response.StatusCode = 429
+				if mode == "server-delay" {
+					response.Header.Set("Retry-After", "30")
+				}
+				return response, nil
+			})
+			input := tusFixtureInput()
+			maximum, want := 1, 2
+			if mode == "disabled" {
+				maximum, want = 0, 1
+			}
+			input.MaxRetries = &maximum
+			input.Timeout = 100 * time.Millisecond
+			_, err := client.UploadAssemblyFile(context.Background(), input)
+			if mode == "server-delay" {
+				want = 1
+				if !errors.Is(err, context.DeadlineExceeded) {
+					t.Fatalf("Retry-After ignored: %v", err)
+				}
+			}
+			if err == nil || reads != want || len(*methods) != 0 {
+				t.Fatalf("unbounded discovery: err=%v reads=%d", err, reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRetainsConfiguredEncodedPrefix(t *testing.T) {
+	endpoint := "https://example.com/a%20b"
+	client, methods := tusFixtureClient(t, endpoint+"/resumable/files/one", nil, 201, 204, endpoint)
+	session, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fresh, err := NewClient(Config{Origin: endpoint, BearerToken: "unused", HTTPClient: client.httpClient})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = fresh.ResumeAssemblyFile(context.Background(), tusFixtureInput(), *session); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST,HEAD,PATCH,GET,HEAD" {
+		t.Fatalf("requests: %v", *methods)
+	}
+}
+
+func TestTusWorkflowRejectsCreationVersionBeforePersistence(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	base := client.httpClient.Transport
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		response, err := base.RoundTrip(request)
+		if request.Method == "POST" {
+			response.Header.Set("Tus-Resumable", "2.0.0")
+		}
+		return response, err
+	})
+	input := tusFixtureInput()
+	input.OnSession = func(AssemblyUploadSession) error { t.Error("persisted incompatible creation"); return nil }
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || len(*methods) != 2 {
+		t.Fatalf("incompatible creation accepted: %v, %v", err, *methods)
 	}
 }
 
