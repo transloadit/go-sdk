@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -24,13 +25,20 @@ func TestContractDevdock(t *testing.T) {
 		t.Fatal("canary requires localhost")
 	}
 	capabilityOrigin := os.Getenv("API2_CONTRACT_TEST_CAPABILITY_ORIGIN")
-	client, err := NewClient(Config{Origin: origin, AssemblyOrigins: []string{capabilityOrigin}, AuthKey: os.Getenv("API2_CONTRACT_TEST_KEY"), AuthSecret: os.Getenv("API2_CONTRACT_TEST_SECRET"), HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+	var interruptUpload context.CancelFunc
+	configuration := Config{Origin: origin, AssemblyOrigins: []string{capabilityOrigin}, AuthKey: os.Getenv("API2_CONTRACT_TEST_KEY"), AuthSecret: os.Getenv("API2_CONTRACT_TEST_SECRET"), HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
 		target := request.URL.Scheme + "://" + request.URL.Host
 		if target != origin && target != capabilityOrigin {
 			return nil, fmt.Errorf("non-local canary destination")
 		}
-		return http.DefaultTransport.RoundTrip(request)
-	})}})
+		response, err := http.DefaultTransport.RoundTrip(request)
+		if err == nil && request.Method == "PATCH" && response.StatusCode == 204 && interruptUpload != nil {
+			interruptUpload()
+			interruptUpload = nil
+		}
+		return response, err
+	})}}
+	client, err := NewClient(configuration)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,7 +137,7 @@ func TestContractDevdock(t *testing.T) {
 		TemplateId: &id,
 		Auth:       &CreateAssemblyParams_Object2_Auth{MaxSize: &maxSize, MaxNumberOfFiles: &maxFiles},
 	}}
-	uploaded, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Files: map[string]UploadFile{"file": {Reader: ioutil.NopCloser(bytes.NewReader(file)), Filename: "smilie.gif"}}})
+	uploaded, err := client.CreateAssembly(ctx, CreateAssemblyInput{Params: params, Fields: map[string]string{"num_expected_upload_files": "1"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -148,6 +156,27 @@ func TestContractDevdock(t *testing.T) {
 			}
 		}
 	}()
+	interrupted, stopUpload := context.WithCancel(ctx)
+	defer stopUpload()
+	interruptUpload = stopUpload
+	var checkpoint AssemblyUploadSession
+	uploadInput := AssemblyUploadOptions{
+		AssemblyID: assemblyID, Reader: bytes.NewReader(file), Size: int64(len(file)), Filename: "smilie.gif", ChunkSize: 64,
+		OnSession: func(session AssemblyUploadSession) error { checkpoint = session; return nil },
+	}
+	if _, err := client.UploadAssemblyFile(interrupted, uploadInput); !errors.Is(err, context.Canceled) {
+		t.Fatalf("expected owned interruption: %v", err)
+	}
+	if checkpoint.UploadURL == "" {
+		t.Fatal("missing resume checkpoint")
+	}
+	fresh, err := NewClient(configuration)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := fresh.ResumeAssemblyFile(ctx, uploadInput, checkpoint); err != nil {
+		t.Fatal(err)
+	}
 	status, err = client.WaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: assemblyID, Interval: 250 * time.Millisecond})
 	if err != nil {
 		t.Fatal(err)

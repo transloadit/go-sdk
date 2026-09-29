@@ -181,15 +181,16 @@ func TestCreateSignedSmartCDNUrl(t *testing.T) {
 // Workflow fixtures are produced once by API2. These tests exercise existing public SDK methods,
 // not an adapter-provided implementation of signing, waiting, retries or resumption.
 type workflowVector struct {
-	ID                  string
-	Kind                string
-	Filename            string
-	Hex                 string
-	ChunkSize           int
-	InterruptAfterBytes int
-	ResponseDelayMs     int
-	Responses           []struct{ Ok, Error string }
-	Expected            struct{ Ok, Error string }
+	ID                     string
+	Kind                   string
+	Filename               string
+	Hex                    string
+	ChunkSize              int
+	InterruptAfterBytes    int
+	LoseResponseAfterBytes int
+	ResponseDelayMs        int
+	Responses              []struct{ Ok, Error string }
+	Expected               struct{ Ok, Error string }
 }
 
 type workflowFixture struct {

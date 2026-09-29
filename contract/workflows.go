@@ -1,12 +1,20 @@
 package contract
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"net"
+	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -78,6 +86,10 @@ func assemblyOrigin(value *url.URL) string { return value.Scheme + "://" + value
 
 func admittedAssemblyOwner(raw, id string, policy assemblyWorkflowPolicy, config Config) (string, error) {
 	expectedPath := strings.ReplaceAll(policy.Path, "{"+policy.Parameter+"}", id)
+	return admittedWorkflowDestination(raw, expectedPath, policy, config)
+}
+
+func admittedWorkflowDestination(raw, expectedPath string, policy assemblyWorkflowPolicy, config Config) (string, error) {
 	// NewClient already validated this caller-owned endpoint. An exact match preserves its proxy
 	// prefix/encoding or loopback spelling without trusting any new response-supplied destination.
 	if raw == config.Origin+expectedPath {
@@ -151,6 +163,441 @@ func waitWorkflowDelay(ctx context.Context, delay time.Duration) error {
 	case <-timer.C:
 		return workflowDeadline(ctx)
 	}
+}
+
+// AssemblyUploadSession is a private checkpoint. Its URL is a secret upload capability.
+type AssemblyUploadSession struct {
+	Version    int    `json:"version"`
+	AssemblyID string `json:"assemblyId"`
+	UploadURL  string `json:"uploadUrl"`
+	Size       int64  `json:"size"`
+	Filename   string `json:"filename"`
+	Fieldname  string `json:"fieldname"`
+	SHA256     string `json:"sha256"`
+}
+
+// AssemblyUploadOptions sends a fixed-size file with bounded memory. The caller owns Reader.
+// ReaderAt must return promptly (as os.File/bytes.Reader do); its bytes must not change during use.
+type AssemblyUploadOptions struct {
+	AssemblyID string
+	Reader     io.ReaderAt
+	Size       int64
+	Filename   string
+	Fieldname  string
+	// ChunkSize defaults to 5 MiB and is limited to 64 MiB.
+	ChunkSize int64
+	// Timeout defaults to five minutes, including hashing and discovery.
+	Timeout time.Duration
+	// OnSession must persist the private checkpoint before any bytes are sent. Errors stop uploading.
+	OnSession func(AssemblyUploadSession) error
+	// MaxRetries defaults to five; a pointer to zero disables recovery. Creation never retries.
+	MaxRetries *int
+	RetryDelay time.Duration
+}
+
+// AssemblyUploadError preserves a checkpoint and cause without printing the secret upload URL.
+type AssemblyUploadError struct {
+	Session *AssemblyUploadSession
+	Cause   error
+}
+
+func (err *AssemblyUploadError) Error() string {
+	return "Assembly upload stopped; remote cleanup is not confirmed"
+}
+func (err *AssemblyUploadError) Unwrap() error { return err.Cause }
+
+type tusHeaderRule struct {
+	Name      string   `json:"name"`
+	Required  bool     `json:"required"`
+	Values    []string `json:"values"`
+	Pattern   string   `json:"pattern"`
+	MinLength *int     `json:"minLength"`
+	MaxLength *int     `json:"maxLength"`
+}
+type tusOperation struct {
+	Method     string `json:"method"`
+	Path       string `json:"path"`
+	Parameters []struct {
+		Name string `json:"name"`
+	} `json:"parameters"`
+	Success int `json:"success"`
+	Headers struct {
+		Alternatives [][]tusHeaderRule `json:"alternatives"`
+	} `json:"headers"`
+}
+type tusWorkflowPolicy struct {
+	Assembly assemblyWorkflowPolicy `json:"assembly"`
+	Wire     struct {
+		Version   string            `json:"version"`
+		Headers   map[string]string `json:"headers"`
+		MediaType string            `json:"mediaType"`
+		Filename  string            `json:"filename"`
+		Fieldname string            `json:"fieldname"`
+	} `json:"wire"`
+	CollectionField string       `json:"collectionField"`
+	MetadataName    string       `json:"metadataName"`
+	Create          tusOperation `json:"create"`
+	Head            tusOperation `json:"head"`
+	Patch           tusOperation `json:"patch"`
+}
+
+func invalidUpload() error {
+	return fmt.Errorf("invalid upload session, protocol response or destination")
+}
+
+func validateTusHeaders(operation tusOperation, headers map[string]string) bool {
+	for _, rules := range operation.Headers.Alternatives {
+		valid, named := true, make(map[string]bool)
+		for _, rule := range rules {
+			named[rule.Name] = true
+			value, exists := headers[rule.Name]
+			if !exists {
+				valid = valid && !rule.Required
+				continue
+			}
+			if rule.Values != nil && !hasWorkflowCode(rule.Values, value) {
+				valid = false
+			}
+			if rule.Pattern != "" {
+				matched, err := regexp.MatchString(rule.Pattern, value)
+				valid = valid && err == nil && matched
+			}
+			length := len([]rune(value))
+			valid = valid && (rule.MinLength == nil || length >= *rule.MinLength) && (rule.MaxLength == nil || length <= *rule.MaxLength)
+		}
+		for name := range headers {
+			valid = valid && named[name]
+		}
+		if valid {
+			return true
+		}
+	}
+	return false
+}
+
+// requestTus makes one generated protocol request, with no ambient authentication or redirects.
+func (client *Client) requestTus(ctx context.Context, operation tusOperation, target string, headers map[string]string, body []byte) (http.Header, error) {
+	if !validateTusHeaders(operation, headers) {
+		return nil, invalidUpload()
+	}
+	request, err := http.NewRequestWithContext(ctx, operation.Method, target, bytes.NewReader(body))
+	if err != nil {
+		return nil, invalidUpload()
+	}
+	for name, value := range headers {
+		request.Header.Set(name, value)
+	}
+	response, err := client.httpClient.Do(request)
+	if err != nil {
+		return nil, &TransportError{Cause: redactRequestURL(err)}
+	}
+	defer response.Body.Close()
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return nil, &ResponseError{Status: response.StatusCode, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now())}
+	}
+	if response.StatusCode != operation.Success {
+		return nil, invalidUpload()
+	}
+	if err := workflowDeadline(ctx); err != nil {
+		return nil, err
+	}
+	return response.Header.Clone(), nil
+}
+
+func admitUploadURL(raw string, operation tusOperation, policy tusWorkflowPolicy, config Config) (string, error) {
+	if strings.ContainsAny(raw, "\\%?#") || strings.IndexFunc(raw, unicode.IsSpace) >= 0 {
+		return "", invalidUpload()
+	}
+	for _, segment := range strings.Split(raw, "/") {
+		if segment == "." || segment == ".." {
+			return "", invalidUpload()
+		}
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return "", invalidUpload()
+	}
+	path := operation.Path
+	if len(operation.Parameters) == 1 {
+		id := parsed.Path[strings.LastIndex(parsed.Path, "/")+1:]
+		if id == "" || id == "." || id == ".." {
+			return "", invalidUpload()
+		}
+		path = strings.ReplaceAll(path, "{"+operation.Parameters[0].Name+"}", id)
+	} else if strings.HasSuffix(raw, "/") {
+		// Collection trailing slashes are canonicalized like the producer's capability adapter.
+		raw = strings.TrimSuffix(raw, "/")
+	}
+	origin, err := admittedWorkflowDestination(raw, path, policy.Assembly, config)
+	if err != nil {
+		return "", err
+	}
+	return origin + path, nil
+}
+
+func tusOffset(headers http.Header, name string, size int64) (int64, error) {
+	values := headers.Values(name)
+	if len(values) != 1 {
+		return 0, invalidUpload()
+	}
+	text := values[0]
+	if text == "" || strings.Trim(text, "0123456789") != "" || (len(text) > 1 && text[0] == '0') {
+		return 0, invalidUpload()
+	}
+	value, err := strconv.ParseInt(text, 10, 64)
+	if err != nil || value > size {
+		return 0, invalidUpload()
+	}
+	return value, nil
+}
+
+func verifyUploadMetadata(raw string, expected map[string]string) bool {
+	actual := make(map[string]string)
+	for _, entry := range strings.Split(raw, ",") {
+		pair := strings.SplitN(strings.TrimSpace(entry), " ", 2)
+		if len(pair) != 2 {
+			return false
+		}
+		if _, duplicate := actual[pair[0]]; duplicate {
+			return false
+		}
+		value, err := base64.StdEncoding.DecodeString(pair[1])
+		if err != nil {
+			return false
+		}
+		actual[pair[0]] = string(value)
+	}
+	for key, value := range expected {
+		if actual[key] != value {
+			return false
+		}
+	}
+	return true
+}
+
+func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadOptions, resume *AssemblyUploadSession) (result *AssemblyUploadSession, failure error) {
+	if input.Timeout < 0 || input.RetryDelay < 0 || input.ChunkSize < 0 || input.Size < 0 || input.Reader == nil {
+		return nil, invalidUpload()
+	}
+	if input.Timeout == 0 {
+		input.Timeout = 5 * time.Minute
+	}
+	if input.RetryDelay == 0 {
+		input.RetryDelay = time.Second
+	}
+	if input.ChunkSize == 0 {
+		input.ChunkSize = 5 * 1024 * 1024
+	}
+	if input.ChunkSize > 64*1024*1024 || input.Size > 9007199254740991 {
+		return nil, invalidUpload()
+	}
+	maxRetries := 5
+	if input.MaxRetries != nil {
+		maxRetries = *input.MaxRetries
+	}
+	if maxRetries < 0 || maxRetries > 100 {
+		return nil, invalidUpload()
+	}
+	if input.Fieldname == "" {
+		input.Fieldname = "file"
+	}
+	if input.Filename == "" || strings.ContainsAny(input.Filename+input.Fieldname, "\r\n\x00") {
+		return nil, invalidUpload()
+	}
+	var policy tusWorkflowPolicy
+	if json.Unmarshal([]byte(tusWorkflowPolicyJSON), &policy) != nil {
+		return nil, invalidUpload()
+	}
+	valid, err := regexp.MatchString(policy.Assembly.Pattern, input.AssemblyID)
+	if err != nil || !valid {
+		return nil, invalidUpload()
+	}
+	ctx, stop := context.WithTimeout(parent, input.Timeout)
+	defer stop()
+	var session *AssemblyUploadSession
+	if resume != nil {
+		copy := *resume
+		session = &copy
+	}
+	defer func() {
+		if failure != nil {
+			if deadline := workflowDeadline(ctx); deadline != nil {
+				failure = deadline
+			}
+			failure = &AssemblyUploadError{Session: session, Cause: failure}
+		}
+	}()
+	if err := workflowDeadline(ctx); err != nil {
+		return nil, err
+	}
+	digest := sha256.New()
+	buffer := make([]byte, input.ChunkSize)
+	for position := int64(0); position < input.Size; {
+		count := input.ChunkSize
+		if remaining := input.Size - position; remaining < count {
+			count = remaining
+		}
+		if _, err := io.ReadFull(io.NewSectionReader(input.Reader, position, count), buffer[:count]); err != nil {
+			return nil, err
+		}
+		digest.Write(buffer[:count])
+		position += count
+		if err := workflowDeadline(ctx); err != nil {
+			return nil, err
+		}
+	}
+	sha := hex.EncodeToString(digest.Sum(nil))
+	if session != nil && (session.Version != 1 || session.AssemblyID != input.AssemblyID || session.Size != input.Size || session.Filename != input.Filename || session.Fieldname != input.Fieldname || session.SHA256 != sha) {
+		return nil, invalidUpload()
+	}
+	if session != nil {
+		if _, err := admitUploadURL(session.UploadURL, policy.Head, policy, client.config); err != nil {
+			return nil, err
+		}
+	}
+	httpClient := *client.httpClient
+	httpClient.Jar = nil
+	connection := &Client{config: client.config, httpClient: &httpClient}
+	status, err := connection.readWorkflowAssembly(ctx, input.AssemblyID)
+	if err != nil {
+		return nil, err
+	}
+	if status == nil || workflowIdentity(status) != input.AssemblyID {
+		return nil, invalidUpload()
+	}
+	owner, err := admittedAssemblyOwner(workflowOwner(status), input.AssemblyID, policy.Assembly, client.config)
+	if err != nil {
+		return nil, err
+	}
+	assemblyURL := owner + strings.ReplaceAll(policy.Assembly.Path, "{"+policy.Assembly.Parameter+"}", input.AssemblyID)
+	collection, err := admitUploadURL(workflowCollection(status), policy.Create, policy, client.config)
+	if err != nil {
+		return nil, err
+	}
+	wire := policy.Wire
+	expectedMetadata := map[string]string{policy.MetadataName: assemblyURL, wire.Filename: input.Filename, wire.Fieldname: input.Fieldname}
+	headers := func() map[string]string { return map[string]string{wire.Headers["resumable"]: wire.Version} }
+	if session == nil {
+		creation := headers()
+		creation[wire.Headers["length"]] = strconv.FormatInt(input.Size, 10)
+		var parts []string
+		for _, key := range []string{policy.MetadataName, wire.Filename, wire.Fieldname} {
+			parts = append(parts, key+" "+base64.StdEncoding.EncodeToString([]byte(expectedMetadata[key])))
+		}
+		creation[wire.Headers["metadata"]] = strings.Join(parts, ",")
+		response, err := connection.requestTus(ctx, policy.Create, collection, creation, nil)
+		if err != nil {
+			return nil, err
+		}
+		locations := response.Values(wire.Headers["location"])
+		if len(locations) != 1 || locations[0] == "" || strings.ContainsAny(locations[0], "\\%?#") || strings.IndexFunc(locations[0], unicode.IsSpace) >= 0 {
+			return nil, invalidUpload()
+		}
+		for _, segment := range strings.Split(locations[0], "/") {
+			if segment == "." || segment == ".." {
+				return nil, invalidUpload()
+			}
+		}
+		base, _ := url.Parse(collection)
+		relative, err := url.Parse(locations[0])
+		if err != nil {
+			return nil, invalidUpload()
+		}
+		uploadURL, err := admitUploadURL(base.ResolveReference(relative).String(), policy.Head, policy, client.config)
+		if err != nil {
+			return nil, err
+		}
+		session = &AssemblyUploadSession{Version: 1, AssemblyID: input.AssemblyID, UploadURL: uploadURL, Size: input.Size, Filename: input.Filename, Fieldname: input.Fieldname, SHA256: sha}
+		if input.OnSession != nil {
+			if err := input.OnSession(*session); err != nil {
+				return nil, err
+			}
+		}
+	}
+	uploadURL, err := admitUploadURL(session.UploadURL, policy.Head, policy, client.config)
+	if err != nil {
+		return nil, err
+	}
+	retries := 0
+	recover := func(failure error) error {
+		if err := workflowDeadline(ctx); err != nil {
+			return err
+		}
+		var response *ResponseError
+		var network net.Error
+		retry := errors.As(failure, &network) || errors.Is(failure, io.EOF) || errors.Is(failure, io.ErrUnexpectedEOF)
+		if errors.As(failure, &response) {
+			retry = response.Status == 409 || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
+		}
+		if !retry || retries >= maxRetries {
+			return failure
+		}
+		retries++
+		delay := input.RetryDelay
+		if response != nil && response.RetryAfter > delay {
+			delay = response.RetryAfter
+		}
+		return waitWorkflowDelay(ctx, delay)
+	}
+	head := func() (int64, error) {
+		for {
+			response, err := connection.requestTus(ctx, policy.Head, uploadURL, headers(), nil)
+			if err != nil {
+				if err := recover(err); err != nil {
+					return 0, err
+				}
+				continue
+			}
+			length, err := tusOffset(response, wire.Headers["length"], input.Size)
+			if err != nil || length != input.Size || response.Get(wire.Headers["resumable"]) != wire.Version || !verifyUploadMetadata(response.Get(wire.Headers["metadata"]), expectedMetadata) {
+				return 0, invalidUpload()
+			}
+			return tusOffset(response, wire.Headers["offset"], input.Size)
+		}
+	}
+	position, err := head()
+	if err != nil {
+		return nil, err
+	}
+	for position < input.Size {
+		if err := workflowDeadline(ctx); err != nil {
+			return nil, err
+		}
+		count := input.ChunkSize
+		if remaining := input.Size - position; remaining < count {
+			count = remaining
+		}
+		if _, err := io.ReadFull(io.NewSectionReader(input.Reader, position, count), buffer[:count]); err != nil {
+			return nil, err
+		}
+		patchHeaders := headers()
+		patchHeaders[wire.Headers["offset"]] = strconv.FormatInt(position, 10)
+		patchHeaders[wire.Headers["contentType"]] = wire.MediaType
+		response, err := connection.requestTus(ctx, policy.Patch, uploadURL, patchHeaders, buffer[:count])
+		if err != nil {
+			if err := recover(err); err != nil {
+				return nil, err
+			}
+			confirmed, err := head()
+			if err != nil {
+				return nil, err
+			}
+			if confirmed < position || confirmed > position+count {
+				return nil, invalidUpload()
+			}
+			position = confirmed
+			continue
+		}
+		next, err := tusOffset(response, wire.Headers["offset"], input.Size)
+		if err != nil || next != position+count || response.Get(wire.Headers["resumable"]) != wire.Version {
+			return nil, invalidUpload()
+		}
+		position = next
+	}
+	if err := workflowDeadline(ctx); err != nil {
+		return nil, err
+	}
+	return session, nil
 }
 
 func (client *Client) readWorkflowStatus(ctx context.Context, id string, interval time.Duration) (*AssemblyWorkflowResult, error) {

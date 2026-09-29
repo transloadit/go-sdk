@@ -89,6 +89,30 @@ completed Assembly. `CreateAssembly.Files` supports multipart uploads. The expli
 `CancelAndWaitForAssembly(ctx, options)` workflows safely follow the owning uploader and return
 only after confirming a terminal status. Check `status.GetOk() == "ASSEMBLY_COMPLETED"` for
 successful processing; cancellation and processing errors are terminal too.
+
+For a resumable upload, create an Assembly with
+`Fields: map[string]string{"num_expected_upload_files": "1"}`, then call
+`UploadAssemblyFile(ctx, contract.AssemblyUploadOptions{AssemblyID: id, Reader: file,
+Size: size, Filename: "example.jpg", OnSession: persistSession})`.
+`Reader` is a caller-owned `io.ReaderAt`, such as an open `*os.File`; keep it open and unchanged
+until the call returns. The SDK hashes and uploads in bounded chunks, not one whole-file buffer.
+
+`OnSession` receives a JSON-serializable `AssemblyUploadSession` before the first file bytes are
+sent. Save it securely; it contains a secret capability URL and must not be logged or shared with
+other users. Return an error if persistence fails. A fresh client can then call
+`ResumeAssemblyFile(ctx, input, savedSession)` using the original file. It checks the file's
+SHA-256, upload metadata and destination, reads the server offset, and never creates a second
+upload. Already completed transfers send no more bytes. Transfer completion is not Assembly
+processing success: call `WaitForAssembly` afterward and inspect its terminal status.
+
+`ChunkSize` defaults to 5 MiB, `Timeout` to five minutes and `MaxRetries` to five recovery attempts.
+A pointer to zero disables recovery. Ambiguous PATCH failures require a fresh offset read before
+more bytes are sent. Creation never retries; if its response is lost before a session is saved,
+inspect the Assembly before starting another upload. `errors.As` with `*contract.AssemblyUploadError`
+provides the saved `Session` when available; `errors.Is` still recognizes caller cancellation.
+Stopping locally does not delete bytes or cancel the Assembly. Use `CancelAndWaitForAssembly`
+explicitly when abandoning the job. Deferred lengths, concatenation and non-seekable streams are
+not supported by these bounded fixed-size helpers.
 Workflow `Timeout` defaults to five minutes and `Interval` to one second. An earlier context
 deadline wins. Cancel-and-wait sends one cancellation attempt, then polls; a timeout or caller
 cancellation stops waiting but does not prove remote cleanup. Private deployments may set
@@ -148,12 +172,12 @@ unreleased draft intentionally replaces earlier operation-prefixed type names; e
 are unchanged. Model naming belongs in API2's `api2/lib/contract/schemaModels.ts`, not local aliases.
 
 API2 also owns `contract/workflow-vectors.json`. `go test -race . -run '^TestSharedWorkflow' -v`
-exercises contract-client wait/cancel and the existing upload and Smart CDN methods with the same
+exercises contract-client wait/cancel/upload/resume and local Smart CDN signing with the same
 observations used by the Node SDK. Tests use synthetic credentials and loopback HTTP servers;
 adapters may not implement missing SDK polling, retries or signing. CI runs these cases as part of
-the root tests. **Resumable tus upload is explicitly unsupported in this Go SDK**, so that named
-case reports `SKIP`, not a pass. New unclassified cases fail. Passing fixture tests is not proof of
-live-server behavior or complete generated-client upload/resume parity. Change shared scenarios
+the root tests. The new contract client's resume case is required and no longer skipped; the old
+multipart API is unchanged. New unclassified cases fail. Passing fixture tests is not proof of
+every live-server behavior or support for every tus extension. Change shared scenarios
 in API2's `api2/lib/contract/sdk/workflowVectors.ts` and regenerate rather than editing the JSON.
 
 The workflow tests also correct existing SDK behavior: Smart CDN signing now uses the server's

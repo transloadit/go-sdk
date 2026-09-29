@@ -1,7 +1,10 @@
 package contract
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,10 +12,133 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
 )
+
+func tusFixtureClient(t *testing.T, location string, overrides map[string]string, creationStatus, patchStatus int) (*Client, *[]string) {
+	t.Helper()
+	origin := "http://127.0.0.1:4000"
+	id := strings.Repeat("1", 32)
+	metadata, position := "", 0
+	methods := []string{}
+	client, err := NewClient(Config{Origin: origin, BearerToken: "never-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		methods = append(methods, request.Method)
+		if request.Header.Get("Authorization") != "" || request.Header.Get("Cookie") != "" {
+			t.Error("credentials forwarded")
+		}
+		header := make(http.Header)
+		header.Set("Tus-Resumable", "1.0.0")
+		status := 200
+		switch request.Method {
+		case "GET":
+			return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_UPLOADING", "assembly_ssl_url": origin + "/assemblies/" + id, "tus_url": origin + "/resumable/files/"}), nil
+		case "POST":
+			metadata = request.Header.Get("Upload-Metadata")
+			header.Set("Location", location)
+			status = creationStatus
+		case "HEAD":
+			header.Set("Upload-Length", "4")
+			header.Set("Upload-Offset", strconv.Itoa(position))
+			header.Set("Upload-Metadata", metadata)
+			for key, value := range overrides {
+				header.Set(key, value)
+			}
+		case "PATCH":
+			body, err := ioutil.ReadAll(request.Body)
+			if err != nil {
+				t.Error(err)
+			}
+			position += len(body)
+			header.Set("Upload-Offset", strconv.Itoa(position))
+			status = patchStatus
+		default:
+			t.Errorf("unexpected method %s", request.Method)
+		}
+		return &http.Response{StatusCode: status, Header: header, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return client, &methods
+}
+
+func tusFixtureInput() AssemblyUploadOptions {
+	return AssemblyUploadOptions{AssemblyID: strings.Repeat("1", 32), Reader: bytes.NewReader([]byte("test")), Size: 4, Filename: "input.txt", RetryDelay: time.Millisecond}
+}
+
+func TestTusWorkflowRejectsDestinations(t *testing.T) {
+	for _, location := range []string{
+		"https://evil.example/resumable/files/one", "//evil.example/resumable/files/one",
+		"http://127.0.0.1:4000/resumable/files/../one", "http://127.0.0.1:4000/resumable/files/%2e%2e",
+		"http://127.0.0.1:4000/resumable/files/one?override=DELETE", "http://127.0.0.1:4000/resumable/files/one#fragment",
+		"http://127.0.0.1:4000/resumable/files/one/two", "https://user:secret@api2-uploader.transloadit.com/resumable/files/one",
+	} {
+		t.Run(location, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, location, nil, 201, 204)
+			_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+			var failure *AssemblyUploadError
+			if !errors.As(err, &failure) || len(*methods) != 2 {
+				t.Fatalf("untrusted destination was followed: %v, %v", err, *methods)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRejectsHeaders(t *testing.T) {
+	for _, headers := range []map[string]string{
+		{"Upload-Length": "5"}, {"Upload-Length": "3"}, {"Upload-Offset": "-1"}, {"Upload-Offset": "1.5"},
+		{"Upload-Offset": "5"}, {"Upload-Offset": "00"}, {"Upload-Offset": "0, 0"},
+		{"Tus-Resumable": "other"}, {"Upload-Metadata": ""},
+		{"Upload-Metadata": "assembly_url Zm9yZWlnbg==,filename aW5wdXQudHh0,fieldname ZmlsZQ=="},
+	} {
+		client, methods := tusFixtureClient(t, "/resumable/files/one", headers, 201, 204)
+		_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+		if err == nil || len(*methods) != 3 {
+			t.Fatalf("invalid headers reached PATCH: %v, %v", headers, err)
+		}
+	}
+}
+
+func TestTusWorkflowPersistenceAndChangedFile(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	var saved AssemblyUploadSession
+	persistence := errors.New("persistence unavailable")
+	input.OnSession = func(session AssemblyUploadSession) error { saved = session; return persistence }
+	_, err := client.UploadAssemblyFile(context.Background(), input)
+	digest := sha256.Sum256([]byte("test"))
+	if !errors.Is(err, persistence) || saved.SHA256 != hex.EncodeToString(digest[:]) || len(*methods) != 2 {
+		t.Fatalf("checkpoint was not persisted before bytes: %v", err)
+	}
+	fresh, calls := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input.Reader = bytes.NewReader([]byte("xxxx"))
+	if _, err := fresh.ResumeAssemblyFile(context.Background(), input, saved); err == nil || len(*calls) != 0 {
+		t.Fatal("changed file was allowed")
+	}
+}
+
+func TestTusWorkflowRecoveryIsOffsetBasedAndBounded(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 503, 204)
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err == nil || len(*methods) != 2 {
+		t.Fatal("uncertain creation was retried")
+	}
+	client, methods = tusFixtureClient(t, "/resumable/files/one", nil, 201, 503)
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST,HEAD,PATCH,HEAD" {
+		t.Fatalf("accepted bytes were replayed: %v", *methods)
+	}
+	client, methods = tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if _, err := client.UploadAssemblyFile(ctx, tusFixtureInput()); !errors.Is(err, context.Canceled) || len(*methods) != 0 {
+		t.Fatal("aborted workflow performed requests")
+	}
+}
 
 func workflowJSON(t *testing.T, value interface{}) *http.Response {
 	t.Helper()
