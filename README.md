@@ -123,7 +123,8 @@ cancellation stops waiting but does not prove remote cleanup. Private deployment
 When a response points back to the exact configured `Origin` plus the Assembly path, its proxy
 prefix is retained. Prefixes are never inferred from an untrusted response URL.
 Uploader requests carry no credentials or cookie jar; redirects and changed owners are rejected.
-Status GETs retry HTTP 429 and 5xx within the overall deadline, honoring `Retry-After`. An HTTP
+Status GETs retry transient network failures and HTTP 429/5xx within the overall deadline,
+honoring `Retry-After`. An HTTP
 error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
 Fixed-size upload and resume use the new contract client; SSE and Webhook receivers remain
 separate work. Go 1.15 remains supported.
