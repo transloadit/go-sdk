@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"syscall"
 	"testing"
 	"time"
 )
@@ -193,6 +194,65 @@ func TestTusWorkflowOwnsEachPatchBuffer(t *testing.T) {
 	}
 	if patches != 2 {
 		t.Fatalf("PATCH count: %d", patches)
+	}
+}
+
+func TestTusWorkflowContinuesFromPartialAcknowledgement(t *testing.T) {
+	client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	transport := client.httpClient.Transport
+	var stored []byte
+	patches := 0
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "PATCH" {
+			return transport.RoundTrip(request)
+		}
+		defer request.Body.Close()
+		if request.Header.Get("Upload-Offset") != strconv.Itoa(len(stored)) {
+			t.Fatalf("wrong resumed offset: %s", request.Header.Get("Upload-Offset"))
+		}
+		body, err := ioutil.ReadAll(request.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		patches++
+		if patches == 1 {
+			body = body[:1]
+		}
+		stored = append(stored, body...)
+		response := workflowJSON(t, nil)
+		response.StatusCode = 204
+		response.Header.Set("Tus-Resumable", "1.0.0")
+		response.Header.Set("Upload-Offset", strconv.Itoa(len(stored)))
+		return response, nil
+	})
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err != nil {
+		t.Fatal(err)
+	}
+	if string(stored) != "test" || patches != 2 {
+		t.Fatalf("partial acknowledgement lost bytes: %q, patches=%d", stored, patches)
+	}
+}
+
+func TestTusWorkflowRejectsInvalidPatchAcknowledgements(t *testing.T) {
+	for _, offset := range []string{"0", "-1", "3", "5", "1.5"} {
+		t.Run(offset, func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			transport := client.httpClient.Transport
+			patches := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if request.Method == "PATCH" && response != nil {
+					patches++
+					response.Header.Set("Upload-Offset", offset)
+				}
+				return response, err
+			})
+			input := tusFixtureInput()
+			input.ChunkSize = 2
+			if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || patches != 1 {
+				t.Fatalf("accepted invalid acknowledgement: err=%v patches=%d", err, patches)
+			}
+		})
 	}
 }
 
@@ -800,15 +860,60 @@ func TestWorkflowRetriesRateLimitedReads(t *testing.T) {
 	}
 }
 
+func TestWorkflowRetriesTransientReadFailures(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, failure := range []error{io.EOF, syscall.ECONNRESET, context.DeadlineExceeded} {
+		for _, phase := range []string{"discovery", "poll"} {
+			for _, cancel := range []bool{false, true} {
+				t.Run(fmt.Sprintf("%s/%s/cancel=%t", failure, phase, cancel), func(t *testing.T) {
+					reads, deletes := 0, 0
+					client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+						state := "ASSEMBLY_EXECUTING"
+						if request.Method == "DELETE" {
+							deletes++
+						} else {
+							reads++
+							if (phase == "discovery" && reads == 1) || (phase == "poll" && reads == 2) {
+								return nil, failure
+							}
+							if reads == 3 {
+								state = "ASSEMBLY_COMPLETED"
+								if cancel {
+									state = "ASSEMBLY_CANCELED"
+								}
+							}
+						}
+						return workflowJSON(t, map[string]string{"assembly_id": id, "ok": state, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+					})}})
+					if err != nil {
+						t.Fatal(err)
+					}
+					workflow := client.WaitForAssembly
+					if cancel {
+						workflow = client.CancelAndWaitForAssembly
+					}
+					result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: time.Second})
+					if err != nil || result == nil || reads != 3 || (cancel && deletes != 1) || (!cancel && deletes != 0) {
+						t.Fatalf("read recovery: err=%v reads=%d deletes=%d", err, reads, deletes)
+					}
+				})
+			}
+		}
+	}
+}
+
 func TestWorkflowBoundsReadRetries(t *testing.T) {
 	id := strings.Repeat("a", 32)
-	for _, mode := range []string{"deadline", "caller", "server-error"} {
+	for _, mode := range []string{"deadline", "caller", "server-error", "transport"} {
 		t.Run(mode, func(t *testing.T) {
 			ctx, stop := context.WithCancel(context.Background())
 			defer stop()
 			calls := 0
 			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
 				calls++
+				if mode == "transport" {
+					return nil, io.EOF
+				}
 				response := workflowJSON(t, map[string]string{"error": "RATE_LIMIT_REACHED"})
 				response.StatusCode = 429
 				response.Header.Set("Retry-After", "999999999999999999999")
@@ -839,7 +944,7 @@ func TestWorkflowBoundsReadRetries(t *testing.T) {
 			if mode == "caller" {
 				want = context.Canceled
 			}
-			if !errors.Is(err, want) || calls != 1 {
+			if !errors.Is(err, want) || (mode != "transport" && calls != 1) || (mode == "transport" && calls < 2) {
 				t.Fatalf("bounded retry: %v calls=%d", err, calls)
 			}
 		})

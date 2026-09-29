@@ -378,7 +378,7 @@ func verifyUploadMetadata(raw string, expected map[string]string) bool {
 	return true
 }
 
-func retryableUploadTransport(failure error) bool {
+func retryableWorkflowTransport(failure error) bool {
 	// url.Error implements net.Error even for certificate or redirect-policy failures.
 	// Unwrap that context before asking whether the actual cause can recover.
 	for {
@@ -480,7 +480,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			return err
 		}
 		var response *ResponseError
-		retry := retryableUploadTransport(failure)
+		retry := retryableWorkflowTransport(failure)
 		if errors.As(failure, &response) {
 			retry = response.Status == 409 || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
 		}
@@ -620,7 +620,8 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			continue
 		}
 		next, err := tusOffset(response, wire.Headers["offset"], input.Size)
-		if err != nil || next != position+count || response.Get(wire.Headers["resumable"]) != wire.Version {
+		// tus acknowledges bytes actually stored, which may be fewer than this request offered.
+		if err != nil || next <= position || next > position+count || response.Get(wire.Headers["resumable"]) != wire.Version {
 			return nil, invalidUpload()
 		}
 		position = next
@@ -641,12 +642,16 @@ func (client *Client) readWorkflowStatus(ctx context.Context, id string, interva
 			return result, nil
 		}
 		var responseError *ResponseError
-		if !errors.As(err, &responseError) || !(responseError.Status == 429 || (responseError.Status >= 500 && responseError.Status <= 599)) {
+		retry := retryableWorkflowTransport(err)
+		if errors.As(err, &responseError) {
+			retry = responseError.Status == 429 || (responseError.Status >= 500 && responseError.Status <= 599)
+		}
+		if !retry {
 			return nil, err
 		}
 		// Only safe reads retry. The context deadline bounds even a very long server hint.
 		delay := interval
-		if responseError.RetryAfter > delay {
+		if responseError != nil && responseError.RetryAfter > delay {
 			delay = responseError.RetryAfter
 		}
 		if err := waitWorkflowDelay(ctx, delay); err != nil {
