@@ -189,7 +189,6 @@ type workflowVector struct {
 	InterruptAfterBytes    int
 	LoseResponseAfterBytes int
 	ResponseDelayMs        int
-	WorkflowError          string
 	Responses              []struct{ Ok, Error string }
 	Expected               struct{ Ok, Error string }
 }

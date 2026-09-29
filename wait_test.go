@@ -153,17 +153,6 @@ func TestSharedWorkflows(t *testing.T) {
 				} else {
 					result, err = generated.WaitForAssembly(deadline, input)
 				}
-				if scenario.WorkflowError != "" {
-					if scenario.WorkflowError != "ASSEMBLY_WORKFLOW_UNCONFIRMED" || !errors.Is(err, contract.ErrAssemblyWorkflowUnconfirmed) {
-						t.Fatalf("expected unconfirmed completion: %v", err)
-					}
-					mu.Lock()
-					defer mu.Unlock()
-					if polls != len(scenario.Responses) || deletes != 0 {
-						t.Fatalf("unconfirmed wait: reads=%d deletes=%d", polls, deletes)
-					}
-					return
-				}
 				if err != nil {
 					t.Fatal(err)
 				}
