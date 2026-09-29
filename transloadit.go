@@ -18,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf16"
 )
 
 // Config defines the configuration options for a client.
@@ -257,15 +258,16 @@ type SignedSmartCDNUrlOptions struct {
 // CreateSignedSmartCDNUrl constructs a signed Smart CDN URL.
 // See https://transloadit.com/docs/topics/signature-authentication/#smart-cdn
 func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) string {
-	workspaceSlug := url.PathEscape(opts.Workspace)
-	templateSlug := url.PathEscape(opts.Template)
-	inputField := url.PathEscape(opts.Input)
+	workspaceSlug := encodeSmartCDNComponent(opts.Workspace, false)
+	templateSlug := encodeSmartCDNComponent(opts.Template, false)
+	inputField := encodeSmartCDNComponent(opts.Input, false)
 
 	var expiresAt int64
 	if !opts.ExpiresAt.IsZero() {
-		expiresAt = opts.ExpiresAt.Unix() * 1000
+		expiresAt = opts.ExpiresAt.Unix()*1000 + int64(opts.ExpiresAt.Nanosecond())/int64(time.Millisecond)
 	} else {
-		expiresAt = time.Now().Add(time.Hour).Unix() * 1000 // 1 hour
+		expires := time.Now().Add(time.Hour)
+		expiresAt = expires.Unix()*1000 + int64(expires.Nanosecond())/int64(time.Millisecond)
 	}
 
 	queryParams := make(url.Values, len(opts.URLParams)+2)
@@ -275,18 +277,28 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 
 	queryParams.Set("auth_key", client.config.AuthKey)
 	queryParams.Set("exp", strconv.FormatInt(expiresAt, 10))
+	queryParams.Del("sig")
 
 	// Build query string with sorted keys
 	queryParamsKeys := make([]string, 0, len(queryParams))
 	for k := range queryParams {
 		queryParamsKeys = append(queryParamsKeys, k)
 	}
-	sort.Strings(queryParamsKeys)
+	// API2 canonicalizes using URLSearchParams.sort(), whose order is UTF-16 code units.
+	sort.Slice(queryParamsKeys, func(i, j int) bool {
+		left, right := utf16.Encode([]rune(queryParamsKeys[i])), utf16.Encode([]rune(queryParamsKeys[j]))
+		for k := 0; k < len(left) && k < len(right); k++ {
+			if left[k] != right[k] {
+				return left[k] < right[k]
+			}
+		}
+		return len(left) < len(right)
+	})
 
 	var queryParts []string
 	for _, k := range queryParamsKeys {
 		for _, v := range queryParams[k] {
-			queryParts = append(queryParts, url.QueryEscape(k)+"="+url.QueryEscape(v))
+			queryParts = append(queryParts, encodeSmartCDNComponent(k, true)+"="+encodeSmartCDNComponent(v, true))
 		}
 	}
 	queryString := strings.Join(queryParts, "&")
@@ -302,4 +314,25 @@ func (client *Client) CreateSignedSmartCDNUrl(opts SignedSmartCDNUrlOptions) str
 		workspaceSlug, templateSlug, inputField, queryString, signature)
 
 	return signedURL
+}
+
+// Smart CDN signs encodeURIComponent path segments and URLSearchParams query bytes, not Go's
+// PathEscape/QueryEscape spellings. Different spellings change the HMAC even for equivalent URLs.
+func encodeSmartCDNComponent(value string, query bool) string {
+	const hexDigits = "0123456789ABCDEF"
+	var result strings.Builder
+	for i := 0; i < len(value); i++ {
+		b := value[i]
+		if b >= 'a' && b <= 'z' || b >= 'A' && b <= 'Z' || b >= '0' && b <= '9' ||
+			strings.ContainsRune("*-._", rune(b)) || !query && strings.ContainsRune("!~'()", rune(b)) {
+			result.WriteByte(b)
+		} else if query && b == ' ' {
+			result.WriteByte('+')
+		} else {
+			result.WriteByte('%')
+			result.WriteByte(hexDigits[b>>4])
+			result.WriteByte(hexDigits[b&15])
+		}
+	}
+	return result.String()
 }
