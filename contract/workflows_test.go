@@ -1071,7 +1071,7 @@ func TestWorkflowRetriesRateLimitedReads(t *testing.T) {
 	}
 }
 
-func TestWorkflowDoesNotConfirmCleanupForAbortedConnection(t *testing.T) {
+func TestWorkflowReturnsAbortedConnectionWithoutClaimingProcessingSuccess(t *testing.T) {
 	id := strings.Repeat("a", 32)
 	for _, cancel := range []bool{false, true} {
 		t.Run(fmt.Sprint(cancel), func(t *testing.T) {
@@ -1087,8 +1087,70 @@ func TestWorkflowDoesNotConfirmCleanupForAbortedConnection(t *testing.T) {
 			if cancel {
 				workflow, want = client.CancelAndWaitForAssembly, "GET,DELETE"
 			}
-			if _, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); !errors.Is(err, ErrAssemblyWorkflowUnconfirmed) {
-				t.Fatalf("aborted connection falsely confirmed cleanup: %v", err)
+			result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.GetOk() != "REQUEST_ABORTED" {
+				t.Fatalf("lost aborted outcome: %v", result.GetOk())
+			}
+			if strings.Join(methods, ",") != want {
+				t.Fatalf("expected %s, got %v", want, methods)
+			}
+		})
+	}
+}
+
+func TestWaitReturnsAbortedConnectionWithoutOwner(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	calls := 0
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		calls++
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED"}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := client.WaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.GetOk() != "REQUEST_ABORTED" || calls != 1 {
+		t.Fatalf("unexpected wait result: %s, requests: %d", result.GetOk(), calls)
+	}
+}
+
+func TestCancelAfterAbortedConnectionPreservesOwnerOutcome(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, failed := range []bool{false, true} {
+		t.Run(fmt.Sprint(failed), func(t *testing.T) {
+			var methods []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				code := "REQUEST_ABORTED"
+				if request.Method == "DELETE" {
+					if failed {
+						response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_CANCEL_UNAVAILABLE"})
+						response.StatusCode = 503
+						return response, nil
+					}
+					code = "ASSEMBLY_CANCELED"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": code, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			want := "GET,DELETE"
+			if failed {
+				want = "GET,DELETE,GET"
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != 503 {
+					t.Fatalf("lost cancellation failure: %v", err)
+				}
+			} else if err != nil || result.GetOk() != "ASSEMBLY_CANCELED" {
+				t.Fatalf("unexpected cancellation result: %v, %v", result, err)
 			}
 			if strings.Join(methods, ",") != want {
 				t.Fatalf("expected %s, got %v", want, methods)

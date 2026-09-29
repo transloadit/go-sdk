@@ -113,7 +113,7 @@ more bytes are sent. Safe discovery and tus recovery share that budget and honor
 Creation never retries; if its response is lost before a session is saved,
 inspect the Assembly before starting another upload. `errors.As` with `*contract.AssemblyUploadError`
 provides the saved `Session` when available; `errors.Is` still recognizes caller cancellation.
-An observed stopped or unconfirmed Assembly prevents new upload writes; `AssemblyCode` preserves
+An observed terminal Assembly prevents new upload writes; `AssemblyCode` preserves
 that status. A resume can still confirm an already complete transfer without sending more bytes,
 even if later Assembly processing failed. Use `WaitForAssembly` to check processing separately.
 If HEAD returns 404 after temporary upload cleanup, the workflow refreshes Assembly status and
@@ -134,9 +134,13 @@ or fault-injection transport works for the whole workflow.
 Status GETs retry transient network failures and HTTP 429/5xx within the overall deadline,
 honoring `Retry-After`. An HTTP
 error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
-`REQUEST_ABORTED` describes the connection, not confirmed completion. Waiting returns
-`ErrAssemblyWorkflowUnconfirmed` (check with `errors.Is`). Cancel-and-wait still attempts the
-owner-routed cancellation once, but returns that error if cleanup remains unconfirmed.
+`REQUEST_ABORTED` is a finite, unsuccessful outcome: waiting returns that typed status without
+an error or indefinite polling. It does not mean processing succeeded or all background work
+has stopped. An explicit cancel still contacts the owning uploader once, preserving a completed
+or failed outcome if work already ended. If that owner cannot be discovered after `REQUEST_ABORTED`,
+cancel-and-wait returns `ErrAssemblyWorkflowUnconfirmed` (check with `errors.Is`). A later GET with
+`REQUEST_ABORTED` does not hide a failed cancellation request. No terminal response promises that
+worker cleanup or billing has already stopped.
 Fixed-size upload and resume use the new contract client; SSE and Webhook receivers remain
 separate work. Go 1.15 remains supported.
 Smart CDN signing remains a local helper in the root package; see the

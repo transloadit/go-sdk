@@ -32,21 +32,21 @@ type AssemblyWorkflowOptions struct {
 }
 
 type assemblyWorkflowPolicy struct {
-	BusyCodes            []string `json:"busyCodes"`
-	TerminalOkCodes      []string `json:"terminalOkCodes"`
-	UnconfirmedOkCodes   []string `json:"unconfirmedOkCodes"`
-	ErrorCodes           []string `json:"errorCodes"`
-	PublicHostPattern    string   `json:"publicHostPattern"`
-	RejectedHostPrefixes []string `json:"rejectedHostPrefixes"`
-	IdentityField        string   `json:"identityField"`
-	AssemblyField        string   `json:"assemblyField"`
-	Path                 string   `json:"path"`
-	Parameter            string   `json:"parameter"`
-	Pattern              string   `json:"pattern"`
+	BusyCodes                 []string `json:"busyCodes"`
+	TerminalOkCodes           []string `json:"terminalOkCodes"`
+	CancelableTerminalOkCodes []string `json:"cancelableTerminalOkCodes"`
+	ErrorCodes                []string `json:"errorCodes"`
+	PublicHostPattern         string   `json:"publicHostPattern"`
+	RejectedHostPrefixes      []string `json:"rejectedHostPrefixes"`
+	IdentityField             string   `json:"identityField"`
+	AssemblyField             string   `json:"assemblyField"`
+	Path                      string   `json:"path"`
+	Parameter                 string   `json:"parameter"`
+	Pattern                   string   `json:"pattern"`
 }
 
-// ErrAssemblyWorkflowUnconfirmed means the connection outcome cannot establish remote cleanup.
-var ErrAssemblyWorkflowUnconfirmed = errors.New("Assembly connection ended; remote completion or cleanup is not confirmed")
+// ErrAssemblyWorkflowUnconfirmed means explicit cancellation could not discover an uploader.
+var ErrAssemblyWorkflowUnconfirmed = errors.New("Assembly cancellation could not be confirmed; no uploader destination is available")
 
 func invalidAssemblyWorkflow() error {
 	// URLs are capabilities. Do not include raw destinations, parser errors or response data.
@@ -210,7 +210,7 @@ type AssemblyUploadOptions struct {
 type AssemblyUploadError struct {
 	Session *AssemblyUploadSession
 	Cause   error
-	// AssemblyCode is the observed stopped or unconfirmed state, when it prevented upload writes.
+	// AssemblyCode is the observed terminal state, when it prevented upload writes.
 	AssemblyCode string
 }
 
@@ -541,7 +541,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			return true, nil
 		}
 		assemblyCode = status.GetOk()
-		known := hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode) || hasWorkflowCode(policy.Assembly.UnconfirmedOkCodes, assemblyCode)
+		known := hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode)
 		if status.WithError != nil {
 			assemblyCode = string(status.WithError.Error)
 			known = hasWorkflowCode(policy.Assembly.ErrorCodes, assemblyCode)
@@ -747,7 +747,7 @@ func (client *Client) readWorkflowStatus(ctx context.Context, id string, interva
 	}
 }
 
-func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy, allowUnconfirmed bool) (bool, string, error) {
+func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy, requireCancellation bool) (bool, string, error) {
 	if err := workflowDeadline(ctx); err != nil {
 		return false, "", err
 	}
@@ -768,12 +768,8 @@ func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, 
 		return true, "", workflowDeadline(ctx)
 	}
 	ok := status.GetOk()
-	if hasWorkflowCode(policy.UnconfirmedOkCodes, ok) {
-		// Only initial cancellation discovery can proceed to the one owner-routed DELETE.
-		// A repeated connection outcome still cannot prove that remote cleanup succeeded.
-		if !allowUnconfirmed || workflowOwner(status) == "" {
-			return false, "", ErrAssemblyWorkflowUnconfirmed
-		}
+	if requireCancellation && hasWorkflowCode(policy.CancelableTerminalOkCodes, ok) {
+		// A failed request is finite for waiters, but an explicit cancel must still reach its owner.
 		return false, workflowOwner(status), nil
 	}
 	if hasWorkflowCode(policy.TerminalOkCodes, ok) {
@@ -827,6 +823,9 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 	if terminal {
 		return result, nil
 	}
+	if cancelAssembly && hasWorkflowCode(policy.CancelableTerminalOkCodes, result.GetOk()) && rawOwner == "" {
+		return nil, ErrAssemblyWorkflowUnconfirmed
+	}
 	origin, err := admittedAssemblyOwner(rawOwner, input.AssemblyID, policy, client.config)
 	if err != nil {
 		return nil, err
@@ -848,7 +847,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 				if readErr != nil {
 					return nil, readErr
 				}
-				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, false)
+				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, true)
 				if inspectionErr != nil {
 					return nil, inspectionErr
 				}
