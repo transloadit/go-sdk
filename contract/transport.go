@@ -75,6 +75,25 @@ func (body *multipartBody) Close() error {
 type ResponseError struct {
 	Status int
 	Data   json.RawMessage
+	// RetryAfter is the server-requested delay, or zero when absent or invalid.
+	RetryAfter time.Duration
+}
+
+func retryAfterDuration(header string, now time.Time) time.Duration {
+	value := strings.TrimSpace(header)
+	if value != "" && strings.Trim(value, "0123456789") == "" {
+		seconds, err := strconv.ParseUint(value, 10, 64)
+		const maximum = time.Duration(1<<63 - 1)
+		if err != nil || seconds > uint64(maximum/time.Second) {
+			return maximum
+		}
+		return time.Duration(seconds) * time.Second
+	}
+	date, err := http.ParseTime(value)
+	if err != nil || !date.After(now) {
+		return 0
+	}
+	return date.Sub(now)
 }
 
 func (err *ResponseError) Error() string {
@@ -686,7 +705,7 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 		if !json.Valid(data) {
 			data = nil
 		}
-		return &ResponseError{Status: response.StatusCode, Data: data}
+		return &ResponseError{Status: response.StatusCode, Data: data, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now())}
 	}
 	if !json.Valid(data) {
 		return fmt.Errorf("API returned an invalid JSON response")

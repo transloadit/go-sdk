@@ -3,6 +3,7 @@ package contract
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -152,6 +153,41 @@ func workflowDeadline(ctx context.Context) error {
 	return nil
 }
 
+func waitWorkflowDelay(ctx context.Context, delay time.Duration) error {
+	timer := time.NewTimer(delay)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return workflowDeadline(ctx)
+	}
+}
+
+func (client *Client) readWorkflowStatus(ctx context.Context, id string, interval time.Duration) (*AssemblyWorkflowResult, error) {
+	for {
+		if err := workflowDeadline(ctx); err != nil {
+			return nil, err
+		}
+		result, err := client.readWorkflowAssembly(ctx, id)
+		if err == nil {
+			return result, nil
+		}
+		var responseError *ResponseError
+		if !errors.As(err, &responseError) || !(responseError.Status == 429 || (responseError.Status >= 500 && responseError.Status <= 599)) {
+			return nil, err
+		}
+		// Only safe reads retry. The context deadline bounds even a very long server hint.
+		delay := interval
+		if responseError.RetryAfter > delay {
+			delay = responseError.RetryAfter
+		}
+		if err := waitWorkflowDelay(ctx, delay); err != nil {
+			return nil, err
+		}
+	}
+}
+
 func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy) (bool, string, error) {
 	if err := workflowDeadline(ctx); err != nil {
 		return false, "", err
@@ -208,7 +244,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 	httpClient := *client.httpClient
 	httpClient.Jar = nil
 	entry := &Client{config: client.config, httpClient: &httpClient}
-	result, err := entry.readWorkflowAssembly(ctx, input.AssemblyID)
+	result, err := entry.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
 	if err != nil {
 		if deadline := workflowDeadline(ctx); deadline != nil {
 			return nil, deadline
@@ -235,6 +271,22 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 			if deadline := workflowDeadline(ctx); deadline != nil {
 				return nil, deadline
 			}
+			var responseError *ResponseError
+			if errors.As(err, &responseError) {
+				// DELETE can race expiration/failure. Confirm through the generated GET, not an
+				// unchecked error-body cast, and never repeat the cancellation write.
+				confirmed, readErr := owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
+				if readErr != nil {
+					return nil, readErr
+				}
+				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy)
+				if inspectionErr != nil {
+					return nil, inspectionErr
+				}
+				if terminal {
+					return confirmed, nil
+				}
+			}
 			return nil, err
 		}
 		terminal, rawOwner, err = inspectWorkflowStatus(ctx, result, input.AssemblyID, policy)
@@ -250,17 +302,10 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 		if admissionErr != nil || current != origin {
 			return nil, invalidAssemblyWorkflow()
 		}
-		timer := time.NewTimer(input.Interval)
-		select {
-		case <-ctx.Done():
-			timer.Stop()
-			return nil, ctx.Err()
-		case <-timer.C:
-		}
-		if err := workflowDeadline(ctx); err != nil {
+		if err := waitWorkflowDelay(ctx, input.Interval); err != nil {
 			return nil, err
 		}
-		result, err = owner.readWorkflowAssembly(ctx, input.AssemblyID)
+		result, err = owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
 		if err != nil {
 			if deadline := workflowDeadline(ctx); deadline != nil {
 				return nil, deadline

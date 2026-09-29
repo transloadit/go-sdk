@@ -266,3 +266,141 @@ func TestWorkflowDoesNotInferProxyPrefixes(t *testing.T) {
 		})
 	}
 }
+
+func TestWorkflowConfirmsCancellationHTTPError(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, terminal := range []bool{false, true} {
+		t.Run(fmt.Sprint(terminal), func(t *testing.T) {
+			var requests []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				requests = append(requests, request.Method)
+				if request.Method == "DELETE" || (terminal && len(requests) > 1) {
+					response := workflowJSON(t, map[string]string{"assembly_id": id, "error": "ASSEMBLY_EXPIRED"})
+					if request.Method == "DELETE" {
+						response.StatusCode = 410
+					}
+					return response, nil
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if terminal {
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.WithError == nil || result.WithError.Error != "ASSEMBLY_EXPIRED" {
+					t.Fatal("missing terminal error")
+				}
+			} else {
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != 410 {
+					t.Fatalf("active status disguised cleanup: %v", err)
+				}
+			}
+			if strings.Join(requests, ",") != "GET,DELETE,GET" {
+				t.Fatalf("requests: %v", requests)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetriesRateLimitedReads(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, phase := range []string{"discovery", "poll"} {
+		t.Run(phase, func(t *testing.T) {
+			var calls []time.Time
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls = append(calls, time.Now())
+				if (phase == "discovery" && len(calls) == 1) || (phase == "poll" && len(calls) == 2) {
+					response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED"})
+					response.StatusCode = 429
+					response.Header.Set("Retry-After", "1")
+					return response, nil
+				}
+				state := "ASSEMBLY_COMPLETED"
+				if phase == "poll" && len(calls) == 1 {
+					state = "ASSEMBLY_EXECUTING"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": state, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.WaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: 5 * time.Second})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.GetOk() != "ASSEMBLY_COMPLETED" || len(calls) < 2 {
+				t.Fatal("missing completion or retry")
+			}
+			if calls[len(calls)-1].Sub(calls[len(calls)-2]) < 990*time.Millisecond {
+				t.Fatal("Retry-After ignored")
+			}
+		})
+	}
+}
+
+func TestWorkflowBoundsReadRetries(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, mode := range []string{"deadline", "caller", "server-error"} {
+		t.Run(mode, func(t *testing.T) {
+			ctx, stop := context.WithCancel(context.Background())
+			defer stop()
+			calls := 0
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls++
+				response := workflowJSON(t, map[string]string{"error": "RATE_LIMIT_REACHED"})
+				response.StatusCode = 429
+				response.Header.Set("Retry-After", "999999999999999999999")
+				if mode == "caller" {
+					time.AfterFunc(10*time.Millisecond, stop)
+				}
+				if mode == "server-error" {
+					response.Header.Del("Retry-After")
+					response.StatusCode = 503
+					if calls > 1 {
+						response.StatusCode = 403
+					}
+				}
+				return response, nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.WaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: 200 * time.Millisecond})
+			if mode == "server-error" {
+				var responseError *ResponseError
+				if calls != 2 || !errors.As(err, &responseError) || responseError.Status != 403 {
+					t.Fatalf("server retry: %v calls=%d", err, calls)
+				}
+				return
+			}
+			want := context.DeadlineExceeded
+			if mode == "caller" {
+				want = context.Canceled
+			}
+			if !errors.Is(err, want) || calls != 1 {
+				t.Fatalf("bounded retry: %v calls=%d", err, calls)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetryAfterMetadata(t *testing.T) {
+	now := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+	for _, scenario := range []struct {
+		header string
+		want   time.Duration
+	}{
+		{"2", 2 * time.Second}, {now.Add(2 * time.Second).Format(http.TimeFormat), 2 * time.Second},
+		{now.Add(-time.Second).Format(http.TimeFormat), 0}, {"0.5", 0}, {"-1", 0}, {"invalid", 0},
+		{"999999999999999999999", time.Duration(1<<63 - 1)},
+	} {
+		if got := retryAfterDuration(scenario.header, now); got != scenario.want {
+			t.Errorf("%s: %v != %v", scenario.header, got, scenario.want)
+		}
+	}
+}
