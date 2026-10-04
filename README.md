@@ -73,6 +73,39 @@ func main() {
 
 For fully working examples on how to use templates, non-blocking processing and more, take a look at [`examples/`](https://github.com/transloadit/go-sdk/tree/main/examples).
 
+## Assembly Notifications (webhooks)
+
+If an assembly's `NotifyURL` is set, Transloadit submits the assembly's final status to that
+URL once it finishes. Use `ParseAssemblyNotification` in your HTTP handler to verify the
+request's signature and decode the payload:
+
+```go
+http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
+	notification, err := transloadit.ParseAssemblyNotification(r, options.AuthSecret)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// notification.Ok / notification.Error describe the assembly's outcome.
+	// notification.AssemblyInfo has the same fields as GetAssembly's result.
+})
+```
+
+See [`examples/webhook`](https://github.com/transloadit/go-sdk/tree/main/examples/webhook) for a
+full example.
+
+## Bearer tokens
+
+`Client.IssueBearerToken` exchanges your Auth Key and Auth Secret for a short-lived, scoped
+bearer token:
+
+```go
+token, err := client.IssueBearerToken(context.Background(), transloadit.BearerTokenRequest{
+	Scope: "assemblies:read assemblies:write",
+})
+```
+
 ## Documentation
 
 See <a href="https://pkg.go.dev/github.com/transloadit/go-sdk">Godoc</a> for full API documentation.
