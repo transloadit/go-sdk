@@ -1,5 +1,18 @@
 # Contract workflow finality follow-up for #47
 
+October 4 final confirmation correction, still draft and unmerged:
+
+- [x] Source-access-verified combined council found invalid confirmation inspection still hid
+      the failed DELETE. Both transport and HTTP cases fail before the repair; explicit caller
+      cancellation remains a separate control.
+- [x] Handle confirmation reading and inspection in the same compound-error boundary. Retain
+      cancellation-first `errors.Is`/`errors.As`, direct access to both errors, deadline precedence
+      and the Go 1.15 floor. No repeated DELETE or weakened response/destination validation.
+- [x] Full native contract race tests pass after the repair.
+- [ ] Repeat shared race/vet/example checks, freeze sources and update API2 pins. Repeat actual
+      local API2/tusd acceptance, post-fix council and exact-head CI. Final PR receipts supersede
+      this pre-push snapshot; no merge/release or additional live-reader budget.
+
 October 4 identity follow-up, still draft and unmerged:
 
 - [x] Main is already an ancestor; regenerate from the integrated API2 contract.

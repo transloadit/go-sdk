@@ -899,16 +899,16 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 			if errors.As(err, &responseError) || retryableWorkflowTransport(err) {
 				// A DELETE can race completion or lose its reply after it was applied. Confirm
 				// through the generated GET, never an error-body cast or another write.
-				confirmed, readErr := owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
-				if readErr != nil {
+				confirmed, confirmationErr := owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
+				if confirmationErr == nil {
+					terminal, _, confirmationErr = inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, true)
+				}
+				if confirmationErr != nil {
 					if deadline := workflowDeadline(ctx); deadline != nil {
 						return nil, deadline
 					}
-					return nil, &AssemblyCancellationConfirmationError{CancellationError: err, ConfirmationError: readErr}
-				}
-				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, true)
-				if inspectionErr != nil {
-					return nil, inspectionErr
+					// Failed reads and unusable confirmations both retain the original DELETE diagnostic.
+					return nil, &AssemblyCancellationConfirmationError{CancellationError: err, ConfirmationError: confirmationErr}
 				}
 				if terminal {
 					return confirmed, nil
