@@ -326,11 +326,15 @@ func (client *Client) requestTus(ctx context.Context, operation tusOperation, ta
 	// accepting unbounded error data or embedding that data in diagnostic messages.
 	const limit = 64 * 1024
 	data, err := ioutil.ReadAll(io.LimitReader(response.Body, limit+1))
-	if err != nil {
-		return nil, &TransportError{Cause: redactRequestURL(err)}
-	}
 	if len(data) > limit {
 		return nil, fmt.Errorf("tus response exceeds size limit")
+	}
+	if err != nil {
+		// Keep failure status/backoff even when draining the protocol body loses its connection.
+		if response.StatusCode < 200 || response.StatusCode >= 300 {
+			return nil, &ResponseError{Status: response.StatusCode, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now()), Cause: redactRequestURL(err)}
+		}
+		return nil, &TransportError{Cause: redactRequestURL(err)}
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		if !json.Valid(data) {
@@ -362,6 +366,7 @@ func admitUploadURL(raw string, operation tusOperation, policy tusWorkflowPolicy
 	}
 	path := operation.Path
 	if len(operation.Parameters) == 1 {
+		// These bounded helpers exclude encoded/nested IDs, rather than guessing a store's layout.
 		escaped := parsed.EscapedPath()
 		id := escaped[strings.LastIndex(escaped, "/")+1:]
 		if id == "" || strings.Contains(id, "%") || id == "." || id == ".." {
@@ -529,14 +534,14 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		}
 	}
 	retries := 0
-	recover := func(failure error) error {
+	recover := func(failure error, allowOffsetConflict bool) error {
 		if err := workflowDeadline(ctx); err != nil {
 			return err
 		}
 		var response *ResponseError
 		retry := retryableWorkflowTransport(failure)
 		if errors.As(failure, &response) {
-			retry = response.Status == 409 || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
+			retry = (allowOffsetConflict && response.Status == 409) || response.Status == 429 || (response.Status >= 500 && response.Status <= 599)
 		}
 		if !retry || retries >= maxRetries {
 			return failure
@@ -557,7 +562,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 			if err == nil {
 				return status, nil
 			}
-			if err := recover(err); err != nil {
+			if err := recover(err, false); err != nil {
 				return nil, err
 			}
 		}
@@ -680,13 +685,14 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 					}
 					return 0, err
 				}
-				if err := recover(err); err != nil {
+				if err := recover(err, true); err != nil {
 					return 0, err
 				}
 				continue
 			}
 			length, err := tusOffset(response, wire.Headers["length"], input.Size)
-			if err != nil || length != input.Size || response.Get(wire.Headers["resumable"]) != wire.Version || !verifyUploadMetadata(response.Get(wire.Headers["metadata"]), expectedMetadata, wire.Identity) {
+			metadata := response.Values(wire.Headers["metadata"])
+			if err != nil || length != input.Size || response.Get(wire.Headers["resumable"]) != wire.Version || len(metadata) != 1 || !verifyUploadMetadata(metadata[0], expectedMetadata, wire.Identity) {
 				return 0, invalidUpload()
 			}
 			return tusOffset(response, wire.Headers["offset"], input.Size)
@@ -720,7 +726,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		patchHeaders[wire.Headers["contentType"]] = wire.MediaType
 		response, err := connection.requestTus(ctx, policy.Patch, uploadURL, patchHeaders, chunk)
 		if err != nil {
-			if err := recover(err); err != nil {
+			if err := recover(err, true); err != nil {
 				return nil, err
 			}
 			confirmed, err := head()
@@ -867,9 +873,9 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 				return nil, deadline
 			}
 			var responseError *ResponseError
-			if errors.As(err, &responseError) {
-				// DELETE can race expiration/failure. Confirm through the generated GET, not an
-				// unchecked error-body cast, and never repeat the cancellation write.
+			if errors.As(err, &responseError) || retryableWorkflowTransport(err) {
+				// A DELETE can race completion or lose its reply after it was applied. Confirm
+				// through the generated GET, never an error-body cast or another write.
 				confirmed, readErr := owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
 				if readErr != nil {
 					return nil, readErr

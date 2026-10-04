@@ -121,9 +121,13 @@ even if later Assembly processing failed. Use `WaitForAssembly` to check process
 If HEAD returns 404 after temporary upload cleanup, the workflow refreshes Assembly status and
 requires one finished `tus_uploads` receipt matching the saved URL, filename, fieldname, size and
 completed offset. Missing or mismatched receipts remain errors; no replacement upload is created.
+If your proxy rewrites upload capability URLs, it must also rewrite their receipt URLs consistently.
+The SDK does not infer that a proxy URL and a different uploader URL identify the same resource.
 Stopping locally does not delete bytes or cancel the Assembly. Use `CancelAndWaitForAssembly`
 explicitly when abandoning the job. Deferred lengths, concatenation and non-seekable streams are
 not supported by these bounded fixed-size helpers.
+These helpers require single-segment upload IDs without percent escapes. A different ID format is
+rejected before the upload session is persisted, even if the server already created that resource.
 Workflow `Timeout` defaults to five minutes and `Interval` to one second. An earlier context
 deadline wins. Cancel-and-wait sends one cancellation attempt, then polls; a timeout or caller
 cancellation stops waiting but does not prove remote cleanup. Private deployments may set
@@ -137,8 +141,9 @@ Uploader requests carry no credentials or cookie jar; redirects and changed owne
 `Config.HTTPClient.Transport` handles both API and uploader/tus requests, so the same observation
 or fault-injection transport works for the whole workflow.
 Status GETs retry transient network failures and HTTP 429/5xx within the overall deadline,
-honoring `Retry-After`. An HTTP
-error from DELETE can be followed by a status GET to confirm a terminal race; DELETE is never retried.
+honoring `Retry-After`, including when an HTTP error body is interrupted. An HTTP error or lost
+response from DELETE can be followed by a status GET to confirm a terminal race within the remaining
+workflow deadline; DELETE is never retried.
 `REQUEST_ABORTED` is a finite, unsuccessful outcome: waiting returns that typed status without
 an error or indefinite polling. It does not mean processing succeeded or all background work
 has stopped. An explicit cancel still contacts the owning uploader once, preserving a completed

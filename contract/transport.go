@@ -79,6 +79,8 @@ type ResponseError struct {
 	Data   json.RawMessage
 	// RetryAfter is the server-requested delay, or zero when absent or invalid.
 	RetryAfter time.Duration
+	// Cause retains an interrupted error-body read without exposing it in Error().
+	Cause error
 }
 
 func retryAfterDuration(header string, now time.Time) time.Duration {
@@ -101,6 +103,8 @@ func retryAfterDuration(header string, now time.Time) time.Duration {
 func (err *ResponseError) Error() string {
 	return fmt.Sprintf("API request failed with HTTP %d", err.Status)
 }
+
+func (err *ResponseError) Unwrap() error { return err.Cause }
 
 // Code returns a recognized public contract error code, or empty for an unknown body/code.
 // It does not expose arbitrary response text through routine diagnostics.
@@ -744,14 +748,18 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 	// Bounded independently of Content-Length, which can be absent or untrusted.
 	const limit = 128 * 1024 * 1024
 	data, err := ioutil.ReadAll(io.LimitReader(response.Body, limit+1))
-	if err != nil {
-		return &TransportError{Cause: redactRequestURL(err)}
-	}
 	if len(data) > limit {
 		// This resource-safety failure is deliberately not a ResponseError: workflow retries of
 		// 429/5xx must not repeatedly download oversized bodies. Status-bearing size-limit errors
 		// would need a separate, explicitly non-retriable error contract.
 		return fmt.Errorf("API response exceeds size limit")
+	}
+	if err != nil {
+		// An interrupted error body must not erase received status or server-requested backoff.
+		if response.StatusCode < 200 || response.StatusCode >= 300 {
+			return &ResponseError{Status: response.StatusCode, RetryAfter: retryAfterDuration(response.Header.Get("Retry-After"), time.Now()), Cause: redactRequestURL(err)}
+		}
+		return &TransportError{Cause: redactRequestURL(err)}
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		if !json.Valid(data) {

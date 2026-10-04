@@ -203,14 +203,18 @@ type workflowFixture struct {
 	TusMetadata []struct {
 		ID, Filename, Append string
 		Values               map[string]string
+		ExtraHeaderValues    []string
 		Accepted             bool
 	}
 	TusReceipts []struct {
-		ID       string
-		Changes  map[string]interface{}
-		Count    int
-		State    map[string]string
-		Accepted bool
+		ID            string
+		Changes       map[string]interface{}
+		ExtraReceipts []map[string]interface{}
+		Hex           *string
+		Omit          []string
+		Count         int
+		State         map[string]string
+		Accepted      bool
 	}
 	SmartCdn []struct {
 		ID, Workspace, Template, Input, ExpectedURL string
