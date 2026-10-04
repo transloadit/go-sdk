@@ -115,9 +115,97 @@ type AssemblyInfo struct {
 	// Since 7 March 2018, the user agent, IP and referer are no longer
 	// stored by Transloadit (see https://transloadit.com/blog/2018/03/gdpr/)
 	// Therefore, these properties will always hold empty strings.
-	ClientAgent   string
-	ClientIp      string
-	ClientReferer string
+	ClientAgent   string `json:"client_agent"`
+	ClientIp      string `json:"client_ip"`
+	ClientReferer string `json:"client_referer"`
+
+	// The following fields were added to match the Assembly Status schema
+	// published at https://api2.transloadit.com/openapi.json, which is also
+	// used for the notify_url webhook payload (see AssemblyNotificationPayload).
+	AccountID               string                 `json:"account_id"`
+	AccountName             string                 `json:"account_name"`
+	AccountSlug             string                 `json:"account_slug"`
+	APIAuthKeyID            string                 `json:"api_auth_key_id"`
+	BuildID                 string                 `json:"build_id"`
+	CompanionURL            string                 `json:"companion_url"`
+	ExpectedTusUploads      int                    `json:"expected_tus_uploads"`
+	FinishedTusUploads      int                    `json:"finished_tus_uploads"`
+	IgnoredErrorCount       int                    `json:"ignored_error_count"`
+	IgnoredErrors           []AssemblyIgnoredError `json:"ignored_errors"`
+	Info                    map[string]interface{} `json:"info"`
+	Instance                string                 `json:"instance"`
+	JobsQueueDuration       float32                `json:"jobs_queue_duration"`
+	MergedParams            string                 `json:"merged_params"`
+	NotifyError             string                 `json:"notify_error"`
+	NotifyResponseCode      Integer                `json:"notify_response_code"`
+	NotifyResponseData      string                 `json:"notify_response_data"`
+	NumInputFiles           int                    `json:"num_input_files"`
+	QueueDuration           float32                `json:"queue_duration"`
+	Region                  string                 `json:"region"`
+	RunningJobs             []string               `json:"running_jobs"`
+	StartedTusUploads       int                    `json:"started_tus_uploads"`
+	Template                string                 `json:"template"`
+	TemplateID              string                 `json:"template_id"`
+	TemplateName            string                 `json:"template_name"`
+	TransloaditClient       string                 `json:"transloadit_client"`
+	TusUploads              []TusUpload            `json:"tus_uploads"`
+	TusURL                  string                 `json:"tus_url"`
+	UpdateStreamURL         string                 `json:"update_stream_url"`
+	UploadMetaDataExtracted bool                   `json:"upload_meta_data_extracted"`
+	UppyServerURL           string                 `json:"uppyserver_url"`
+	UsageTags               string                 `json:"usage_tags"`
+	VirusName               string                 `json:"virusname"`
+	Warnings                []AssemblyWarning      `json:"warnings"`
+	WebsocketURL            string                 `json:"websocket_url"`
+
+	// The following fields are only present when Error is set, giving
+	// additional diagnostic detail about the processing job that failed.
+	// Use Error for programmatic handling; these are for troubleshooting only.
+	Cmd                 interface{}            `json:"cmd"`
+	ExitCode            Integer                `json:"exitCode"`
+	ExitSignal          string                 `json:"exitSignal"`
+	File                string                 `json:"file"`
+	Headers             map[string]interface{} `json:"headers"`
+	IsPrivateAddress    bool                   `json:"is_private_address"`
+	Name                string                 `json:"name"`
+	NumRetries          int                    `json:"numRetries"`
+	PlaywrightErrorCode string                 `json:"playwright_error_code"`
+	Reason              interface{}            `json:"reason"`
+	Retries             int                    `json:"retries"`
+	Retryable           bool                   `json:"retryable"`
+	ResponseCode        Integer                `json:"response_code"`
+	Stderr              string                 `json:"stderr"`
+	Stdout              string                 `json:"stdout"`
+	URL                 string                 `json:"url"`
+	URLHost             string                 `json:"url_host"`
+}
+
+// AssemblyIgnoredError describes a non-fatal error that occurred while
+// processing an assembly but did not cause it to fail.
+type AssemblyIgnoredError struct {
+	Error   interface{} `json:"error"`
+	Message string      `json:"message"`
+	Phase   string      `json:"phase"`
+	Step    string      `json:"step"`
+}
+
+// AssemblyWarning describes a non-fatal warning raised while processing an
+// assembly.
+type AssemblyWarning struct {
+	Level string `json:"level"`
+	Msg   string `json:"msg"`
+}
+
+// TusUpload contains details about a single resumable (tus) upload belonging
+// to an assembly.
+type TusUpload struct {
+	Fieldname string                 `json:"fieldname"`
+	Filename  string                 `json:"filename"`
+	Finished  bool                   `json:"finished"`
+	Offset    float64                `json:"offset"`
+	Size      float64                `json:"size"`
+	UploadURL string                 `json:"upload_url"`
+	UserMeta  map[string]interface{} `json:"user_meta"`
 }
 
 // FileInfo contains details about a file which was either uploaded or is the
