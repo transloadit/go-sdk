@@ -147,6 +147,8 @@ workflow deadline; DELETE is never retried.
 If that GET also fails, `errors.Is` and `errors.As` can inspect both failures, with the DELETE
 failure taking precedence when their concrete types match. Caller cancellation and the overall
 deadline still take precedence over this combined diagnostic.
+Use `errors.As` with `*contract.AssemblyCancellationConfirmationError` to access its
+`CancellationError` and `ConfirmationError` separately, including when both are `ResponseError`.
 `REQUEST_ABORTED` is a finite, unsuccessful outcome: waiting returns that typed status without
 an error or indefinite polling. It does not mean processing succeeded or all background work
 has stopped. An explicit cancel still contacts the owning uploader once, preserving a completed

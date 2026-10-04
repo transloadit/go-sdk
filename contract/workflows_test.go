@@ -1539,6 +1539,14 @@ func TestWorkflowRetainsCancellationAndConfirmationFailures(t *testing.T) {
 			if kind == "transport" && !errors.Is(err, io.EOF) {
 				t.Fatalf("cancellation transport failure missing: %v", err)
 			}
+			var combined *AssemblyCancellationConfirmationError
+			if !errors.As(err, &combined) || combined.CancellationError == nil || !errors.Is(combined.ConfirmationError, confirmationFailure) {
+				t.Fatalf("individual failure diagnostics missing: %v", err)
+			}
+			var confirmationResponse *ResponseError
+			if !errors.As(combined.ConfirmationError, &confirmationResponse) || confirmationResponse.Status != 403 {
+				t.Fatalf("confirmation HTTP diagnostics missing: %v", err)
+			}
 			var responseError *ResponseError
 			wantStatus := 403
 			if kind == "http" {

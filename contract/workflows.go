@@ -48,25 +48,27 @@ type assemblyWorkflowPolicy struct {
 // ErrAssemblyWorkflowUnconfirmed means explicit cancellation could not discover an uploader.
 var ErrAssemblyWorkflowUnconfirmed = errors.New("Assembly cancellation could not be confirmed; no uploader destination is available")
 
-// Go 1.15 lacks errors.Join. Keep both failures inspectable without exposing response text;
-// cancellation is the primary cause when both failures have the same concrete error type.
-type assemblyCancellationConfirmationError struct {
-	cancellation error
-	confirmation error
+// AssemblyCancellationConfirmationError retains a failed DELETE and failed confirmation GET.
+// Its message excludes response text. The cancellation is the primary cause; both failures remain
+// directly available even when errors.As would match their same concrete type.
+type AssemblyCancellationConfirmationError struct {
+	CancellationError error
+	ConfirmationError error
 }
 
-func (err *assemblyCancellationConfirmationError) Error() string {
+func (err *AssemblyCancellationConfirmationError) Error() string {
 	return "Assembly cancellation could not be confirmed"
 }
 
-func (err *assemblyCancellationConfirmationError) Unwrap() error { return err.cancellation }
+func (err *AssemblyCancellationConfirmationError) Unwrap() error { return err.CancellationError }
 
-func (err *assemblyCancellationConfirmationError) Is(target error) bool {
-	return errors.Is(err.cancellation, target) || errors.Is(err.confirmation, target)
+func (err *AssemblyCancellationConfirmationError) Is(target error) bool {
+	return errors.Is(err.CancellationError, target) || errors.Is(err.ConfirmationError, target)
 }
 
-func (err *assemblyCancellationConfirmationError) As(target interface{}) bool {
-	return errors.As(err.cancellation, target) || errors.As(err.confirmation, target)
+func (err *AssemblyCancellationConfirmationError) As(target interface{}) bool {
+	// Go 1.15 supports only single-error Unwrap. Preserve cancellation-first inspection of both.
+	return errors.As(err.CancellationError, target) || errors.As(err.ConfirmationError, target)
 }
 
 func invalidAssemblyWorkflow() error {
@@ -902,7 +904,7 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 					if deadline := workflowDeadline(ctx); deadline != nil {
 						return nil, deadline
 					}
-					return nil, &assemblyCancellationConfirmationError{cancellation: err, confirmation: readErr}
+					return nil, &AssemblyCancellationConfirmationError{CancellationError: err, ConfirmationError: readErr}
 				}
 				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, true)
 				if inspectionErr != nil {
