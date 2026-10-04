@@ -1,5 +1,17 @@
 # Contract workflow finality follow-up for #47
 
+October 4 identity follow-up, still draft and unmerged:
+
+- [x] Main is already an ancestor; regenerate from the integrated API2 contract.
+- [x] Reproduce unrelated-empty metadata rejection and noncanonical padding acceptance first.
+- [x] Consume owner grammar, strict Base64 bytes and generated receipt accessors, not wire fields.
+- [x] All 26 shared cases and native contract/shared race tests, vet and examples build pass.
+- [ ] Refresh source pins, repeat actual local API2/tusd proof, complete fresh council and exact-head
+      CI. Historical acceptance below does not certify this candidate.
+
+Receipt field names and unrelated empty tus metadata below are historical open items now repaired;
+the deployed raw parser, Go 1.15 floor, legacy APIs and live-reader budgets are unchanged.
+
 Why: runtime investigation distinguished a finite client outcome from backend cleanup. The user
 approved returning typed `REQUEST_ABORTED` from ordinary waiting, while still attempting explicit
 cancellation and preserving a failed cancellation request. This is not merge/release approval.

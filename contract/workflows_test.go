@@ -112,6 +112,115 @@ func TestTusWorkflowRejectsHeaders(t *testing.T) {
 	}
 }
 
+func TestSharedTusIdentityAndReceipts(t *testing.T) {
+	data, err := ioutil.ReadFile("workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures struct {
+		TusMetadata []struct {
+			ID, Filename, Append string
+			Values               map[string]string
+			Accepted             bool
+		}
+		TusReceipts []struct {
+			ID       string
+			Changes  map[string]interface{}
+			Count    int
+			State    map[string]string
+			Accepted bool
+		}
+	}
+	if err := json.Unmarshal(data, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	if len(fixtures.TusMetadata) == 0 || len(fixtures.TusReceipts) == 0 {
+		t.Fatal("missing shared upload cases")
+	}
+	for _, scenario := range fixtures.TusMetadata {
+		t.Run(scenario.ID, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			input := tusFixtureInput()
+			input.Filename = scenario.Filename
+			transport := client.httpClient.Transport
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if err != nil || request.Method != "HEAD" {
+					return response, err
+				}
+				entries := strings.Split(response.Header.Get("Upload-Metadata"), ",")
+				for index, entry := range entries {
+					key := strings.SplitN(entry, " ", 2)[0]
+					if value, present := scenario.Values[key]; present {
+						entries[index] = key + " " + value
+					}
+				}
+				response.Header.Set("Upload-Metadata", strings.Join(entries, ",")+scenario.Append)
+				return response, nil
+			})
+			_, err := client.UploadAssemblyFile(context.Background(), input)
+			if (err == nil) != scenario.Accepted {
+				t.Fatalf("accepted=%t, error=%v", scenario.Accepted, err)
+			}
+			wanted := "GET,POST,HEAD"
+			if scenario.Accepted {
+				wanted += ",PATCH"
+			}
+			if strings.Join(*methods, ",") != wanted {
+				t.Fatalf("unexpected requests: %v", *methods)
+			}
+		})
+	}
+	for _, scenario := range fixtures.TusReceipts {
+		t.Run(scenario.ID, func(t *testing.T) {
+			origin := "http://127.0.0.1:4000"
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			input := tusFixtureInput()
+			session, err := client.UploadAssemblyFile(context.Background(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			*methods = nil
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				*methods = append(*methods, request.Method)
+				if request.Method == "HEAD" {
+					return &http.Response{StatusCode: 404, Header: http.Header{}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+				}
+				if request.Method != "GET" {
+					t.Fatalf("unexpected write: %s", request.Method)
+				}
+				reads++
+				body := map[string]interface{}{"assembly_id": input.AssemblyID,
+					"assembly_ssl_url": origin + "/assemblies/" + input.AssemblyID, "tus_url": origin + "/resumable/files/"}
+				for key, value := range scenario.State {
+					body[key] = value
+				}
+				receipts := []interface{}{}
+				if reads > 1 {
+					for index := 0; index < scenario.Count; index++ {
+						receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
+							"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
+						for key, value := range scenario.Changes {
+							receipt[key] = value
+						}
+						receipts = append(receipts, receipt)
+					}
+				}
+				body["tus_uploads"] = receipts
+				return workflowJSON(t, body), nil
+			})
+			_, err = client.ResumeAssemblyFile(context.Background(), input, *session)
+			if (err == nil) != scenario.Accepted {
+				t.Fatalf("accepted=%t, error=%v", scenario.Accepted, err)
+			}
+			if strings.Join(*methods, ",") != "GET,HEAD,GET" {
+				t.Fatalf("unexpected requests: %v", *methods)
+			}
+		})
+	}
+}
+
 func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
 	for _, code := range []string{"ASSEMBLY_COMPLETED", "ASSEMBLY_CANCELED", "REQUEST_ABORTED", "FILE_FILTER_DECLINED_FILE"} {
 		for _, resume := range []bool{false, true} {

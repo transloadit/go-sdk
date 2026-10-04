@@ -241,17 +241,34 @@ type tusOperation struct {
 type tusWorkflowPolicy struct {
 	Assembly assemblyWorkflowPolicy `json:"assembly"`
 	Wire     struct {
-		Version   string            `json:"version"`
-		Headers   map[string]string `json:"headers"`
-		MediaType string            `json:"mediaType"`
-		Filename  string            `json:"filename"`
-		Fieldname string            `json:"fieldname"`
+		Version   string                    `json:"version"`
+		Headers   map[string]string         `json:"headers"`
+		MediaType string                    `json:"mediaType"`
+		Filename  string                    `json:"filename"`
+		Fieldname string                    `json:"fieldname"`
+		Identity  tusMetadataIdentityPolicy `json:"identity"`
+		Receipt   struct {
+			MatchCount    int  `json:"matchCount"`
+			FinishedValue bool `json:"finishedValue"`
+		} `json:"receipt"`
 	} `json:"wire"`
 	CollectionField string       `json:"collectionField"`
 	MetadataName    string       `json:"metadataName"`
 	Create          tusOperation `json:"create"`
 	Head            tusOperation `json:"head"`
 	Patch           tusOperation `json:"patch"`
+}
+
+type tusMetadataIdentityPolicy struct {
+	KeyPattern   string `json:"keyPattern"`
+	ValuePattern string `json:"valuePattern"`
+}
+
+// The generator binds wire fields to these native roles; orchestration owns no field inventory.
+type tusUploadReceipt struct {
+	URL, Filename, Fieldname string
+	Size, Offset             float64
+	Finished                 bool
 }
 
 func invalidUpload() error {
@@ -378,24 +395,36 @@ func tusOffset(headers http.Header, name string, size int64) (int64, error) {
 	return value, nil
 }
 
-func verifyUploadMetadata(raw string, expected map[string]string) bool {
+func verifyUploadMetadata(raw string, expected map[string]string, policy tusMetadataIdentityPolicy) bool {
+	keyPattern, err := regexp.Compile(policy.KeyPattern)
+	if err != nil {
+		return false
+	}
+	valuePattern, err := regexp.Compile(policy.ValuePattern)
+	if err != nil {
+		return false
+	}
 	actual := make(map[string]string)
 	for _, entry := range strings.Split(raw, ",") {
-		pair := strings.SplitN(strings.TrimSpace(entry), " ", 2)
-		if len(pair) != 2 {
+		pair := strings.SplitN(entry, " ", 2)
+		encoded := ""
+		if len(pair) == 2 {
+			encoded = pair[1]
+		}
+		if !keyPattern.MatchString(pair[0]) || !valuePattern.MatchString(encoded) {
 			return false
 		}
 		if _, duplicate := actual[pair[0]]; duplicate {
 			return false
 		}
-		value, err := base64.StdEncoding.DecodeString(pair[1])
+		value, err := base64.StdEncoding.Strict().DecodeString(encoded)
 		if err != nil {
 			return false
 		}
 		actual[pair[0]] = string(value)
 	}
 	for key, value := range expected {
-		if actual[key] != value {
+		if decoded, present := actual[key]; !present || decoded != value {
 			return false
 		}
 	}
@@ -637,18 +666,16 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 						return 0, refreshErr
 					}
 					matches, complete := 0, false
-					if uploads := refreshed.GetTusUploads(); uploads != nil {
-						for _, upload := range *uploads {
-							receiptURL, admissionErr := admitUploadURL(upload.UploadUrl, policy.Head, policy, client.config)
-							if admissionErr != nil || receiptURL != uploadURL {
-								continue
-							}
-							matches++
-							complete = upload.Finished && upload.Size == float64(input.Size) && upload.Offset == float64(input.Size) &&
-								upload.Filename == input.Filename && upload.Fieldname == input.Fieldname
+					for _, upload := range workflowUploadReceipts(refreshed) {
+						receiptURL, admissionErr := admitUploadURL(upload.URL, policy.Head, policy, client.config)
+						if admissionErr != nil || receiptURL != uploadURL {
+							continue
 						}
+						matches++
+						complete = upload.Finished == wire.Receipt.FinishedValue && upload.Size == float64(input.Size) && upload.Offset == float64(input.Size) &&
+							upload.Filename == input.Filename && upload.Fieldname == input.Fieldname
 					}
-					if matches == 1 && complete {
+					if matches == wire.Receipt.MatchCount && complete {
 						return input.Size, workflowDeadline(ctx)
 					}
 					return 0, err
@@ -659,7 +686,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 				continue
 			}
 			length, err := tusOffset(response, wire.Headers["length"], input.Size)
-			if err != nil || length != input.Size || response.Get(wire.Headers["resumable"]) != wire.Version || !verifyUploadMetadata(response.Get(wire.Headers["metadata"]), expectedMetadata) {
+			if err != nil || length != input.Size || response.Get(wire.Headers["resumable"]) != wire.Version || !verifyUploadMetadata(response.Get(wire.Headers["metadata"]), expectedMetadata, wire.Identity) {
 				return 0, invalidUpload()
 			}
 			return tusOffset(response, wire.Headers["offset"], input.Size)

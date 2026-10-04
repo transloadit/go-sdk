@@ -200,7 +200,19 @@ type workflowFixture struct {
 	AssemblyID  string
 	Admission   json.RawMessage
 	Cases       []workflowVector
-	SmartCdn    []struct {
+	TusMetadata []struct {
+		ID, Filename, Append string
+		Values               map[string]string
+		Accepted             bool
+	}
+	TusReceipts []struct {
+		ID       string
+		Changes  map[string]interface{}
+		Count    int
+		State    map[string]string
+		Accepted bool
+	}
+	SmartCdn []struct {
 		ID, Workspace, Template, Input, ExpectedURL string
 		ExpiresAt                                   int64
 		Params                                      url.Values
