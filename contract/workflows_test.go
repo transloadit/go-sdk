@@ -1508,6 +1508,77 @@ func TestWorkflowConfirmsLostCancellationResponse(t *testing.T) {
 	}
 }
 
+func TestWorkflowRetainsCancellationAndConfirmationFailures(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, kind := range []string{"transport", "http"} {
+		t.Run(kind, func(t *testing.T) {
+			methods := []string{}
+			confirmationFailure := errors.New("synthetic confirmation body failure")
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				if request.Method == "DELETE" {
+					if kind == "transport" {
+						return nil, io.EOF
+					}
+					response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_CANCEL_UNAVAILABLE"})
+					response.StatusCode = 503
+					return response, nil
+				}
+				if len(methods) > 1 {
+					return &http.Response{StatusCode: 403, Header: http.Header{}, Body: failedBody{err: confirmationFailure}}, nil
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err == nil || err.Error() != "Assembly cancellation could not be confirmed" || !errors.Is(err, confirmationFailure) {
+				t.Fatalf("confirmation failure missing: %v", err)
+			}
+			if kind == "transport" && !errors.Is(err, io.EOF) {
+				t.Fatalf("cancellation transport failure missing: %v", err)
+			}
+			var responseError *ResponseError
+			wantStatus := 403
+			if kind == "http" {
+				wantStatus = 503
+			}
+			if !errors.As(err, &responseError) || responseError.Status != wantStatus {
+				t.Fatalf("wrong primary HTTP failure: %v", err)
+			}
+			if strings.Join(methods, ",") != "GET,DELETE,GET" {
+				t.Fatalf("wrong cancellation requests: %v", methods)
+			}
+		})
+	}
+}
+
+func TestWorkflowPrioritizesCallerCancellationDuringConfirmation(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	methods := []string{}
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		methods = append(methods, request.Method)
+		if request.Method == "DELETE" {
+			return nil, io.EOF
+		}
+		if len(methods) > 1 {
+			cancel()
+			return nil, ctx.Err()
+		}
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.CancelAndWaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id})
+	if err != context.Canceled || strings.Join(methods, ",") != "GET,DELETE,GET" {
+		t.Fatalf("caller abort was masked: %v, %v", err, methods)
+	}
+}
+
 func TestWorkflowRetainsHTTPBackoffAfterBodyFailure(t *testing.T) {
 	for _, method := range []string{"GET", "HEAD"} {
 		for _, status := range []int{403, 429, 503} {

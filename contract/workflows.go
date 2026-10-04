@@ -48,6 +48,27 @@ type assemblyWorkflowPolicy struct {
 // ErrAssemblyWorkflowUnconfirmed means explicit cancellation could not discover an uploader.
 var ErrAssemblyWorkflowUnconfirmed = errors.New("Assembly cancellation could not be confirmed; no uploader destination is available")
 
+// Go 1.15 lacks errors.Join. Keep both failures inspectable without exposing response text;
+// cancellation is the primary cause when both failures have the same concrete error type.
+type assemblyCancellationConfirmationError struct {
+	cancellation error
+	confirmation error
+}
+
+func (err *assemblyCancellationConfirmationError) Error() string {
+	return "Assembly cancellation could not be confirmed"
+}
+
+func (err *assemblyCancellationConfirmationError) Unwrap() error { return err.cancellation }
+
+func (err *assemblyCancellationConfirmationError) Is(target error) bool {
+	return errors.Is(err.cancellation, target) || errors.Is(err.confirmation, target)
+}
+
+func (err *assemblyCancellationConfirmationError) As(target interface{}) bool {
+	return errors.As(err.cancellation, target) || errors.As(err.confirmation, target)
+}
+
 func invalidAssemblyWorkflow() error {
 	// URLs are capabilities. Do not include raw destinations, parser errors or response data.
 	return fmt.Errorf("invalid Assembly workflow response or uploader destination")
@@ -878,7 +899,10 @@ func (client *Client) runAssemblyWorkflow(parent context.Context, input Assembly
 				// through the generated GET, never an error-body cast or another write.
 				confirmed, readErr := owner.readWorkflowStatus(ctx, input.AssemblyID, input.Interval)
 				if readErr != nil {
-					return nil, readErr
+					if deadline := workflowDeadline(ctx); deadline != nil {
+						return nil, deadline
+					}
+					return nil, &assemblyCancellationConfirmationError{cancellation: err, confirmation: readErr}
 				}
 				terminal, _, inspectionErr := inspectWorkflowStatus(ctx, confirmed, input.AssemblyID, policy, true)
 				if inspectionErr != nil {
