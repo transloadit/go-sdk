@@ -14,6 +14,9 @@ October 6 reader compatibility, still draft and unmerged:
       contract/example race suites pass; explicit changed field names still fail before network I/O.
 - [ ] Finish the post-fix council, refreshed producer pins/runtime acceptance and exact-head CI.
       No merge, release or new live-test budget.
+- [x] Post-fix council reports only the known OAuth merge blocker below. Native `c2144cf14b`
+      passes all five CI versions in run `37428738152`. Regenerate from producer `f8947685ba`
+      to retain the distinction between unproven known-emitter and inapplicable future-value proof.
 - Explicit next-slice merge blocker: main's public `authorization_code` and `refresh_token` grants
   need no Basic credentials, but draft `IssueBearerToken` requires them and `NewClient` cannot be
   anonymous. Model grant-specific authentication at the producer before release; do not patch the
