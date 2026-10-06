@@ -225,9 +225,9 @@ type AssemblyUploadOptions struct {
 	ChunkSize int64
 	// Timeout defaults to five minutes, including hashing and discovery.
 	Timeout time.Duration
-	// OnSession synchronously persists before any bytes. It must return promptly and observe the
-	// caller context; the SDK cannot interrupt caller-owned synchronous I/O. Errors stop uploading.
-	OnSession func(AssemblyUploadSession) error
+	// OnSession synchronously persists before any bytes, using the upload's deadline-bound context.
+	// It must return promptly; the SDK cannot interrupt caller-owned synchronous I/O. Errors stop uploading.
+	OnSession func(context.Context, AssemblyUploadSession) error
 	// MaxRetries defaults to five; a pointer to zero disables recovery. Creation never retries.
 	MaxRetries *int
 	RetryDelay time.Duration
@@ -669,7 +669,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		}
 		session = &AssemblyUploadSession{Version: 1, AssemblyID: input.AssemblyID, UploadURL: uploadURL, Size: input.Size, Filename: input.Filename, Fieldname: input.Fieldname, SHA256: sha}
 		if input.OnSession != nil {
-			if err := input.OnSession(*session); err != nil {
+			if err := input.OnSession(ctx, *session); err != nil {
 				return nil, err
 			}
 		}

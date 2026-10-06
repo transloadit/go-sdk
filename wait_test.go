@@ -301,7 +301,7 @@ func testSharedContractUpload(t *testing.T, fixtures workflowFixture, scenario w
 	input := contract.AssemblyUploadOptions{
 		AssemblyID: fixtures.AssemblyID, Reader: bytes.NewReader(data), Size: int64(len(data)),
 		Filename: scenario.Filename, ChunkSize: int64(scenario.ChunkSize), RetryDelay: time.Millisecond,
-		OnSession: func(session contract.AssemblyUploadSession) error { saved = session; return nil },
+		OnSession: func(_ context.Context, session contract.AssemblyUploadSession) error { saved = session; return nil },
 	}
 	_, err = client.UploadAssemblyFile(interrupted, input)
 	if scenario.Kind == "resume" {

@@ -84,7 +84,7 @@ func TestTusResumeInheritsSavedFieldname(t *testing.T) {
 	input := tusFixtureInput()
 	input.Fieldname = "avatar"
 	var saved AssemblyUploadSession
-	input.OnSession = func(session AssemblyUploadSession) error {
+	input.OnSession = func(_ context.Context, session AssemblyUploadSession) error {
 		saved = session
 		return errors.New("synthetic interruption before bytes")
 	}
@@ -461,7 +461,7 @@ func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
 				input := tusFixtureInput()
 				var session *AssemblyUploadSession
 				if resume {
-					input.OnSession = func(value AssemblyUploadSession) error {
+					input.OnSession = func(_ context.Context, value AssemblyUploadSession) error {
 						session = &value
 						return errors.New("checkpoint only")
 					}
@@ -664,12 +664,37 @@ func TestTusWorkflowBoundsAndReadsResponseBodies(t *testing.T) {
 	}
 }
 
+func TestTusWorkflowPersistenceObservesUploadDeadline(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	parent, stop := context.WithTimeout(context.Background(), time.Second)
+	defer stop()
+	input := tusFixtureInput()
+	input.Timeout = 30 * time.Millisecond
+	var saved AssemblyUploadSession
+	input.OnSession = func(ctx context.Context, session AssemblyUploadSession) error {
+		saved = session
+		<-ctx.Done()
+		return ctx.Err()
+	}
+	_, err := client.UploadAssemblyFile(parent, input)
+	if parent.Err() != nil {
+		t.Fatal("persistence exceeded the upload deadline and consumed the parent budget")
+	}
+	var upload *AssemblyUploadError
+	if !errors.As(err, &upload) || upload.Session == nil || *upload.Session != saved || !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("missing deadline or checkpoint: %v", err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST" {
+		t.Fatalf("sent file bytes after persistence deadline: %v", *methods)
+	}
+}
+
 func TestTusWorkflowPersistenceAndChangedFile(t *testing.T) {
 	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
 	input := tusFixtureInput()
 	var saved AssemblyUploadSession
 	persistence := errors.New("persistence unavailable")
-	input.OnSession = func(session AssemblyUploadSession) error { saved = session; return persistence }
+	input.OnSession = func(_ context.Context, session AssemblyUploadSession) error { saved = session; return persistence }
 	_, err := client.UploadAssemblyFile(context.Background(), input)
 	digest := sha256.Sum256([]byte("test"))
 	if !errors.Is(err, persistence) || saved.SHA256 != hex.EncodeToString(digest[:]) || len(*methods) != 2 {
@@ -937,7 +962,10 @@ func TestTusWorkflowRejectsCreationVersionBeforePersistence(t *testing.T) {
 		return response, err
 	})
 	input := tusFixtureInput()
-	input.OnSession = func(AssemblyUploadSession) error { t.Error("persisted incompatible creation"); return nil }
+	input.OnSession = func(context.Context, AssemblyUploadSession) error {
+		t.Error("persisted incompatible creation")
+		return nil
+	}
 	if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || len(*methods) != 2 {
 		t.Fatalf("incompatible creation accepted: %v, %v", err, *methods)
 	}

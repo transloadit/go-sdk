@@ -162,7 +162,7 @@ func TestContractDevdock(t *testing.T) {
 	var checkpoint AssemblyUploadSession
 	uploadInput := AssemblyUploadOptions{
 		AssemblyID: assemblyID, Reader: bytes.NewReader(file), Size: int64(len(file)), Filename: "smilie.gif", ChunkSize: 64,
-		OnSession: func(session AssemblyUploadSession) error { checkpoint = session; return nil },
+		OnSession: func(_ context.Context, session AssemblyUploadSession) error { checkpoint = session; return nil },
 	}
 	if _, err := client.UploadAssemblyFile(interrupted, uploadInput); !errors.Is(err, context.Canceled) {
 		t.Fatalf("expected owned interruption: %v", err)

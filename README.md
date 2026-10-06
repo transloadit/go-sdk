@@ -104,8 +104,9 @@ Size: size, Filename: "example.jpg", OnSession: persistSession})`.
 `Reader` is a caller-owned `io.ReaderAt`, such as an open `*os.File`; keep it open and unchanged
 until the call returns. The SDK hashes and uploads in bounded chunks, not one whole-file buffer.
 
-`OnSession` receives a JSON-serializable `AssemblyUploadSession` before the first file bytes are
-sent. Save it securely; it contains a secret capability URL and must not be logged or shared with
+`OnSession(ctx context.Context, session contract.AssemblyUploadSession) error` receives the upload's
+deadline-bound context and a JSON-serializable checkpoint before the first file bytes are sent.
+Save it securely; it contains a secret capability URL and must not be logged or shared with
 other users. Return an error if persistence fails. A fresh client can then call
 `ResumeAssemblyFile(ctx, input, savedSession)` using the original file. It checks the file's
 SHA-256, upload metadata and destination, reads the server offset, and never creates a second
@@ -116,7 +117,8 @@ processing success: call `WaitForAssembly` afterward and inspect its terminal st
 The timeout includes hashing the complete file, discovery, session persistence, transfer and backoff.
 Choose a larger `Timeout` for files or connections that cannot finish that work within five minutes.
 Caller-owned `ReaderAt` and synchronous `OnSession` code must return promptly; the SDK cannot
-interrupt that code. Honor your caller context in any external persistence I/O.
+interrupt that code. Use the callback's context for persistence I/O so both caller cancellation
+and the upload deadline are honored.
 A pointer to zero disables recovery. Ambiguous PATCH failures require a fresh offset read before
 more bytes are sent. Safe discovery and tus recovery share that budget and honor `Retry-After`.
 Creation never retries; if its response is lost before a session is saved,
