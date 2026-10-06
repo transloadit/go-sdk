@@ -5,15 +5,119 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync"
 	"testing"
 	"time"
 )
+
+func TestContractDevdockCleansFailedAssembly(t *testing.T) {
+	id := strings.Repeat("1", 32)
+	var mu sync.Mutex
+	position, cancellations := 0, 0
+	metadata, origin := "", ""
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		mu.Lock()
+		defer mu.Unlock()
+		response.Header().Set("Content-Type", "application/json")
+		body := map[string]interface{}{}
+		switch request.URL.Path {
+		case "/templates", "/templates/template", "/templates/builtin/test":
+			body = map[string]interface{}{"id": "template", "name": "synthetic", "ok": "TEMPLATE_CREATED", "assembly_status_expiry": nil, "content": nil, "message": "Synthetic Template", "require_signature_auth": 1, "transcoding_result_expiry": nil}
+			if request.Method == "GET" {
+				body["ok"] = "TEMPLATE_FOUND"
+			}
+			if request.Method == "DELETE" {
+				if request.Header.Get("Authorization") == "Bearer synthetic-token" {
+					response.WriteHeader(403)
+					body = map[string]interface{}{"error": "INSUFFICIENT_SCOPE"}
+				} else {
+					body = map[string]interface{}{"ok": "TEMPLATE_DELETED", "message": "Synthetic deletion"}
+				}
+			} else if request.Method == "GET" && request.URL.Path == "/templates" {
+				itemID := "template"
+				if strings.Contains(request.URL.Query().Get("params"), "exclusively-latest") {
+					itemID = "builtin/test"
+				}
+				body = map[string]interface{}{"count": 1, "items": []map[string]interface{}{{"id": itemID, "content": nil}}}
+			} else if request.URL.Path == "/templates/builtin/test" {
+				body["id"] = "builtin/test"
+			}
+		case "/token":
+			body = map[string]interface{}{"access_token": "synthetic-token", "expires_in": 3600, "scope": "templates:read", "token_type": "Bearer"}
+		case "/assemblies", "/assemblies/" + id:
+			code := "ASSEMBLY_UPLOADING"
+			if position == 128 {
+				code = "REQUEST_ABORTED"
+			}
+			if request.Method == "DELETE" {
+				cancellations++
+				code = "ASSEMBLY_CANCELED"
+			}
+			body = map[string]interface{}{"assembly_id": id, "ok": code, "assembly_ssl_url": origin + "/assemblies/" + id, "tus_url": origin + "/resumable/files/"}
+		case "/resumable/files", "/resumable/files/", "/resumable/files/one":
+			response.Header().Set("Tus-Resumable", "1.0.0")
+			switch request.Method {
+			case "POST":
+				metadata = request.Header.Get("Upload-Metadata")
+				response.Header().Set("Location", "/resumable/files/one")
+				response.WriteHeader(201)
+			case "HEAD":
+				response.Header().Set("Upload-Length", "128")
+				response.Header().Set("Upload-Offset", strconv.Itoa(position))
+				response.Header().Set("Upload-Metadata", metadata)
+			case "PATCH":
+				data, err := ioutil.ReadAll(request.Body)
+				if err != nil {
+					t.Error(err)
+					return
+				}
+				position += len(data)
+				response.Header().Set("Upload-Offset", strconv.Itoa(position))
+				response.WriteHeader(204)
+			default:
+				t.Errorf("unexpected tus method %s", request.Method)
+			}
+			return
+		default:
+			t.Errorf("unexpected canary route %s", request.URL.Path)
+			response.WriteHeader(404)
+		}
+		if err := json.NewEncoder(response).Encode(body); err != nil {
+			t.Error(err)
+		}
+	}))
+	defer server.Close()
+	origin = strings.Replace(server.URL, "127.0.0.1", "localhost", 1)
+	file := filepath.Join(t.TempDir(), "input.gif")
+	if err := ioutil.WriteFile(file, make([]byte, 128), 0600); err != nil {
+		t.Fatal(err)
+	}
+	// Execute the actual canary in a child because its expected t.Fatal must not fail this test.
+	command := exec.Command(os.Args[0], "-test.run=^TestContractDevdock$", "-test.count=1", "-test.timeout=10s")
+	command.Env = append(os.Environ(), "API2_CONTRACT_TEST_ORIGIN="+origin, "API2_CONTRACT_TEST_CAPABILITY_ORIGIN="+origin,
+		"API2_CONTRACT_TEST_KEY=synthetic-key", "API2_CONTRACT_TEST_SECRET=synthetic-secret", "API2_CONTRACT_TEST_FILE="+file)
+	output, err := command.CombinedOutput()
+	if err == nil || !strings.Contains(string(output), "Assembly processing failed") {
+		t.Fatalf("canary did not reach the intended terminal failure: %v, %s", err, output)
+	}
+	mu.Lock()
+	defer mu.Unlock()
+	if cancellations != 1 {
+		t.Fatalf("failed canary sent %d cancellations, want one", cancellations)
+	}
+}
 
 func TestContractDevdock(t *testing.T) {
 	origin := os.Getenv("API2_CONTRACT_TEST_ORIGIN")
@@ -181,10 +285,10 @@ func TestContractDevdock(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	finished = true
 	if status.GetOk() != "ASSEMBLY_COMPLETED" {
 		t.Fatal("Assembly processing failed")
 	}
+	finished = true
 	digest := md5.Sum(file)
 	uploads, results := status.GetUploads(), status.GetResults()
 	if uploads == nil || len(*uploads) != 1 || (*uploads)[0].GetMd5hash().GetString() != hex.EncodeToString(digest[:]) || results == nil || len(results.AdditionalProperties["passed"]) != 1 || results.AdditionalProperties["passed"][0].Md5hash.GetString() != hex.EncodeToString(digest[:]) {

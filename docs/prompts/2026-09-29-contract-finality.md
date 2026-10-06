@@ -23,6 +23,11 @@ October 6 reader compatibility, still draft and unmerged:
       The fail-first deadline case now passes and preserves the saved checkpoint without sending
       file bytes. Existing released APIs remain unchanged. Repeat full checks, immutable pins and
       the combined council with locally readable producer evidence.
+- [x] The source-access-verified rerun reproduces the actual runtime canary skipping cancellation
+      after `REQUEST_ABORTED`. A subprocess executes that same canary against a loopback fixture;
+      after completing upload/resume, it deliberately fails processing and previously sent zero
+      cancellations. Move the ownership release after the completion assertion; the regression
+      and complete native/shared/example race, vet and builds pass. OAuth remains a release blocker.
 - Explicit next-slice merge blocker: main's public `authorization_code` and `refresh_token` grants
   need no Basic credentials, but draft `IssueBearerToken` requires them and `NewClient` cannot be
   anonymous. Model grant-specific authentication at the producer before release; do not patch the
