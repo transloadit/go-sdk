@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -76,6 +77,163 @@ func tusFixtureClient(t *testing.T, location string, overrides map[string]string
 
 func tusFixtureInput() AssemblyUploadOptions {
 	return AssemblyUploadOptions{AssemblyID: strings.Repeat("1", 32), Reader: bytes.NewReader([]byte("test")), Size: 4, Filename: "input.txt", RetryDelay: time.Millisecond}
+}
+
+func TestSharedAssemblyErrorReaders(t *testing.T) {
+	data, err := ioutil.ReadFile("workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures struct {
+		AssemblyID          string
+		ReaderCompatibility []struct {
+			ID       string
+			State    map[string]interface{}
+			Accepted bool
+		}
+	}
+	if err := json.Unmarshal(data, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	if len(fixtures.ReaderCompatibility) == 0 {
+		t.Fatal("missing reader compatibility vectors")
+	}
+	origin := "http://127.0.0.1:4000"
+	owner := origin + "/assemblies/" + fixtures.AssemblyID
+	collection := origin + "/resumable/files/"
+	digest := sha256.Sum256([]byte("test"))
+	session := AssemblyUploadSession{Version: 1, AssemblyID: fixtures.AssemblyID, UploadURL: collection + "one", Size: 4, Filename: "input.txt", Fieldname: "file", SHA256: hex.EncodeToString(digest[:])}
+	for _, scenario := range fixtures.ReaderCompatibility {
+		for _, mode := range []string{"get", "wait", "cancel", "poll", "delete", "http-confirm", "transport-confirm", "fresh", "partial", "receipt"} {
+			t.Run(scenario.ID+"/"+mode, func(t *testing.T) {
+				requests := []string{}
+				immediate := mode == "get" || mode == "wait" || mode == "cancel" || mode == "fresh" || mode == "partial" || mode == "receipt"
+				client, err := NewClient(Config{Origin: origin, BearerToken: "synthetic-never-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method)
+					if request.Header.Get("Authorization") != "" || request.Header.Get("Cookie") != "" {
+						t.Fatal("forwarded credentials")
+					}
+					if len(requests) > 3 {
+						t.Fatal("unexpected request after reader observation")
+					}
+					if request.Method == "HEAD" {
+						if request.URL.String() != session.UploadURL {
+							t.Fatal("changed upload identity")
+						}
+						if mode == "receipt" {
+							return &http.Response{StatusCode: 404, Header: make(http.Header), Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+						}
+						metadata := "assembly_url " + base64.StdEncoding.EncodeToString([]byte(owner)) + ",filename aW5wdXQudHh0,fieldname ZmlsZQ=="
+						return &http.Response{StatusCode: 200, Header: http.Header{"Tus-Resumable": {"1.0.0"}, "Upload-Length": {"4"}, "Upload-Offset": {"0"}, "Upload-Metadata": {metadata}}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+					}
+					if request.URL.String() != owner {
+						t.Fatal("changed Assembly destination")
+					}
+					if request.Method != "GET" && request.Method != "DELETE" {
+						t.Fatal("stopped Assembly attempted upload write")
+					}
+					if request.Method == "DELETE" && mode == "transport-confirm" {
+						return nil, io.ErrUnexpectedEOF
+					}
+					if request.Method == "DELETE" && mode == "http-confirm" {
+						return &http.Response{StatusCode: 404, Header: make(http.Header), Body: ioutil.NopCloser(strings.NewReader("{}"))}, nil
+					}
+					body := map[string]interface{}{"assembly_id": fixtures.AssemblyID, "assembly_ssl_url": owner, "tus_url": collection, "message": "Synthetic result"}
+					if !immediate && len(requests) == 1 {
+						body["ok"] = "ASSEMBLY_EXECUTING"
+					} else {
+						for key, value := range scenario.State {
+							body[key] = value
+						}
+					}
+					body["tus_uploads"] = []interface{}{map[string]interface{}{"upload_url": session.UploadURL, "filename": session.Filename, "fieldname": session.Fieldname, "size": 4, "offset": 4, "finished": true}}
+					return workflowJSON(t, body), nil
+				})}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				options := AssemblyWorkflowOptions{AssemblyID: fixtures.AssemblyID, Timeout: time.Second, Interval: time.Millisecond}
+				input := tusFixtureInput()
+				input.AssemblyID = fixtures.AssemblyID
+				input.Timeout = time.Second
+				var result *AssemblyWorkflowResult
+				var saved *AssemblyUploadSession
+				switch mode {
+				case "get":
+					result, err = client.GetAssembly(context.Background(), GetAssemblyInput{AssemblyId: fixtures.AssemblyID})
+				case "wait", "poll":
+					result, err = client.WaitForAssembly(context.Background(), options)
+				case "cancel", "delete", "http-confirm", "transport-confirm":
+					result, err = client.CancelAndWaitForAssembly(context.Background(), options)
+				case "fresh":
+					saved, err = client.UploadAssemblyFile(context.Background(), input)
+				case "partial", "receipt":
+					saved, err = client.ResumeAssemblyFile(context.Background(), input, session)
+				default:
+					t.Fatal("unclassified reader mode")
+				}
+				upload := mode == "fresh" || mode == "partial" || mode == "receipt"
+				if scenario.Accepted && (!upload || mode == "receipt") {
+					if err != nil {
+						t.Fatal(err)
+					}
+					if upload {
+						if saved == nil || *saved != session {
+							t.Fatal("lost exact receipt")
+						}
+					} else {
+						code, ok := scenario.State["error"].(string)
+						if !ok || result == nil || result.WithError == nil || string(result.WithError.Error) != code {
+							t.Fatal("lost exact error value")
+						}
+					}
+				} else {
+					if err == nil {
+						t.Fatal("incorrectly accepted reader observation")
+					}
+					if upload {
+						var failure *AssemblyUploadError
+						if !errors.As(err, &failure) {
+							t.Fatal("missing upload error")
+						}
+						if failure.Error() != "Assembly upload stopped; remote cleanup is not confirmed" {
+							t.Fatal("unsafe upload diagnostic")
+						}
+						if scenario.Accepted {
+							code, ok := scenario.State["error"].(string)
+							if !ok || failure.AssemblyCode != code {
+								t.Fatal("lost structured stop code")
+							}
+							if failure.Cause == nil || failure.Cause.Error() != "Assembly is not accepting upload writes" || errors.Unwrap(failure.Cause) != nil {
+								t.Fatal("unsafe stopped-upload diagnostic")
+							}
+						} else if failure.AssemblyCode != "" {
+							t.Fatal("admitted malformed code")
+						}
+					}
+				}
+				expected := "GET"
+				if !immediate {
+					expected = "GET,DELETE"
+					if mode == "poll" {
+						expected = "GET,GET"
+					}
+					if strings.HasSuffix(mode, "confirm") {
+						expected = "GET,DELETE,GET"
+					}
+				}
+				if scenario.Accepted && mode == "partial" {
+					expected = "GET,HEAD"
+				}
+				if scenario.Accepted && mode == "receipt" {
+					expected = "GET,HEAD,GET"
+				}
+				if strings.Join(requests, ",") != expected {
+					t.Fatalf("incorrect requests: %v, expected %s", requests, expected)
+				}
+			})
+		}
+	}
 }
 
 func TestTusWorkflowRejectsDestinations(t *testing.T) {
@@ -298,7 +456,7 @@ func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
 				})
 				_, err := client.runTusUpload(context.Background(), input, session)
 				var failure *AssemblyUploadError
-				if !errors.As(err, &failure) || failure.AssemblyCode != code || !strings.Contains(failure.Cause.Error(), code) {
+				if !errors.As(err, &failure) || failure.AssemblyCode != code || failure.Cause == nil || failure.Cause.Error() != "Assembly is not accepting upload writes" {
 					t.Fatalf("lost stopped Assembly status %s: %v", code, err)
 				}
 				for _, method := range *methods {

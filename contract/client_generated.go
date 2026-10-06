@@ -1,4 +1,4 @@
-// Code generated from API2 contract 4246893330e3fa724407e19fa3d8d49501f87132b7aff9665f850a2f10fd8c53; DO NOT EDIT.
+// Code generated from API2 contract 4c71aa3a66cf20aebfaea7b6f87ee8b8f3bc5c91ff4894ce115d978b2accc6b4; DO NOT EDIT.
 package contract
 
 import (
@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 const defaultOrigin = "https://api2.transloadit.com"
@@ -4557,10 +4558,8 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	Format      *AssemblySteps_AdditionalProperty_DocumentOcr_Format             `json:"format,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -4568,15 +4567,12 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	// The MCP servers to use for tool calling. You can use any MCP server reachable from your environment. Use `headers` to pass server-specific auth (for example `Authorization: Bearer <token>`). For Transloadit's MCP server: Bearer tokens minted via `/token` satisfy Signature Authentication (signature checks apply only to key/secret requests). `auth: "transloadit"` is reserved for API2-managed auth to Transloadit-hosted MCP servers.
 	McpServers *AssemblySteps_AdditionalProperty_AiChat_McpServers `json:"mcp_servers,omitempty"`
@@ -4584,7 +4580,6 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	Messages AssemblySteps_AdditionalProperty_AiChat_Messages `json:"messages"`
 	// The model to use. Transloadit can pick the best model for the job if you set this to "auto".
 	Model *AssemblySteps_AdditionalProperty_AiChat_Model `json:"model,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -4602,7 +4597,6 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -4629,41 +4623,38 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	SystemMessage *ValueStringOrString `json:"system_message,omitempty"`
 	// Use Transloadit-provided credentials for testing. Usage is billed at provider cost plus a 30% markup (minimum $0.0005 per request).
 	TestCredentials *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"test_credentials,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -4671,7 +4662,6 @@ type AssemblySteps_AdditionalProperty_AiChat struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -17911,17 +17901,11 @@ type AssemblySteps_AdditionalProperty_AiChat_UserMeta = AssemblySteps_Additional
 type AssemblySteps_AdditionalProperty_AiChat_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioArtwork struct {
-	//
 	// Whether the original file should be transcoded into a new format if there is an issue with the original file.
-	//
 	ChangeFormatIfNecessary *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"change_format_if_necessary,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -17931,9 +17915,7 @@ type AssemblySteps_AdditionalProperty_AudioArtwork struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -17941,21 +17923,15 @@ type AssemblySteps_AdditionalProperty_AudioArtwork struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// What should be done with the audio file. A value of `"extract"` means audio artwork will be extracted. A value of `"insert"` means the provided image will be inserted as audio artwork.
-	//
 	Method *AssemblySteps_AdditionalProperty_AudioArtwork_Method `json:"method,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -17973,63 +17949,55 @@ type AssemblySteps_AdditionalProperty_AudioArtwork struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> extracts or inserts cover artwork in audio files.
 	//
 	// For extraction, it uses the image format embedded within the audio file — most often, this is JPEG. If you need the image in a different format, pipe the result into [🤖/image/resize](/docs/robots/image-resize/).
 	//
 	// For insertion, provide both an audio file (as `"audio"`) and an image file (as `"image"`) via the `use` parameter, and set `method` to `"insert"`. The image will be embedded as the cover artwork of the audio file.
-	//
 	Robot AssemblySteps_AdditionalProperty_AudioArtwork_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -18037,7 +18005,6 @@ type AssemblySteps_AdditionalProperty_AudioArtwork struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -20300,9 +20267,7 @@ func (value *AssemblySteps_AdditionalProperty_AudioArtwork_Use_Variant_Array2_It
 
 type AssemblySteps_AdditionalProperty_AudioArtwork_Use_WithSteps struct {
 	BundleSteps *bool `json:"bundle_steps,omitempty"`
-	//
 	// Array of field names to filter input files by when using steps.
-	//
 	Fields          *AssemblySteps_AdditionalProperty_AudioArtwork_Use_Variant_Array1 `json:"fields,omitempty"`
 	GroupByOriginal *bool                                                             `json:"group_by_original,omitempty"`
 	Steps           AssemblySteps_AdditionalProperty_AudioArtwork_Use_Variant         `json:"steps"`
@@ -20338,31 +20303,21 @@ type AssemblySteps_AdditionalProperty_AudioArtwork_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_AudioArtwork_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioConcat struct {
-	//
 	// When used this adds an audio fade in and out effect between each section of your concatenated audio file. The float value is used, so if you want an audio delay effect of 500 milliseconds between each video section, you would select 0.5. Integer values can also be represented.
 	//
 	// This parameter does not add an audio fade effect at the beginning or end of your result audio file. If you want to do so, create an additional [🤖/audio/encode](/docs/robots/audio-encode/) <dfn>Step</dfn> and use our `ffmpeg` parameter as shown in this [demo](/demos/audio-encoding/ffmpeg-fade-in-and-out/).
-	//
 	AudioFadeSeconds *ValueStringOrStringOrNumber `json:"audio_fade_seconds,omitempty"`
-	//
 	// Bit rate of the resulting audio file, in bits per second. If not specified will default to the bit rate of the input audio file.
-	//
 	Bitrate *ValueStringOrStringOrInteger `json:"bitrate,omitempty"`
-	//
 	// When set to `true`, this parameter enables crossfading between concatenated audio files using FFmpeg's `acrossfade` filter. This creates a smooth transition where the end of one audio file overlaps and blends with the beginning of the next file.
 	//
 	// The duration of the crossfade is controlled by the `audio_fade_seconds` parameter (defaults to 1 second if `audio_fade_seconds` is 0).
 	//
 	// Note: This parameter requires at least 2 audio files to concatenate and only works with audio files, not video files.
-	//
 	Crossfade *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"crossfade,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -20372,9 +20327,7 @@ type AssemblySteps_AdditionalProperty_AudioConcat struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -20382,17 +20335,13 @@ type AssemblySteps_AdditionalProperty_AudioConcat struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -20410,71 +20359,59 @@ type AssemblySteps_AdditionalProperty_AudioConcat struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This Robot can concatenate an almost infinite number of audio files.
-	//
 	Robot AssemblySteps_AdditionalProperty_AudioConcat_Robot `json:"robot"`
-	//
 	// Sample rate of the resulting audio file, in Hertz. If not specified will default to the sample rate of the input audio file.
-	//
 	SampleRate *ValueStringOrStringOrInteger `json:"sample_rate,omitempty"`
-	//
 	// Controls how bundled inputs are ordered when no explicit numbered alias for the input type is used. Numbered aliases end with a numeric suffix such as `_1`.
 	//
 	// The default `"basename"` keeps the legacy natural basename sorting behavior.
 	//
 	// Set this to `"import_order"` to preserve the order of array-based import steps when all input files carry complete import order metadata. `"auto"` has the same import-order preference with natural basename sorting as fallback.
-	//
 	SortBy *AssemblySteps_AdditionalProperty_AudioConcat_SortBy `json:"sort_by,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -20482,7 +20419,6 @@ type AssemblySteps_AdditionalProperty_AudioConcat struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -21029,17 +20965,11 @@ type AssemblySteps_AdditionalProperty_AudioConcat_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_AudioConcat_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioEncode struct {
-	//
 	// Bit rate of the resulting audio file, in bits per second. If not specified will default to the bit rate of the input audio file.
-	//
 	Bitrate *ValueStringOrStringOrInteger `json:"bitrate,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -21049,9 +20979,7 @@ type AssemblySteps_AdditionalProperty_AudioEncode struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -21059,17 +20987,13 @@ type AssemblySteps_AdditionalProperty_AudioEncode struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -21087,15 +21011,12 @@ type AssemblySteps_AdditionalProperty_AudioEncode struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -21103,45 +21024,40 @@ type AssemblySteps_AdditionalProperty_AudioEncode struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_AudioEncode_Robot `json:"robot"`
-	//
 	// Sample rate of the resulting audio file, in Hertz. If not specified will default to the sample rate of the input audio file.
-	//
 	SampleRate *ValueStringOrStringOrInteger `json:"sample_rate,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -21149,7 +21065,6 @@ type AssemblySteps_AdditionalProperty_AudioEncode struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -21584,21 +21499,13 @@ type AssemblySteps_AdditionalProperty_AudioEncode_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_AudioEncode_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioLoop struct {
-	//
 	// Bit rate of the resulting audio file, in bits per second. If not specified will default to the bit rate of the input audio file.
-	//
 	Bitrate *ValueStringOrStringOrInteger `json:"bitrate,omitempty"`
-	//
 	// Target duration for the whole process in seconds. The <dfn>Robot</dfn> will loop the input audio file for as long as this target duration is not reached yet.
-	//
 	Duration *ValueStringOrStringOrNumber `json:"duration,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -21608,9 +21515,7 @@ type AssemblySteps_AdditionalProperty_AudioLoop struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -21618,17 +21523,13 @@ type AssemblySteps_AdditionalProperty_AudioLoop struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -21646,15 +21547,12 @@ type AssemblySteps_AdditionalProperty_AudioLoop struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -21662,45 +21560,40 @@ type AssemblySteps_AdditionalProperty_AudioLoop struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_AudioLoop_Robot `json:"robot"`
-	//
 	// Sample rate of the resulting audio file, in Hertz. If not specified will default to the sample rate of the input audio file.
-	//
 	SampleRate *ValueStringOrStringOrInteger `json:"sample_rate,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -21708,7 +21601,6 @@ type AssemblySteps_AdditionalProperty_AudioLoop struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -22146,21 +22038,13 @@ type AssemblySteps_AdditionalProperty_AudioLoop_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_AudioLoop_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioMerge struct {
-	//
 	// Bit rate of the resulting audio file, in bits per second. If not specified will default to the bit rate of the input audio file.
-	//
 	Bitrate *ValueStringOrStringOrInteger `json:"bitrate,omitempty"`
-	//
 	// Duration of the output file compared to the duration of all merged audio files. Can be `"first"` (duration of the first input file), `"shortest"` (duration of the shortest audio file) or `"longest"` for the duration of the longest input file.
-	//
 	Duration *AssemblySteps_AdditionalProperty_AudioMerge_Duration `json:"duration,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -22170,9 +22054,7 @@ type AssemblySteps_AdditionalProperty_AudioMerge struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -22180,21 +22062,15 @@ type AssemblySteps_AdditionalProperty_AudioMerge struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Specifies if any input files that do not match the target duration should be looped to match it. Useful for audio merging where your overlay file is typically much shorter than the main audio file.
-	//
 	Loop *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"loop,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -22212,15 +22088,12 @@ type AssemblySteps_AdditionalProperty_AudioMerge struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -22228,45 +22101,40 @@ type AssemblySteps_AdditionalProperty_AudioMerge struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_AudioMerge_Robot `json:"robot"`
-	//
 	// Sample rate of the resulting audio file, in Hertz. If not specified will default to the sample rate of the input audio file.
-	//
 	SampleRate *ValueStringOrStringOrInteger `json:"sample_rate,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -22274,11 +22142,8 @@ type AssemblySteps_AdditionalProperty_AudioMerge struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Valid values are `"average"` and `"sum"` here. `"average"` means each input is scaled 1/n (n is the number of inputs) or `"sum"` which means each individual audio stays on the same volume, but since we merge tracks 'on top' of each other, this could result in very loud output.
-	//
 	Volume *AssemblySteps_AdditionalProperty_AudioMerge_Volume `json:"volume,omitempty"`
 }
 
@@ -22904,17 +22769,11 @@ func (value *AssemblySteps_AdditionalProperty_AudioMerge_Volume_String2) Unmarsh
 }
 
 type AssemblySteps_AdditionalProperty_AudioSplit struct {
-	//
 	// Bit rate of the resulting audio file, in bits per second. If not specified will default to the bit rate of the input audio file.
-	//
 	Bitrate *ValueStringOrStringOrInteger `json:"bitrate,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -22924,9 +22783,7 @@ type AssemblySteps_AdditionalProperty_AudioSplit struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -22934,17 +22791,13 @@ type AssemblySteps_AdditionalProperty_AudioSplit struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -22962,64 +22815,54 @@ type AssemblySteps_AdditionalProperty_AudioSplit struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Splits an audio file into multiple segments based on an array of from/to durations. Each segment produces a separate output file. This is useful for cutting an audio file into parts, for example to insert ads later via [🤖/audio/concat](/docs/robots/audio-concat/).
-	//
 	Robot AssemblySteps_AdditionalProperty_AudioSplit_Robot `json:"robot"`
-	//
 	// Sample rate of the resulting audio file, in Hertz. If not specified will default to the sample rate of the input audio file.
-	//
 	SampleRate *ValueStringOrStringOrInteger                        `json:"sample_rate,omitempty"`
 	Segments   AssemblySteps_AdditionalProperty_AudioSplit_Segments `json:"segments"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -23027,7 +22870,6 @@ type AssemblySteps_AdditionalProperty_AudioSplit struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -23436,11 +23278,9 @@ type AssemblySteps_AdditionalProperty_AudioSplit_SampleRate = ValueStringOrStrin
 
 type AssemblySteps_AdditionalProperty_AudioSplit_Segments struct {
 	String *string
-	//
 	// An array of objects, each specifying a segment to extract from the input audio. Each object must have a `from` and `to` key indicating the start and end time of the segment.
 	//
 	// Times can be specified as numbers (seconds) or as timecode strings (e.g. `"00:01:30.000"`).
-	//
 	Array *AssemblySteps_AdditionalProperty_AudioSplit_Segments_Array
 }
 
@@ -23632,69 +23472,37 @@ type AssemblySteps_AdditionalProperty_AudioSplit_UserMeta = AssemblySteps_Additi
 type AssemblySteps_AdditionalProperty_AudioSplit_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_AudioWaveform struct {
-	//
 	// Available when style is `"v1"`. Amplitude scale factor.
-	//
 	AmplitudeScale *ValueStringOrStringOrNumber `json:"amplitude_scale,omitempty"`
-	//
 	// Either a value of `0` or `1`, or `true`/`false`, corresponding to if you want to enable antialiasing to achieve smoother edges in the waveform graph or not.
-	//
 	Antialiasing *AssemblySteps_AdditionalProperty_AudioWaveform_Antialiasing `json:"antialiasing,omitempty"`
-	//
 	// Available when style is `"v1"`. Color for axis labels in "rrggbbaa" format.
-	//
 	AxisLabelColor *ValueStringOrString `json:"axis_label_color,omitempty"`
-	//
 	// The background color of the resulting image in the "rrggbbaa" format (red, green, blue, alpha), if the format `"image"` was selected.
-	//
 	BackgroundColor *ValueStringOrString `json:"background_color,omitempty"`
-	//
 	// Available when style is `"v1"`. Gap between bars in pixels when waveform_style is "bars".
-	//
 	BarGap *ValueStringOrStringOrInteger `json:"bar_gap,omitempty"`
-	//
 	// Available when style is `"v1"`. Bar style when waveform_style is "bars".
-	//
 	BarStyle *AssemblySteps_AdditionalProperty_AudioWaveform_BarStyle `json:"bar_style,omitempty"`
-	//
 	// Available when style is `"v1"`. Width of bars in pixels when waveform_style is "bars".
-	//
 	BarWidth *ValueStringOrStringOrInteger `json:"bar_width,omitempty"`
-	//
 	// Available when style is `"v1"`. Bit depth for waveform data. Can be 8 or 16.
-	//
 	Bits *AssemblySteps_AdditionalProperty_AudioWaveform_Bits `json:"bits,omitempty"`
-	//
 	// Available when style is `"v1"`. Border color in "rrggbbaa" format.
-	//
 	BorderColor *ValueStringOrString `json:"border_color,omitempty"`
-	//
 	// The color used in the center of the gradient. The format is "rrggbbaa" (red, green, blue, alpha).
-	//
 	CenterColor *ValueStringOrString `json:"center_color,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Color scheme for the spectrogram visualization. Defaults to `"viridis"`.
-	//
 	ColorMap *AssemblySteps_AdditionalProperty_AudioWaveform_ColorMap `json:"color_map,omitempty"`
-	//
 	// Available when style is `"v1"`. Color scheme to use. Can be "audition" or "audacity".
-	//
 	Colors *AssemblySteps_AdditionalProperty_AudioWaveform_Colors `json:"colors,omitempty"`
-	//
 	// Available when style is `"v1"`. PNG compression level: 0 (none) to 9 (best), or -1 (default). Only applicable when format is "image".
-	//
 	Compression *ValueStringOrStringOrInteger `json:"compression,omitempty"`
-	//
 	// Available when style is `"v1"`. End time in seconds (0 means end of audio).
-	//
 	End *ValueStringOrStringOrNumber `json:"end,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -23704,34 +23512,20 @@ type AssemblySteps_AdditionalProperty_AudioWaveform struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The format of the result file. Can be `"image"` or `"json"`. If `"image"` is supplied, a PNG image will be created, otherwise a JSON file.
 	// When `style` is `"spectrogram"`, only `"image"` is supported.
-	//
 	Format *AssemblySteps_AdditionalProperty_AudioWaveform_Format `json:"format,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Maximum frequency in Hz to display. Defaults to half the sample rate (Nyquist frequency).
-	//
 	FrequencyMax *ValueStringOrStringOrNumber `json:"frequency_max,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Minimum frequency in Hz to display. Defaults to `0`.
-	//
 	FrequencyMin *ValueStringOrStringOrNumber `json:"frequency_min,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Frequency scale for the spectrogram. `"linear"` shows frequencies evenly spaced, `"logarithmic"` emphasizes lower frequencies. Defaults to `"logarithmic"`.
-	//
 	FrequencyScale *AssemblySteps_AdditionalProperty_AudioWaveform_FrequencyScale `json:"frequency_scale,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Linear gain factor for spectrogram intensity. Defaults to `1`.
-	//
 	Gain *ValueStringOrStringOrNumber `json:"gain,omitempty"`
-	//
 	// The height of the resulting image if the format `"image"` was selected.
-	//
 	Height *ValueStringOrStringOrInteger `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -23739,33 +23533,21 @@ type AssemblySteps_AdditionalProperty_AudioWaveform struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Whether to include a legend showing the frequency and time scales. Defaults to `false`.
-	//
 	Legend *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"legend,omitempty"`
-	//
 	// Available when style is `"v1"`. If set to `true`, renders waveform image without axis labels.
-	//
 	NoAxisLabels *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"no_axis_labels,omitempty"`
-	//
 	// Available when style is `"spectrogram"`. Orientation of the spectrogram. `"horizontal"` shows time on the x-axis (default), `"vertical"` shows time on the y-axis.
-	//
 	Orientation *AssemblySteps_AdditionalProperty_AudioWaveform_Orientation `json:"orientation,omitempty"`
-	//
 	// The color used in the outer parts of the gradient. The format is "rrggbbaa" (red, green, blue, alpha).
-	//
 	OuterColor *ValueStringOrString `json:"outer_color,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -23783,31 +23565,21 @@ type AssemblySteps_AdditionalProperty_AudioWaveform struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Available when style is `"v1"`. Zoom level in pixels per second. This parameter cannot be used together with `zoom`.
-	//
 	PixelsPerSecond *ValueStringOrStringOrNumber `json:"pixels_per_second,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// We recommend that you use an [🤖/audio/encode](/docs/robots/audio-encode/) <dfn>Step</dfn> prior to your waveform <dfn>Step</dfn> to convert audio files to MP3. This way it is guaranteed that [🤖/audio/waveform](/docs/robots/audio-waveform/) accepts your audio file and you can also down-sample large audio files and save some money.
 	//
 	// Similarly, if you need the output image in a different format, please pipe the result of this <dfn>Robot</dfn> into [🤖/image/resize](/docs/robots/image-resize/).
-	//
 	Robot AssemblySteps_AdditionalProperty_AudioWaveform_Robot `json:"robot"`
-	//
 	// Available when style is `"v1"`. If set to `true`, outputs multi-channel waveform data or image files, one per channel.
-	//
 	SplitChannels *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"split_channels,omitempty"`
-	//
 	// Available when style is `"v1"`. Start time in seconds.
-	//
 	Start *ValueStringOrStringOrNumber `json:"start,omitempty"`
-	//
 	// Waveform style version.
 	//
 	// - `"v0"`: Legacy waveform generation (default).
@@ -23815,43 +23587,39 @@ type AssemblySteps_AdditionalProperty_AudioWaveform struct {
 	// - `"spectrogram"`: Spectrogram visualization showing frequency content over time.
 	//
 	// For backwards compatibility, numeric values `0` and `1` are also accepted and mapped to `"v0"` and `"v1"`.
-	//
 	Style *AssemblySteps_AdditionalProperty_AudioWaveform_Style `json:"style,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -23859,23 +23627,14 @@ type AssemblySteps_AdditionalProperty_AudioWaveform struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Available when style is `"v1"`. Waveform style. Can be "normal" or "bars".
-	//
 	WaveformStyle *AssemblySteps_AdditionalProperty_AudioWaveform_WaveformStyle `json:"waveform_style,omitempty"`
-	//
 	// The width of the resulting image if the format `"image"` was selected.
-	//
 	Width *ValueStringOrStringOrInteger `json:"width,omitempty"`
-	//
 	// Available when style is `"v1"`. If set to `true`, renders waveform image with axis labels.
-	//
 	WithAxisLabels *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"with_axis_labels,omitempty"`
-	//
 	// Available when style is `"v1"`. Zoom level in samples per pixel. This parameter cannot be used together with `pixels_per_second`.
-	//
 	Zoom *ValueStringOrStringOrInteger `json:"zoom,omitempty"`
 }
 
@@ -25488,7 +25247,6 @@ type AssemblySteps_AdditionalProperty_AudioWaveform_Start = ValueStringOrStringO
 // For backwards compatibility, numeric values `0` and `1` are also accepted and mapped to `"v0"` and `"v1"`.
 type AssemblySteps_AdditionalProperty_AudioWaveform_Style struct {
 	String *string
-	//
 	// Waveform style version.
 	//
 	// - `"v0"`: Legacy waveform generation (default).
@@ -25496,7 +25254,6 @@ type AssemblySteps_AdditionalProperty_AudioWaveform_Style struct {
 	// - `"spectrogram"`: Spectrogram visualization showing frequency content over time.
 	//
 	// For backwards compatibility, numeric values `0` and `1` are also accepted and mapped to `"v0"` and `"v1"`.
-	//
 	Variant *AssemblySteps_AdditionalProperty_AudioWaveform_Style_Variant
 }
 
@@ -25911,15 +25668,11 @@ type AssemblySteps_AdditionalProperty_AudioWaveform_Zoom = ValueStringOrStringOr
 type AssemblySteps_AdditionalProperty_AzureImport struct {
 	Account   *ValueStringOrString `json:"account,omitempty"`
 	Container *ValueStringOrString `json:"container,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your Azure Container, Account and Key.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"account"`, `"key"`, `"container"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -25929,11 +25682,9 @@ type AssemblySteps_AdditionalProperty_AzureImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -25943,26 +25694,18 @@ type AssemblySteps_AdditionalProperty_AzureImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// A string token used for pagination. The returned files of one paginated call have the next page token inside of their meta data, which needs to be used for the subsequent paging call.
-	//
 	NextPageToken *ValueStringOrString `json:"next_page_token,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -25980,9 +25723,7 @@ type AssemblySteps_AdditionalProperty_AzureImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path in your container to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are descendants of this directory are recursively imported. For example: `images/`.
@@ -25990,19 +25731,15 @@ type AssemblySteps_AdditionalProperty_AzureImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
-	//   Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
-	//
+	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_AzureImport_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -26010,7 +25747,6 @@ type AssemblySteps_AdditionalProperty_AzureImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -26180,32 +25916,20 @@ type AssemblySteps_AdditionalProperty_AzureImport_UserMeta_AdditionalProperty = 
 
 type AssemblySteps_AdditionalProperty_AzureStore struct {
 	Account *ValueStringOrString `json:"account,omitempty"`
-	//
 	// The cache control header with which to store the file.
-	//
 	CacheControl *ValueStringOrString `json:"cache_control,omitempty"`
 	Container    *ValueStringOrString `json:"container,omitempty"`
-	//
 	// The content disposition with which to store the file. By default this will be guessed by Azure.
-	//
 	ContentDisposition *ValueStringOrString `json:"content_disposition,omitempty"`
-	//
 	// The content encoding with which to store the file. By default this will be guessed by Azure.
-	//
 	ContentEncoding *ValueStringOrString `json:"content_encoding,omitempty"`
-	//
 	// The content language with which to store the file. By default this will be guessed by Azure.
-	//
 	ContentLanguage *ValueStringOrString `json:"content_language,omitempty"`
-	//
 	// The content type with which to store the file. By default this will be guessed by Azure.
-	//
 	ContentType *ValueStringOrString `json:"content_type,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your Azure Container, Account and Key.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"account"`, `"key"`, `"container"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -26215,9 +25939,7 @@ type AssemblySteps_AdditionalProperty_AzureStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -26225,22 +25947,16 @@ type AssemblySteps_AdditionalProperty_AzureStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// A JavaScript object containing a list of metadata to be set for this file on Azure, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Metadata *AssemblySteps_AdditionalProperty_AzureStore_Metadata `json:"metadata,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -26258,11 +25974,8 @@ type AssemblySteps_AdditionalProperty_AzureStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -26270,49 +25983,42 @@ type AssemblySteps_AdditionalProperty_AzureStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_AzureStore_Robot `json:"robot"`
-	//
 	// Set this to a number to enable shared access signatures for your stored object. This reflects the number of seconds that the signature will be valid for once the object is stored. Enabling this will attach the shared access signature (SAS) to the result URL of your object.
-	//
 	SasExpiresIn *ValueStringOrStringOrInteger `json:"sas_expires_in,omitempty"`
-	//
 	// Set this to a combination of `r` (read), `w` (write) and `d` (delete) for your shared access signatures (SAS) permissions.
-	//
 	SasPermissions *ValueStringOrString `json:"sas_permissions,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -26320,7 +26026,6 @@ type AssemblySteps_AdditionalProperty_AzureStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -26572,7 +26277,6 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	AppKey   *ValueStringOrString `json:"app_key,omitempty"`
 	AppKeyId *ValueStringOrString `json:"app_key_id,omitempty"`
 	Bucket   *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Backblaze Bucket Name, App Key ID, and App Key.
 	//
 	// To create your credential information, head over to Backblaze, sign in to your account, and select "Create a Bucket". Save the name of your bucket, and click on the "App Keys" tab, scroll to the bottom of the page then select “Add a New Application Key”. Allow access to your recently created bucket, select  “Read and Write” as your type of access, and tick the “Allow List All Bucket Names” option.
@@ -26582,11 +26286,8 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	// ⚠️ Your App Key will only be viewable once, so make sure you note this down.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"app_key_id"`, `"app_key"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -26596,11 +26297,9 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -26610,21 +26309,15 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -26642,9 +26335,7 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -26654,25 +26345,19 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive a 404 `BACKBLAZE_IMPORT_NOT_FOUND` error.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `start_file_name` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_BackblazeImport_Robot `json:"robot"`
-	//
 	// The name of the last file from the previous paging call. This tells the <dfn>Robot</dfn> to ignore all files up to and including this file.
-	//
 	StartFileName *ValueStringOrString `json:"start_file_name,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -26680,7 +26365,6 @@ type AssemblySteps_AdditionalProperty_BackblazeImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -26862,7 +26546,6 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	AppKey   *ValueStringOrString `json:"app_key,omitempty"`
 	AppKeyId *ValueStringOrString `json:"app_key_id,omitempty"`
 	Bucket   *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Backblaze Bucket Name, App Key ID, and App Key.
 	//
 	// To create your credential information, head over to Backblaze, sign in to your account, and select "Create a Bucket". Save the name of your bucket, and click on the "App Keys" tab, scroll to the bottom of the page then select “Add a New Application Key”. Allow access to your recently created bucket, select  “Read and Write” as your type of access, and tick the “Allow List All Bucket Names” option.
@@ -26872,7 +26555,6 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	// ⚠️ Your App Key will only be viewable once, so make sure you note this down.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"app_key_id"`, `"app_key"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -26882,17 +26564,13 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your Backblaze B2 Cloud Storage bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// [Here](https://www.backblaze.com/b2/docs/b2_upload_file.html) you can find a list of available headers.
 	//
 	// Object Metadata can be specified using `X-Bz-Info-*` headers.
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -26900,17 +26578,13 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -26928,11 +26602,8 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -26940,41 +26611,38 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_BackblazeStore_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -26982,7 +26650,6 @@ type AssemblySteps_AdditionalProperty_BackblazeStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -27140,7 +26807,6 @@ type AssemblySteps_AdditionalProperty_BackblazeStore_UserMeta = AssemblySteps_Ad
 type AssemblySteps_AdditionalProperty_BackblazeStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_BoxImport struct {
-	//
 	// Create a Box app in the [Box Developer Console](https://app.box.com/developers/console) using **Server Authentication (JWT)**.
 	//
 	// Generate a public/private keypair for that app. Box will download a JSON config file (with `boxAppSettings` and `appAuth`) that includes your JWT private key material.
@@ -27148,7 +26814,6 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	// In your Transloadit account, create [Template Credentials](/c/template-credentials/) of type Box and paste that full JSON file into `key_file_contents`. Then set this `credentials` parameter to the Template Credentials name.
 	//
 	// If your Box enterprise requires it, make sure the app is authorized by an admin before using it in production.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -27158,11 +26823,9 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -27172,21 +26835,15 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -27204,9 +26861,7 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path in your Box to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are descendants of this directory are recursively imported. For example: `images/`.
@@ -27214,7 +26869,6 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -27222,7 +26876,6 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_BoxImport_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -27230,7 +26883,6 @@ type AssemblySteps_AdditionalProperty_BoxImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -27384,11 +27036,8 @@ type AssemblySteps_AdditionalProperty_BoxImport_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_BoxImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_BoxStore struct {
-	//
 	// Whether to create a URL to this file for sharing with other people. This will overwrite the file's `"url"` property.
-	//
 	CreateSharingLink *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"create_sharing_link,omitempty"`
-	//
 	// Create a Box app in the [Box Developer Console](https://app.box.com/developers/console) using **Server Authentication (JWT)**.
 	//
 	// Generate a public/private keypair for that app. Box will download a JSON config file (with `boxAppSettings` and `appAuth`) that includes your JWT private key material.
@@ -27396,7 +27045,6 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	// In your Transloadit account, create [Template Credentials](/c/template-credentials/) of type Box and paste that full JSON file into `key_file_contents`. Then set this `credentials` parameter to the Template Credentials name.
 	//
 	// If your Box enterprise requires it, make sure the app is authorized by an admin before using it in production.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -27406,9 +27054,7 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -27416,17 +27062,13 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -27444,11 +27086,8 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -27456,41 +27095,38 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_BoxStore_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -27498,7 +27134,6 @@ type AssemblySteps_AdditionalProperty_BoxStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -27648,16 +27283,12 @@ type AssemblySteps_AdditionalProperty_BoxStore_UserMeta_AdditionalProperty = Ass
 type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	AccountType *AssemblySteps_AdditionalProperty_CloudfilesImport_AccountType `json:"account_type,omitempty"`
 	Container   *ValueStringOrString                                           `json:"container,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your Cloud Files Container, User, Key, Account type and Data center.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"account_type"` ("us" or "uk"), `"data_center"` ("dfw" for Dallas or "ord" for Chicago for example), `"user"`, `"key"`, `"container"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	DataCenter  *ValueStringOrString `json:"data_center,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -27667,11 +27298,9 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -27681,22 +27310,16 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -27714,15 +27337,11 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your container to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -27730,22 +27349,18 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	// Directories are **not** imported recursively. If you want to import files from subdirectories and sub-subdirectories, enable the `recursive` parameter.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page`wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_CloudfilesImport_Robot `json:"robot"`
 	User  *ValueStringOrString                                    `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -27753,7 +27368,6 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -28021,11 +27635,9 @@ type AssemblySteps_AdditionalProperty_CloudfilesImport_UserMeta_AdditionalProper
 type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	AccountType *AssemblySteps_AdditionalProperty_CloudfilesImport_AccountType `json:"account_type,omitempty"`
 	Container   *ValueStringOrString                                           `json:"container,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your Cloud Files Container, User, Key, Account type and Data center.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"account_type"` ("us" or "uk"), `"data_center"` ("dfw" for Dallas or "ord" for Chicago for example), `"user"`, `"key"`, `"container"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	DataCenter  *ValueStringOrString `json:"data_center,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
@@ -28036,9 +27648,7 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -28046,18 +27656,14 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -28075,11 +27681,8 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which to store the file. This value can also contain [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -28087,42 +27690,39 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_CloudfilesStore_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use  *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
 	User *ValueStringOrString                               `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -28130,7 +27730,6 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -28280,15 +27879,11 @@ type AssemblySteps_AdditionalProperty_CloudfilesStore_UserMeta_AdditionalPropert
 
 type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Cloudflare R2 bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -28298,12 +27893,10 @@ type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -28313,22 +27906,16 @@ type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -28346,15 +27933,11 @@ type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -28364,26 +27947,20 @@ type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subfolders and sub-subfolders, etc. of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_CloudflareImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                                    `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -28391,7 +27968,6 @@ type AssemblySteps_AdditionalProperty_CloudflareImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -28576,11 +28152,9 @@ type AssemblySteps_AdditionalProperty_CloudflareImport_UserMeta_AdditionalProper
 
 type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Cloudflare R2 bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -28590,16 +28164,12 @@ type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your Cloudflare R2 bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -28607,18 +28177,14 @@ type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -28636,11 +28202,8 @@ type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -28649,49 +28212,42 @@ type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_CloudflareStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                                   `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// The URL prefix used for accessing files from your Cloudflare R2 bucket. This is typically the custom public URL access host set up in your Cloudflare account.
-	//
 	UrlPrefix *ValueStringOrString `json:"url_prefix,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -28699,7 +28255,6 @@ type AssemblySteps_AdditionalProperty_CloudflareStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -28857,15 +28412,11 @@ type AssemblySteps_AdditionalProperty_CloudflareStore_UserMeta = AssemblySteps_A
 type AssemblySteps_AdditionalProperty_CloudflareStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your DigitalOcean Space, Key, Secret and Region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"space"`, `"region"` (for example: `"fra1"` or `"nyc3"`), `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -28875,11 +28426,9 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -28889,22 +28438,16 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -28922,15 +28465,11 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -28938,28 +28477,22 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
 	// Directories are **not** imported recursively. If you want to import files from subdirectories and sub-subdirectories, enable the `recursive` parameter.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	Region    *ValueStringOrString                                             `json:"region,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_DigitaloceanImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                                      `json:"secret,omitempty"`
 	Space  *ValueStringOrString                                      `json:"space,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -28967,7 +28500,6 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -29149,15 +28681,11 @@ type AssemblySteps_AdditionalProperty_DigitaloceanImport_UserMeta = AssemblyStep
 type AssemblySteps_AdditionalProperty_DigitaloceanImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your [Template Credentials](/c/template-credentials/) as this parameter's value. They will contain the values for your DigitalOcean Space, Key, Secret and Region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"space"`, `"region"` (for example: `"fra1"` or `"nyc3"`), `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -29167,17 +28695,13 @@ type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file on DigitalOcean Spaces, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// [Here](https://developers.digitalocean.com/documentation/spaces/#object) you can find a list of available headers.
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -29185,18 +28709,14 @@ type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -29214,11 +28734,8 @@ type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue  *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -29228,50 +28745,43 @@ type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_DigitaloceanStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                                     `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
 	Space       *ValueStringOrString          `json:"space,omitempty"`
-	//
 	// The URL prefix used for the returned URL, such as `"https://my.cdn.com/some/path"`.
-	//
 	UrlPrefix *ValueStringOrString `json:"url_prefix,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -29279,7 +28789,6 @@ type AssemblySteps_AdditionalProperty_DigitaloceanStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -29451,9 +28960,7 @@ type AssemblySteps_AdditionalProperty_DocumentAutorotate struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -29461,17 +28968,13 @@ type AssemblySteps_AdditionalProperty_DocumentAutorotate struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -29489,7 +28992,6 @@ type AssemblySteps_AdditionalProperty_DocumentAutorotate struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -29497,41 +28999,38 @@ type AssemblySteps_AdditionalProperty_DocumentAutorotate struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_DocumentAutorotate_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -29539,7 +29038,6 @@ type AssemblySteps_AdditionalProperty_DocumentAutorotate struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -29676,13 +29174,9 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The desired format for document conversion.
-	//
 	Format AssemblySteps_AdditionalProperty_DocumentConvert_Format `json:"format"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -29690,25 +29184,17 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Markdown can be represented in several [variants](https://www.iana.org/assignments/markdown-variants/markdown-variants.xhtml), so when using this Robot to transform Markdown into HTML please specify which revision is being used.
-	//
 	MarkdownFormat *AssemblySteps_AdditionalProperty_DocumentConvert_MarkdownFormat `json:"markdown_format,omitempty"`
-	//
 	// This parameter overhauls your Markdown files styling based on several canned presets.
-	//
 	MarkdownTheme *AssemblySteps_AdditionalProperty_DocumentConvert_MarkdownTheme `json:"markdown_theme,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -29726,15 +29212,11 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Display PDF header and footer.
 	//
 	// Currently this parameter is only supported when converting from `html`.
-	//
 	PdfDisplayHeaderFooter *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"pdf_display_header_footer,omitempty"`
-	//
 	// HTML template for the PDF print footer.
 	//
 	// Should use the same format as the `pdf_header_template`.
@@ -29746,15 +29228,11 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// ```html
 	// <div style="font-size: 15px; width: 100%; text-align: center;"><span class="pageNumber"></span></div>
 	// ```
-	//
 	PdfFooterTemplate *ValueStringOrString `json:"pdf_footer_template,omitempty"`
-	//
 	// PDF paper format.
 	//
 	// Currently this parameter is only supported when converting from `html`.
-	//
 	PdfFormat *AssemblySteps_AdditionalProperty_DocumentConvert_PdfFormat `json:"pdf_format,omitempty"`
-	//
 	// HTML template for the PDF print header.
 	//
 	// Should be valid HTML markup with following classes used to inject printing values into them:
@@ -29771,27 +29249,21 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// ```html
 	// <div style="font-size: 15px; width: 100%; text-align: center;"><span class="pageNumber"></span></div>
 	// ```
-	//
 	PdfHeaderTemplate *ValueStringOrString `json:"pdf_header_template,omitempty"`
-	//
 	// PDF Paper margins, separated by `,` and with units.
 	//
 	// We support the following unit values: `px`, `in`, `cm`, `mm`.
 	//
 	// Currently this parameter is only supported when converting from `html`.
-	//
 	PdfMargin *ValueStringOrString `json:"pdf_margin,omitempty"`
-	//
 	// Print PDF background graphics.
 	//
 	// Currently this parameter is only supported when converting from `html`.
-	//
 	PdfPrintBackground *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"pdf_print_background,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// > [!Note]
 	// > This Robot can convert files to PDF, but cannot convert PDFs to different formats. If you want to convert PDFs to say, JPEG or TIFF, use [🤖/image/resize](/docs/robots/image-resize/). If you want to turn them into text files or recognize (OCR) them to make them searchable, reach out, as we have a new Robot in the works for this.
 	//
@@ -29837,43 +29309,39 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// - `xls`
 	// - `xlsx`
 	// - `xml`
-	//
 	Robot AssemblySteps_AdditionalProperty_DocumentConvert_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -29881,7 +29349,6 @@ type AssemblySteps_AdditionalProperty_DocumentConvert struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -29908,9 +29375,7 @@ type AssemblySteps_AdditionalProperty_DocumentConvert_ForceAccept_Variant_String
 // The desired format for document conversion.
 type AssemblySteps_AdditionalProperty_DocumentConvert_Format struct {
 	String1 *string
-	//
 	// The desired format for document conversion.
-	//
 	String2 *AssemblySteps_AdditionalProperty_DocumentConvert_Format_String2
 }
 
@@ -30441,13 +29906,9 @@ type AssemblySteps_AdditionalProperty_DocumentConvert_UserMeta = AssemblySteps_A
 type AssemblySteps_AdditionalProperty_DocumentConvert_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DocumentExtract struct {
-	//
 	// When enabled, identical extracted image files are emitted only once.
-	//
 	DedupeImages *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"dedupe_images,omitempty"`
-	//
 	// Selects which assets to extract. Use `["text"]`, `["images"]`, or `["text", "images"]`.
-	//
 	Extract *AssemblySteps_AdditionalProperty_DocumentExtract_Extract `json:"extract,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -30457,9 +29918,7 @@ type AssemblySteps_AdditionalProperty_DocumentExtract struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -30467,45 +29926,29 @@ type AssemblySteps_AdditionalProperty_DocumentExtract struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Output format for extracted embedded raster images.
 	//
 	// - `"auto"` and `"original"` preserve the embedded image format where possible.
 	// - `"png"` asks Poppler to decode images as PNG.
 	// - `"jpg"` converts non-JPEG extracted images through `/image/resize`.
-	//
 	ImageFormat *AssemblySteps_AdditionalProperty_DocumentExtract_ImageFormat `json:"image_format,omitempty"`
-	//
 	// When enabled, the robot also keeps image mask files when Poppler exposes them as separate files.
-	//
 	IncludeImageMasks *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"include_image_masks,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Minimum file size in bytes for extracted images. Smaller images are ignored.
-	//
 	MinImageBytes *ValueStringOrStringOrInteger `json:"min_image_bytes,omitempty"`
-	//
 	// Minimum height in pixels for extracted images. Smaller images are ignored. Set to `0` to disable this filter.
-	//
 	MinImageHeight *ValueStringOrStringOrInteger `json:"min_image_height,omitempty"`
-	//
 	// Minimum width in pixels for extracted images. Smaller images are ignored. Set to `0` to disable this filter.
-	//
 	MinImageWidth *ValueStringOrStringOrInteger `json:"min_image_width,omitempty"`
-	//
 	// OCR provider to use when `text_method` is `"ocr"` or `"auto"`. Valid values are `"aws"` and `"gcp"`.
-	//
 	OcrProvider *AssemblySteps_AdditionalProperty_DocumentExtract_OcrProvider `json:"ocr_provider,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -30523,44 +29966,32 @@ type AssemblySteps_AdditionalProperty_DocumentExtract struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Optional comma-separated page selection, such as `"1"`, `"1-3"`, or `"1,3-5"`. Page numbers start at 1. Ranges are clamped to the detected page count.
 	//
 	// At most 1,000 selected pages are allowed per job.
 	//
 	// This is supported for native text extraction and embedded image extraction. OCR extraction currently works on the full document.
-	//
 	PageRange *ValueStringOrString `json:"page_range,omitempty"`
-	//
 	// Password used to unlock encrypted PDFs for native text extraction and embedded image extraction. OCR extraction currently does not support encrypted PDFs, so do not combine this with `text_method: "ocr"` or `text_method: "auto"`.
-	//
 	Password *ValueStringOrString `json:"password,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Extracts native/selectable text and embedded raster image assets from PDF documents.
 	//
 	// This robot does not render full pages. If you need page images, use `/document/thumbs`. Vector graphics, charts, and page backgrounds are not always embedded raster images and may therefore not be returned by this robot.
-	//
 	Robot AssemblySteps_AdditionalProperty_DocumentExtract_Robot `json:"robot"`
-	//
 	// Output format for extracted text. Use `"txt"` for plain text or `"json"` for structured output.
-	//
 	TextFormat *AssemblySteps_AdditionalProperty_DocumentExtract_TextFormat `json:"text_format,omitempty"`
-	//
 	// Controls text output grouping for native extraction.
 	//
 	// - `"document"` creates one text result for the selected pages.
 	// - `"page"` creates one text result per selected page.
 	//
 	// Page granularity is currently only supported with `text_method: "native"`.
-	//
 	TextGranularity *AssemblySteps_AdditionalProperty_DocumentExtract_TextGranularity `json:"text_granularity,omitempty"`
-	//
 	// Controls how text is extracted.
 	//
 	// - `"native"` extracts selectable PDF text locally with Poppler. This is fast, but returns little or no text for scanned PDFs.
@@ -30568,43 +29999,39 @@ type AssemblySteps_AdditionalProperty_DocumentExtract struct {
 	// - `"auto"` tries native extraction first, then falls back to OCR when no native text is found. This also requires `ocr_provider`.
 	//
 	// OCR modes currently cannot be combined with `password`.
-	//
 	TextMethod *AssemblySteps_AdditionalProperty_DocumentExtract_TextMethod `json:"text_method,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -30612,7 +30039,6 @@ type AssemblySteps_AdditionalProperty_DocumentExtract struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -31504,9 +30930,7 @@ type AssemblySteps_AdditionalProperty_DocumentMerge struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -31514,25 +30938,19 @@ type AssemblySteps_AdditionalProperty_DocumentMerge struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// An array of passwords for the input documents, in case they are encrypted. The order of passwords must match the order of the documents as they are passed to the /document/merge step.
 	//
 	// This can be achieved via our as-syntax using "document_1", "document_2", etc if provided. See the demos below.
 	//
 	// If the as-syntax is not used in the "use" parameter, the documents are sorted alphanumerically based on their filename, and in that order input passwords should be provided.
-	//
 	InputPasswords *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2 `json:"input_passwords,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -31550,11 +30968,8 @@ type AssemblySteps_AdditionalProperty_DocumentMerge struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// If not empty, encrypts the output file and makes it accessible only by typing in this password.
-	//
 	OutputPassword *ValueStringOrString `json:"output_password,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -31562,49 +30977,44 @@ type AssemblySteps_AdditionalProperty_DocumentMerge struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_DocumentMerge_Robot `json:"robot"`
-	//
 	// Controls how bundled inputs are ordered when no explicit numbered alias for the input type is used. Numbered aliases end with a numeric suffix such as `_1`.
 	//
 	// The default `"basename"` keeps the legacy natural basename sorting behavior.
 	//
 	// Set this to `"import_order"` to preserve the order of array-based import steps when all input files carry complete import order metadata. `"auto"` has the same import-order preference with natural basename sorting as fallback.
-	//
 	SortBy *AssemblySteps_AdditionalProperty_AudioConcat_SortBy `json:"sort_by,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -31612,7 +31022,6 @@ type AssemblySteps_AdditionalProperty_DocumentMerge struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -31767,20 +31176,14 @@ type AssemblySteps_AdditionalProperty_DocumentOcr struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// In what format to return the extracted text.
 	// - `"json"` returns a JSON file.
 	// - `"meta"` does not return a file, but stores the data inside Transloadit's file object (under `${file.meta.recognized_text}`, which is an array of strings) that's passed around between encoding <dfn>Steps</dfn>, so that you can use the values to burn the data into videos, filter on them, etc.
 	// - `"text"` returns the recognized text as a plain UTF-8 encoded text file.
-	//
 	Format *AssemblySteps_AdditionalProperty_DocumentOcr_Format `json:"format,omitempty"`
-	//
 	// Whether to return a full response including coordinates for the text (`"full"`), or a flat list of the extracted phrases (`"list"`). This parameter has no effect if the `format` parameter is set to `"text"`.
-	//
 	Granularity *AssemblySteps_AdditionalProperty_DocumentOcr_Granularity `json:"granularity,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -31788,17 +31191,13 @@ type AssemblySteps_AdditionalProperty_DocumentOcr struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -31816,59 +31215,52 @@ type AssemblySteps_AdditionalProperty_DocumentOcr struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
 	// Select a specific provider to override automatic selection.
 	// AWS supports detection for the following languages: English, Arabic, Russian, German, French, Italian, Portuguese and Spanish. GCP allows for a wider range of languages, with varying levels of support which can be found on the [official documentation](https://cloud.google.com/vision/docs/languages/).
-	//
 	Provider *AssemblySteps_AdditionalProperty_DocumentOcr_Provider `json:"provider,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// With this <dfn>Robot</dfn>, you can detect and extract text from PDFs using optical character recognition (OCR).
 	//
 	// For example, you can use the results to obtain the content of invoices, legal documents or restaurant menus. You can also pass the text down to other <dfn>Robots</dfn> to filter documents that contain (or do not contain) certain phrases.
-	//
 	Robot AssemblySteps_AdditionalProperty_DocumentOcr_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -31876,7 +31268,6 @@ type AssemblySteps_AdditionalProperty_DocumentOcr struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -32287,7 +31678,6 @@ type AssemblySteps_AdditionalProperty_DocumentOcr_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_DocumentOcr_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
-	//
 	// The PDF version compatibility level. Lower versions have broader compatibility but fewer features. Higher versions support more advanced features but may not open in older PDF readers.
 	//
 	// - `1.4` - Acrobat 5 compatibility, most widely supported
@@ -32295,11 +31685,8 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// - `1.6` - Acrobat 7 compatibility
 	// - `1.7` - Acrobat 8+ compatibility (default)
 	// - `2.0` - PDF 2.0 standard
-	//
 	Compatibility *AssemblySteps_AdditionalProperty_DocumentOptimize_Compatibility `json:"compatibility,omitempty"`
-	//
 	// Whether to compress embedded fonts. When enabled, fonts are compressed to reduce file size.
-	//
 	CompressFonts *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"compress_fonts,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -32309,9 +31696,7 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -32319,9 +31704,7 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Target DPI (dots per inch) for embedded images. When specified, this overrides the DPI setting from the preset.
 	//
 	// Higher DPI values result in better image quality but larger file sizes. Lower values produce smaller files but may result in pixelated images when printed.
@@ -32331,21 +31714,15 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// - 150 - eBooks and general documents
 	// - 300 - Print quality
 	// - 600 - High-quality print
-	//
 	ImageDpi *ValueStringOrStringOrInteger `json:"image_dpi,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Whether to linearize (optimize for Fast Web View) the output PDF. Linearized PDFs can begin displaying in a browser before they are fully downloaded, improving the user experience for web delivery.
-	//
 	Linearize *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"linearize,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -32363,26 +31740,20 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The quality preset to use for optimization. Each preset provides a different balance between file size and quality:
 	//
 	// - `screen` - Lowest quality, smallest file size. Best for screen viewing only. Images are downsampled to 72 DPI.
 	// - `ebook` - Good balance of quality and size. Suitable for most purposes. Images are downsampled to 150 DPI.
 	// - `printer` - High quality suitable for printing. Images are kept at 300 DPI.
 	// - `prepress` - Highest quality for professional printing. Minimal compression applied.
-	//
 	Preset *AssemblySteps_AdditionalProperty_DocumentOptimize_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Whether to strip document metadata (title, author, keywords, etc.) from the PDF. This can provide a small reduction in file size and may be useful for privacy.
-	//
 	RemoveMetadata *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"remove_metadata,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This Robot reduces PDF file sizes. It recompresses images, subsets fonts, and applies various optimizations to reduce file size while maintaining acceptable quality.
 	//
 	// ## Quality Presets
@@ -32395,47 +31766,41 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// | `ebook` | 150 | Good balance of quality/size | ~71% |
 	// | `printer` | 300 | Print quality | Moderate |
 	// | `prepress` | Highest | Press-ready, largest files | Minimal |
-	//
 	Robot AssemblySteps_AdditionalProperty_DocumentOptimize_Robot `json:"robot"`
-	//
 	// Whether to subset embedded fonts, keeping only the glyphs that are actually used in the document. This can significantly reduce file size for documents that only use a small portion of a font's character set.
-	//
 	SubsetFonts *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"subset_fonts,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -32443,7 +31808,6 @@ type AssemblySteps_AdditionalProperty_DocumentOptimize struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -32816,9 +32180,7 @@ type AssemblySteps_AdditionalProperty_DocumentSplit struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -32826,17 +32188,13 @@ type AssemblySteps_AdditionalProperty_DocumentSplit struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -32854,7 +32212,6 @@ type AssemblySteps_AdditionalProperty_DocumentSplit struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// The pages to select from the input PDF and to be included in the output PDF. Each entry can be a single page number (e.g. 5), or a range (e.g. `5-10`). Page numbers start at 1. By default all pages are extracted.
 	Pages *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"pages,omitempty"`
@@ -32864,41 +32221,38 @@ type AssemblySteps_AdditionalProperty_DocumentSplit struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_DocumentSplit_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -32906,7 +32260,6 @@ type AssemblySteps_AdditionalProperty_DocumentSplit struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -33046,41 +32399,29 @@ type AssemblySteps_AdditionalProperty_DocumentSplit_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_DocumentSplit_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
-	//
 	// Change how the alpha channel of the resulting image should work. Valid values are `"Set"` to enable transparency and `"Remove"` to remove transparency.
 	//
 	// For a list of all valid values please check the ImageMagick documentation [here](http://www.imagemagick.org/script/command-line-options.php#alpha).
-	//
 	Alpha *AssemblySteps_AdditionalProperty_DocumentThumbs_Alpha `json:"alpha,omitempty"`
-	//
 	// Controls whether or not antialiasing is used to remove jagged edges from text or images in a document.
-	//
 	Antialiasing *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"antialiasing,omitempty"`
-	//
 	// Either the hexadecimal code or [name](https://www.imagemagick.org/script/color.php#color_names) of the color used to fill the background (only used for the pad resize strategy).
 	//
 	// By default, the background of transparent images is changed to white. For details about how to preserve transparency across all image types, see [this demo](/demos/image-processing/properly-preserve-transparency-across-all-image-types/).
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// Sets the image colorspace. For details about the available values, see the [ImageMagick documentation](https://www.imagemagick.org/script/command-line-options.php#colorspace).
 	//
 	// Please note that if you were using `"RGB"`, we recommend using `"sRGB"`. ImageMagick might try to find the most efficient `colorspace` based on the color of an image, and default to e.g. `"Gray"`. To force colors, you might then have to use this parameter.
-	//
 	Colorspace *AssemblySteps_AdditionalProperty_DocumentThumbs_Colorspace `json:"colorspace,omitempty"`
-	//
 	// If your output format is `"gif"` then this parameter sets the number of 100th seconds to pass before the next frame is shown in the animation. Set this to `100` for example to allow 1 second to pass between the frames of the animated gif.
 	//
 	// If your output format is not `"gif"`, then this parameter does not have any effect.
-	//
 	Delay *ValueStringOrStringOrInteger `json:"delay,omitempty"`
-	//
 	// While in-memory quality and file format depth specifies the color resolution, the density of an image is the spatial (space) resolution of the image. That is the density (in pixels per inch) of an image and defines how far apart (or how big) the individual pixels are. It defines the size of the image in real world terms when displayed on devices or printed.
 	//
 	// You can set this value to a specific `width` or in the format `width`x`height`.
 	//
 	// If your converted image has a low resolution, please try using the density parameter to resolve that.
-	//
 	Density *ValueStringOrString `json:"density,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -33090,19 +32431,13 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The format of the extracted image(s).
 	//
 	// If you specify the value `"gif"`, then an animated gif cycling through all pages is created. Please check out [this demo](/demos/document-processing/convert-all-pages-of-a-document-into-an-animated-gif/) to learn more about this.
-	//
 	Format *AssemblySteps_AdditionalProperty_DocumentThumbs_Format `json:"format,omitempty"`
-	//
 	// Height of the new image, in pixels. If not specified, will default to the height of the input image
-	//
 	Height *ValueStringOrStringOrInteger `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -33110,18 +32445,14 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors     *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors       `json:"ignore_errors,omitempty"`
 	ImagemagickStack *AssemblySteps_AdditionalProperty_DocumentThumbs_ImagemagickStack `json:"imagemagick_stack,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -33139,40 +32470,28 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The PDF page that you want to convert to an image. By default the value is `null` which means that all pages will be converted into images.
-	//
 	Page *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"page,omitempty"`
-	//
 	// A page range to extract, in the format `"start-end"` (e.g., `"1-20"`). Extraction starts from the first page in the range and proceeds sequentially, stopping gracefully when a page does not exist. This is useful for PDFs where the total page count cannot be determined.
 	//
 	// The start must be at least `1`, and the end must be greater than or equal to the start.
 	//
 	// This parameter cannot be used together with `page`, and is not supported with GIF format. When `page_range` is set, the robot does not need to know the total page count upfront, making it robust for PDFs that fail page count detection.
-	//
 	PageRange *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"page_range,omitempty"`
-	//
 	// Some PDF documents lie about their dimensions. For instance they'll say they are landscape, but when opened in decent Desktop readers, it's really in portrait mode. This can happen if the document has a cropbox defined. When this option is enabled (by default), the cropbox is leading in determining the dimensions of the resulting thumbnails.
-	//
 	PdfUseCropbox *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"pdf_use_cropbox,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// One of the [available resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// ## Things to keep in mind
 	//
 	// - If you convert a multi-page PDF file into several images, all result images will be sorted with the first image being the thumbnail of the first document page, etc.
 	// - You can also check the `meta.thumb_index` key of each result image to find out which page it corresponds to. Keep in mind that these thumb indices **start at 0,** not at 1.
-	//
 	Robot AssemblySteps_AdditionalProperty_DocumentThumbs_Robot `json:"robot"`
-	//
 	// Selects the PDF rendering stack. Defaults to Ghostscript.
 	//
 	// Use `"pdfium"` for page-specific or single-page high-DPI PDF rasterization when Ghostscript is too slow or exhausts scratch space, for example with high-resolution CAD, blueprint, or layered real-estate PDFs. This stack uses PDFium via the Python `pypdfium2` bindings and Pillow for final image encoding.
@@ -33182,15 +32501,11 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	// The `"pdfium"` stack currently supports JPG/PNG output, `resize_strategy: "fit"`, a specific `page` or single-page PDFs, opaque hexadecimal backgrounds, `antialiasing`, and `pdf_use_cropbox`.
 	//
 	// The `"vips"` stack currently supports JPG/PNG output, `resize_strategy: "fit"`, a specific `page` or single-page PDFs, and hexadecimal or transparent backgrounds.
-	//
 	Stack *AssemblySteps_AdditionalProperty_DocumentThumbs_Stack `json:"stack,omitempty"`
-	//
 	// This determines if additional whitespace around the PDF should first be trimmed away before it is converted to an image. If you set this to `true` only the real PDF page contents will be shown in the image.
 	//
 	// If you need to reflect the PDF's dimensions in your image, it is generally a good idea to set this to `false`.
-	//
 	TrimWhitespace *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"trim_whitespace,omitempty"`
-	//
 	// Enables high-performance mode for faster document processing.
 	//
 	// When enabled, Turbo Mode provides two key optimizations:
@@ -33202,43 +32517,39 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	// Files are emitted as they become available during processing. If you set this to `false`, pages are extracted sequentially using a single process, and files are emitted only after all processing is complete.
 	//
 	// Turbo Mode increases pricing in that the input document's file size is added for every extracted page. There are no performance benefits nor increased charges for single-page documents.
-	//
 	Turbo *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"turbo,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -33246,11 +32557,8 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Width of the new image, in pixels. If not specified, will default to the width of the input image
-	//
 	Width *ValueStringOrStringOrInteger `json:"width,omitempty"`
 }
 
@@ -34210,13 +33518,9 @@ type AssemblySteps_AdditionalProperty_DocumentThumbs_UserMeta_AdditionalProperty
 type AssemblySteps_AdditionalProperty_DocumentThumbs_Width = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_DropboxImport struct {
-	//
 	// The Dropbox OAuth access token. We recommend using <dfn>Template Credentials</dfn> via `credentials`, but you can use this parameter for dynamic Dropbox credentials.
-	//
 	AccessToken *ValueStringOrString `json:"access_token,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Dropbox access token.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -34226,11 +33530,9 @@ type AssemblySteps_AdditionalProperty_DropboxImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -34240,21 +33542,15 @@ type AssemblySteps_AdditionalProperty_DropboxImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -34272,9 +33568,7 @@ type AssemblySteps_AdditionalProperty_DropboxImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path in your Dropbox to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are descendants of this directory are recursively imported. For example: `images/`.
@@ -34282,19 +33576,15 @@ type AssemblySteps_AdditionalProperty_DropboxImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// The Dropbox OAuth refresh token. This is optional and can be used together with `access_token` for dynamic Dropbox credentials.
-	//
 	RefreshToken *ValueStringOrString `json:"refresh_token,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_DropboxImport_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -34302,7 +33592,6 @@ type AssemblySteps_AdditionalProperty_DropboxImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -34456,13 +33745,9 @@ type AssemblySteps_AdditionalProperty_DropboxImport_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_DropboxImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_DropboxStore struct {
-	//
 	// Whether to create a URL to this file for sharing with other people. This will overwrite the file's `"url"` property.
-	//
 	CreateSharingLink *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"create_sharing_link,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Dropbox access token.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -34472,9 +33757,7 @@ type AssemblySteps_AdditionalProperty_DropboxStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -34482,17 +33765,13 @@ type AssemblySteps_AdditionalProperty_DropboxStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -34510,11 +33789,8 @@ type AssemblySteps_AdditionalProperty_DropboxStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -34522,41 +33798,38 @@ type AssemblySteps_AdditionalProperty_DropboxStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_DropboxStore_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -34564,7 +33837,6 @@ type AssemblySteps_AdditionalProperty_DropboxStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -34714,9 +33986,7 @@ type AssemblySteps_AdditionalProperty_EdglyDeliver struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -34724,17 +33994,13 @@ type AssemblySteps_AdditionalProperty_EdglyDeliver struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -34752,17 +34018,13 @@ type AssemblySteps_AdditionalProperty_EdglyDeliver struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// When you want Transloadit to tranform files on the fly, this <dfn>Robot</dfn> can cache and deliver the results close to your end-user, saving on latency and encoding volume. The use of this <dfn>Robot</dfn> is implicit when you use the <code>edgly.net</code> domain.
-	//
 	Robot AssemblySteps_AdditionalProperty_EdglyDeliver_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -34770,7 +34032,6 @@ type AssemblySteps_AdditionalProperty_EdglyDeliver struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -34876,21 +34137,15 @@ type AssemblySteps_AdditionalProperty_EdglyDeliver_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_EdglyDeliver_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FileCompress struct {
-	//
 	// The name of the archive file to be created (without the file extension).
-	//
 	ArchiveName *ValueStringOrString `json:"archive_name,omitempty"`
-	//
 	// Determines how fiercely to try to compress the archive. `-0` is compressionless, which is suitable for media that is already compressed. `-1` is fastest with lowest compression. `-9` is slowest with the highest compression.
 	//
 	// If you are using `-0` in combination with the `tar` format with `gzip` enabled, consider setting `gzip: false` instead. This results in a plain Tar archive, meaning it already has no compression.
-	//
 	CompressionLevel *ValueStringOrStringOrInteger `json:"compression_level,omitempty"`
-	//
 	// Determines if the result archive should contain all files in one directory (value for this is `"simple"`) or in subfolders according to the explanation below (value for this is `"advanced"`). The `"relative-path"` option preserves the relative directory structure of the input files.
 	//
 	// Files with same names are numbered in the `"simple"` file layout to avoid naming collisions.
-	//
 	FileLayout *AssemblySteps_AdditionalProperty_FileCompress_FileLayout `json:"file_layout,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -34900,19 +34155,13 @@ type AssemblySteps_AdditionalProperty_FileCompress struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The format of the archive to be created. Supported values are `"tar"` and `"zip"`.
 	//
 	// Note that `"tar"` without setting `gzip` to `true` results in an archive that's not compressed in any way.
-	//
 	Format *AssemblySteps_AdditionalProperty_FileCompress_Format `json:"format,omitempty"`
-	//
 	// Determines if the result archive should also be gzipped. Gzip compression is only applied if you use the `"tar"` format.
-	//
 	Gzip *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"gzip,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -34920,17 +34169,13 @@ type AssemblySteps_AdditionalProperty_FileCompress struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -34948,19 +34193,14 @@ type AssemblySteps_AdditionalProperty_FileCompress struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// This allows you to encrypt all archive contents with a password and thereby protect it against unauthorized use. To unzip the archive, the user will need to provide the password in a text input field prompt.
 	//
 	// This parameter has no effect if the format parameter is anything other than `"zip"`.
-	//
 	Password *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"password,omitempty"`
-	//
 	// The path at which each file is to be placed inside the archive. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). Variables are evaluated per file, allowing templates like `"${file.meta.archive_directory}/${file.name}"` to preserve the original directory structure from a previously extracted archive.
 	//
 	// When this parameter is set, the `file_layout` parameter is ignored.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -34968,41 +34208,38 @@ type AssemblySteps_AdditionalProperty_FileCompress struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_FileCompress_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -35010,7 +34247,6 @@ type AssemblySteps_AdditionalProperty_FileCompress struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -35364,9 +34600,7 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -35376,17 +34610,13 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
 	//
 	// Metadata extraction can fail for files inside an archive, for example when an archived file has a size of zero bytes. Configure the `"meta"` phase when decompression should continue in that case.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -35404,9 +34634,7 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The password to use for decrypting password-protected archives.
 	//
 	// Supports encrypted ZIP (ZipCrypto and AES), RAR (encrypted), and 7z (AES-256 encrypted) archives.
@@ -35414,13 +34642,11 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// For security, this value should be passed via Template Variables (`${fields.archive_password}`) or Template Credentials rather than hardcoded in your Assembly Instructions. The password is never logged or included in Assembly status responses.
 	//
 	// If the archive is encrypted and no password is provided, or if the password is incorrect, the <dfn>Assembly</dfn> will fail with a `FILE_DECOMPRESS_PASSWORD_REQUIRED` or `FILE_DECOMPRESS_PASSWORD_INCORRECT` error.
-	//
 	Password *ValueStringOrString `json:"password,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This Robot supports the following archive formats:
 	//
 	// - ZIP archives (with uncompressed or "deflate"-compressed entries, including password-protected)
@@ -35453,9 +34679,7 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// For security reasons, archives containing symlinks that point outside the archived directory will cause the <dfn>Assembly</dfn> to fail.
 	//
 	// Password-protected archives (ZIP with ZipCrypto or AES encryption, RAR encrypted, 7z with AES-256) are supported via the `password` parameter.
-	//
 	Robot AssemblySteps_AdditionalProperty_FileDecompress_Robot `json:"robot"`
-	//
 	// Enables Turbo Mode for `/file/decompress`.
 	//
 	// This setting defaults to `true`. Set it to `false` to disable Turbo Mode.
@@ -35463,43 +34687,39 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// When enabled, extracted files are emitted as soon as they are available, which can speed up downstream processing for large archives.
 	//
 	// Turbo Mode also changes usage accounting: emitted extracted-file bytes and original input-archive bytes are billed with a surcharge (25% by default).
-	//
 	Turbo *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"turbo,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -35507,7 +34727,6 @@ type AssemblySteps_AdditionalProperty_FileDecompress struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -35667,7 +34886,6 @@ type AssemblySteps_AdditionalProperty_FileDecompress_UserMeta = AssemblySteps_Ad
 type AssemblySteps_AdditionalProperty_FileDecompress_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FileFilter struct {
-	//
 	// Files that match at least one requirement will be accepted, or declined otherwise. If the value is `null`, all files will be accepted. If the array is empty, no files will be accepted. Omit this parameter or set it to `null` when you want the Step to pass every file through. Examples:
 	//
 	// `[["${file.mime}", "==", "image/gif"]]`
@@ -35678,13 +34896,9 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// If the `condition_type` parameter is set to `"and"`, then all requirements must match for the file to be accepted.
 	//
 	// If `accepts` and `declines` are both provided, the requirements in `accepts` will be evaluated first, before the conditions in `declines`.
-	//
 	Accepts *AssemblySteps_AdditionalProperty_FileFilter_Accepts `json:"accepts,omitempty"`
-	//
 	// Specifies the condition type according to which the members of the `accepts` or `declines` arrays should be evaluated. Can be `"or"` or `"and"`.
-	//
 	ConditionType *AssemblySteps_AdditionalProperty_FileFilter_ConditionType `json:"condition_type,omitempty"`
-	//
 	// Files that match at least one requirement will be declined, or accepted otherwise. If the value is `null` or an empty array, no files will be declined. Examples:
 	//
 	// `[["${file.size}", ">", "1024"]]`
@@ -35695,15 +34909,10 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// If the `condition_type` parameter is set to `"and"`, then all requirements must match for the file to be declined.
 	//
 	// If `accepts` and `declines` are both provided, the requirements in `accepts` will be evaluated first, before the conditions in `declines`.
-	//
 	Declines *AssemblySteps_AdditionalProperty_FileFilter_Accepts `json:"declines,omitempty"`
-	//
 	// The error message shown to your users (such as by Uppy) when a file is declined and `error_on_decline` is set to `true`.
-	//
 	ErrorMsg *ValueStringOrString `json:"error_msg,omitempty"`
-	//
 	// If this is set to `true` and one or more files are declined, the Assembly will be stopped and marked with an error.
-	//
 	ErrorOnDecline *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"error_on_decline,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -35713,9 +34922,7 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -35723,17 +34930,13 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -35751,13 +34954,11 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Think of this <dfn>Robot</dfn> as an `if/else` condition for building advanced file conversion workflows. With it, you can filter and direct certain uploaded files depending on their metadata.
 	//
 	// The <dfn>Robot</dfn> has two modes of operation:
@@ -35815,43 +35016,39 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// - `${Math.max(file.meta.width, file.meta.height) > 100}`
 	//
 	// As indicated, we charge for this via [🤖/script/run](/docs/robots/script-run/). See also [Dynamic Evaluation](/docs/topics/dynamic-evaluation/) for more details on allowed syntax and behavior.
-	//
 	Robot AssemblySteps_AdditionalProperty_FileFilter_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -35859,7 +35056,6 @@ type AssemblySteps_AdditionalProperty_FileFilter struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -38449,11 +37645,9 @@ type AssemblySteps_AdditionalProperty_FileFilter_UserMeta = AssemblySteps_Additi
 type AssemblySteps_AdditionalProperty_FileFilter_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FileHash struct {
-	//
 	// The hashing algorithm to use.
 	//
 	// The file hash is exported as `file.meta.hash`.
-	//
 	Algorithm *AssemblySteps_AdditionalProperty_FileHash_Algorithm `json:"algorithm,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -38463,9 +37657,7 @@ type AssemblySteps_AdditionalProperty_FileHash struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -38473,17 +37665,13 @@ type AssemblySteps_AdditionalProperty_FileHash struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -38501,9 +37689,7 @@ type AssemblySteps_AdditionalProperty_FileHash struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Specifies which portion of the file to hash. This is useful for fast fingerprinting of large files.
 	//
 	// - `"full"` (default): Hash the entire file.
@@ -38512,57 +37698,49 @@ type AssemblySteps_AdditionalProperty_FileHash struct {
 	// - `"both"`: Hash the first N bytes concatenated with the last N bytes.
 	//
 	// When using partial hashing, `file.meta.hash_partial` indicates the mode used, and `file.meta.hash_partial_size` indicates the number of bytes hashed from each portion.
-	//
 	Partial *AssemblySteps_AdditionalProperty_FileHash_Partial `json:"partial,omitempty"`
-	//
 	// The number of bytes to hash when using partial hashing. Defaults to `1048576` (1 MB).
 	//
 	// This parameter is only used when `partial` is set to `"first"`, `"last"`, or `"both"`.
-	//
 	PartialSize *ValueStringOrStringOrInteger `json:"partial_size,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> allows you to hash any file as part of the <dfn>Assembly</dfn> execution process. This can be useful for verifying the integrity of a file for example.
-	//
 	Robot AssemblySteps_AdditionalProperty_FileHash_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -38570,7 +37748,6 @@ type AssemblySteps_AdditionalProperty_FileHash struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -38897,39 +38074,23 @@ type AssemblySteps_AdditionalProperty_FileHash_UserMeta = AssemblySteps_Addition
 type AssemblySteps_AdditionalProperty_FileHash_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FilePreview struct {
-	//
-	//   The color used in the center of the artwork's gradient.
-	//
+	// The color used in the center of the artwork's gradient.
 	ArtworkCenterColor *ValueStringOrString `json:"artwork_center_color,omitempty"`
-	//
-	//   The color used in the outer parts of the artwork's gradient.
-	//
+	// The color used in the outer parts of the artwork's gradient.
 	ArtworkOuterColor *ValueStringOrString `json:"artwork_outer_color,omitempty"`
-	//
 	// The hexadecimal code of the color used to fill the background (only used for the pad resize strategy). The format is `#rrggbb[aa]` (red, green, blue, alpha). Use `#00000000` for a transparent padding.
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// The duration in seconds of the generated video clip. Only used if the `clip` strategy for video files is applied. Be aware that a longer clip duration also results in a larger file size, which might be undesirable for previews.
-	//
 	ClipDuration *ValueStringOrStringOrNumber `json:"clip_duration,omitempty"`
-	//
 	// The animated image format for the generated video clip. Only used if the `clip` strategy for video files is applied.
 	//
 	// Please consult the [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types) for detailed information about the image formats and their characteristics. GIF enjoys the broadest support in software, but only supports a limit color palette. APNG supports a variety of color depths, but its lossless compression produces large images for videos. AVIF is a modern image format that offers great compression, but proper support for animations is still lacking in some browsers. WebP on the other hand, enjoys broad support while offering a great balance between small file sizes and good visual quality, making it the default clip format.
-	//
 	ClipFormat *AssemblySteps_AdditionalProperty_FilePreview_ClipFormat `json:"clip_format,omitempty"`
-	//
 	// The framerate of the generated video clip. Only used if the `clip` strategy for video files is applied. Be aware that a higher framerate appears smoother but also results in a larger file size, which might be undesirable for previews.
-	//
 	ClipFramerate *ValueStringOrStringOrInteger `json:"clip_framerate,omitempty"`
-	//
 	// Specifies whether the generated animated image should loop forever (`true`) or stop after playing the animation once (`false`). Only used if the `clip` strategy for video files is applied.
-	//
 	ClipLoop *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"clip_loop,omitempty"`
-	//
 	// The start position in seconds of where the clip is cut. Only used if the `clip` strategy for video files is applied. Be aware that for larger video only the first few MBs of the file may be imported to improve speed. Larger offsets may seek to a position outside of the imported part and thus fail to generate a clip.
-	//
 	ClipOffset *ValueStringOrStringOrNumber `json:"clip_offset,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -38939,38 +38100,24 @@ type AssemblySteps_AdditionalProperty_FilePreview struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The output format for the generated thumbnail image. AVIF and WebP are also supported. If a short video clip is generated using the `clip` strategy, its format is defined by `clip_format`.
-	//
 	Format *AssemblySteps_AdditionalProperty_FilePreview_Format `json:"format,omitempty"`
-	//
 	// Height of the thumbnail, in pixels.
-	//
 	Height *AssemblySteps_AdditionalProperty_FilePreview_Height `json:"height,omitempty"`
-	//
 	// The style of the icon generated if the `icon` strategy is applied. The default style, `with-text`, includes an icon showing the file type and a text box below it, whose content can be controlled by the `icon_text_content` parameter and defaults to the file extension (e.g. MP4, JPEG). The `square` style only includes a square variant of the icon showing the file type. Below are exemplary previews generated for a text file utilizing the different styles:
 	//
 	// <br /><br /> <strong>`with-text` style:</strong> <br />
 	// ![Image with text style]({{site.asset_cdn}}/assets/images/file-preview/icon-with-text.png)
 	// <br /><br /> <strong>`square` style:</strong> <br />
 	// ![Image with square style]({{site.asset_cdn}}/assets/images/file-preview/icon-square.png)
-	//
 	IconStyle *AssemblySteps_AdditionalProperty_FilePreview_IconStyle `json:"icon_style,omitempty"`
-	//
 	// The color of the text used in the icon. The format is `#rrggbb[aa]`. Only used if the `icon` strategy is applied.
-	//
 	IconTextColor *ValueStringOrString `json:"icon_text_color,omitempty"`
-	//
 	// The content of the text box in generated icons. Only used if the `icon_style` parameter is set to `with-text`. The default value, `extension`, adds the file extension (e.g. MP4, JPEG) to the icon. The value `none` can be used to render an empty text box, which is useful if no text should not be included in the raster image, but some place should be reserved in the image for later overlaying custom text over the image using HTML etc.
-	//
 	IconTextContent *AssemblySteps_AdditionalProperty_FilePreview_IconTextContent `json:"icon_text_content,omitempty"`
-	//
 	// The font family of the text used in the icon. Only used if the `icon` strategy is applied. [Here](/docs/supported-formats/fonts/) is a list of all supported fonts.
-	//
 	IconTextFont *ValueStringOrString `json:"icon_text_font,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -38978,29 +38125,19 @@ type AssemblySteps_AdditionalProperty_FilePreview struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Specifies whether the generated preview image should be optimized to reduce the image's file size while keeping their quaility. If enabled, the images will be optimized using [🤖/image/optimize](/docs/robots/image-optimize/).
-	//
 	Optimize *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"optimize,omitempty"`
-	//
 	// Specifies whether conversion speed or compression ratio is prioritized when optimizing images. Only used if `optimize` is enabled. Please see the [🤖/image/optimize documentation](/docs/robots/image-optimize/#priority) for more details.
-	//
 	OptimizePriority *AssemblySteps_AdditionalProperty_FilePreview_OptimizePriority `json:"optimize_priority,omitempty"`
-	//
 	// Specifies whether images should be interlaced, which makes the result image load progressively in browsers. Only used if `optimize` is enabled. Please see the [🤖/image/optimize documentation](/docs/robots/image-optimize/#progressive) for more details.
-	//
 	OptimizeProgressive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"optimize_progressive,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -39018,27 +38155,21 @@ type AssemblySteps_AdditionalProperty_FilePreview struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// To achieve the desired dimensions of the preview thumbnail, the <dfn>Robot</dfn> might have to resize the generated image. This happens, for example, when the dimensions of a frame extracted from a video do not match the chosen `width` and `height` parameters.
 	//
 	// See the list of available [resize strategies](/docs/topics/resize-strategies/) for more details.
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn>'s purpose is to generate a meaningful preview image for any file, in such a way that the resulting thumbnail highlights the file's content. The goal is not to losslessly present the original media in a smaller way. Instead, it is to maximize the chance of a person recognizing the media at a glance, while being visually pleasing and consistent with other previews. The generation process depends on the file type. For example, the <dfn>Robot</dfn> can extract artwork from media files, frames from videos, generate a waveform for audio files, and preview the content of documents and images. The details of all available strategies are provided in the next section.
 	//
 	// If no file-specific thumbnail can be generated because the file type is not supported, a generic icon containing the file extension will be generated.
 	//
 	// The default parameters ensure that the <dfn>Robot</dfn> always generates a preview image with the predefined dimensions and formats, to allow an easy integration into your application's UI. In addition, the generated preview images are optimized by default to reduce their file size while keeping their quality.
-	//
 	Robot AssemblySteps_AdditionalProperty_FilePreview_Robot `json:"robot"`
-	//
 	// Definition of the thumbnail generation process per file category. The parameter must be an object whose keys can be one of the file categories: `audio`, `video`, `image`, `document`, `archive`, `webpage`, and `unknown`. The corresponding value is an array of strategies for the specific file category. See the above section for a list of all available strategies.
 	//
 	// For each file, the <dfn>Robot</dfn> will attempt to use the first strategy to generate the thumbnail. If this process fails (e.g., because no artwork is available in a video file), the next strategy is attempted. This is repeated until either a thumbnail is generated or the list is exhausted. Selecting the `icon` strategy as the last entry provides a fallback mechanism to ensure that an appropriate strategy is always available.
@@ -39046,53 +38177,51 @@ type AssemblySteps_AdditionalProperty_FilePreview struct {
 	// The parameter defaults to the following definition:
 	//
 	// ```json
-	// {
-	//   "audio": ["artwork", "waveform", "icon"],
-	//   "video": ["artwork", "frame", "icon"],
-	//   "document": ["page", "icon"],
-	//   "image": ["image", "icon"],
-	//   "webpage": ["render", "icon"],
-	//   "archive": ["icon"],
-	//   "unknown": ["icon"]
-	// }
+	//
+	//	{
+	//	  "audio": ["artwork", "waveform", "icon"],
+	//	  "video": ["artwork", "frame", "icon"],
+	//	  "document": ["page", "icon"],
+	//	  "image": ["image", "icon"],
+	//	  "webpage": ["render", "icon"],
+	//	  "archive": ["icon"],
+	//	  "unknown": ["icon"]
+	//	}
+	//
 	// ```
-	//
 	Strategy *AssemblySteps_AdditionalProperty_FilePreview_Strategy `json:"strategy,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -39100,33 +38229,20 @@ type AssemblySteps_AdditionalProperty_FilePreview struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The color used in the center of the waveform's gradient. The format is `#rrggbb[aa]` (red, green, blue, alpha). Only used if the `waveform` strategy for audio files is applied.
-	//
 	WaveformCenterColor *ValueStringOrString `json:"waveform_center_color,omitempty"`
-	//
 	// Height of the waveform, in pixels. Only used if the `waveform` strategy for audio files is applied. It can be utilized to ensure that the waveform only takes up a section of the preview thumbnail.
-	//
 	WaveformHeight *ValueStringOrStringOrInteger `json:"waveform_height,omitempty"`
-	//
 	// The color used in the outer parts of the waveform's gradient. The format is `#rrggbb[aa]` (red, green, blue, alpha). Only used if the `waveform` strategy for audio files is applied.
-	//
 	WaveformOuterColor *ValueStringOrString `json:"waveform_outer_color,omitempty"`
-	//
 	// Width of the waveform, in pixels. Only used if the `waveform` strategy for audio files is applied. It can be utilized to ensure that the waveform only takes up a section of the preview thumbnail.
-	//
 	WaveformWidth *ValueStringOrStringOrInteger `json:"waveform_width,omitempty"`
-	//
 	// Width of the thumbnail, in pixels.
-	//
 	Width *AssemblySteps_AdditionalProperty_FilePreview_Height `json:"width,omitempty"`
-	//
 	// If set to `false`, smaller images will not be stretched to the desired `width` and `height`. This is useful if you want to retain the original image dimensions and only limit the output to a maximum size. For details about the impact of zooming for your preferred resize strategy, see the list of available [resize strategies](/docs/topics/resize-strategies/).
 	//
 	// Note that this parameter only affects strategies that produce a still image. Animated clips generated by the `clip` strategy are not affected.
-	//
 	Zoom *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"zoom,omitempty"`
 }
 
@@ -40025,9 +39141,7 @@ type AssemblySteps_AdditionalProperty_FileRead struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -40035,17 +39149,13 @@ type AssemblySteps_AdditionalProperty_FileRead struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -40063,53 +39173,47 @@ type AssemblySteps_AdditionalProperty_FileRead struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> accepts any file, and will read the file using UTF-8 encoding. The result is outputted to `file.meta.content` to be accessed in later <dfn>Steps</dfn>.
 	//
 	// The <dfn>Robot</dfn> currently only accepts files under 500KB.
-	//
 	Robot AssemblySteps_AdditionalProperty_FileRead_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -40117,7 +39221,6 @@ type AssemblySteps_AdditionalProperty_FileRead struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -40246,11 +39349,9 @@ type AssemblySteps_AdditionalProperty_FileRead_UserMeta = AssemblySteps_Addition
 type AssemblySteps_AdditionalProperty_FileRead_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FileServe struct {
-	//
 	// An optional duration in seconds that the served file should be cached. When set, this value is used for both the `max-age` (browser cache) and `s-maxage` (shared/CDN cache) directives in the `Cache-Control` header, overriding the defaults. For example, setting `cache_duration` to `43200` would cache the file for 12 hours.
 	//
 	// This is useful for controlling data retention in CDNs. For instance, if your temporary files are deleted after 24 hours, you can set `cache_duration` to `86400` to ensure cached copies also expire within that window.
-	//
 	CacheDuration *ValueStringOrStringOrInteger `json:"cache_duration,omitempty"`
 	// Serve as an attachment using this Unicode filename. Empty or omitted keeps inline delivery. Overrides a Content-Disposition header without changing the bytes or Range support.
 	DownloadName *ValueStringOrString `json:"download_name,omitempty"`
@@ -40262,15 +39363,11 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for a file as we serve it to a CDN/web browser, such as `{ FileURL: "${file.url_name}" }` which will be merged over the defaults, and can include any available [Assembly Variable](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// The `Accept-Ranges: bytes` header advertises that HTTP range requests are supported for seekable media playback. This relies on Transloadit's storage backends (S3, GCS, etc.) all honoring Range request headers. The CORS headers include `Range` and `If-Range` in `Access-Control-Allow-Headers` to permit cross-origin range requests, and expose `Content-Range`, `Content-Length`, and `Accept-Ranges` via `Access-Control-Expose-Headers` so browser JavaScript can read these values.
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -40278,17 +39375,13 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -40306,13 +39399,11 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// When you want Transloadit to tranform files on the fly, you can use this <dfn>Robot</dfn> to determine which <dfn>Step</dfn> of a <dfn>Template</dfn> should be served to the end-user (via a CDN), as well as set extra information on the served files, such as headers. This way you can for instance suggest the CDN for how long to keep cached copies of the result around. By default, we instruct browsers to cache the result for 72h (`259200` seconds) and CDNs to cache the content for 24h (`86400` seconds). Use the `cache_duration` parameter to customize both values at once.
 	//
 	// 🤖/file/serve merely acts as the glue layer between our <dfn>Assembly</dfn> engine and serving files over HTTP. It let's you pick the proper result of a series of <dfn>Steps</dfn> via the `use` parameter and configure headers on the original content. That is where its responsibilies end, and 🤖/tlcdn/deliver, then takes over to globally distribute this original content across the globe, and make sure that is cached close to your end-users, when they make requests such as <https://my-app.tlcdn.com/resize-img/canoe.jpg?w=500>, another. 🤖/tlcdn/deliver is not a part of your <dfn>Assembly Instructions</dfn>, but it may appear on your invoices as bandwidth charges incur when distributing the cached copies. 🤖/file/serve only charges when the CDN does not have a cached copy and requests to regenerate the original content, which depending on your caching settings could be just once a month, or year, per file/transformation.
@@ -40332,17 +39423,17 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	//
 	// import { Transloadit } from '@transloadit/node'
 	//
-	// const transloadit = new Transloadit({
-	//   authKey: 'YOUR_TRANSLOADIT_KEY',
-	//   authSecret: 'YOUR_TRANSLOADIT_SECRET',
-	// })
+	//	const transloadit = new Transloadit({
+	//	  authKey: 'YOUR_TRANSLOADIT_KEY',
+	//	  authSecret: 'YOUR_TRANSLOADIT_SECRET',
+	//	})
 	//
-	// const url = transloadit.getSignedSmartCDNUrl({
-	//   workspace: 'YOUR_WORKSPACE',
-	//   template: 'YOUR_TEMPLATE',
-	//   input: 'image.png',
-	//   urlParams: { height: 100, width: 100 },
-	// })
+	//	const url = transloadit.getSignedSmartCDNUrl({
+	//	  workspace: 'YOUR_WORKSPACE',
+	//	  template: 'YOUR_TEMPLATE',
+	//	  input: 'image.png',
+	//	  urlParams: { height: 100, width: 100 },
+	//	})
 	//
 	// console.log(url)
 	// ```
@@ -40357,43 +39448,39 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	// - [🤖/file/serve](/docs/robots/file-serve/) pricing
 	// - [🤖/tlcdn/deliver](/docs/robots/tlcdn-deliver/) pricing
 	// - [File Preview Feature](/blog/2024/06/file-preview-with-smart-cdn/) blog post
-	//
 	Robot AssemblySteps_AdditionalProperty_FileServe_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -40401,7 +39488,6 @@ type AssemblySteps_AdditionalProperty_FileServe struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -40545,13 +39631,9 @@ type AssemblySteps_AdditionalProperty_FileServe_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_FileServe_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FileVerify struct {
-	//
 	// The error message shown to your users (such as by Uppy) when a file is declined and `error_on_decline` is set to `true`.
-	//
 	ErrorMsg *ValueStringOrString `json:"error_msg,omitempty"`
-	//
 	// If this is set to `true` and one or more files are declined, the Assembly will be stopped and marked with an error.
-	//
 	ErrorOnDecline *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"error_on_decline,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -40561,9 +39643,7 @@ type AssemblySteps_AdditionalProperty_FileVerify struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -40571,17 +39651,13 @@ type AssemblySteps_AdditionalProperty_FileVerify struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -40599,53 +39675,47 @@ type AssemblySteps_AdditionalProperty_FileVerify struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Attempt to repair invalid PDFs with `mutool clean`. This is best-effort and only applies when `verify_to_be` is `"pdf"`.
-	//
 	RepairPdf *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"repair_pdf,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_FileVerify_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -40653,11 +39723,8 @@ type AssemblySteps_AdditionalProperty_FileVerify struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The type that you want to match against to ensure your file is of this type. For example, `image` will verify whether uploaded files are images. This also works against file media types, in this case `image/png` would also work to match against specifically `png` files.
-	//
 	VerifyToBe *ValueStringOrString `json:"verify_to_be,omitempty"`
 }
 
@@ -40806,13 +39873,9 @@ type AssemblySteps_AdditionalProperty_FileVerify_UserMeta_AdditionalProperty = A
 type AssemblySteps_AdditionalProperty_FileVerify_VerifyToBe = ValueStringOrString
 
 type AssemblySteps_AdditionalProperty_FileVirusscan struct {
-	//
 	// The error message shown to your users (such as by Uppy) when a file is declined and `error_on_decline` is set to `true`.
-	//
 	ErrorMsg *ValueStringOrString `json:"error_msg,omitempty"`
-	//
 	// If this is set to `true` and one or more files are declined, the Assembly will be stopped and marked with an error.
-	//
 	ErrorOnDecline *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"error_on_decline,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -40822,9 +39885,7 @@ type AssemblySteps_AdditionalProperty_FileVirusscan struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -40832,17 +39893,13 @@ type AssemblySteps_AdditionalProperty_FileVirusscan struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -40860,55 +39917,49 @@ type AssemblySteps_AdditionalProperty_FileVirusscan struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> is built on top of [ClamAV](https://www.clamav.net/), the best open source antivirus engine available. We update its signatures on a daily basis.
 	//
 	// By default, this <dfn>Robot</dfn> excludes all malicious files from further processing without any additional notification. This behavior can be changed by setting `error_on_decline` to `true`, which will stop <dfn>Assemblies</dfn> as soon as malicious files are found. Such <dfn>Assemblies</dfn> will then be marked with an error.
 	//
 	// We allow the use of industry standard [EICAR files](https://www.eicar.org/download-anti-malware-testfile/) for integration testing without needing to use potentially dangerous live virus samples.
-	//
 	Robot AssemblySteps_AdditionalProperty_FileVirusscan_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -40916,7 +39967,6 @@ type AssemblySteps_AdditionalProperty_FileVirusscan struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -41055,11 +40105,9 @@ type AssemblySteps_AdditionalProperty_FileVirusscan_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_FileVirusscan_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FtpImport struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your FTP host, user and password.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> with their static nature is too unwieldy. If you have this requirement, feel free to use the following parameters instead: `"host"`, `"user"`, `"password"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -41069,12 +40117,10 @@ type AssemblySteps_AdditionalProperty_FtpImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -41084,21 +40130,15 @@ type AssemblySteps_AdditionalProperty_FtpImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -41116,16 +40156,11 @@ type AssemblySteps_AdditionalProperty_FtpImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Determines if passive mode should be used for the FTP connection.
-	//
 	PassiveMode *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"passive_mode,omitempty"`
 	Password    *ValueStringOrString                                             `json:"password,omitempty"`
-	//
 	// The path on your FTP server where to search for files. Files are imported recursively from all sub-directories and sub-sub-directories (and so on) from this path.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// The port to use for the FTP connection.
 	Port *ValueStringOrStringOrInteger `json:"port,omitempty"`
@@ -41136,7 +40171,6 @@ type AssemblySteps_AdditionalProperty_FtpImport struct {
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_FtpImport_Robot `json:"robot"`
 	User  *ValueStringOrString                             `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -41144,7 +40178,6 @@ type AssemblySteps_AdditionalProperty_FtpImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -41304,11 +40337,9 @@ type AssemblySteps_AdditionalProperty_FtpImport_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_FtpImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_FtpStore struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your FTP host, user and password.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> with their static nature is too unwieldy. If you have this requirement, feel free to use the following parameters instead: `"host"`, `"user"`, `"password"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -41318,10 +40349,8 @@ type AssemblySteps_AdditionalProperty_FtpStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	Host        *ValueStringOrString                                             `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -41329,17 +40358,13 @@ type AssemblySteps_AdditionalProperty_FtpStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -41357,14 +40382,11 @@ type AssemblySteps_AdditionalProperty_FtpStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	Password   *ValueStringOrString                                            `json:"password,omitempty"`
-	//
 	// The path at which the file is to be stored. This can contain any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Please note that you might need to include your homedir at the beginning of the path.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// The port to use for the FTP connection.
 	Port *ValueStringOrStringOrInteger `json:"port,omitempty"`
@@ -41374,54 +40396,45 @@ type AssemblySteps_AdditionalProperty_FtpStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_FtpStore_Robot `json:"robot"`
-	//
 	// Determines whether to establish a secure connection to the FTP server using SSL.
-	//
 	Secure *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"secure,omitempty"`
-	//
 	// The SSL URL of the file in the result JSON. The following [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables) are supported.
-	//
 	SslUrlTemplate *ValueStringOrString `json:"ssl_url_template,omitempty"`
-	//
 	// The URL of the file in the result JSON. The following [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables) are supported.
-	//
 	UrlTemplate *ValueStringOrString `json:"url_template,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use  *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
 	User *ValueStringOrString                               `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -41429,7 +40442,6 @@ type AssemblySteps_AdditionalProperty_FtpStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -41590,7 +40602,6 @@ type AssemblySteps_AdditionalProperty_FtpStore_UserMeta = AssemblySteps_Addition
 type AssemblySteps_AdditionalProperty_FtpStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_GoogleImport struct {
-	//
 	// Create a new [Google service account](https://cloud.google.com/storage/docs/authentication). Set its role to "Storage Object Creator". Choose "JSON" for the key file format and download it to your computer. You will need to upload this file when creating your <dfn>Template Credentials</dfn>.
 	//
 	// Go back to your Google credentials project and enable the "Google Cloud Storage JSON API" for it. Wait around ten minutes for the action to propagate through the Google network. Grab the project ID from the dropdown menu in the header bar on the Google site. You will also need it later on.
@@ -41602,11 +40613,8 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	// Next, go to Storage browser and select the ellipsis on your bucket to edit bucket permissions. From here, select "Add Member", enter your service account as a new member, and select your newly created role.
 	//
 	// Then, create your associated [Template Credentials](/c/template-credentials/) in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -41616,11 +40624,9 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -41630,25 +40636,17 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// A string token used for pagination. The returned files of one paginated call have the next page token inside of their meta data, which needs to be used for the subsequent paging call.
-	//
 	NextPageToken *ValueStringOrString `json:"next_page_token,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -41666,9 +40664,7 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -41678,21 +40674,17 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive a 404 `GOOGLE_IMPORT_NOT_FOUND` error.
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `start_file_name` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_GoogleImport_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -41700,7 +40692,6 @@ type AssemblySteps_AdditionalProperty_GoogleImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -41875,15 +40866,10 @@ type AssemblySteps_AdditionalProperty_GoogleImport_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_GoogleImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_GoogleStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl *AssemblySteps_AdditionalProperty_GoogleStore_Acl `json:"acl,omitempty"`
-	//
 	// The `Cache-Control` header determines how long browsers are allowed to cache your object for. Values specified with this parameter will be added to the object's metadata under the `Cache-Control` header. For more information on valid values, take a look at the [official Google documentation](https://cloud.google.com/storage/docs/metadata#cache-control).
-	//
 	CacheControl *ValueStringOrString `json:"cache_control,omitempty"`
-	//
 	// Create a new [Google service account](https://cloud.google.com/storage/docs/authentication). Set its role to "Storage Object Creator". Choose "JSON" for the key file format and download it to your computer. You will need to upload this file when creating your <dfn>Template Credentials</dfn>.
 	//
 	// Go back to your Google credentials project and enable the "Google Cloud Storage JSON API" for it. Wait around ten minutes for the action to propagate through the Google network. Grab the project ID from the dropdown menu in the header bar on the Google site. You will also need it later on.
@@ -41895,7 +40881,6 @@ type AssemblySteps_AdditionalProperty_GoogleStore struct {
 	// Next, go to Storage browser and select the ellipsis on your bucket to edit bucket permissions. From here, select "Add Member", enter your service account as a new member, and select your newly created role.
 	//
 	// Then, create your associated [Template Credentials](/c/template-credentials/) in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value.
-	//
 	Credentials ValueStringOrString `json:"credentials"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -41905,9 +40890,7 @@ type AssemblySteps_AdditionalProperty_GoogleStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -41915,17 +40898,13 @@ type AssemblySteps_AdditionalProperty_GoogleStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -41943,63 +40922,51 @@ type AssemblySteps_AdditionalProperty_GoogleStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the exported file in your Google bucket will be presented in the Transloadit <dfn>Assembly Status</dfn> JSON. This <dfn>Robot</dfn> can also be used to export encoded files to Google's Firebase as demonstrated in [this blogpost](/blog/2018/12/2h-youtube-clone/).
-	//
 	Robot AssemblySteps_AdditionalProperty_GoogleStore_Robot `json:"robot"`
-	//
 	// The SSL URL of the file in the result JSON. The following [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables) are supported.
-	//
 	SslUrlTemplate *ValueStringOrString `json:"ssl_url_template,omitempty"`
-	//
 	// The URL of the file in the result JSON. This may include any of the following supported [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	UrlTemplate *ValueStringOrString `json:"url_template,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -42007,7 +40974,6 @@ type AssemblySteps_AdditionalProperty_GoogleStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -42307,9 +41273,7 @@ type AssemblySteps_AdditionalProperty_GoogleStore_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_GoogleStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_HtmlConvert struct {
-	//
 	// The delay (in milliseconds) applied to allow the page and all of its JavaScript to render before taking the screenshot.
-	//
 	Delay *ValueStringOrStringOrInteger `json:"delay,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -42319,29 +41283,19 @@ type AssemblySteps_AdditionalProperty_HtmlConvert struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The format of the resulting image.
-	//
 	Format *AssemblySteps_AdditionalProperty_HtmlConvert_Format `json:"format,omitempty"`
-	//
 	// Determines if a screenshot of the full page should be taken or not.
 	//
 	// If set to `true`, the `height` parameter will not have any effect, as heights of websites vary. You can control the size of the resulting image somewhat, though, by setting the `width` parameter.
 	//
 	// If set to `false`, an image will be cropped from the top of the webpage according to your `width` and `height` parameters.
-	//
 	Fullpage *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"fullpage,omitempty"`
-	//
 	// An object containing optional headers that will be passed along with the original request to the website. For example, this parameter can be used to pass along an authorization token along with the request.
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// The screen height that will be used, in pixels. By default this equals the length of the web page in pixels if `fullpage` is set to `true`. If `fullpage` is set to `false`, the height parameter takes effect and defaults to the value `768`.
-	//
 	Height *ValueStringOrStringOrInteger `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -42349,25 +41303,19 @@ type AssemblySteps_AdditionalProperty_HtmlConvert struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Determines whether to preserve a transparent background in HTML pages. Useful if you're generating artwork in HTML that you want to overlay on e.g. a video.
 	//
 	// The default of `false` fills transparent areas with a white background, for easier reading/printing.
 	//
 	// This parameter is only used when `format` is not `pdf`.
-	//
 	OmitBackground *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"omit_background,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -42385,57 +41333,49 @@ type AssemblySteps_AdditionalProperty_HtmlConvert struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// A URL can be provided instead of an input HTML file, to capture a screenshot from the website referenced by the URL.
 	//
 	// Use [🤖/image/resize](/docs/robots/image-resize/) to resize or crop the screenshot as needed.
-	//
 	Robot AssemblySteps_AdditionalProperty_HtmlConvert_Robot `json:"robot"`
-	//
 	// The URL of the web page to be converted. Optional, as you can also upload/import HTML files and pass it to this <dfn>Robot</dfn>.
-	//
 	Url *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"url,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -42443,17 +41383,12 @@ type AssemblySteps_AdditionalProperty_HtmlConvert struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The event to wait for before taking the screenshot. Used for loading Javascript, and images.
 	//
 	// See [Playwright's documentation](https://playwright.dev/docs/api/class-page#page-wait-for-load-state) for more information.
-	//
 	WaitUntil *AssemblySteps_AdditionalProperty_HtmlConvert_WaitUntil `json:"wait_until,omitempty"`
-	//
 	// The screen width that will be used, in pixels. Change this to change the  dimensions of the resulting image.
-	//
 	Width *ValueStringOrStringOrInteger `json:"width,omitempty"`
 }
 
@@ -42811,9 +41746,7 @@ func (value *AssemblySteps_AdditionalProperty_HtmlConvert_WaitUntil_String2) Unm
 type AssemblySteps_AdditionalProperty_HtmlConvert_Width = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_HttpImport struct {
-	//
 	// Disable the internal retry mechanism, and fail immediately if a resource can't be imported. This can be useful for performance critical applications.
-	//
 	FailFast *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"fail_fast,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -42823,11 +41756,9 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Custom headers to be sent for file import.
 	//
 	// This is an empty array by default, such that no additional headers except the necessary ones (e.g. Host) are sent.
@@ -42844,9 +41775,7 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// The same `headers` value is sent with every URL in this `/http/import` Step. If `url` is an
 	// array, `headers` is not matched to the URLs by array index. Use separate `/http/import` Steps
 	// when different URLs need different headers.
-	//
 	Headers *AssemblySteps_AdditionalProperty_HttpImport_Headers `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -42856,25 +41785,17 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Maximum allowed size in bytes for each imported file. If the remote server reports a larger file size, the import is rejected before the download starts. If the remote server does not report a size upfront, the download is aborted once this limit is exceeded.
-	//
 	MaxFileSize *ValueStringOrStringOrInteger `json:"max_file_size,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -42892,11 +41813,9 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Allows you to specify one or more byte ranges to import from the file. The server must support range requests for this to work.
 	//
 	// **Single range**: Use a string like `"0-99"` to import bytes 0-99 (the first 100 bytes).
@@ -42913,15 +41832,11 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// - If the server doesn't support range requests, the entire file will be imported instead
 	// - Overlapping ranges are allowed and will be included as requested
 	// - The resulting file size will be the highest byte position requested, with gaps filled with zero bytes
-	//
 	Range *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"range,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
-	//
 	// The result of this <dfn>Robot</dfn> will carry a field `import_url` in its metadata, which references the URL from which it was imported. Further conversion results that use this file will also carry this `import_url` field. This allows you to match conversion results with the original import URL that you used.
 	//
 	// This <dfn>Robot</dfn> knows to interpret links to files on these services:
@@ -42932,21 +41847,15 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// - OneDrive
 	//
 	// Instead of downloading the HTML page previewing the file, the actual file itself will be imported.
-	//
 	Robot AssemblySteps_AdditionalProperty_HttpImport_Robot `json:"robot"`
-	//
 	// The URL from which the file to be imported can be retrieved.
 	//
 	// HTTPS URLs must present a valid certificate trusted by Transloadit and matching the requested hostname. Self-signed, expired, or hostname-mismatched certificates cause `HTTP_IMPORT_FAILURE`.
 	//
 	// You can also specify an array of URLs or a string of `|` delimited URLs to import several files at once. Please also check the `url_delimiter` parameter for that.
-	//
 	Url AssemblySteps_AdditionalProperty_HttpImport_Url `json:"url"`
-	//
 	// Provides the delimiter that is used to split the URLs in your `url` parameter value.
-	//
 	UrlDelimiter *ValueStringOrString `json:"url_delimiter,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -42954,7 +41863,6 @@ type AssemblySteps_AdditionalProperty_HttpImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -43420,9 +42328,7 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Custom request headers.
 	//
 	// Headers can be specified as an array of strings in the format `"Header-Name: value"`, an array
@@ -43431,9 +42337,7 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	// Header names must be valid HTTP tokens. Header values may contain horizontal tabs, but other control characters, including carriage returns and line feeds, are rejected.
 	//
 	// In an array of header strings, `"Header-Name;"` sends an empty header value. Each entry must be a literal header; reading headers from a file with `@filename` is not supported.
-	//
 	Headers *AssemblySteps_AdditionalProperty_HttpRequest_Headers `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -43441,35 +42345,23 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Maximum accepted response size in bytes. The response should normally be a small JSON document.
-	//
 	MaxResponseSize *ValueStringOrStringOrInteger `json:"max_response_size,omitempty"`
-	//
 	// Maximum allowed size in bytes for each result file returned by URL. If the remote server reports a
 	// larger file size, the result download is rejected before it starts. If the remote server does not
 	// report a size upfront, the download is aborted once this limit is exceeded.
-	//
 	MaxResultFileSize *ValueStringOrStringOrInteger `json:"max_result_file_size,omitempty"`
-	//
 	// Maximum number of files that the endpoint may return.
-	//
 	MaxResultFiles *ValueStringOrStringOrInteger `json:"max_result_files,omitempty"`
-	//
 	// HTTP method to use for the request.
-	//
 	Method *AssemblySteps_AdditionalProperty_HttpRequest_Method `json:"method,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -43487,32 +42379,26 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Controls what is sent to your endpoint.
 	//
-	// - `none`: Send no request body.
-	// - `metadata`: Send a JSON body with Assembly metadata, fields, the previous Step, and file metadata.
-	// - `file`: Send multipart form data with a `payload` JSON field and the first input file as a
-	//   `file` part.
-	// - `files`: Send multipart form data with a `payload` JSON field and all input files as repeated
-	//   `files[]` parts. Useful with `bundle_steps`.
+	//   - `none`: Send no request body.
+	//   - `metadata`: Send a JSON body with Assembly metadata, fields, the previous Step, and file metadata.
+	//   - `file`: Send multipart form data with a `payload` JSON field and the first input file as a
+	//     `file` part.
+	//   - `files`: Send multipart form data with a `payload` JSON field and all input files as repeated
+	//     `files[]` parts. Useful with `bundle_steps`.
 	//
 	// The `payload` JSON object contains `assembly`, `fields`, `previous_step`, `file`, and
 	// `files`. `file` is the first input file’s metadata or `null`; `files` is an array of input
 	// file metadata.
-	//
 	Payload *AssemblySteps_AdditionalProperty_HttpRequest_Payload `json:"payload,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Maximum number of seconds to spend downloading each result file returned by URL.
-	//
 	ResultDownloadTimeout *ValueStringOrStringOrInteger `json:"result_download_timeout,omitempty"`
-	//
 	// Calls an HTTP endpoint during the Assembly and expects optional JSON describing zero or more input
 	// files or result-file URLs to emit from this Step.
 	//
@@ -43521,54 +42407,46 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	// `{ "files": [...] }` / `{ "files": { "name": {...} } }`. Returned file objects must include
 	// either a `path` that matches one of the input file paths sent to your endpoint, or an HTTP(S)
 	// `url` that Transloadit downloads and emits as a new result file.
-	//
 	Robot AssemblySteps_AdditionalProperty_HttpRequest_Robot `json:"robot"`
-	//
 	// Maximum number of seconds to wait for the HTTP request.
 	//
 	// The effective timeout is the lower of this value and Transloadit’s server-side cap. The cap is 30
 	// seconds plus 1 second per MiB sent to your endpoint.
-	//
 	Timeout *ValueStringOrStringOrInteger `json:"timeout,omitempty"`
-	//
 	// The HTTP or HTTPS endpoint to call.
-	//
 	Url ValueStringOrString `json:"url"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -43576,7 +42454,6 @@ type AssemblySteps_AdditionalProperty_HttpRequest struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -44281,11 +43158,9 @@ type AssemblySteps_AdditionalProperty_ImageBgremove struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Format of the generated image. Defaults to PNG when not provided.
 	Format *AssemblySteps_AdditionalProperty_ImageBgremove_Format `json:"format,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -44293,19 +43168,15 @@ type AssemblySteps_AdditionalProperty_ImageBgremove struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	// Provider-specific model to use for removing the background. Mostly intended for testing and evaluation.
 	Model *ValueStringOrString `json:"model,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -44323,7 +43194,6 @@ type AssemblySteps_AdditionalProperty_ImageBgremove struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
@@ -44337,41 +43207,38 @@ type AssemblySteps_AdditionalProperty_ImageBgremove struct {
 	Robot AssemblySteps_AdditionalProperty_ImageBgremove_Robot `json:"robot"`
 	// Region to select and keep in the image. The other region is removed.
 	Select *AssemblySteps_AdditionalProperty_ImageBgremove_Select `json:"select,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -44379,7 +43246,6 @@ type AssemblySteps_AdditionalProperty_ImageBgremove struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -44789,7 +43655,6 @@ type AssemblySteps_AdditionalProperty_ImageBgremove_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_ImageBgremove_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
-	//
 	// Which categories of copyrighted content to detect.
 	//
 	// - `"stock_photo"` — Known stock photography (Shutterstock, Getty, Adobe Stock, etc.)
@@ -44797,19 +43662,12 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
 	// - `"artwork"` — Famous artworks and illustrations
 	// - `"watermarked"` — Images containing visible watermarks
 	// - `"all"` — All categories
-	//
 	Categories *AssemblySteps_AdditionalProperty_ImageCopyrightdetect_Categories `json:"categories,omitempty"`
-	//
 	// Minimum confidence percentage (0–100) for a match to be considered a copyright concern. Matches below this threshold are still returned in results but not flagged. Higher values reduce false positives but may miss some matches.
-	//
 	ConfidenceThreshold *ValueStringOrStringOrNumber `json:"confidence_threshold,omitempty"`
-	//
 	// The error message shown to your users (such as by Uppy) when a file is declined and `error_on_decline` is set to `true`.
-	//
 	ErrorMsg *ValueStringOrString `json:"error_msg,omitempty"`
-	//
 	// If set to `true` and one or more files match a known stock photo or copyrighted work (above the `confidence_threshold`), the <dfn>Assembly</dfn> will be stopped and marked with an error. Works the same way as `/file/virusscan`'s `error_on_decline`.
-	//
 	ErrorOnDecline *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"error_on_decline,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -44819,16 +43677,12 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// In what format to return the detection results.
 	//
 	// - `"json"` returns a JSON file with full match details including `licenses[]`, plus summary fields `flagged`, `max_confidence`, and `confidence_threshold`.
 	// - `"meta"` does not return a file, but stores the same data object (including `licenses[]`, `flagged`, `max_confidence`, and `confidence_threshold`) inside Transloadit's file object (under `${file.meta.copyright}`) that's passed around between encoding <dfn>Steps</dfn>, so that you can use the values to filter on them, etc.
-	//
 	Format *AssemblySteps_AdditionalProperty_ImageCopyrightdetect_Format `json:"format,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -44836,17 +43690,13 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -44864,55 +43714,49 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Detects known stock photos, brand logos, and watermarked images in uploaded files by performing reverse image lookups against web databases. This is best understood as "stock photo detection" — it identifies whether an uploaded image matches a known copyrighted work in indexed databases (Getty Images, Shutterstock, Adobe Stock, etc.).
 	//
 	// Returns a `licenses[]` array with match details including source collection, license type, confidence scores, and source URLs. Can optionally halt the <dfn>Assembly</dfn> when a known copyrighted work is detected, similar to how `/file/virusscan` handles malicious files.
 	//
 	// This <dfn>Robot</dfn> provides a **risk signal**, not a legal determination. A match means the image was found in a stock photo or rights-managed database — it does not mean the user lacks a valid license.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageCopyrightdetect_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -44920,7 +43764,6 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -45323,13 +44166,11 @@ type AssemblySteps_AdditionalProperty_ImageCopyrightdetect_UserMeta = AssemblySt
 type AssemblySteps_AdditionalProperty_ImageCopyrightdetect_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageDescribe struct {
-	//
 	// Whether to return only explicit or only non-explicit descriptions of the provided image. Explicit descriptions include labels for NSFW content (nudity, violence, etc). If set to `false`, only non-explicit descriptions (such as human or chair) will be returned. If set to `true`, only explicit descriptions will be returned.
 	//
 	// The possible descriptions depend on the chosen provider. The list of labels from AWS can be found [in their documentation](https://docs.aws.amazon.com/rekognition/latest/dg/moderation.html#moderation-api). GCP labels the image based on five categories, as described [in their documentation](https://cloud.google.com/vision/docs/detecting-safe-search).
 	//
 	// For an example of how to automatically reject NSFW content and malware, please check out this [blog post](/blog/2022/07/deny-image-uploads/).
-	//
 	ExplicitDescriptions *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"explicit_descriptions,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -45339,20 +44180,14 @@ type AssemblySteps_AdditionalProperty_ImageDescribe struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// In what format to return the descriptions.
 	//
 	// - `"json"` returns a JSON file.
 	// - `"meta"` does not return a file, but stores the data inside Transloadit's file object (under `${file.meta.descriptions}`) that's passed around between encoding <dfn>Steps</dfn>, so that you can use the values to burn the data into videos, filter on them, etc.
-	//
 	Format *AssemblySteps_AdditionalProperty_DocumentOcr_Format `json:"format,omitempty"`
-	//
 	// Whether to return a full response (`"full"`) including confidence percentages for each found label, or just a flat list of labels (`"list"`).
-	//
 	Granularity *AssemblySteps_AdditionalProperty_DocumentOcr_Granularity `json:"granularity,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -45360,17 +44195,13 @@ type AssemblySteps_AdditionalProperty_ImageDescribe struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -45388,7 +44219,6 @@ type AssemblySteps_AdditionalProperty_ImageDescribe struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
@@ -45398,45 +44228,40 @@ type AssemblySteps_AdditionalProperty_ImageDescribe struct {
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// You can use the labels that we return in your application to automatically classify images. You can also pass the labels down to other <dfn>Robots</dfn> to filter images that contain (or do not contain) certain content.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageDescribe_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -45444,7 +44269,6 @@ type AssemblySteps_AdditionalProperty_ImageDescribe struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -45604,28 +44428,20 @@ type AssemblySteps_AdditionalProperty_ImageDescribe_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_ImageDescribe_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageEnhance struct {
-	//
 	// AI enhancement preset used when `engine` is set to `"ai"`:
 	// - `restore` — General image restoration.
 	// - `face_restore` — Portrait-focused face restoration.
 	//
 	// AI mode is not intended for image upscaling. For dedicated upscaling, use [🤖/image/upscale](/docs/robots/image-upscale/).
-	//
 	AiPreset *AssemblySteps_AdditionalProperty_ImageEnhance_AiPreset `json:"ai_preset,omitempty"`
-	//
 	// Noise reduction strength (`0` = none, `10` = maximum). Useful for high-ISO photos.
-	//
 	Denoise *ValueStringOrStringOrNumber `json:"denoise,omitempty"`
-	//
 	// Enhancement engine to use.
 	//
 	// - `"classic"` uses ImageMagick-based adjustments and presets.
 	// - `"ai"` uses AI restoration models on Replicate (typically higher latency and cost than classic mode).
-	//
 	Engine *AssemblySteps_AdditionalProperty_ImageEnhance_Engine `json:"engine,omitempty"`
-	//
 	// The auto-enhancement mode. `"auto"` applies balanced auto-levels, gamma correction, and subtle sharpening. `"auto_gentle"` is more conservative (good for already-decent photos). `"auto_aggressive"` applies stronger normalization and contrast. `"none"` skips auto-enhance (useful when only applying a preset filter).
-	//
 	Enhance *AssemblySteps_AdditionalProperty_ImageEnhance_Enhance `json:"enhance,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -45635,9 +44451,7 @@ type AssemblySteps_AdditionalProperty_ImageEnhance struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -45645,18 +44459,14 @@ type AssemblySteps_AdditionalProperty_ImageEnhance struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors     *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors       `json:"ignore_errors,omitempty"`
 	ImagemagickStack *AssemblySteps_AdditionalProperty_DocumentThumbs_ImagemagickStack `json:"imagemagick_stack,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -45674,9 +44484,7 @@ type AssemblySteps_AdditionalProperty_ImageEnhance struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// A named color grading preset to apply. Applied after auto-enhancement. Use `"none"` to skip preset application.
 	//
 	// Available presets:
@@ -45693,63 +44501,53 @@ type AssemblySteps_AdditionalProperty_ImageEnhance struct {
 	// - `fade` — Washed-out faded look
 	// - `pastel` — Soft, desaturated pastel tones
 	// - `teal_orange` — Complementary teal shadows and orange highlights
-	//
 	Preset *AssemblySteps_AdditionalProperty_ImageEnhance_Preset `json:"preset,omitempty"`
-	//
 	// Quality of the output image. A value between `1` and `100`. Defaults to `92`.
-	//
 	Quality *ValueStringOrStringOrInteger `json:"quality,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// With this <dfn>Robot</dfn> you can automatically enhance images with one click — adjusting levels, contrast, saturation, sharpness, and white balance to produce an optimally balanced image. It also supports a library of named photo filter presets (e.g. `warm`, `cool`, `vintage`, `vivid`) that apply curated color grading and tone adjustments.
 	//
 	// It works well together with [🤖/image/resize](/docs/robots/image-resize/) — you can enhance first, then resize, or vice versa.
 	//
 	// This <dfn>Robot</dfn> accepts all image types supported by ImageMagick and passes unsupported types through unchanged. `engine: "classic"` uses `enhance`, `preset`, `sharpen`, and `denoise`, while `engine: "ai"` uses `ai_preset` and `quality`; classic controls are ignored in AI mode. Output keeps the original file extension when possible. In AI mode, if the target extension is not writable by the selected `imagemagick_stack`, the file is passed through unchanged.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageEnhance_Robot `json:"robot"`
-	//
 	// Additional sharpening amount (`0` = none, `10` = maximum). The `"auto"` enhance mode already applies subtle sharpening; this parameter adds more on top.
-	//
 	Sharpen *ValueStringOrStringOrNumber `json:"sharpen,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -45757,7 +44555,6 @@ type AssemblySteps_AdditionalProperty_ImageEnhance struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -46293,15 +45090,10 @@ type AssemblySteps_AdditionalProperty_ImageEnhance_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_ImageEnhance_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
-	//
 	// Determine if the detected faces should be extracted. If this option is set to `false`, then the <dfn>Robot</dfn> returns the input image again, but with the coordinates of all detected faces attached to `file.meta.faces` in the result JSON. If this parameter is set to `true`, the <dfn>Robot</dfn> will output all detected faces as images.
-	//
 	Crop *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"crop,omitempty"`
-	//
 	// Specifies how much padding is added to the extracted face images if `crop` is set to `true`. Values can be in `px` (pixels) or `%` (percentage of the width and height of the particular face image).
-	//
 	CropPadding *ValueStringOrString `json:"crop_padding,omitempty"`
-	//
 	// Determines which of the detected faces should be returned. Valid values are:
 	//
 	// - `"each"` — each face is returned individually.
@@ -46344,7 +45136,6 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	// `faces: 0` applied:
 	//
 	// ![](/assets/images/abbas-malek-hosseini-22NnY93qaOk-face-0.jpg)
-	//
 	Faces *AssemblySteps_AdditionalProperty_ImageFacedetect_Faces `json:"faces,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -46354,15 +45145,11 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Determines the output format of the extracted face images if `crop` is set to `true`.
 	//
 	// The default value `"preserve"` means that the input image format is re-used.
-	//
 	Format *AssemblySteps_AdditionalProperty_ImageFacedetect_Format `json:"format,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -46370,21 +45157,15 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Specifies the minimum confidence that a detected face must have. Only faces which have a higher confidence value than this threshold will be included in the result.
-	//
 	MinConfidence *ValueStringOrStringOrInteger `json:"min_confidence,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -46402,7 +45183,6 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
@@ -46412,7 +45192,6 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// You can specify padding around the extracted faces, tailoring the output for your needs.
 	//
 	// This <dfn>Robot</dfn> works well together with [🤖/image/resize](/docs/robots/image-resize/) to bring the full power of resized and optimized images to your website or app.
@@ -46426,43 +45205,39 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	// - The number of returned detections can also be controlled using the `min_confidence` parameter. Increasing its value will yield less results but each with a higher confidence. Decreasing the value, on the other hand, will provide more results but may also include objects other than faces.
 	//
 	// </div>
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageFacedetect_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -46470,7 +45245,6 @@ type AssemblySteps_AdditionalProperty_ImageFacedetect struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -46939,13 +45713,11 @@ type AssemblySteps_AdditionalProperty_ImageGenerate struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Output format. Defaults depend on model: png for Google and OpenAI models, svg for recraft-v3, jpeg for others. Google models currently return PNG only.
 	Format *AssemblySteps_AdditionalProperty_ImageGenerate_Format `json:"format,omitempty"`
 	// Requested output height in pixels (mainly used by Google and OpenAI image models).
 	Height *ValueStringOrStringOrNumber `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -46953,21 +45725,17 @@ type AssemblySteps_AdditionalProperty_ImageGenerate struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	// The AI model to use. Defaults to `openai/gpt-image-2.5-flare`. Supported models include `flux-1.1-pro-ultra`, `flux-schnell`, `recraft-v3`, `google/nano-banana`, `google/nano-banana-2`, `google/nano-banana-pro`, `openai/gpt-image-2`, `openai/gpt-image-2.5-flare`, `openai/gpt-image-2.5-sunburst`, and `stability-ai/stable-diffusion-inpainting`. The legacy alias `gpt-image-2` is also accepted for backwards compatibility.
 	Model *ValueStringOrString `json:"model,omitempty"`
 	// Number of output variants to generate (1-10).
 	NumOutputs *ValueStringOrStringOrInteger `json:"num_outputs,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -46985,7 +45753,6 @@ type AssemblySteps_AdditionalProperty_ImageGenerate struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Prompt describing the desired image. For inpainting, describe what should appear in the masked/transparent region and that the rest should stay unchanged.
 	Prompt ValueStringOrString `json:"prompt"`
@@ -46995,31 +45762,30 @@ type AssemblySteps_AdditionalProperty_ImageGenerate struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_ImageGenerate_Robot `json:"robot"`
-	// Seed for the random number generator.
+	// Seed for the random number generator. For Google models, use an integer from 0 to 2147483647. Each output increments the seed by 1, so the final output’s seed must also fit this range. A seed does not guarantee identical images.
 	Seed *ValueStringOrStringOrNumber `json:"seed,omitempty"`
 	// Style of the generated image.
 	Style *ValueStringOrString `json:"style,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
 	// For inpainting, provide both the source image and mask through `use`, typically with:
 	//
 	// ```json
-	// {
-	//   "use": [
-	//     { "name": ":original", "as": "image" },
-	//     { "name": ":original", "as": "mask" }
-	//   ]
-	// }
+	//
+	//	{
+	//	  "use": [
+	//	    { "name": ":original", "as": "image" },
+	//	    { "name": ":original", "as": "mask" }
+	//	  ]
+	//	}
+	//
 	// ```
 	//
 	// Best practice:
 	// - Tag source and mask inputs explicitly using `as` (or semantic upload field names)
 	// - Keep the prompt focused on what should change in the masked/transparent region
 	// - Leave the model choice to the robot defaults unless you have a specific need
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -47027,7 +45793,6 @@ type AssemblySteps_AdditionalProperty_ImageGenerate struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 	// Requested output width in pixels (mainly used by Google and OpenAI image models).
 	Width *ValueStringOrStringOrNumber `json:"width,omitempty"`
@@ -47237,7 +46002,7 @@ func (value *AssemblySteps_AdditionalProperty_ImageGenerate_Robot) UnmarshalJSON
 	return nil
 }
 
-// Seed for the random number generator.
+// Seed for the random number generator. For Google models, use an integer from 0 to 2147483647. Each output increments the seed by 1, so the final output’s seed must also fit this range. A seed does not guarantee identical images.
 type AssemblySteps_AdditionalProperty_ImageGenerate_Seed = ValueStringOrStringOrNumber
 
 // Style of the generated image.
@@ -47293,19 +46058,14 @@ type AssemblySteps_AdditionalProperty_ImageGenerate_UserMeta_AdditionalProperty 
 type AssemblySteps_AdditionalProperty_ImageGenerate_Width = ValueStringOrStringOrNumber
 
 type AssemblySteps_AdditionalProperty_ImageMerge struct {
-	//
 	// Controls the image compression for PNG images. Setting to `true` results in smaller file size, while increasing processing time. It is encouraged to keep this option disabled.
-	//
 	AdaptiveFiltering *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"adaptive_filtering,omitempty"`
-	//
 	// Either the hexadecimal code or [name](https://www.imagemagick.org/script/color.php#color_names) of the color used to fill the background (only shown with a border > 1).
 	//
 	// By default, the background of transparent images is changed to white. Set to `none` or `transparent` for a transparent canvas — set `format` to `png` or `webp` to preserve alpha.
 	//
 	// For details about how to preserve transparency across all image types, see [this demo](/demos/image-processing/properly-preserve-transparency-across-all-image-types/).
-	//
 	Background *AssemblySteps_AdditionalProperty_ImageMerge_Background `json:"background,omitempty"`
-	//
 	// An integer value which defines the gap between images on the spritesheet.
 	//
 	// A value of `10` would cause the images to have the largest gap between them, while a value of `1` would place the images side-by-side.
@@ -47313,47 +46073,34 @@ type AssemblySteps_AdditionalProperty_ImageMerge struct {
 	// When `effect` is `polaroid-stack`, this value is instead used as canvas padding so the outermost photos keep that many pixels of distance from the edge.
 	//
 	// When `effect` is `mosaic`, this value is used both as the outer canvas padding and as the gutter width between neighboring tiles.
-	//
 	Border *ValueStringOrStringOrInteger `json:"border,omitempty"`
-	//
 	// Uniform height for each grid cell in pixels. Only applies when `direction` is `grid`.
 	//
 	// Images are resized to fit within the cell while preserving aspect ratio.
-	//
 	CellHeight *ValueStringOrStringOrInteger `json:"cell_height,omitempty"`
-	//
 	// Uniform width for each grid cell in pixels. Only applies when `direction` is `grid`.
 	//
 	// Images are resized to fit within the cell while preserving aspect ratio.
-	//
 	CellWidth *ValueStringOrStringOrInteger `json:"cell_width,omitempty"`
-	//
 	// Number of columns in the grid layout. Only applies when `direction` is `grid`.
 	//
 	// If omitted, columns are calculated automatically from the number of inputs and requested rows.
-	//
 	Columns *ValueStringOrStringOrInteger `json:"columns,omitempty"`
-	//
 	// Area-coverage multiplier for the `polaroid-stack` effect. Controls how large each polaroid is relative to the canvas and consequently how much of the canvas is covered by photos.
 	//
 	// The default of `1.5` leaves a subtle beige border along some edges. Use `2.0`–`2.5` for edge-to-edge coverage (photos overlap more). Values below `1.0` produce smaller, more widely spaced polaroids.
 	//
 	// Has no effect on the `mosaic` style or on plain spritesheets.
-	//
 	Coverage *ValueStringOrStringOrNumber `json:"coverage,omitempty"`
-	//
 	// Specifies the direction which the images are displayed.
 	//
 	// Use `grid` to arrange inputs left-to-right and top-to-bottom.
 	//
 	// Only applies to the default spritesheet layout. Ignored when `effect` is set to `polaroid-stack` or `mosaic`, as those effects use their own layout algorithms.
-	//
 	Direction *AssemblySteps_AdditionalProperty_ImageMerge_Direction `json:"direction,omitempty"`
-	//
 	// Applies a styled collage layout instead of a plain horizontal or vertical spritesheet.
 	//
 	// Currently supports `polaroid-stack`, which renders the inputs as overlapping instant photos on a canvas, and `mosaic`, which builds a justified tiled collage.
-	//
 	Effect *AssemblySteps_AdditionalProperty_ImageMerge_Effect `json:"effect,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -47363,17 +46110,13 @@ type AssemblySteps_AdditionalProperty_ImageMerge struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// The output format for the modified image.
 	Format *AssemblySteps_AdditionalProperty_ImageMerge_Format `json:"format,omitempty"`
-	//
 	// The output canvas height in pixels.
 	//
 	// This is mainly used by styled effects such as `polaroid-stack` and `mosaic`.
-	//
 	Height *ValueStringOrStringOrInteger `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -47381,17 +46124,13 @@ type AssemblySteps_AdditionalProperty_ImageMerge struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -47409,81 +46148,65 @@ type AssemblySteps_AdditionalProperty_ImageMerge struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Controls the image compression for JPG, PNG, and WebP images. Please also take a look at [🤖/image/optimize](/docs/robots/image-optimize/).
-	//
 	Quality *ValueStringOrStringOrInteger `json:"quality,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The final result will be a spritesheet, with the images displayed horizontally, vertically, or in a grid layout.
 	//
 	// It's recommended to use this Robot with
 	// [🤖/image/resize](/docs/robots/image-resize/) so your images are of a
 	// similar size before merging them.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageMerge_Robot `json:"robot"`
-	//
 	// Number of rows in the grid layout. Only applies when `direction` is `grid`.
 	//
 	// If omitted, rows are calculated automatically from the number of inputs and requested columns.
-	//
 	Rows *ValueStringOrStringOrInteger `json:"rows,omitempty"`
-	//
 	// Optional deterministic seed used by styled effects such as `polaroid-stack` and `mosaic`.
-	//
 	Seed *ValueStringOrStringOrInteger `json:"seed,omitempty"`
-	//
 	// Whether styled effects such as `polaroid-stack` and `mosaic` may shuffle the input order before laying out the canvas.
-	//
 	Shuffle *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"shuffle,omitempty"`
-	//
 	// Controls how bundled inputs are ordered when no explicit numbered alias for the input type is used. Numbered aliases end with a numeric suffix such as `_1`.
 	//
 	// The default `"basename"` keeps the legacy natural basename sorting behavior.
 	//
 	// Set this to `"import_order"` to preserve the order of array-based import steps when all input files carry complete import order metadata. `"auto"` has the same import-order preference with natural basename sorting as fallback.
-	//
 	SortBy *AssemblySteps_AdditionalProperty_AudioConcat_SortBy `json:"sort_by,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -47491,13 +46214,10 @@ type AssemblySteps_AdditionalProperty_ImageMerge struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The output canvas width in pixels.
 	//
 	// This is mainly used by styled effects such as `polaroid-stack` and `mosaic`.
-	//
 	Width *ValueStringOrStringOrInteger `json:"width,omitempty"`
 }
 
@@ -48165,20 +46885,14 @@ type AssemblySteps_AdditionalProperty_ImageOcr struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// In what format to return the extracted text.
 	// - `"json"` returns a JSON file.
 	// - `"meta"` does not return a file, but stores the data inside Transloadit's file object (under `${file.meta.recognized_text}`, which is an array of strings) that's passed around between encoding <dfn>Steps</dfn>, so that you can use the values to burn the data into videos, filter on them, etc.
 	// - `"text"` returns the recognized text as a plain UTF-8 encoded text file.
-	//
 	Format *AssemblySteps_AdditionalProperty_DocumentOcr_Format `json:"format,omitempty"`
-	//
 	// Whether to return a full response including coordinates for the text (`"full"`), or a flat list of the extracted phrases (`"list"`). This parameter has no effect if the `format` parameter is set to `"text"`.
-	//
 	Granularity *AssemblySteps_AdditionalProperty_DocumentOcr_Granularity `json:"granularity,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -48186,17 +46900,13 @@ type AssemblySteps_AdditionalProperty_ImageOcr struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -48214,59 +46924,52 @@ type AssemblySteps_AdditionalProperty_ImageOcr struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
 	// Select a specific provider to override automatic selection.
 	// AWS supports detection for the following languages: English, Arabic, Russian, German, French, Italian, Portuguese and Spanish. GCP allows for a wider range of languages, with varying levels of support which can be found on the [official documentation](https://cloud.google.com/vision/docs/languages/).
-	//
 	Provider *AssemblySteps_AdditionalProperty_DocumentOcr_Provider `json:"provider,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// With this <dfn>Robot</dfn> you can detect and extract text from images using optical character recognition (OCR).
 	//
 	// For example, you can use the results to obtain the content of traffic signs, name tags, package labels and many more. You can also pass the text down to other <dfn>Robots</dfn> to filter images that contain (or do not contain) certain phrases. For images of dense documents, results may vary and be less accurate than for small pieces of text in photos.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageOcr_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -48274,7 +46977,6 @@ type AssemblySteps_AdditionalProperty_ImageOcr struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -48415,9 +47117,7 @@ type AssemblySteps_AdditionalProperty_ImageOcr_UserMeta = AssemblySteps_Addition
 type AssemblySteps_AdditionalProperty_ImageOcr_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageOptimize struct {
-	//
 	// If set to `true` this parameter tries to fix images that would otherwise make the underlying tool error out and thereby break your <dfn>Assemblies</dfn>. This can sometimes result in a larger file size, though.
-	//
 	FixBreakingImages *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"fix_breaking_images,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -48427,9 +47127,7 @@ type AssemblySteps_AdditionalProperty_ImageOptimize struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -48437,26 +47135,20 @@ type AssemblySteps_AdditionalProperty_ImageOptimize struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// When set to `false` (the default), only lossless PNG optimizers are used, disabling pngquant to preserve color accuracy.
 	//
 	// When set to `true`, both lossy and lossless PNG optimizers compete and the smallest result wins. This allows pngquant, a lossy compressor that reduces PNGs to a 256-color palette, which may cause noticeable color shifts in images with rich color palettes, subtle gradients, or brand-specific colors.
 	//
 	// > [!Note]
 	// > This parameter only affects PNG optimization. JPEG, GIF, WebP, and SVG optimization is unaffected.
-	//
 	Lossy *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"lossy,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -48474,25 +47166,17 @@ type AssemblySteps_AdditionalProperty_ImageOptimize struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Specifies if the image's metadata should be preserved during the optimization, or not. If it is not preserved, the file size is even further reduced. But be aware that this could strip a photographer's copyright information, which for obvious reasons can be frowned upon.
-	//
 	PreserveMetaData *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"preserve_meta_data,omitempty"`
-	//
 	// Provides different algorithms for better or worse compression for your images, but that run slower or faster. The value `"conversion-speed"` will result in an average compression ratio of 18%. `"compression-ratio"` will result in an average compression ratio of 31%.
-	//
 	Priority *AssemblySteps_AdditionalProperty_FilePreview_OptimizePriority `json:"priority,omitempty"`
-	//
 	// Interlaces the image if set to `true`, which makes the result image load progressively in browsers. Instead of rendering the image from top to bottom, the browser will first show a low-res blurry version of the image which is then quickly replaced with the actual image as the data arrives. This greatly increases the user experience, but comes at a loss of about 10% of the file size reduction.
-	//
 	Progressive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"progressive,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// With this <dfn>Robot</dfn> it's possible to reduce the file size of your JPEG, PNG, GIF, WEBP and SVG images by up to 80% for big images and 65% for small to medium sized ones — while keeping their original quality!
 	//
 	// This <dfn>Robot</dfn> enables you to lower your storage and bandwidth costs, and improves your user experience and monetization by reducing the load time of image-intensive web pages.
@@ -48504,43 +47188,39 @@ type AssemblySteps_AdditionalProperty_ImageOptimize struct {
 	//
 	// > [!Note]
 	// > PNG optimization uses only lossless (optipng) compressors by default. To also enable lossy compression (pngquant), set `lossy: true`. When enabled, both lossy and lossless compressors compete and the smallest result wins, which may cause color shifts in some images.
-	//
 	Robot AssemblySteps_AdditionalProperty_ImageOptimize_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -48548,7 +47228,6 @@ type AssemblySteps_AdditionalProperty_ImageOptimize struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -48715,37 +47394,22 @@ type AssemblySteps_AdditionalProperty_ImageOptimize_UserMeta = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_ImageOptimize_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_ImageResize struct {
-	//
 	// Controls the image compression for PNG images. Setting to `true` results in smaller file size, while increasing processing time. It is encouraged to keep this option disabled.
-	//
 	AdaptiveFiltering *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"adaptive_filtering,omitempty"`
-	//
 	// Gives control of the alpha/matte channel of an image.
-	//
 	Alpha *AssemblySteps_AdditionalProperty_ImageResize_Alpha `json:"alpha,omitempty"`
-	//
 	// Either the hexadecimal code or [name](https://www.imagemagick.org/script/color.php#color_names) of the color used to fill the background (used for the `pad` resize strategy).
 	//
 	// **Note:** By default, the background of transparent images is changed to white. To preserve transparency, set `"background"` to `"none"`.
-	//
 	Background *AssemblySteps_AdditionalProperty_ImageMerge_Background `json:"background,omitempty"`
-	//
 	// Specifies gaussian blur, using a value with the form `{radius}x{sigma}`. The radius value specifies the size of area the operator should look at when spreading pixels, and should typically be either `"0"` or at least two times the sigma value. The sigma value is an approximation of how many pixels the image is "spread"; think of it as the size of the brush used to blur the image. This number is a floating point value, enabling small values like `"0.5"` to be used.
-	//
 	Blur *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"blur,omitempty"`
-	//
 	// Specifies an array of ellipse objects that should be blurred on the image. Each object has the following keys: `x`, `y`, `width`, `height`.  If `blur_regions` has a value, then the `blur` parameter is used as the strength of the blur for each region.
-	//
 	BlurRegions *AssemblySteps_AdditionalProperty_ImageResize_BlurRegions `json:"blur_regions,omitempty"`
-	//
 	// Increases or decreases the brightness of the image by using a multiplier. For example `1.5` would increase the brightness by 50%, and `0.75` would decrease the brightness by 25%.
-	//
 	Brightness *ValueStringOrStringOrNumber `json:"brightness,omitempty"`
-	//
 	// Apply the clipping path to other operations in the resize job, if one is present. If set to `true`, it will automatically take the first clipping path. If set to a String it finds a clipping path by that name.
-	//
 	Clip *AssemblySteps_AdditionalProperty_ImageResize_Clip `json:"clip,omitempty"`
-	//
 	// Applies a Color Look-Up Table (CLUT) image to remap the colors of the input image using ImageMagick's `-clut` operator. When enabled, a second input file must be supplied via the `use` parameter with `"as": "clut"`.
 	//
 	// This operation currently runs via ImageMagick convert stack (not image-resizer daemon), even if `stack: "daemon"` is requested.
@@ -48757,59 +47421,53 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// Example:
 	//
 	// ```json
-	// {
-	//   "steps": {
-	//     ":original": {
-	//       "robot": "/upload/handle"
-	//     },
-	//     "lut_image": {
-	//       "robot": "/upload/handle"
-	//     },
-	//     "color_graded": {
-	//       "robot": "/image/resize",
-	//       "use": {
-	//         "steps": [
-	//           { "name": ":original", "as": "base" },
-	//           { "name": "lut_image", "as": "clut" }
-	//         ]
-	//       },
-	//       "clut": true
-	//     }
-	//   }
-	// }
+	//
+	//	{
+	//	  "steps": {
+	//	    ":original": {
+	//	      "robot": "/upload/handle"
+	//	    },
+	//	    "lut_image": {
+	//	      "robot": "/upload/handle"
+	//	    },
+	//	    "color_graded": {
+	//	      "robot": "/image/resize",
+	//	      "use": {
+	//	        "steps": [
+	//	          { "name": ":original", "as": "base" },
+	//	          { "name": "lut_image", "as": "clut" }
+	//	        ]
+	//	      },
+	//	      "clut": true
+	//	    }
+	//	  }
+	//	}
+	//
 	// ```
-	//
 	Clut *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"clut,omitempty"`
-	//
 	// Sets the image colorspace. For details about the available values, see the [ImageMagick documentation](https://www.imagemagick.org/script/command-line-options.php#colorspace). Please note that if you were using `"RGB"`, we recommend using `"sRGB"` instead as of 2014-02-04. ImageMagick might try to find the most efficient `colorspace` based on the color of an image, and default to e.g. `"Gray"`. To force colors, you might have to use this parameter in combination with `type: "TrueColor"`.
-	//
 	Colorspace *AssemblySteps_AdditionalProperty_DocumentThumbs_Colorspace `json:"colorspace,omitempty"`
-	//
 	// Specifies pixel compression for when the image is written. Compression is disabled by default.
 	//
 	// Please also take a look at [🤖/image/optimize](/docs/robots/image-optimize/).
-	//
 	Compress *AssemblySteps_AdditionalProperty_ImageResize_Compress `json:"compress,omitempty"`
-	//
 	// Adjusts the contrast of the image. A value of `1` produces no change. Values below `1` decrease contrast (with `0` being minimum contrast), and values above `1` increase contrast (with `2` being maximum contrast). This works like the `brightness` parameter.
-	//
 	Contrast *ValueStringOrStringOrNumber `json:"contrast,omitempty"`
-	//
 	// Prevents gamma errors [common in many image scaling algorithms](https://www.4p8.com/eric.brasseur/gamma.html).
-	//
 	CorrectGamma *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"correct_gamma,omitempty"`
-	//
 	// Specify an object containing coordinates for the top left and bottom right corners of the rectangle to be cropped from the original image(s). The coordinate system is rooted in the top left corner of the image. Values can be integers for absolute pixel values or strings for percentage based values.
 	//
 	// For example:
 	//
 	// ```json
-	// {
-	//   "x1": 80,
-	//   "y1": 100,
-	//   "x2": "60%",
-	//   "y2": "80%"
-	// }
+	//
+	//	{
+	//	  "x1": 80,
+	//	  "y1": 100,
+	//	  "x2": "60%",
+	//	  "y2": "80%"
+	//	}
+	//
 	// ```
 	//
 	// This will crop the area from `(80, 100)` to `(600, 800)` from a 1000×1000 pixels image, which is a square whose width is 520px and height is 700px. If `crop` is set, the width and height parameters are ignored, and the `resize_strategy` is set to `crop` automatically.
@@ -48821,21 +47479,16 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// ```
 	//
 	// To crop around human faces, see [🤖/image/facedetect](/docs/robots/image-facedetect/).
-	//
 	Crop *AssemblySteps_AdditionalProperty_ImageResize_Crop `json:"crop,omitempty"`
-	//
 	// While in-memory quality and file format depth specifies the color resolution, the density of an image is the spatial (space) resolution of the image. That is the density (in pixels per inch) of an image and defines how far apart (or how big) the individual pixels are. It defines the size of the image in real world terms when displayed on devices or printed.
 	//
 	// You can set this value to a specific `width` or in the format `width`x`height`.
 	//
 	// If your converted image is unsharp, please try increasing density.
-	//
 	Density *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"density,omitempty"`
-	//
 	// Flattens all layers onto the specified background to achieve better results from transparent formats to non-transparent formats, as explained in the [ImageMagick documentation](https://www.imagemagick.org/script/command-line-options.php#layers).
 	//
 	// To preserve animations, GIF files are not flattened when this is set to `true`. To flatten GIF animations, use the `frame` parameter.
-	//
 	Flatten *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"flatten,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -48845,9 +47498,7 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The output format for the modified image.
 	//
 	// Some of the most important available formats are `"jpg"`, `"png"`, `"gif"`, `"tiff"`, and `"jxl"` for JPEG XL. For a complete list of all formats that we can write to, please check [our supported image formats list](/docs/supported-formats/image-formats/).
@@ -48855,29 +47506,19 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// If `null` (default), then the input image's format will be used as the output format.
 	//
 	// If you wish to convert to `"pdf"`, please consider [🤖/document/convert](/docs/robots/document-convert/) instead.
-	//
 	Format *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"format,omitempty"`
-	//
 	// Use this parameter when dealing with animated GIF files to specify which frame of the GIF is used for the operation. Specify `1` to use the first frame, `2` to use the second, and so on. `null` means all frames.
-	//
 	Frame *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"frame,omitempty"`
-	//
 	// Sets crop direction for `crop` or `fillcrop` without explicit coordinates.
 	// Content-aware `attention` and `entropy` need libvips, `fillcrop`, `width` and `height`.
 	// Effects such as `sepia` or `text`, and inputs such as HEIC, can use ImageMagick.
 	// It centers these crops and the Assembly reports a warning.
 	// Crop in a separate /image/resize Step before effects, or convert unsupported inputs to PNG first.
-	//
 	Gravity *AssemblySteps_AdditionalProperty_ImageResize_Gravity `json:"gravity,omitempty"`
-	//
 	// Height of the new image, in pixels. If not specified, will default to the height of the input image.
-	//
 	Height *AssemblySteps_AdditionalProperty_FilePreview_Height `json:"height,omitempty"`
-	//
 	// Changes the hue by rotating the color of the image. The value `100` would produce no change whereas `0` and `200` will negate the colors in the image.
-	//
 	Hue *ValueStringOrStringOrNumber `json:"hue,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -48885,26 +47526,18 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors     *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors       `json:"ignore_errors,omitempty"`
 	ImagemagickStack *AssemblySteps_AdditionalProperty_DocumentThumbs_ImagemagickStack `json:"imagemagick_stack,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Transform the image to black and white. This is a shortcut for setting the colorspace to Gray and type to Bilevel.
-	//
 	Monochrome *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"monochrome,omitempty"`
-	//
 	// Replace each pixel with its complementary color, effectively negating the image. Especially useful when testing clipping.
-	//
 	Negate *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"negate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -48922,119 +47555,92 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Gives control of the alpha/matte channel of an image before applying the clipping path via `clip: true`.
-	//
 	PreclipAlpha *AssemblySteps_AdditionalProperty_ImageResize_Alpha `json:"preclip_alpha,omitempty"`
-	//
 	// Interlaces the image if set to `true`, which makes the image load progressively in browsers. Instead of rendering the image from top to bottom, the browser will first show a low-res blurry version of the images which is then quickly replaced with the actual image as the data arrives. This greatly increases the user experience, but comes at a cost of a file size increase by around 10%.
-	//
 	Progressive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"progressive,omitempty"`
-	//
 	// Controls the image compression for JPG and PNG images. Please also take a look at [🤖/image/optimize](/docs/robots/image-optimize/).
-	//
 	Quality *ValueStringOrStringOrInteger `json:"quality,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// See the list of available [resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_ImageResize_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_ImageResize_Robot `json:"robot"`
-	//
 	// Determines whether the image should be rotated. Use any number to specify the rotation angle in degrees (e.g., `90`, `180`, `270`, `360`, or precise values like `2.9`). Use the value `true` or `"auto"` to auto-rotate images that are rotated incorrectly or depend on EXIF rotation settings. Otherwise, use `false` to disable auto-fixing altogether.
-	//
 	Rotation *AssemblySteps_AdditionalProperty_ImageResize_Rotation `json:"rotation,omitempty"`
-	//
 	// Increases or decreases the saturation of the image by using a multiplier. For example `1.5` would increase the saturation by 50%, and `0.75` would decrease the saturation by 25%.
-	//
 	Saturation *ValueStringOrStringOrNumber `json:"saturation,omitempty"`
-	//
 	// Applies a sepia tone effect in percent.
-	//
 	Sepia *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"sepia,omitempty"`
-	//
 	// Shave pixels from the image edges. The value should be in the format `width` or `width`x`height` to specify the number of pixels to remove from each side.
-	//
 	Shave *AssemblySteps_AdditionalProperty_ImageResize_Shave `json:"shave,omitempty"`
-	//
 	// Strips all metadata from the image. This is useful to keep thumbnails as small as possible.
-	//
 	Strip *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"strip,omitempty"`
-	//
 	// Text overlays to be applied to the image. Can be either a single text object or an array of text objects. Each text object contains text rules. The following text parameters are intended to be used as properties for your text overlays. Here is an example:
 	//
 	// ```json
-	// "watermarked": {
-	//   "use": "resized",
-	//   "robot": "/image/resize",
-	//   "text": [
-	//     {
-	//       "text": "© 2018 Transloadit.com",
-	//       "size": 12,
-	//       "font": "Ubuntu",
-	//       "color": "#eeeeee",
-	//       "valign": "bottom",
-	//       "align": "right",
-	//       "x_offset": 16,
-	//       "y_offset": -10
-	//     }
-	//   ]
-	// }
+	//
+	//	"watermarked": {
+	//	  "use": "resized",
+	//	  "robot": "/image/resize",
+	//	  "text": [
+	//	    {
+	//	      "text": "© 2018 Transloadit.com",
+	//	      "size": 12,
+	//	      "font": "Ubuntu",
+	//	      "color": "#eeeeee",
+	//	      "valign": "bottom",
+	//	      "align": "right",
+	//	      "x_offset": 16,
+	//	      "y_offset": -10
+	//	    }
+	//	  ]
+	//	}
+	//
 	// ```
 	Text *AssemblySteps_AdditionalProperty_ImageResize_Text `json:"text,omitempty"`
-	//
 	// Make this color transparent within the image. Example: `"255,255,255"`.
-	//
 	Transparent *AssemblySteps_AdditionalProperty_ImageResize_Transparent `json:"transparent,omitempty"`
-	//
 	// This determines if additional whitespace around the image should first be trimmed away. If you set this to `true` this parameter removes any edges that are exactly the same color as the corner pixels.
-	//
 	TrimWhitespace *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"trim_whitespace,omitempty"`
-	//
 	// Sets the image color type. For details about the available values, see the [ImageMagick documentation](https://www.imagemagick.org/script/command-line-options.php#type). If you're using `colorspace`, ImageMagick might try to find the most efficient based on the color of an image, and default to e.g. `"Gray"`. To force colors, you could e.g. set this parameter to `"TrueColor"`
-	//
 	Type *AssemblySteps_AdditionalProperty_ImageResize_Type `json:"type,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -49042,35 +47648,25 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The opacity of the watermark, where `0.0` is fully transparent and `1.0` is fully opaque.
 	//
 	// For example, a value of `0.5` means the watermark will be 50% transparent, allowing the underlying image to show through. This is useful for subtle branding or when you want the watermark to be less obtrusive.
-	//
 	WatermarkOpacity *ValueStringOrStringOrNumber `json:"watermark_opacity,omitempty"`
-	//
 	// The position at which the watermark is placed. The available options are `"center"`, `"top"`, `"bottom"`, `"left"`, and `"right"`. You can also combine options, such as `"bottom-right"`.
 	//
 	// An array of possible values can also be specified, in which case one value will be selected at random, such as `[ "center", "left", "bottom-left", "bottom-right" ]`.
 	//
 	// This setting puts the watermark in the specified corner. To use a specific pixel offset for the watermark, you will need to add the padding to the image itself.
-	//
 	WatermarkPosition *AssemblySteps_AdditionalProperty_ImageResize_WatermarkPosition `json:"watermark_position,omitempty"`
-	//
 	// When set to `true`, the watermark will be repeated horizontally across the entire width of the image.
 	//
 	// This is useful for creating tiled watermark patterns that cover the full image and make it more difficult to crop out the watermark.
-	//
 	WatermarkRepeatX *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"watermark_repeat_x,omitempty"`
-	//
 	// When set to `true`, the watermark will be repeated vertically across the entire height of the image.
 	//
 	// This is useful for creating tiled watermark patterns that cover the full image. Can be combined with `watermark_repeat_x` to tile in both directions.
-	//
 	WatermarkRepeatY *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"watermark_repeat_y,omitempty"`
-	//
 	// Available values are `"fit"`, `"min_fit"`, `"stretch"` and `"area"`.
 	//
 	// To explain how the resize strategies work, let's assume our target image size is 800×800 pixels and our watermark image is 400×300 pixels. Let's also assume, the `watermark_size` parameter is set to `"25%"`.
@@ -49082,37 +47678,24 @@ type AssemblySteps_AdditionalProperty_ImageResize struct {
 	// For the `"stretch"` resize strategy, the watermark is stretched (meaning, it is resized without keeping its aspect ratio in mind) so that both sides take up 25% of the corresponding image side. Since our image is 800×800 pixels, for a watermark size of 25% the watermark would be resized to 200×200 pixels. Its height would appear stretched, because keeping the aspect ratio in mind it would be resized to 200×150 pixels instead.
 	//
 	// For the `"area"` resize strategy, the watermark is resized (keeping its aspect ratio in check) so that it covers `"xx%"` of the image's surface area. The value from `watermark_size` is used for the percentage area size.
-	//
 	WatermarkResizeStrategy *AssemblySteps_AdditionalProperty_ImageResize_WatermarkResizeStrategy `json:"watermark_resize_strategy,omitempty"`
-	//
 	// The size of the watermark, as a percentage.
 	//
 	// For example, a value of `"50%"` means that size of the watermark will be 50% of the size of image on which it is placed. The exact sizing depends on `watermark_resize_strategy`, too.
-	//
 	WatermarkSize *ValueStringOrString `json:"watermark_size,omitempty"`
-	//
 	// A URL indicating a PNG image to be overlaid above this image. Please note that you can also  [supply the watermark via another Assembly Step](/docs/topics/use-parameter/#supplying-the-watermark-via-an-assembly-step). With watermarking you can add an image onto another image. This is usually used for logos.
-	//
 	WatermarkUrl *ValueStringOrString `json:"watermark_url,omitempty"`
-	//
 	// The x-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkXOffset *ValueStringOrStringOrInteger `json:"watermark_x_offset,omitempty"`
-	//
 	// The y-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkYOffset *ValueStringOrStringOrInteger `json:"watermark_y_offset,omitempty"`
-	//
 	// Width of the result in pixels. If not specified, will default to the width of the original.
-	//
 	Width *AssemblySteps_AdditionalProperty_FilePreview_Height `json:"width,omitempty"`
-	//
 	// If this is set to `false`, smaller images will not be stretched to the desired width and height. For details about the impact of zooming for your preferred resize strategy, see the list of available [resize strategies](/docs/topics/resize-strategies/).
-	//
 	Zoom *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"zoom,omitempty"`
 }
 
@@ -51687,53 +50270,31 @@ func (value *AssemblySteps_AdditionalProperty_ImageResize_Text_Variant1) GetStri
 }
 
 type AssemblySteps_AdditionalProperty_ImageResize_Text_Variant1_WithText struct {
-	//
 	// The horizontal text alignment. Can be `"left"`, `"center"` and `"right"`.
-	//
 	Align *AssemblySteps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Align `json:"align,omitempty"`
-	//
 	// The background color behind the text. All hex colors in the form `"#xxxxxx"` are supported, where each x can be `0-9` or `a-f`. Named colors like `"black"`, `"white"`, `"transparent"` etc. are also supported.
-	//
 	BackgroundColor *AssemblySteps_AdditionalProperty_ImageMerge_Background `json:"background_color,omitempty"`
-	//
 	// The text color. All hex colors in the form `"#xxxxxx"` are supported, where each x can be `0-9` or `a-f`. Named colors like `"black"`, `"white"`, `"transparent"` etc. are also supported. If you want a transparent text color, use "stroke" instead, otherwise your text will not be visible.
-	//
 	Color *AssemblySteps_AdditionalProperty_ImageMerge_Background `json:"color,omitempty"`
-	//
 	// The font family to use. Also includes boldness and style of the font.
 	//
 	// [Here](/docs/supported-formats/fonts/) is a list of all
 	// supported fonts.
-	//
 	Font *ValueStringOrString `json:"font,omitempty"`
-	//
 	// The rotation angle in degrees.
-	//
 	Rotate *ValueStringOrStringOrInteger `json:"rotate,omitempty"`
-	//
 	// The text size in pixels.
-	//
 	Size *ValueStringOrStringOrInteger `json:"size,omitempty"`
-	//
 	// The stroke's color. All hex colors in the form `"#xxxxxx"` are supported, where each x can be `0-9` or `a-f`. Named colors like `"black"`, `"white"`, `"transparent"` etc. are also supported.
-	//
 	StrokeColor *AssemblySteps_AdditionalProperty_ImageMerge_Background `json:"stroke_color,omitempty"`
-	//
 	// The stroke's width in pixels.
-	//
 	StrokeWidth *ValueStringOrStringOrInteger `json:"stroke_width,omitempty"`
 	Text        ValueStringOrString           `json:"text"`
-	//
 	// The vertical text alignment. Can be `"top"`, `"center"` and `"bottom"`.
-	//
 	Valign *AssemblySteps_AdditionalProperty_ImageResize_Text_Variant1_WithText_Valign `json:"valign,omitempty"`
-	//
 	// The horizontal offset for the text in pixels that is added (positive integer) or removed (negative integer) from the horizontal alignment.
-	//
 	XOffset *ValueStringOrStringOrInteger `json:"x_offset,omitempty"`
-	//
 	// The vertical offset for the text in pixels that is added (positive integer) or removed (negative integer) from the vertical alignment.
-	//
 	YOffset              *ValueStringOrStringOrInteger `json:"y_offset,omitempty"`
 	AdditionalProperties map[string]json.RawMessage    `json:"-"`
 }
@@ -52664,9 +51225,7 @@ type AssemblySteps_AdditionalProperty_ImageUpscale struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -52674,19 +51233,15 @@ type AssemblySteps_AdditionalProperty_ImageUpscale struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	// The AI model to use for image upscaling. Defaults to nightmareai/real-esrgan.
 	Model *AssemblySteps_AdditionalProperty_ImageUpscale_Model `json:"model,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -52704,7 +51259,6 @@ type AssemblySteps_AdditionalProperty_ImageUpscale struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -52714,41 +51268,38 @@ type AssemblySteps_AdditionalProperty_ImageUpscale struct {
 	Robot AssemblySteps_AdditionalProperty_ImageUpscale_Robot `json:"robot"`
 	// Upscale factor. Defaults to 2.
 	Scale *AssemblySteps_AdditionalProperty_ImageUpscale_Scale `json:"scale,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -52756,7 +51307,6 @@ type AssemblySteps_AdditionalProperty_ImageUpscale struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -53265,19 +51815,13 @@ type AssemblySteps_AdditionalProperty_ImageUpscale_UserMeta_AdditionalProperty =
 
 type AssemblySteps_AdditionalProperty_MegaImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your MEGA S4 Object Storage bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"bucket_region"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -53287,12 +51831,10 @@ type AssemblySteps_AdditionalProperty_MegaImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -53302,22 +51844,16 @@ type AssemblySteps_AdditionalProperty_MegaImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -53335,15 +51871,11 @@ type AssemblySteps_AdditionalProperty_MegaImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -53353,26 +51885,20 @@ type AssemblySteps_AdditionalProperty_MegaImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subfolders and sub-subfolders, etc. of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_MegaImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                              `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -53380,7 +51906,6 @@ type AssemblySteps_AdditionalProperty_MegaImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -53567,20 +52092,14 @@ type AssemblySteps_AdditionalProperty_MegaImport_UserMeta = AssemblySteps_Additi
 type AssemblySteps_AdditionalProperty_MegaImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_MegaStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl    *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
 	Bucket *ValueStringOrString                            `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your MEGA S4 Object Storage bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"bucket_region"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -53590,16 +52109,12 @@ type AssemblySteps_AdditionalProperty_MegaStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your MEGA S4 Object Storage bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -53607,18 +52122,14 @@ type AssemblySteps_AdditionalProperty_MegaStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -53636,60 +52147,50 @@ type AssemblySteps_AdditionalProperty_MegaStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the result file will be returned in the <dfn>Assembly Status JSON</dfn>.
-	//
 	Robot  AssemblySteps_AdditionalProperty_MegaStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                             `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -53697,7 +52198,6 @@ type AssemblySteps_AdditionalProperty_MegaStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -53947,19 +52447,13 @@ type AssemblySteps_AdditionalProperty_MegaStore_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_MegaStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_MetaWrite struct {
-	//
 	// A key/value map defining the metadata to write into the file.
 	//
 	// Valid metadata keys can be found [here](https://exiftool.org/TagNames/EXIF.html). For example: `ProcessingSoftware`.
-	//
 	DataToWrite *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"data_to_write,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -53969,9 +52463,7 @@ type AssemblySteps_AdditionalProperty_MetaWrite struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -53979,17 +52471,13 @@ type AssemblySteps_AdditionalProperty_MetaWrite struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -54007,51 +52495,45 @@ type AssemblySteps_AdditionalProperty_MetaWrite struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// **Note:** This <dfn>Robot</dfn> currently accepts images, videos and audio files.
-	//
 	Robot AssemblySteps_AdditionalProperty_MetaWrite_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -54059,7 +52541,6 @@ type AssemblySteps_AdditionalProperty_MetaWrite struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -54492,15 +52973,11 @@ type AssemblySteps_AdditionalProperty_MetaWrite_UserMeta_AdditionalProperty = As
 
 type AssemblySteps_AdditionalProperty_MinioImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your MinIO bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -54510,12 +52987,10 @@ type AssemblySteps_AdditionalProperty_MinioImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -54525,22 +53000,16 @@ type AssemblySteps_AdditionalProperty_MinioImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -54558,15 +53027,11 @@ type AssemblySteps_AdditionalProperty_MinioImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -54576,26 +53041,20 @@ type AssemblySteps_AdditionalProperty_MinioImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_MinioImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                               `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -54603,7 +53062,6 @@ type AssemblySteps_AdditionalProperty_MinioImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -54787,16 +53245,12 @@ type AssemblySteps_AdditionalProperty_MinioImport_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_MinioImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_MinioStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl    *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
 	Bucket *ValueStringOrString                            `json:"bucket,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your MinIO bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -54806,16 +53260,12 @@ type AssemblySteps_AdditionalProperty_MinioStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your MinIO bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -54823,18 +53273,14 @@ type AssemblySteps_AdditionalProperty_MinioStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -54852,62 +53298,52 @@ type AssemblySteps_AdditionalProperty_MinioStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the result file will be returned in the <dfn>Assembly Status JSON</dfn>.
-	//
 	Robot  AssemblySteps_AdditionalProperty_MinioStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                              `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds.
 	//
 	// If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -54915,7 +53351,6 @@ type AssemblySteps_AdditionalProperty_MinioStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -55078,15 +53513,11 @@ type AssemblySteps_AdditionalProperty_MinioStore_UserMeta_AdditionalProperty = A
 type AssemblySteps_AdditionalProperty_S3Import struct {
 	Bucket       *ValueStringOrString `json:"bucket,omitempty"`
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your S3 `bucket`, `key`, `secret` and `bucket_region`.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"bucket_region"` (for example: `"us-east-1"` or `"eu-west-2"`), `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -55096,11 +53527,9 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -55110,22 +53539,16 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -55143,15 +53566,11 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants to this directory will be imported. For example: `images/`.
@@ -55161,11 +53580,9 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Allows you to specify one or more byte ranges to import from the file. S3 must support range requests for this to work.
 	//
 	// **Single range**: Use a string like `"0-99"` to import bytes 0-99 (the first 100 bytes).
@@ -55182,21 +53599,15 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// - Overlapping ranges are allowed and will be included as requested
 	// - The resulting file size will be the highest byte position requested, with gaps filled with zero bytes
 	// - Each range is fetched in a separate request to ensure compatibility with S3
-	//
 	Range *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"range,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
-	//
 	// If you are new to Amazon S3, see our tutorial on [using your own S3 bucket](/docs/faq/how-to-set-up-an-amazon-s3-bucket/).
 	//
 	// The URL to the result file in your S3 bucket will be returned in the <dfn>Assembly Status JSON</dfn>.
@@ -55213,17 +53624,19 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// Please change `{BUCKET_NAME}` in the values for `Sid` and `Resource` accordingly. Also, this policy will grant the minimum required permissions to all your users. We advise you to create a separate Amazon IAM user, and use its User ARN (can be found in the "Summary" tab of a user [here](https://console.aws.amazon.com/iam/home#users)) for the `Principal` value. More information about this can be found [here](https://docs.aws.amazon.com/AmazonS3/latest/dev/AccessPolicyLanguage_UseCases_s3_a.html).
 	//
 	// ```json
-	// {
-	//   "Version": "2012-10-17",
-	//   "Statement": [
-	//     {
-	//       "Sid": "AllowTransloaditToImportFilesIn{BUCKET_NAME}Bucket",
-	//       "Effect": "Allow",
-	//       "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
-	//       "Resource": ["arn:aws:s3:::{BUCKET_NAME}", "arn:aws:s3:::{BUCKET_NAME}/*"]
-	//     }
-	//   ]
-	// }
+	//
+	//	{
+	//	  "Version": "2012-10-17",
+	//	  "Statement": [
+	//	    {
+	//	      "Sid": "AllowTransloaditToImportFilesIn{BUCKET_NAME}Bucket",
+	//	      "Effect": "Allow",
+	//	      "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
+	//	      "Resource": ["arn:aws:s3:::{BUCKET_NAME}", "arn:aws:s3:::{BUCKET_NAME}/*"]
+	//	    }
+	//	  ]
+	//	}
+	//
 	// ```
 	//
 	// The `Sid` value is just an identifier for you to recognize the rule later. You can name it anything you like.
@@ -55233,10 +53646,8 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// In order to build proper result URLs we need to know the region in which your S3 bucket resides. For this we require the `GetBucketLocation` permission. Figuring out your bucket's region this way will also slow down your Assemblies. To make this much faster and to also not require the `GetBucketLocation` permission, we have added the `bucket_region` parameter to the /s3/store and /s3/import Robots. We recommend using them at all times.
 	//
 	// Please keep in mind that if you use bucket encryption you may also need to add `"sts:*"` and `"kms:*"` to the bucket policy. Please read [here](https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html) and [here](https://aws.amazon.com/blogs/security/how-to-restrict-amazon-s3-bucket-access-to-a-specific-iam-role/) in case you run into trouble with our example bucket policy.
-	//
 	Robot  AssemblySteps_AdditionalProperty_S3Import_Robot `json:"robot"`
 	Secret *ValueStringOrString                            `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -55244,7 +53655,6 @@ type AssemblySteps_AdditionalProperty_S3Import struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -55454,23 +53864,17 @@ type AssemblySteps_AdditionalProperty_S3Import_UserMeta = AssemblySteps_Addition
 type AssemblySteps_AdditionalProperty_S3Import_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_S3Store struct {
-	//
 	// The ACL used for this file. The default remains `"public-read"`, which can conflict with S3 Block Public Access and disabled ACLs. For modern private buckets, explicitly set `"bucket-default"` to omit the generated ACL header, and do not supply ACL/grant headers in `headers`. `"private"` still sends an ACL.
-	//
 	Acl          *AssemblySteps_AdditionalProperty_S3Store_Acl `json:"acl,omitempty"`
 	Bucket       *ValueStringOrString                          `json:"bucket,omitempty"`
 	BucketRegion *ValueStringOrString                          `json:"bucket_region,omitempty"`
-	//
 	// Calculate and submit the file's checksum in order for S3 to verify its integrity after uploading, which can help with occasional file corruption issues.
 	//
 	// Enabling this option adds to the overall execution time, as integrity checking can be CPU intensive, especially for larger files.
-	//
 	CheckIntegrity *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"check_integrity,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your S3 `bucket`, `key`, `secret` and `bucket_region`.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"bucket_region"` (for example: `"us-east-1"` or `"eu-west-2"`), `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -55480,19 +53884,13 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file on S3, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables). You can find a list of available headers [here](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// The host of the storage service used. This only needs to be set when the storage service used is not Amazon S3, but has a compatible API (such as hosteurope.de). The default protocol used is HTTP, for anything else the protocol needs to be explicitly specified. For example, prefix the host with `https://` or `s3://` to use either respective protocol.
-	//
 	Host *ValueStringOrString `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -55500,22 +53898,16 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Set to `true` if you use a custom host and run into access denied errors.
-	//
 	NoVhost *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"no_vhost,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -55533,17 +53925,13 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If you are new to Amazon S3, see our tutorial on [using your own S3 bucket](/docs/faq/how-to-set-up-an-amazon-s3-bucket/).
 	//
 	// The URL to the result file in your S3 bucket will be returned in the <dfn>Assembly Status JSON</dfn>. A returned URL does not make a private object public or grant read access. If your S3 bucket has versioning enabled, the version ID of the file will be returned within `meta.version_id`.
@@ -55565,17 +53953,19 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	// This example covers uploads and failed multipart-upload cleanup with an explicit `bucket_region`, `acl: "bucket-default"`, no ACL/grant headers, no tags and S3-managed encryption (SSE-S3). Existing bucket policies, organization controls or endpoint policies can still deny access.
 	//
 	// ```json
-	// {
-	//   "Version": "2012-10-17",
-	//   "Statement": [
-	//     {
-	//       "Sid": "UploadAndAbortWithinPrefix",
-	//       "Effect": "Allow",
-	//       "Action": ["s3:PutObject", "s3:AbortMultipartUpload"],
-	//       "Resource": "arn:aws:s3:::{BUCKET_NAME}/uploads/*"
-	//     }
-	//   ]
-	// }
+	//
+	//	{
+	//	  "Version": "2012-10-17",
+	//	  "Statement": [
+	//	    {
+	//	      "Sid": "UploadAndAbortWithinPrefix",
+	//	      "Effect": "Allow",
+	//	      "Action": ["s3:PutObject", "s3:AbortMultipartUpload"],
+	//	      "Resource": "arn:aws:s3:::{BUCKET_NAME}/uploads/*"
+	//	    }
+	//	  ]
+	//	}
+	//
 	// ```
 	//
 	// The uploader uses either `PutObject` or `CreateMultipartUpload`, `UploadPart` and `CompleteMultipartUpload`; failed multipart uploads can trigger `AbortMultipartUpload`. AWS maps the successful upload operations to `s3:PutObject`. Write access can **overwrite an existing object key**; it is not add-only. Choose unique object paths and consider versioning for recovery.
@@ -55589,60 +53979,48 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	// S3 applies its [bucket encryption configuration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-bucket-encryption.html) when no encryption override is sent. You can request SSE-KMS through `headers`, using `x-amz-server-side-encryption: aws:kms` and `x-amz-server-side-encryption-aws-kms-key-id`. When either bucket default encryption or request headers select [SSE-KMS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html), the uploading identity needs `kms:GenerateDataKey` on the relevant key, plus `kms:Decrypt` for multipart uploads. For a customer-managed key, grant these permissions with a compatible KMS key policy; the base S3 policy above does not include them. Do not add blanket `kms:*` or `sts:*` grants.
 	//
 	// Short-lived AWS credentials are a matching set of `key`, `secret` and `session_token`. Have a trusted backend obtain and refresh all three, then supply them together when it creates the Assembly. It can pass them directly in Robot instructions or save and update them together through the [Template Credentials API](/docs/api/template-credentials-post/). Keep all three out of browser instructions; replacing only the session token does not refresh expired access keys. This Robot passes the supplied credentials to S3; it does not assume a role or refresh expired credentials. Keep temporary credentials valid for the upload.
-	//
 	Robot  AssemblySteps_AdditionalProperty_S3Store_Robot `json:"robot"`
 	Secret *ValueStringOrString                           `json:"secret,omitempty"`
-	//
 	// The session token belonging to the temporary AWS access key ID and secret access key supplied for this upload. The Robot does not assume a role or refresh these credentials; they must remain valid for the upload.
-	//
 	SessionToken *ValueStringOrString `json:"session_token,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_url` and `signed_ssl_url` properties). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Object tagging allows you to categorize storage. You can associate up to 10 tags with an object. Tags that are associated with an object must have unique tag keys.
-	//
 	Tags *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"tags,omitempty"`
-	//
 	// The URL prefix used for the returned URL, such as `"http://my.cdn.com/some/path/"`.
-	//
 	UrlPrefix *ValueStringOrString `json:"url_prefix,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -55650,7 +54028,6 @@ type AssemblySteps_AdditionalProperty_S3Store struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -55935,9 +54312,7 @@ type AssemblySteps_AdditionalProperty_ScriptRun struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -55945,17 +54320,13 @@ type AssemblySteps_AdditionalProperty_ScriptRun struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -55973,55 +54344,59 @@ type AssemblySteps_AdditionalProperty_ScriptRun struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> allows you to run arbitrary `JavaScript` as part of the <dfn>Assembly</dfn>
 	// execution process. The <dfn>Robot</dfn> is invoked automatically when there are <dfn>Assembly
 	// Instructions</dfn> containing `${...}`:
 	//
 	// ```json
-	// {
-	//   "robot": "/image/resize",
-	//   "width": "${Math.max(file.meta.width, file.meta.height)}"
-	// }
+	//
+	//	{
+	//	  "robot": "/image/resize",
+	//	  "width": "${Math.max(file.meta.width, file.meta.height)}"
+	//	}
+	//
 	// ```
 	//
 	// You can also invoke this <dfn>Robot</dfn> directly, leaving out the `${...}`:
 	//
 	// ```json
-	// {
-	//   "robot": "/script/run",
-	//   "script": "Math.max(file.meta.width, file.meta.height)"
-	// }
+	//
+	//	{
+	//	  "robot": "/script/run",
+	//	  "script": "Math.max(file.meta.width, file.meta.height)"
+	//	}
+	//
 	// ```
 	//
 	// When accessing arrays, the syntax is the same as in any JavaScript program:
 	//
 	// ```json
-	// {
-	//   "robot": "/image/resize",
-	//   "width": "${file.meta.faces[0].width * 2}"
-	// }
+	//
+	//	{
+	//	  "robot": "/image/resize",
+	//	  "width": "${file.meta.faces[0].width * 2}"
+	//	}
+	//
 	// ```
 	//
 	// Compared to only accessing an <dfn>Assembly Variable</dfn>:
 	//
 	// ```json
-	// {
-	//   "robot": "/image/resize",
-	//   "width": "${file.meta.faces[0].width}"
-	// }
+	//
+	//	{
+	//	  "robot": "/image/resize",
+	//	  "width": "${file.meta.faces[0].width}"
+	//	}
+	//
 	// ```
 	//
 	// For more information, see [Dynamic Evaluation](/docs/topics/dynamic-evaluation/).
-	//
 	Robot AssemblySteps_AdditionalProperty_ScriptRun_Robot `json:"robot"`
-	//
 	// A string of JavaScript to evaluate. It has access to all JavaScript features available in a modern browser environment.
 	//
 	// The script is expected to return a `JSON.stringify`-able value in the same tick, so no `await` or callbacks are allowed (yet).
@@ -56029,43 +54404,39 @@ type AssemblySteps_AdditionalProperty_ScriptRun struct {
 	// If the script does not finish within 1000ms it times out with an error. The return value or error is exported as `file.meta.result`. If there was an error, `file.meta.isError` is `true`. Note that the <dfn>Assembly</dfn> will not crash in this case. If you need it to crash, you can check this value with a [🤖/file/filter](/docs/robots/file-filter/) <dfn>Step</dfn>, setting `error_on_decline` to `true`.
 	//
 	// You can check whether evaluating this script was free by inspecting `file.meta.isFree`. It is recommended to do this during development as to not see sudden unexpected costs in production.
-	//
 	Script ValueStringOrString `json:"script"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -56073,7 +54444,6 @@ type AssemblySteps_AdditionalProperty_ScriptRun struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -56211,11 +54581,9 @@ type AssemblySteps_AdditionalProperty_ScriptRun_UserMeta = AssemblySteps_Additio
 type AssemblySteps_AdditionalProperty_ScriptRun_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_SftpImport struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your SFTP host, user and optional custom public key.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"host"`, `"port"`, `"user"`, `"public_key"` (optional).
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -56225,12 +54593,10 @@ type AssemblySteps_AdditionalProperty_SftpImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -56240,21 +54606,15 @@ type AssemblySteps_AdditionalProperty_SftpImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -56272,27 +54632,21 @@ type AssemblySteps_AdditionalProperty_SftpImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path on your SFTP server where to search for files. If the path points to a directory, only direct descendants of this directory are imported by default.
-	//
 	Path ValueStringOrString `json:"path"`
 	// The port to use for the FTP connection.
 	Port      *ValueStringOrStringOrInteger `json:"port,omitempty"`
 	PublicKey *ValueStringOrString          `json:"public_key,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_SftpImport_Robot `json:"robot"`
 	User  *ValueStringOrString                              `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -56300,7 +54654,6 @@ type AssemblySteps_AdditionalProperty_SftpImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -56452,15 +54805,11 @@ type AssemblySteps_AdditionalProperty_SftpImport_UserMeta = AssemblySteps_Additi
 type AssemblySteps_AdditionalProperty_SftpImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_SftpStore struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your SFTP host, user and optional custom public key.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"host"`, `"port"`, `"user"`, `"public_key"` (optional).
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// This optional parameter controls how an uploaded file's permission bits are set. You can use any string format that the `chmod` command would accept, such as `"755"`. If you don't specify this option, the file's permission bits aren't changed at all, meaning it's up to your server's configuration (e.g. umask).
-	//
 	FileChmod *ValueStringOrString `json:"file_chmod,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -56470,10 +54819,8 @@ type AssemblySteps_AdditionalProperty_SftpStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	Host        *ValueStringOrString                                             `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -56481,17 +54828,13 @@ type AssemblySteps_AdditionalProperty_SftpStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -56509,11 +54852,8 @@ type AssemblySteps_AdditionalProperty_SftpStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// The port to use for the FTP connection.
 	Port      *ValueStringOrStringOrInteger `json:"port,omitempty"`
@@ -56524,50 +54864,43 @@ type AssemblySteps_AdditionalProperty_SftpStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_SftpStore_Robot `json:"robot"`
-	//
-	//   The SSL URL of the file in the result JSON. The following [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables) are supported.
-	//
+	// The SSL URL of the file in the result JSON. The following [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables) are supported.
 	SslUrlTemplate *ValueStringOrString `json:"ssl_url_template,omitempty"`
-	//
 	// The URL of the file in the result JSON. This may include any of the following supported [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables).
-	//
 	UrlTemplate *ValueStringOrString `json:"url_template,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use  *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
 	User *ValueStringOrString                               `json:"user,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -56575,7 +54908,6 @@ type AssemblySteps_AdditionalProperty_SftpStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -56738,22 +55070,16 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Output format for the transcription.
 	//
 	// - `"text"` outputs a plain text file that you can store and process.
 	// - `"json"` outputs a JSON file containing timestamped words. When `speaker_labels` is enabled, words can include `speaker` labels and the JSON can also include grouped `segments` by speaker.
 	// - `"srt"` and `"webvtt"` output subtitle files of those respective file types, which can be stored separately or used in other encoding <dfn>Steps</dfn>.
 	// - `"meta"` does not return a file, but stores the data inside Transloadit's file object (under `${file.meta.transcription.text}`, `${file.meta.transcription.words}`, and, when speaker labels are available, `${file.meta.transcription.segments}`) that's passed around between encoding <dfn>Steps</dfn>, so that you can use the values to burn the data into videos, filter on them, etc.
-	//
 	Format *AssemblySteps_AdditionalProperty_SpeechTranscribe_Format `json:"format,omitempty"`
-	//
 	// Both `"full"` and `"list"` currently return the same complete transcription response. `"list"` remains accepted for backward compatibility.
-	//
 	Granularity *AssemblySteps_AdditionalProperty_DocumentOcr_Granularity `json:"granularity,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -56761,21 +55087,15 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// The maximum number of speakers to detect when `speaker_labels` is enabled.
-	//
 	MaxSpeakers *ValueStringOrStringOrInteger `json:"max_speakers,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -56793,21 +55113,17 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Chooses the best provider based on your request.
 	//
 	// Set this to `"aws"`, `"gcp"`, or `"replicate"` to force a specific provider.
 	// When set to `"auto"`, Transloadit uses `"replicate"` by default and uses `"aws"` when
 	// `speaker_labels` is enabled.
-	//
 	Provider *AssemblySteps_AdditionalProperty_SpeechTranscribe_Provider `json:"provider,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// You can use the text that we return in your application, or you can pass the text down to other <dfn>Robots</dfn> to filter audio or video files that contain (or do not contain) certain content, or burn the text into images or video for example.
 	//
 	// Another common use case is automatically subtitling videos, or making audio searchable.
@@ -56816,18 +55132,20 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	// recurring speakers:
 	//
 	// ```json
-	// {
-	//   "steps": {
-	//     "transcribed": {
-	//       "use": ":original",
-	//       "robot": "/speech/transcribe",
-	//       "provider": "aws",
-	//       "format": "json",
-	//       "speaker_labels": true,
-	//       "max_speakers": 3
-	//     }
-	//   }
-	// }
+	//
+	//	{
+	//	  "steps": {
+	//	    "transcribed": {
+	//	      "use": ":original",
+	//	      "robot": "/speech/transcribe",
+	//	      "provider": "aws",
+	//	      "format": "json",
+	//	      "speaker_labels": true,
+	//	      "max_speakers": 3
+	//	    }
+	//	  }
+	//	}
+	//
 	// ```
 	//
 	// Speaker labels are currently supported by the `aws` and `gcp` providers. If you enable
@@ -56835,74 +55153,66 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	// are normalized as `speaker_1`, `speaker_2`, and so on:
 	//
 	// ```json
-	// {
-	//   "text": "Hello there. Hi!",
-	//   "words": [
-	//     { "text": "Hello", "startTime": 0, "endTime": 0.5, "speaker": "speaker_1" },
-	//     { "text": "there", "startTime": 0.6, "endTime": 1, "speaker": "speaker_1" },
-	//     { "text": "Hi!", "startTime": 1.2, "endTime": 1.8, "speaker": "speaker_2" }
-	//   ],
-	//   "segments": [
-	//     { "text": "Hello there", "startTime": 0, "endTime": 1, "speaker": "speaker_1" },
-	//     { "text": "Hi!", "startTime": 1.2, "endTime": 1.8, "speaker": "speaker_2" }
-	//   ]
-	// }
+	//
+	//	{
+	//	  "text": "Hello there. Hi!",
+	//	  "words": [
+	//	    { "text": "Hello", "startTime": 0, "endTime": 0.5, "speaker": "speaker_1" },
+	//	    { "text": "there", "startTime": 0.6, "endTime": 1, "speaker": "speaker_1" },
+	//	    { "text": "Hi!", "startTime": 1.2, "endTime": 1.8, "speaker": "speaker_2" }
+	//	  ],
+	//	  "segments": [
+	//	    { "text": "Hello there", "startTime": 0, "endTime": 1, "speaker": "speaker_1" },
+	//	    { "text": "Hi!", "startTime": 1.2, "endTime": 1.8, "speaker": "speaker_2" }
+	//	  ]
+	//	}
+	//
 	// ```
-	//
 	Robot AssemblySteps_AdditionalProperty_SpeechTranscribe_Robot `json:"robot"`
-	//
 	// Sets the spoken language for the `"aws"` and `"gcp"` providers. The transcription stays in the spoken language; this parameter does not translate speech.
 	//
 	// The language should be specified in the [BCP-47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) format, such as `"en-GB"`, `"de-DE"` or `"fr-FR"`. Please also consult the list of supported languages for [the `gcp` provider](https://cloud.google.com/speech-to-text/docs/languages) and [the `aws` provider](https://docs.aws.amazon.com/transcribe/latest/dg/what-is-transcribe.html).
-	//
 	SourceLanguage *ValueStringOrString `json:"source_language,omitempty"`
-	//
 	// When enabled, Transloadit asks the transcription provider to distinguish different speakers. JSON and meta output can then include `speaker` labels such as `"speaker_1"` on individual words, plus grouped `segments` by speaker. Text, SRT, and WebVTT output behavior is unchanged.
 	//
 	// Speaker labels identify recurring voices, not real person names. Accuracy depends on audio quality, background noise, overlapping speech, and the number of speakers.
-	//
 	SpeakerLabels *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"speaker_labels,omitempty"`
-	//
 	// Sets the spoken language hint for the `"replicate"` provider. Omit this parameter to detect the spoken language automatically. Set it to the full lowercase English language name, such as `"french"`, when the spoken language is known. Despite its name, this parameter does not translate speech.
 	//
 	// For the `"aws"` and `"gcp"` providers, use `source_language` instead.
-	//
 	TargetLanguage *ValueStringOrString `json:"target_language,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -56910,7 +55220,6 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -57260,21 +55569,15 @@ type AssemblySteps_AdditionalProperty_SpeechTranscribe_UserMeta_AdditionalProper
 
 type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Supabase bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
 	//
 	// If you do use these parameters, make sure to use the **Endpoint** value under `Storage > S3 Connection` in the Supabase console for the `"host"` value, and the values under **S3 Access Keys** on the same page for your `"key"` and `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -57284,12 +55587,10 @@ type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -57299,22 +55600,16 @@ type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -57332,15 +55627,11 @@ type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -57350,28 +55641,20 @@ type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subfolders and sub-subfolders, etc. of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
-	//
 	// The URL to the result file will be returned in the <dfn>Assembly Status JSON</dfn>.
-	//
 	Robot  AssemblySteps_AdditionalProperty_SupabaseImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                                  `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -57379,7 +55662,6 @@ type AssemblySteps_AdditionalProperty_SupabaseImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -57569,17 +55851,13 @@ type AssemblySteps_AdditionalProperty_SupabaseImport_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Supabase bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
 	//
 	// If you do use these parameters, make sure to use the **Endpoint** value under `Storage > S3 Connection` in the Supabase console for the `"host"` value, and the values under **S3 Access Keys** on the same page for your `"key"` and `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -57589,16 +55867,12 @@ type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your Supabase Storage bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -57606,18 +55880,14 @@ type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -57635,11 +55905,8 @@ type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -57648,41 +55915,38 @@ type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_SupabaseStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                                 `json:"secret,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -57690,7 +55954,6 @@ type AssemblySteps_AdditionalProperty_SupabaseStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -57848,15 +56111,11 @@ type AssemblySteps_AdditionalProperty_SupabaseStore_UserMeta_AdditionalProperty 
 
 type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
+	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your OpenStack Swift container (provided through the `"bucket"` parameter), host, Key and Secret.
 	//
-	//   Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your OpenStack Swift container (provided through the `"bucket"` parameter), host, Key and Secret.
-	//
-	//   While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
+	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -57866,15 +56125,11 @@ type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// The S3-compatible object storage endpoint for the OpenStack Swift service. This is required when supplying dynamic credentials directly instead of using Template Credentials.
-	//
 	Host *ValueStringOrString `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -57884,22 +56139,16 @@ type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -57917,15 +56166,11 @@ type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your container to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -57935,26 +56180,20 @@ type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your container that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_SwiftImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                               `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -57962,7 +56201,6 @@ type AssemblySteps_AdditionalProperty_SwiftImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -58147,16 +56385,12 @@ type AssemblySteps_AdditionalProperty_SwiftImport_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_SwiftImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_SwiftStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl    *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
 	Bucket *ValueStringOrString                            `json:"bucket,omitempty"`
+	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your OpenStack Swift container (provided through the `"bucket"` parameter), host, Key and Secret.
 	//
-	//   Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your OpenStack Swift container (provided through the `"bucket"` parameter), host, Key and Secret.
-	//
-	//   While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
+	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -58166,19 +56400,13 @@ type AssemblySteps_AdditionalProperty_SwiftStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your OpenStack Swift container, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// The S3-compatible object storage endpoint for the OpenStack Swift service. This is required when supplying dynamic credentials directly instead of using Template Credentials.
-	//
 	Host *ValueStringOrString `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -58186,18 +56414,14 @@ type AssemblySteps_AdditionalProperty_SwiftStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -58215,59 +56439,50 @@ type AssemblySteps_AdditionalProperty_SwiftStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the result file in your OpenStack Swift container will be returned in the <dfn>Assembly Status JSON</dfn>.
 	Robot  AssemblySteps_AdditionalProperty_SwiftStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                              `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -58275,7 +56490,6 @@ type AssemblySteps_AdditionalProperty_SwiftStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -58443,9 +56657,7 @@ type AssemblySteps_AdditionalProperty_TextSpeak struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -58453,17 +56665,13 @@ type AssemblySteps_AdditionalProperty_TextSpeak struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -58481,11 +56689,8 @@ type AssemblySteps_AdditionalProperty_TextSpeak struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Which text to speak. You can also set this to `null` and supply an input text file.
-	//
 	Prompt *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"prompt,omitempty"`
 	// Chooses the best provider based on your request.
 	//
@@ -58495,59 +56700,50 @@ type AssemblySteps_AdditionalProperty_TextSpeak struct {
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// You can use the audio that we return in your application, or you can pass the audio down to other <dfn>Robots</dfn> to add a voice track to a video for example.
 	//
 	// Another common use case is making your product accessible to people with a reading disability.
-	//
 	Robot AssemblySteps_AdditionalProperty_TextSpeak_Robot `json:"robot"`
-	//
 	// Supply [Speech Synthesis Markup Language](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language) instead of raw text, in order to gain more control over how your text is voiced, including rests and pronounciations.
 	//
 	// Please see the supported syntaxes for [AWS](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html) and [GCP](https://cloud.google.com/text-to-speech/docs/ssml).
-	//
 	Ssml *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"ssml,omitempty"`
-	//
 	// The written language of the document. This will also be the language of the spoken text.
 	//
 	// The language should be specified in the [BCP-47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) format, such as `"en-GB"`, `"de-DE"` or `"fr-FR"`. Please consult the list of supported languages and voices.
-	//
 	TargetLanguage *ValueStringOrString `json:"target_language,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -58555,11 +56751,8 @@ type AssemblySteps_AdditionalProperty_TextSpeak struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The gender to be used for voice synthesis. Please consult the list of supported languages and voices.
-	//
 	Voice *AssemblySteps_AdditionalProperty_TextSpeak_Voice `json:"voice,omitempty"`
 }
 
@@ -58816,9 +57009,7 @@ type AssemblySteps_AdditionalProperty_TextTranslate struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -58826,17 +57017,13 @@ type AssemblySteps_AdditionalProperty_TextTranslate struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -58854,7 +57041,6 @@ type AssemblySteps_AdditionalProperty_TextTranslate struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Chooses the best provider based on your request.
 	//
@@ -58864,62 +57050,53 @@ type AssemblySteps_AdditionalProperty_TextTranslate struct {
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// You can use the text that we return in your application, or you can pass the text down to other <dfn>Robots</dfn> to add a translated subtitle track to a video for example.
 	//
 	// > [!Note]
 	// > **This <dfn>Robot</dfn> accepts only files with a `text/*` MIME-type,** including plain text and Markdown. For documents in other formats, use [🤖/document/convert](/docs/robots/document-convert/) to first convert them into a compatible text format before proceeding.
-	//
 	Robot AssemblySteps_AdditionalProperty_TextTranslate_Robot `json:"robot"`
-	//
 	// The desired language to translate from.
 	//
 	// By default, both providers will detect this automatically, but there are cases where specifying the source language prevents ambiguities.
 	//
 	// If the exact language can't be found, a generic variant can be fallen back to. For example, if you specify `"en-US"`, "en" will be used instead. Please consult the list of supported languages for each provider.
-	//
 	SourceLanguage *AssemblySteps_AdditionalProperty_TextTranslate_SourceLanguage `json:"source_language,omitempty"`
-	//
 	// The desired language to translate to.
 	//
 	// If the exact language can't be found, a generic variant can be fallen back to. For example, if you specify `"en-US"`, "en" will be used instead. Please consult the list of supported languages for each provider.
-	//
 	TargetLanguage *AssemblySteps_AdditionalProperty_TextTranslate_SourceLanguage `json:"target_language,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -58927,7 +57104,6 @@ type AssemblySteps_AdditionalProperty_TextTranslate struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -59169,15 +57345,11 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
 	// The region of your Tigris bucket. This is optional as it can often be derived.
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Tigris bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -59187,12 +57359,10 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -59202,22 +57372,16 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -59235,15 +57399,11 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -59253,26 +57413,20 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subdirectories and sub-subdirectories (etc.) of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_TigrisImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                                `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -59280,7 +57434,6 @@ type AssemblySteps_AdditionalProperty_TigrisImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -59467,18 +57620,14 @@ type AssemblySteps_AdditionalProperty_TigrisImport_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_TigrisImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_TigrisStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl    *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
 	Bucket *ValueStringOrString                            `json:"bucket,omitempty"`
 	// The region of your Tigris bucket. This is optional as it can often be derived.
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Tigris bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -59488,16 +57637,12 @@ type AssemblySteps_AdditionalProperty_TigrisStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file on Tigris, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -59505,18 +57650,14 @@ type AssemblySteps_AdditionalProperty_TigrisStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -59534,62 +57675,52 @@ type AssemblySteps_AdditionalProperty_TigrisStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the result file will be returned in the <dfn>Assembly Status JSON</dfn>.
-	//
 	Robot  AssemblySteps_AdditionalProperty_TigrisStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                               `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds.
 	//
 	// If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -59597,7 +57728,6 @@ type AssemblySteps_AdditionalProperty_TigrisStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -59771,9 +57901,7 @@ type AssemblySteps_AdditionalProperty_TlcdnDeliver struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -59781,17 +57909,13 @@ type AssemblySteps_AdditionalProperty_TlcdnDeliver struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -59809,17 +57933,13 @@ type AssemblySteps_AdditionalProperty_TlcdnDeliver struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// When you want Transloadit to transform files on the fly, this <dfn>Robot</dfn> can cache and deliver the results close to your end-user, saving on latency and encoding volume. The use of this <dfn>Robot</dfn> is implicit when you use the <code>tlcdn.com</code> domain.
-	//
 	Robot AssemblySteps_AdditionalProperty_TlcdnDeliver_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -59827,7 +57947,6 @@ type AssemblySteps_AdditionalProperty_TlcdnDeliver struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -59940,10 +58059,8 @@ type AssemblySteps_AdditionalProperty_TlcdnDeliver_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_TlcdnDeliver_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
-	//
 	// The stored asset's stable ID. Without `version_id`, imports its current version even after
 	// renaming or moving it. Cannot be combined with `path` or recursive folder imports.
-	//
 	AssetId *impossibleValue `json:"asset_id,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -59953,11 +58070,9 @@ type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -59967,21 +58082,15 @@ type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -59999,23 +58108,17 @@ type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The current file or folder location, for example `photos/cat.jpg`. Use either `path` or
 	// `asset_id`, not both. Renaming makes an old path stale; overwriting changes what it imports.
-	//
 	Path ValueStringOrString `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Whether to import files from subfolders and sub-subfolders when `path` is a folder. By default
 	// only the folder's own files are imported.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_Recursive `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Imports files from your Workspace's Transloadit Storage. Select a mutable location with
 	// `path`, or a logical asset with `asset_id`. Add `version_id` to pin the exact stored bytes.
 	// IDs remain subject to Workspace access and version retention.
@@ -60024,9 +58127,7 @@ type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
 	// either a bearer token or signed `params` with a future `params.auth.expires` timestamp.
 	// This applies even when Workspace Signature Authentication is disabled. An Auth Key alone
 	// is not sufficient; bearer-authenticated requests do not need a separate signature or expiry.
-	//
 	Robot AssemblySteps_AdditionalProperty_TransloaditImport1_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -60034,12 +58135,9 @@ type AssemblySteps_AdditionalProperty_TransloaditImport1 struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The exact retained version of `asset_id` to import. Requires `asset_id`; a missing or deleted
 	// version never falls back to the current version.
-	//
 	VersionId *impossibleValue `json:"version_id,omitempty"`
 }
 
@@ -61269,10 +59367,8 @@ func (value *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta) Unmar
 type AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty = json.RawMessage
 
 type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
-	//
 	// The stored asset's stable ID. Without `version_id`, imports its current version even after
 	// renaming or moving it. Cannot be combined with `path` or recursive folder imports.
-	//
 	AssetId ValueStringOrString `json:"asset_id"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -61282,11 +59378,9 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -61296,21 +59390,15 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -61328,23 +59416,17 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The current file or folder location, for example `photos/cat.jpg`. Use either `path` or
 	// `asset_id`, not both. Renaming makes an old path stale; overwriting changes what it imports.
-	//
 	Path *impossibleValue `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Whether to import files from subfolders and sub-subfolders when `path` is a folder. By default
 	// only the folder's own files are imported.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport2_Recursive `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Imports files from your Workspace's Transloadit Storage. Select a mutable location with
 	// `path`, or a logical asset with `asset_id`. Add `version_id` to pin the exact stored bytes.
 	// IDs remain subject to Workspace access and version retention.
@@ -61353,9 +59435,7 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
 	// either a bearer token or signed `params` with a future `params.auth.expires` timestamp.
 	// This applies even when Workspace Signature Authentication is disabled. An Auth Key alone
 	// is not sufficient; bearer-authenticated requests do not need a separate signature or expiry.
-	//
 	Robot AssemblySteps_AdditionalProperty_TransloaditImport1_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -61363,12 +59443,9 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2 struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The exact retained version of `asset_id` to import. Requires `asset_id`; a missing or deleted
 	// version never falls back to the current version.
-	//
 	VersionId *ValueStringOrString `json:"version_id,omitempty"`
 }
 
@@ -61626,11 +59703,9 @@ type AssemblySteps_AdditionalProperty_TransloaditImport2_UserMeta_AdditionalProp
 type AssemblySteps_AdditionalProperty_TransloaditImport2_VersionId = ValueStringOrString
 
 type AssemblySteps_AdditionalProperty_TransloaditStore struct {
-	//
 	// Chooses how to handle an existing destination. By default, an occupied path fails. Select
 	// `rename` to allocate a different filename, or `overwrite` to create a new version of the
 	// existing asset. Always save the returned asset identity, version and final path.
-	//
 	ConflictStrategy *AssemblySteps_AdditionalProperty_TransloaditStore_ConflictStrategy `json:"conflict_strategy,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -61640,9 +59715,7 @@ type AssemblySteps_AdditionalProperty_TransloaditStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -61650,17 +59723,13 @@ type AssemblySteps_AdditionalProperty_TransloaditStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -61678,19 +59747,15 @@ type AssemblySteps_AdditionalProperty_TransloaditStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Sets the destination path inside your Transloadit Storage workspace, relative to its root: a
 	// filename, or folders and a filename such as `website/hero.jpg`. Folders that do not exist yet
 	// are created.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Stores each input privately in Transloadit Storage.
 	//
 	// After `ASSEMBLY_COMPLETED`, save the stored result from `results[producingStep][i]` with
@@ -61701,43 +59766,39 @@ type AssemblySteps_AdditionalProperty_TransloaditStore struct {
 	// IDs with 🤖/transloadit/import to reuse exact retained bytes after a native catalog rename or overwrite.
 	// A path selects the current location; an asset ID without a version selects its current bytes.
 	// Deleting an asset or removing a retained version makes that reference unavailable.
-	//
 	Robot AssemblySteps_AdditionalProperty_TransloaditStore_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -61745,7 +59806,6 @@ type AssemblySteps_AdditionalProperty_TransloaditStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -61975,13 +60035,9 @@ type AssemblySteps_AdditionalProperty_TransloaditStore_UserMeta = AssemblySteps_
 type AssemblySteps_AdditionalProperty_TransloaditStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_TusStore struct {
-	//
 	// Create <dfn>Template Credentials</dfn> for this <dfn>Robot</dfn> in your [Transloadit account](/c/template-credentials/) and use the name of the <dfn>Template Credentials</dfn> as this parameter's value. For this <dfn>Robot</dfn>, use the HTTP template, which allows request headers to be passed along to the destination server.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The URL of the Tus-compatible server, which you're uploading files to.
-	//
 	Endpoint ValueStringOrString `json:"endpoint"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -61991,15 +60047,11 @@ type AssemblySteps_AdditionalProperty_TusStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Optional extra headers outside of the <dfn>Template Credentials</dfn> can be passed along within this parameter.
 	//
 	// Although, we recommend to exclusively use <dfn>Template Credentials</dfn>, this may be necessary if you're looking to use dynamic credentials, which isn't a feature supported by <dfn>Template Credentials</dfn>.
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -62007,21 +60059,15 @@ type AssemblySteps_AdditionalProperty_TusStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Metadata to pass along to destination. Includes some file info by default.
-	//
 	Metadata *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"metadata,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -62039,7 +60085,6 @@ type AssemblySteps_AdditionalProperty_TusStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -62047,49 +60092,42 @@ type AssemblySteps_AdditionalProperty_TusStore struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_TusStore_Robot `json:"robot"`
-	//
 	// The SSL URL of the file in the <dfn>Assembly Status JSON</dfn>. The following [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables) are supported. If this is not specified, the upload URL specified by the destination server will be used instead, as long as it starts with `https`.
-	//
 	SslUrlTemplate *ValueStringOrString `json:"ssl_url_template,omitempty"`
-	//
 	// The URL of the file in the <dfn>Assembly Status JSON</dfn>. The following [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables) are supported. If this is not specified, the upload URL specified by the destination server will be used instead.
-	//
 	UrlTemplate *ValueStringOrString `json:"url_template,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -62097,7 +60135,6 @@ type AssemblySteps_AdditionalProperty_TusStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -62258,9 +60295,7 @@ type AssemblySteps_AdditionalProperty_UploadHandle struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -62268,17 +60303,13 @@ type AssemblySteps_AdditionalProperty_UploadHandle struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -62296,13 +60327,11 @@ type AssemblySteps_AdditionalProperty_UploadHandle struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Transloadit handles file uploads by default, so specifying this <dfn>Robot</dfn> is optional.
 	//
 	// It can still be a good idea to define this <dfn>Robot</dfn>, though. It makes your <dfn>Assembly Instructions</dfn> explicit, and allows you to configure exactly how uploads should be handled. For example, you can extract specific metadata from the uploaded files.
@@ -62312,9 +60341,7 @@ type AssemblySteps_AdditionalProperty_UploadHandle struct {
 	// 1. Don’t define a `use` parameter, unlike with other <dfn>Robots</dfn>.
 	// 2. Use it only once in a single set of <dfn>Assembly Instructions</dfn>.
 	// 3. Name the Step as `:original`.
-	//
 	Robot AssemblySteps_AdditionalProperty_UploadHandle_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -62322,7 +60349,6 @@ type AssemblySteps_AdditionalProperty_UploadHandle struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -62428,25 +60454,17 @@ type AssemblySteps_AdditionalProperty_UploadHandle_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_UploadHandle_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
-	//
 	// When set to `true` and using the `"hls"` technique, audio-only input files are treated as alternate audio renditions instead of standalone stream variants. This enables players to offer audio track selection (e.g. for multiple languages). Audio-only files are listed as `#EXT-X-MEDIA:TYPE=AUDIO` entries in the multivariant playlist, and video variants reference them via the `AUDIO` attribute.
 	//
 	// When enabled, video inputs only include their video stream in the output segments (any muxed audio is excluded). Provide audio separately as audio-only input files.
 	//
 	// This option is only supported for the `"hls"` technique and has no effect when using `"dash"`.
-	//
 	AudioGroup *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"audio_group,omitempty"`
-	//
 	// Determines whether you want closed caption support when using the `"hls"` technique.
-	//
 	ClosedCaptions *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"closed_captions,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -62456,19 +60474,13 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Only used when `technique` is `"cmaf"`. Defines the filename for the generated HLS master playlist. The default is `"playlist.m3u8"`.
-	//
 	HlsPlaylistName *ValueStringOrString `json:"hls_playlist_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -62476,17 +60488,13 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -62504,24 +60512,18 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The filename for the generated manifest/playlist file. The default is `"playlist.mpd"` if your `technique` is `"dash"`, and `"playlist.m3u8"` if your `technique` is `"hls"`.
 	// For `"cmaf"`, this value names the MPEG-Dash manifest and defaults to `"playlist.mpd"`.
-	//
 	PlaylistName *ValueStringOrString `json:"playlist_name,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> accepts all types of video files and audio files. Do not forget to use <dfn>Step</dfn> bundling in your `use` parameter to make the <dfn>Robot</dfn> work on several input files at once.
 	//
 	// This <dfn>Robot</dfn> is normally used in combination with [🤖/video/encode](/docs/robots/video-encode/). We have implemented video and audio encoding presets specifically for MPEG-Dash and HTTP Live Streaming support. These presets are prefixed with `"dash/"` and `"hls/"`. [View a HTTP Live Streaming demo here](/demos/video-encoding/implement-http-live-streaming/).
@@ -62540,12 +60542,14 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	//
 	// ```json
 	// [
-	//   {
-	//     "AllowedHeaders": ["*"],
-	//     "AllowedMethods": ["GET"],
-	//     "AllowedOrigins": ["*"],
-	//     "ExposeHeaders": []
-	//   }
+	//
+	//	{
+	//	  "AllowedHeaders": ["*"],
+	//	  "AllowedMethods": ["GET"],
+	//	  "AllowedOrigins": ["*"],
+	//	  "ExposeHeaders": []
+	//	}
+	//
 	// ]
 	// ```
 	//
@@ -62561,51 +60565,43 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	// The <dfn>Robot</dfn> gives its result files (segments, initialization segments, MPD manifest files and M3U8 playlist files) the right metadata property `relative_path`, so that you can store them easily using one of our storage <dfn>Robots</dfn>.
 	//
 	// In the `path` parameter of the storage <dfn>Robot</dfn> of your choice, use the <dfn>Assembly Variable</dfn> `${file.meta.relative_path}` to store files in the proper paths to make the playlist files work.
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoAdaptive_Robot `json:"robot"`
-	//
 	// The duration for each segment in seconds.
-	//
 	SegmentDuration *ValueStringOrStringOrInteger `json:"segment_duration,omitempty"`
-	//
 	// Determines which streaming technique should be used. Supports `"dash"` for MPEG-Dash, `"hls"` for HTTP Live Streaming and `"cmaf"` for FFmpeg-based CMAF output with both MPEG-Dash and HLS manifests that reference the same fMP4 segments.
-	//
 	Technique *AssemblySteps_AdditionalProperty_VideoAdaptive_Technique `json:"technique,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -62613,13 +60609,10 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
 }
 
@@ -63276,13 +61269,9 @@ type AssemblySteps_AdditionalProperty_VideoAdaptive_Width_Null = AssemblySteps_A
 type AssemblySteps_AdditionalProperty_VideoAdaptive_Width_Variant = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_VideoArtwork struct {
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -63292,9 +61281,7 @@ type AssemblySteps_AdditionalProperty_VideoArtwork struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -63302,21 +61289,15 @@ type AssemblySteps_AdditionalProperty_VideoArtwork struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// What should be done with the video file. A value of `"extract"` means video artwork will be extracted. A value of `"insert"` means the provided image will be inserted as video artwork.
-	//
 	Method *AssemblySteps_AdditionalProperty_AudioArtwork_Method `json:"method,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -63334,63 +61315,55 @@ type AssemblySteps_AdditionalProperty_VideoArtwork struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Performs conversion using pre-configured settings.
 	//
 	// If you specify your own FFmpeg parameters using the <dfn>Robot</dfn>'s `ffmpeg` parameter and you have not specified a preset, then the default `mp3` preset is not applied. This is to prevent you from having to override each of the MP3 preset's values manually.
 	//
 	// For a list of audio presets, see [audio presets](/docs/presets/audio/).
-	//
 	Preset *AssemblySteps_AdditionalProperty_AudioArtwork_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> extracts or inserts cover artwork in video files.
 	//
 	// For extraction, it uses the image format embedded within the video file — most often, this is JPEG. If you need the image in a different format, pipe the result into [🤖/image/resize](/docs/robots/image-resize/).
 	//
 	// For insertion, provide both a video file (as `"video"`) and an image file (as `"image"`) via the `use` parameter, and set `method` to `"insert"`. The image will be embedded as the cover artwork of the video file.
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoArtwork_Robot `json:"robot"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -63398,7 +61371,6 @@ type AssemblySteps_AdditionalProperty_VideoArtwork struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -63832,27 +61804,19 @@ type AssemblySteps_AdditionalProperty_VideoArtwork_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_VideoArtwork_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_VideoConcat struct {
-	//
 	// When used this adds an audio fade in and out effect between each section of your concatenated video. The float value is used so if you want an audio delay effect of 500 milliseconds between each video section you would select `0.5`, however, integer values can also be represented.
 	//
 	// This parameter does not add an audio fade effect at the beginning or end of your video. If you want to do so, create an additional [🤖/video/encode](/docs/robots/video-encode/) Step and use our `ffmpeg` parameter as shown in this [demo](/demos/audio-encoding/ffmpeg-fade-in-and-out/).
 	//
 	// Please note this parameter is independent of adding video fades between sections.
-	//
 	AudioFadeSeconds *ValueStringOrStringOrNumber `json:"audio_fade_seconds,omitempty"`
-	//
 	// When set to `true`, the concatenated video will contain chapter markers at the positions where the input videos are joined. Each chapter will be titled with the basename of the corresponding input video file.
 	//
 	// This is useful for navigation in video players that support chapter-based seeking.
-	//
 	ChapterMarkers *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"chapter_markers,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -63862,15 +61826,11 @@ type AssemblySteps_AdditionalProperty_VideoConcat struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -63878,17 +61838,13 @@ type AssemblySteps_AdditionalProperty_VideoConcat struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -63906,34 +61862,26 @@ type AssemblySteps_AdditionalProperty_VideoConcat struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// > [!Note]
 	// > Input videos may have differing dimensions and streams - the Robot can handle this fine. It will pre-transcode the input videos if necessary before concatenation at no additional cost.
 	//
 	// It’s possible to concatenate a virtually infinite number of video files using [🤖/video/concat](/docs/robots/video-concat/).
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoConcat_Robot `json:"robot"`
-	//
 	// Controls how bundled inputs are ordered when no explicit numbered alias for the input type is used. Numbered aliases end with a numeric suffix such as `_1`.
 	//
 	// The default `"basename"` keeps the legacy natural basename sorting behavior.
 	//
 	// Set this to `"import_order"` to preserve the order of array-based import steps when all input files carry complete import order metadata. `"auto"` has the same import-order preference with natural basename sorting as fallback.
-	//
 	SortBy *AssemblySteps_AdditionalProperty_AudioConcat_SortBy `json:"sort_by,omitempty"`
-	//
 	// Specifies the transition effect to apply between concatenated video clips.
 	//
 	// - `"none"` (default): No transition effect. Videos are joined end-to-end.
@@ -63941,51 +61889,45 @@ type AssemblySteps_AdditionalProperty_VideoConcat struct {
 	// - `"fade_to_black"`: Applies a fade-to-black transition where each clip fades out to black before the next clip fades in from black.
 	//
 	// When using `"crossfade"` or `"fade_to_black"`, the `transition_duration` parameter controls how long the transition lasts. Note that crossfade transitions will reduce the total output duration since clips overlap during the transition.
-	//
 	Transition *AssemblySteps_AdditionalProperty_VideoConcat_Transition `json:"transition,omitempty"`
-	//
 	// The duration of the transition effect in seconds. Only applies when `transition` is set to `"crossfade"` or `"fade_to_black"`.
 	//
 	// For example, a value of `1.0` creates a 1-second transition between clips. The value can be a float for sub-second precision (e.g., `0.5` for 500 milliseconds) and must be greater than `0` whenever transitions are enabled.
 	//
 	// For crossfade transitions, this is the overlap duration where both clips are visible. For fade_to_black transitions, this is the total time for the fade out and fade in (half for each). The applied transition is capped at half of the shorter clip in each transition pair.
-	//
 	TransitionDuration *ValueStringOrStringOrNumber `json:"transition_duration,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -63993,21 +61935,16 @@ type AssemblySteps_AdditionalProperty_VideoConcat struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// When used this adds a video fade in and out effect between each section of your concatenated video. The float value is used so if you want a video delay effect of 500 milliseconds between each video section you would select `0.5`, however, integer values can also be represented.
 	//
 	// This parameter does not add a video fade effect at the beginning or end of your video. If you want to do so, create an additional [🤖/video/encode](/docs/robots/video-encode/) Step and use our `ffmpeg` parameter as shown in this [demo](/demos/video-encoding/concatenate-fade-effect/).
 	//
 	// Please note this parameter is independent of adding audio fades between sections.
-	//
 	VideoFadeSeconds *ValueStringOrStringOrNumber `json:"video_fade_seconds,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
 }
 
@@ -64586,26 +62523,23 @@ type AssemblySteps_AdditionalProperty_VideoConcat_Width_Null = AssemblySteps_Add
 type AssemblySteps_AdditionalProperty_VideoConcat_Width_Variant = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_VideoEncode struct {
-	//
 	// The background color of the resulting video in the `"rrggbbaa"` format (red, green, blue, alpha) when used with the `"pad"` resize strategy. The default color is black.
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// Allows you to specify the duration of each chunk when `turbo` is set to `true`. This means you can take advantage of that feature while using fewer <dfn>Priority Job Slots</dfn>. For instance, the longer each chunk is, the fewer <dfn>Encoding Jobs</dfn> will need to be used.
-	//
 	ChunkDuration *ValueStringOrStringOrInteger `json:"chunk_duration,omitempty"`
-	//
 	// Specify an object containing coordinates for the top left and bottom right corners of the rectangle to be cropped from the original video(s). Values can be integers for absolute pixel values or strings for percentage based values.
 	//
 	// For example:
 	//
 	// ```json
-	// {
-	//   "x1": 80,
-	//   "y1": 100,
-	//   "x2": "60%",
-	//   "y2": "80%"
-	// }
+	//
+	//	{
+	//	  "x1": 80,
+	//	  "y1": 100,
+	//	  "x2": "60%",
+	//	  "y2": "80%"
+	//	}
+	//
 	// ```
 	//
 	// This will crop the area from `(80, 100)` to `(600, 800)` from a 1000×1000 pixels video, which is a square whose width is 520px and height is 700px. If `crop` is set, the width and height parameters are ignored, and the `resize_strategy` is set to `crop` automatically.
@@ -64615,15 +62549,10 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// ```json
 	// "{\"x1\": <Integer>, \"y1\": <Integer>, \"x2\": <Integer>, \"y2\": <Integer>}"
 	// ```
-	//
 	Crop *AssemblySteps_AdditionalProperty_ImageResize_Crop `json:"crop,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	FontColor   *ValueStringOrString                                       `json:"font_color,omitempty"`
 	FontSize    *ValueStringOrStringOrNumber                               `json:"font_size,omitempty"`
@@ -64635,19 +62564,13 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Enables hinting for mp4 files, for RTP/RTSP streaming.
-	//
 	Hint *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"hint,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -64655,17 +62578,13 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -64683,23 +62602,17 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// See the [available resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The /video/encode Robot is a versatile tool for video processing that handles transcoding, resizing, and watermarking. It supports various formats including modern standards like HEVC (H.265), and provides features such as presets for common devices, custom FFmpeg parameters for powerusers, watermark positioning, and more.
 	//
 	// ## Adding text overlays with FFmpeg
@@ -64707,114 +62620,98 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// You can add text overlays to videos using FFmpeg's `drawtext` filter through this <dfn>Robot</dfn>'s `ffmpeg` parameter. Here are two examples — one with the default font and one with a custom font family name:
 	//
 	// ```json
-	// {
-	//   "steps": {
-	//     ":original": {
-	//       "robot": "/upload/handle"
-	//     },
-	//     "text_overlay_default": {
-	//       "use": ":original",
-	//       "robot": "/video/encode",
-	//       "preset": "empty",
-	//       "ffmpeg_stack": "v7",
-	//       "ffmpeg": {
-	//         "codec:a": "copy",
-	//         "vf": "drawtext=text='My text overlay':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2"
-	//       },
-	//       "result": true
-	//     },
-	//     "text_overlay_custom": {
-	//       "use": ":original",
-	//       "robot": "/video/encode",
-	//       "preset": "empty",
-	//       "ffmpeg_stack": "v7",
-	//       "ffmpeg": {
-	//         "codec:a": "copy",
-	//         "vf": "drawtext=font='Times New Roman':text='My text overlay':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2"
-	//       },
-	//       "result": true
-	//     }
-	//   }
-	// }
+	//
+	//	{
+	//	  "steps": {
+	//	    ":original": {
+	//	      "robot": "/upload/handle"
+	//	    },
+	//	    "text_overlay_default": {
+	//	      "use": ":original",
+	//	      "robot": "/video/encode",
+	//	      "preset": "empty",
+	//	      "ffmpeg_stack": "v7",
+	//	      "ffmpeg": {
+	//	        "codec:a": "copy",
+	//	        "vf": "drawtext=text='My text overlay':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2"
+	//	      },
+	//	      "result": true
+	//	    },
+	//	    "text_overlay_custom": {
+	//	      "use": ":original",
+	//	      "robot": "/video/encode",
+	//	      "preset": "empty",
+	//	      "ffmpeg_stack": "v7",
+	//	      "ffmpeg": {
+	//	        "codec:a": "copy",
+	//	        "vf": "drawtext=font='Times New Roman':text='My text overlay':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2"
+	//	      },
+	//	      "result": true
+	//	    }
+	//	  }
+	//	}
+	//
 	// ```
 	//
 	// **Notes:**
 	//
-	// - Use the `font` attribute to reference a font by family name with FFmpeg's `drawtext`
-	// - FFmpeg font family names typically do not contain dashes (e.g. `Times New Roman`), while
-	//   ImageMagick uses dashed names (e.g. `Times-New-Roman`).
-	// - File-loading `drawtext` options such as `textfile` and `fontfile` are not supported. Use
-	//   inline `text` and a font family name instead.
-	// - Preserve the source audio by setting `"codec:a": "copy"`.
-	// - Position text with the `x` and `y` expressions. The example above centers the text.
+	//   - Use the `font` attribute to reference a font by family name with FFmpeg's `drawtext`
+	//   - FFmpeg font family names typically do not contain dashes (e.g. `Times New Roman`), while
+	//     ImageMagick uses dashed names (e.g. `Times-New-Roman`).
+	//   - File-loading `drawtext` options such as `textfile` and `fontfile` are not supported. Use
+	//     inline `text` and a font family name instead.
+	//   - Preserve the source audio by setting `"codec:a": "copy"`.
+	//   - Position text with the `x` and `y` expressions. The example above centers the text.
 	//
 	// See the [live text overlay demo](/demos/video-encoding/add-text-overlay/).
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoEncode_Robot `json:"robot"`
-	//
 	// Forces the video to be rotated by the specified degree integer. Currently, only multiples of `90` are supported. We automatically correct the orientation of many videos when the orientation is provided by the camera. This option is only useful for videos requiring rotation because it was not detected by the camera. If you set `rotate` to `false` no rotation is performed, even if the metadata contains such instructions.
-	//
 	Rotate *AssemblySteps_AdditionalProperty_VideoEncode_Rotate `json:"rotate,omitempty"`
-	//
 	// Splits the file into multiple parts, to be used for Apple's [HTTP Live Streaming](https://developer.apple.com/resources/http-streaming/).
-	//
 	Segment *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"segment,omitempty"`
-	//
 	// Specifies the length of each HTTP segment. This is optional, and the default value as recommended by Apple is `10`. Do not change this value unless you have a good reason.
-	//
 	SegmentDuration *ValueStringOrStringOrInteger `json:"segment_duration,omitempty"`
-	//
 	// The name used for the final segment. Available variables are `${segment_prefix}`, `${segment_number}` and `${segment_id}` (which is a UUIDv4 without dashes).
-	//
 	SegmentName *ValueStringOrString `json:"segment_name,omitempty"`
-	//
 	// The prefix used for the naming. For example, a prefix of `"segment_"` would produce files named `"segment_0.ts"`, `"segment_1.ts"` and so on. This is optional, and defaults to the base name of the input file. Also see the related `segment_name` parameter.
-	//
 	SegmentPrefix *ValueStringOrString `json:"segment_prefix,omitempty"`
-	//
 	// Delta to apply to segment duration. This is optional and allows fine-tuning of segment boundaries.
-	//
 	SegmentTimeDelta    *ValueStringOrStringOrNumber `json:"segment_time_delta,omitempty"`
 	TextBackgroundColor *ValueStringOrString         `json:"text_background_color,omitempty"`
-	//
 	// Splits the video into multiple chunks so that each chunk can be encoded in parallel before all encoded chunks are stitched back together to form the result video. This comes at the expense of extra <dfn>Priority Job Slots</dfn> and may prove to be counter-productive for very small video files.
-	//
 	Turbo *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"turbo,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -64822,25 +62719,17 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The duration in seconds for the watermark to be shown. Can be used together with `watermark_start_time` to create nice effects. The default value is `-1.0`, which means that the watermark is shown for the entire duration of the video.
-	//
 	WatermarkDuration *ValueStringOrStringOrNumber `json:"watermark_duration,omitempty"`
-	//
 	// The opacity of the watermark. Valid values are between `0` (invisible) and `1.0` (full visibility).
-	//
 	WatermarkOpacity *ValueStringOrStringOrNumber `json:"watermark_opacity,omitempty"`
-	//
 	// The position at which the watermark is placed.
 	//
 	// An array of possible values can also be specified, in which case one value will be selected at random, such as `[ "center", "left", "bottom-left", "bottom-right" ]`.
 	//
 	// This setting puts the watermark in the specified corner. To use a specific pixel offset for the watermark, you will need to add the padding to the image itself.
-	//
 	WatermarkPosition *AssemblySteps_AdditionalProperty_ImageResize_WatermarkPosition `json:"watermark_position,omitempty"`
-	//
 	// To explain how the resize strategies work, let's assume our target video size is 800×800 pixels and our watermark image is 400×300 pixels. Let's also assume, the `watermark_size` parameter is set to `"25%"`.
 	//
 	// For the `"fit"` resize strategy, the watermark is scaled so that the longer side of the watermark takes up 25% of the corresponding video side. And the other side is scaled according to the aspect ratio of the watermark image. So with our watermark, the width is the longer side, and 25% of the video size would be 200px. Hence, the watermark would be resized to 200×150 pixels. If the `watermark_size` was set to `"50%"`", it would be resized to 400×300 pixels (so just left at its original size).
@@ -64848,41 +62737,26 @@ type AssemblySteps_AdditionalProperty_VideoEncode struct {
 	// For the `"stretch"` resize strategy, the watermark image is stretched (meaning, it is resized without keeping its aspect ratio in mind) so that both sides take up 25% of the corresponding video side. Since our video is 800×800 pixels, for a watermark size of 25% the watermark would be resized to 200×200 pixels. Its height would appear stretched, because keeping the aspect ratio in mind it would be resized to 200×150 pixels instead.
 	//
 	// For the `"area"` resize strategy, the watermark is resized (keeping its aspect ratio in check) so that it covers `"xx%"` of the video's surface area. The value from `watermark_size` is used for the percentage area size.
-	//
 	WatermarkResizeStrategy *AssemblySteps_AdditionalProperty_VideoEncode_WatermarkResizeStrategy `json:"watermark_resize_strategy,omitempty"`
-	//
 	// The size of the watermark, as a percentage, such as `"50%"`. How the watermark is resized greatly depends on the `watermark_resize_strategy`.
-	//
 	WatermarkSize *ValueStringOrString `json:"watermark_size,omitempty"`
-	//
 	// The delay in seconds from the start of the video for the watermark to appear. By default the watermark is immediately shown.
-	//
 	WatermarkStartTime *ValueStringOrStringOrNumber `json:"watermark_start_time,omitempty"`
-	//
 	// A URL indicating a PNG image to be overlaid above this image. You can also [supply the watermark via another Assembly Step](/docs/topics/use-parameter/#supplying-the-watermark-via-an-assembly-step).
-	//
 	WatermarkUrl *AssemblySteps_AdditionalProperty_VideoEncode_WatermarkUrl `json:"watermark_url,omitempty"`
-	//
 	// The x-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkXOffset *ValueStringOrStringOrInteger `json:"watermark_x_offset,omitempty"`
-	//
 	// The y-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkYOffset *ValueStringOrStringOrInteger `json:"watermark_y_offset,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
-	//
 	// If this is set to `false`, smaller videos will not be stretched to the desired width and height. For details about the impact of zooming for your preferred resize strategy, see the list of available [resize strategies](/docs/topics/resize-strategies/).
-	//
 	Zoom *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"zoom,omitempty"`
 }
 
@@ -66408,7 +64282,6 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Format of the generated video.
 	Format *AssemblySteps_AdditionalProperty_VideoGenerate_Format `json:"format,omitempty"`
@@ -66416,7 +64289,6 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	Fps *ValueStringOrStringOrNumber `json:"fps,omitempty"`
 	// Height of the generated video.
 	Height *ValueStringOrStringOrNumber `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -66424,15 +64296,12 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	// The AI model to use for video generation. Defaults to minimax/video-01.
 	Model *ValueStringOrString `json:"model,omitempty"`
@@ -66442,7 +64311,6 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	NegativePrompt *ValueStringOrString `json:"negative_prompt,omitempty"`
 	// Number of video variants to generate.
 	NumOutputs *ValueStringOrStringOrInteger `json:"num_outputs,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -66460,7 +64328,6 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// The prompt describing the desired video content.
 	Prompt ValueStringOrString `json:"prompt"`
@@ -66476,41 +64343,38 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	Seed *ValueStringOrStringOrNumber `json:"seed,omitempty"`
 	// Style of the generated video.
 	Style *ValueStringOrString `json:"style,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -66518,7 +64382,6 @@ type AssemblySteps_AdditionalProperty_VideoGenerate struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 	// Width of the generated video.
 	Width *ValueStringOrStringOrNumber `json:"width,omitempty"`
@@ -66783,29 +64646,19 @@ type AssemblySteps_AdditionalProperty_VideoGenerate_UserMeta_AdditionalProperty 
 type AssemblySteps_AdditionalProperty_VideoGenerate_Width = ValueStringOrStringOrNumber
 
 type AssemblySteps_AdditionalProperty_VideoMerge struct {
-	//
 	// When merging a video and an audio file, and when merging images and an audio file to generate a video, this is the desired delay in seconds for the audio file to start playing. Imagine you merge a video file without sound and an audio file, but you wish the audio to start playing after 5 seconds and not immediately, then this is the parameter to use.
-	//
 	AudioDelay *ValueStringOrStringOrNumber `json:"audio_delay,omitempty"`
-	//
 	// The background color of the resulting video in the `"rrggbbaa"` format (red, green, blue, alpha) when used with the `"pad"` resize strategy. The default color is black.
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// When merging images to generate a video or when merging audio and video this is the desired target duration in seconds. The float value can take one decimal digit. If you want all images to be displayed exactly once, then you can set the duration according to this formula: `duration = numberOfImages / framerate`. This also works for the inverse framerate values like `1/5`.
 	//
 	// If you set this value to `null` (default), then the duration of the input audio file will be used when merging images with an audio file.
 	//
 	// When merging audio files and video files, the duration of the longest video or audio file is used by default.
-	//
 	Duration *AssemblySteps_AdditionalProperty_VideoMerge_Duration `json:"duration,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -66815,19 +64668,13 @@ type AssemblySteps_AdditionalProperty_VideoMerge struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// When merging images to generate a video this is the input framerate. A value of "1/5" means each image is given 5 seconds before the next frame appears (the inverse of a framerate of "5"). Likewise for "1/10", "1/20", etc. A value of "5" means there are 5 frames per second.
-	//
 	Framerate *AssemblySteps_AdditionalProperty_VideoMerge_Framerate `json:"framerate,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -66835,29 +64682,19 @@ type AssemblySteps_AdditionalProperty_VideoMerge struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// When merging images to generate a video this allows you to define how long (in seconds) each image will be shown inside of the video. So if you pass 3 images and define `[2.4, 5.6, 9]` the first image will be shown for 2.4s, the second image for 5.6s and the last one for 9s. The `duration` parameter will automatically be set to the sum of the image_durations, so `17` in our example. It can still be overwritten, though, in which case the last image will be shown until the defined duration is reached.
-	//
 	ImageDurations *AssemblySteps_AdditionalProperty_VideoMerge_ImageDurations `json:"image_durations,omitempty"`
-	//
 	// The URL of an image to be merged with the audio or video. When this parameter is provided, the robot will download the image from the URL and merge it with the other media.
-	//
 	ImageUrl *ValueStringOrString `json:"image_url,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Determines whether the shorter media file should be looped to match the duration of the longer one. For example, if you merge a 1-minute video with a 3-minute audio file and enable this option, the video will play three times in a row to match the audio length.
-	//
 	Loop *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"loop,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -66875,83 +64712,67 @@ type AssemblySteps_AdditionalProperty_VideoMerge struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Determines whether the audio of the video should be replaced with a provided audio file.
-	//
 	ReplaceAudio *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"replace_audio,omitempty"`
-	//
 	// If the given width/height parameters are bigger than the input image's dimensions, then the `resize_strategy` determines how the image will be resized to match the provided width/height. See the [available resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_VideoMerge_Robot `json:"robot"`
-	//
 	// Controls how bundled inputs are ordered when no explicit numbered alias for the input type is used. Numbered aliases end with a numeric suffix such as `_1`.
 	//
 	// The default `"basename"` keeps the legacy natural basename sorting behavior.
 	//
 	// Set this to `"import_order"` to preserve the order of array-based import steps when all input files carry complete import order metadata. `"auto"` has the same import-order preference with natural basename sorting as fallback.
-	//
 	SortBy *AssemblySteps_AdditionalProperty_AudioConcat_SortBy `json:"sort_by,omitempty"`
-	//
 	// The type of transition effect to apply between concatenated video clips. Only applies when concatenating multiple videos (using `video_1`, `video_2`, etc. or `pre_roll`/`post_roll` inputs).
 	//
 	// - `"none"` — No transition effect. Videos are joined end-to-end.
 	// - `"crossfade"` — A gradual blend from one clip to the next (both video and audio).
 	// - `"fade_to_black"` — The current clip fades out to black, then the next clip fades in from black.
-	//
 	Transition *AssemblySteps_AdditionalProperty_VideoConcat_Transition `json:"transition,omitempty"`
-	//
 	// The duration of the transition effect in seconds. Only applies when `transition` is not `"none"`. Supports float values (e.g., `0.5` for a 500ms transition) and must be greater than `0` whenever transitions are enabled. The applied transition is automatically capped at half of the shorter clip in each transition pair to prevent overlapping transitions.
-	//
 	TransitionDuration *ValueStringOrStringOrNumber `json:"transition_duration,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -66959,17 +64780,12 @@ type AssemblySteps_AdditionalProperty_VideoMerge struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Stacks the input media vertically. All streams need to have the same pixel format and width - so consider using a [/video/encode](/docs/robots/video-encode/) <dfn>Step</dfn> before using this parameter to enforce this.
-	//
 	Vstack *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"vstack,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
 }
 
@@ -67695,9 +65511,7 @@ type AssemblySteps_AdditionalProperty_VideoOndemand struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -67705,17 +65519,13 @@ type AssemblySteps_AdditionalProperty_VideoOndemand struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -67733,7 +65543,6 @@ type AssemblySteps_AdditionalProperty_VideoOndemand struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -67745,41 +65554,38 @@ type AssemblySteps_AdditionalProperty_VideoOndemand struct {
 	SegmentDuration *ValueStringOrStringOrNumber `json:"segment_duration,omitempty"`
 	// When signing URLs is enabled, the URLs in the generated playlist files will be signed. This parameter specifies the duration (in seconds) that the signed URLs will remain valid. Use the modern `sig` + `exp` format for new integrations. Legacy `s` signatures are deprecated. Shorter expirations reduce the replay window, but they also reduce cache reuse and can increase segment re-generation and latency.
 	SignUrlsFor *ValueStringOrStringOrNumber `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -67787,7 +65593,6 @@ type AssemblySteps_AdditionalProperty_VideoOndemand struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 	// Defines the variants the video player can choose from. The keys are the names of the variant as they will appear in the generated playlists and URLs.
 	Variants AssemblySteps_AdditionalProperty_VideoOndemand_Variants `json:"variants"`
@@ -68026,26 +65831,23 @@ func (value *AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalP
 }
 
 type AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_Object struct {
-	//
 	// The background color of the resulting video in the `"rrggbbaa"` format (red, green, blue, alpha) when used with the `"pad"` resize strategy. The default color is black.
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// Allows you to specify the duration of each chunk when `turbo` is set to `true`. This means you can take advantage of that feature while using fewer <dfn>Priority Job Slots</dfn>. For instance, the longer each chunk is, the fewer <dfn>Encoding Jobs</dfn> will need to be used.
-	//
 	ChunkDuration *ValueStringOrStringOrInteger `json:"chunk_duration,omitempty"`
-	//
 	// Specify an object containing coordinates for the top left and bottom right corners of the rectangle to be cropped from the original video(s). Values can be integers for absolute pixel values or strings for percentage based values.
 	//
 	// For example:
 	//
 	// ```json
-	// {
-	//   "x1": 80,
-	//   "y1": 100,
-	//   "x2": "60%",
-	//   "y2": "80%"
-	// }
+	//
+	//	{
+	//	  "x1": 80,
+	//	  "y1": 100,
+	//	  "x2": "60%",
+	//	  "y2": "80%"
+	//	}
+	//
 	// ```
 	//
 	// This will crop the area from `(80, 100)` to `(600, 800)` from a 1000×1000 pixels video, which is a square whose width is 520px and height is 700px. If `crop` is set, the width and height parameters are ignored, and the `resize_strategy` is set to `crop` automatically.
@@ -68055,81 +65857,47 @@ type AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_
 	// ```json
 	// "{\"x1\": <Integer>, \"y1\": <Integer>, \"x2\": <Integer>, \"y2\": <Integer>}"
 	// ```
-	//
 	Crop *AssemblySteps_AdditionalProperty_ImageResize_Crop `json:"crop,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Enables hinting for mp4 files, for RTP/RTSP streaming.
-	//
 	Hint *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"hint,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
-	//
 	// See the [available resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
-	//
 	// Forces the video to be rotated by the specified degree integer. Currently, only multiples of `90` are supported. We automatically correct the orientation of many videos when the orientation is provided by the camera. This option is only useful for videos requiring rotation because it was not detected by the camera. If you set `rotate` to `false` no rotation is performed, even if the metadata contains such instructions.
-	//
 	Rotate *AssemblySteps_AdditionalProperty_VideoEncode_Rotate `json:"rotate,omitempty"`
-	//
 	// Splits the file into multiple parts, to be used for Apple's [HTTP Live Streaming](https://developer.apple.com/resources/http-streaming/).
-	//
 	Segment *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"segment,omitempty"`
-	//
 	// Specifies the length of each HTTP segment. This is optional, and the default value as recommended by Apple is `10`. Do not change this value unless you have a good reason.
-	//
 	SegmentDuration *ValueStringOrStringOrInteger `json:"segment_duration,omitempty"`
-	//
 	// The name used for the final segment. Available variables are `${segment_prefix}`, `${segment_number}` and `${segment_id}` (which is a UUIDv4 without dashes).
-	//
 	SegmentName *ValueStringOrString `json:"segment_name,omitempty"`
-	//
 	// The prefix used for the naming. For example, a prefix of `"segment_"` would produce files named `"segment_0.ts"`, `"segment_1.ts"` and so on. This is optional, and defaults to the base name of the input file. Also see the related `segment_name` parameter.
-	//
 	SegmentPrefix *ValueStringOrString `json:"segment_prefix,omitempty"`
-	//
 	// Delta to apply to segment duration. This is optional and allows fine-tuning of segment boundaries.
-	//
 	SegmentTimeDelta *ValueStringOrStringOrNumber `json:"segment_time_delta,omitempty"`
-	//
 	// Splits the video into multiple chunks so that each chunk can be encoded in parallel before all encoded chunks are stitched back together to form the result video. This comes at the expense of extra <dfn>Priority Job Slots</dfn> and may prove to be counter-productive for very small video files.
-	//
 	Turbo *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"turbo,omitempty"`
-	//
 	// The duration in seconds for the watermark to be shown. Can be used together with `watermark_start_time` to create nice effects. The default value is `-1.0`, which means that the watermark is shown for the entire duration of the video.
-	//
 	WatermarkDuration *ValueStringOrStringOrNumber `json:"watermark_duration,omitempty"`
-	//
 	// The opacity of the watermark. Valid values are between `0` (invisible) and `1.0` (full visibility).
-	//
 	WatermarkOpacity *ValueStringOrStringOrNumber `json:"watermark_opacity,omitempty"`
-	//
 	// The position at which the watermark is placed.
 	//
 	// An array of possible values can also be specified, in which case one value will be selected at random, such as `[ "center", "left", "bottom-left", "bottom-right" ]`.
 	//
 	// This setting puts the watermark in the specified corner. To use a specific pixel offset for the watermark, you will need to add the padding to the image itself.
-	//
 	WatermarkPosition *AssemblySteps_AdditionalProperty_ImageResize_WatermarkPosition `json:"watermark_position,omitempty"`
-	//
 	// To explain how the resize strategies work, let's assume our target video size is 800×800 pixels and our watermark image is 400×300 pixels. Let's also assume, the `watermark_size` parameter is set to `"25%"`.
 	//
 	// For the `"fit"` resize strategy, the watermark is scaled so that the longer side of the watermark takes up 25% of the corresponding video side. And the other side is scaled according to the aspect ratio of the watermark image. So with our watermark, the width is the longer side, and 25% of the video size would be 200px. Hence, the watermark would be resized to 200×150 pixels. If the `watermark_size` was set to `"50%"`", it would be resized to 400×300 pixels (so just left at its original size).
@@ -68137,41 +65905,26 @@ type AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_
 	// For the `"stretch"` resize strategy, the watermark image is stretched (meaning, it is resized without keeping its aspect ratio in mind) so that both sides take up 25% of the corresponding video side. Since our video is 800×800 pixels, for a watermark size of 25% the watermark would be resized to 200×200 pixels. Its height would appear stretched, because keeping the aspect ratio in mind it would be resized to 200×150 pixels instead.
 	//
 	// For the `"area"` resize strategy, the watermark is resized (keeping its aspect ratio in check) so that it covers `"xx%"` of the video's surface area. The value from `watermark_size` is used for the percentage area size.
-	//
 	WatermarkResizeStrategy *AssemblySteps_AdditionalProperty_VideoEncode_WatermarkResizeStrategy `json:"watermark_resize_strategy,omitempty"`
-	//
 	// The size of the watermark, as a percentage, such as `"50%"`. How the watermark is resized greatly depends on the `watermark_resize_strategy`.
-	//
 	WatermarkSize *ValueStringOrString `json:"watermark_size,omitempty"`
-	//
 	// The delay in seconds from the start of the video for the watermark to appear. By default the watermark is immediately shown.
-	//
 	WatermarkStartTime *ValueStringOrStringOrNumber `json:"watermark_start_time,omitempty"`
-	//
 	// A URL indicating a PNG image to be overlaid above this image. You can also [supply the watermark via another Assembly Step](/docs/topics/use-parameter/#supplying-the-watermark-via-an-assembly-step).
-	//
 	WatermarkUrl *AssemblySteps_AdditionalProperty_VideoEncode_WatermarkUrl `json:"watermark_url,omitempty"`
-	//
 	// The x-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkXOffset *ValueStringOrStringOrInteger `json:"watermark_x_offset,omitempty"`
-	//
 	// The y-offset in number of pixels at which the watermark will be placed in relation to the position it has due to `watermark_position`.
 	//
 	// Values can be both positive and negative and yield different results depending on the `watermark_position` parameter. Positive values move the watermark closer to the image's center point, whereas negative values move the watermark further away from the image's center point.
-	//
 	WatermarkYOffset *ValueStringOrStringOrInteger `json:"watermark_y_offset,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
-	//
 	// If this is set to `false`, smaller videos will not be stretched to the desired width and height. For details about the impact of zooming for your preferred resize strategy, see the list of available [resize strategies](/docs/topics/resize-strategies/).
-	//
 	Zoom *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"zoom,omitempty"`
 }
 
@@ -68708,13 +66461,9 @@ type AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_
 type AssemblySteps_AdditionalProperty_VideoOndemand_Variants_AdditionalProperty_Object_Zoom_Variant_String = AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept_Variant_String
 
 type AssemblySteps_AdditionalProperty_VideoSplit struct {
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -68724,15 +66473,11 @@ type AssemblySteps_AdditionalProperty_VideoSplit struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -68740,17 +66485,13 @@ type AssemblySteps_AdditionalProperty_VideoSplit struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -68768,58 +66509,50 @@ type AssemblySteps_AdditionalProperty_VideoSplit struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Splits a video into multiple segments based on an array of from/to durations. Each segment produces a separate output file. This is useful for cutting a video into parts, for example to insert ads later via [🤖/video/concat](/docs/robots/video-concat/).
-	//
 	Robot    AssemblySteps_AdditionalProperty_VideoSplit_Robot    `json:"robot"`
 	Segments AssemblySteps_AdditionalProperty_AudioSplit_Segments `json:"segments"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -68827,13 +66560,10 @@ type AssemblySteps_AdditionalProperty_VideoSplit struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
 }
 
@@ -69305,39 +67035,23 @@ type AssemblySteps_AdditionalProperty_VideoSplit_Width_Null = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_VideoSplit_Width_Variant = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_VideoSubtitle struct {
-	//
 	// Specifies whether the subtitle text should be bold. Only applies to burned subtitles.
-	//
 	Bold *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"bold,omitempty"`
-	//
 	// The color for the subtitle border. The first two hex digits specify the alpha value of the color.
-	//
 	BorderColor *ValueStringOrString `json:"border_color,omitempty"`
-	//
 	// Specifies the style of the subtitle. Use the `border_color` parameter to specify the color of the border.
-	//
 	BorderStyle *AssemblySteps_AdditionalProperty_VideoSubtitle_BorderStyle `json:"border_style,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
-	//
 	// The font family to use. Also includes boldness and style of the font.
 	//
 	// [Here](/docs/supported-formats/fonts/) is a list of all supported fonts.
-	//
 	Font *ValueStringOrString `json:"font,omitempty"`
-	//
 	// The color of the subtitle text in `"rgb"`, `"rrggbb"`, or `"aarrggbb"` format. If 8 hex digits are provided, the first two specify the alpha value of the color (`"00"` is fully opaque, `"ff"` is fully transparent).
-	//
 	FontColor *AssemblySteps_AdditionalProperty_VideoSubtitle_FontColor `json:"font_color,omitempty"`
-	//
 	// Specifies the size of the text.
-	//
 	FontSize *ValueStringOrStringOrInteger `json:"font_size,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -69347,15 +67061,11 @@ type AssemblySteps_AdditionalProperty_VideoSubtitle struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Height of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied height](/docs/presets/video/) will be implemented.
-	//
 	Height *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -69363,37 +67073,23 @@ type AssemblySteps_AdditionalProperty_VideoSubtitle struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Specifies whether the subtitle text should be italic. Only applies to burned subtitles.
-	//
 	Italic *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"italic,omitempty"`
-	//
 	// Specifies if existing subtitles in the input file should be kept or be replaced by the new subtitle. Only used if the subtitles are external. Set this to `true` when chaining multiple `/video/subtitle` Steps to add several subtitle streams (e.g. different languages) to the same video.
-	//
 	KeepSubtitles *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"keep_subtitles,omitempty"`
-	//
 	// Specifies the language of the subtitle stream using a three-letter language code (e.g. `"eng"`, `"deu"`, `"spa"`). Only used if the subtitles are external. When adding multiple subtitle streams, set a different language for each stream so that video players can offer language selection.
-	//
 	Language *AssemblySteps_AdditionalProperty_VideoSubtitle_Language `json:"language,omitempty"`
-	//
 	// Specifies a human-readable name for the subtitle track (e.g. `"English"`, `"Deutsch"`, `"Español"`). Only used if the subtitles are external. This name is displayed in video player subtitle menus alongside the language.
-	//
 	Name *AssemblySteps_AdditionalProperty_VideoSubtitle_Language `json:"name,omitempty"`
-	//
 	// Specifies the width of the text outline in pixels. Only applies to burned subtitles with `"outline"` or `"box"` border styles. If not specified, the default width is used.
-	//
 	OutlineWidth *AssemblySteps_AdditionalProperty_VideoSubtitle_OutlineWidth `json:"outline_width,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -69411,65 +67107,53 @@ type AssemblySteps_AdditionalProperty_VideoSubtitle struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// Specifies the position of the subtitles.
-	//
 	Position *AssemblySteps_AdditionalProperty_ImageResize_Gravity_Variant1 `json:"position,omitempty"`
-	//
 	// Converts a video according to [pre-configured settings](/docs/presets/video/).
 	//
 	// You can use the value `'empty'` here if you specify your own FFmpeg parameters using the <dfn>Robot</dfn> or do not want Transloadit to set any encoding settings.
-	//
 	Preset *AssemblySteps_AdditionalProperty_VideoAdaptive_Preset `json:"preset,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// This <dfn>Robot</dfn> supports both SRT and VTT subtitle files.
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoSubtitle_Robot `json:"robot"`
-	//
 	// Determines if subtitles are added as a separate stream to the video (value `"external"`) that then can be switched on and off in your video player, or if they should be burned directly into the video (value `"burned"` or `"burn"`) so that they become part of the video stream.
-	//
 	SubtitlesType *AssemblySteps_AdditionalProperty_VideoSubtitle_SubtitlesType `json:"subtitles_type,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -69477,13 +67161,10 @@ type AssemblySteps_AdditionalProperty_VideoSubtitle struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Width of the new video, in pixels.
 	//
 	// If the value is not specified and the `preset` parameter is available, the `preset`'s [supplied width](/docs/presets/video/) will be implemented.
-	//
 	Width *AssemblySteps_AdditionalProperty_DocumentThumbs_Page `json:"width,omitempty"`
 }
 
@@ -70462,25 +68143,17 @@ type AssemblySteps_AdditionalProperty_VideoSubtitle_Width_Null = AssemblySteps_A
 type AssemblySteps_AdditionalProperty_VideoSubtitle_Width_Variant = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_VideoThumbs struct {
-	//
 	// The background color of the resulting thumbnails in the `"rrggbbaa"` format (red, green, blue, alpha) when used with the `"pad"` resize strategy. The default color is black.
-	//
 	Background *ValueStringOrString `json:"background,omitempty"`
-	//
 	// The number of thumbnails to be extracted. As some videos have incorrect durations, the actual number of thumbnails generated may be less in rare cases. The maximum number of thumbnails we currently allow is 999.
 	//
 	// The thumbnails are taken at regular intervals, determined by dividing the video duration by the count. For example, a count of 3 will produce thumbnails at 25%, 50% and 75% through the video.
 	//
 	// To extract thumbnails for specific timestamps, use the `offsets` parameter.
-	//
 	Count *ValueStringOrStringOrInteger `json:"count,omitempty"`
-	//
 	// A parameter object to be passed to FFmpeg. If a preset is used, the options specified are merged on top of the ones from the preset. For available options, see the [FFmpeg documentation](https://ffmpeg.org/ffmpeg-doc.html). Options specified here take precedence over the preset options.
-	//
 	Ffmpeg *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg `json:"ffmpeg,omitempty"`
-	//
 	// Selects the FFmpeg stack version to use for encoding. We currently recommend using "v7". The exact versions "v6.0.0", "v7.0.0", and "v8.0.0" are legacy values that remain accepted for backward compatibility. Deprecated "v5.x" values are also accepted.
-	//
 	FfmpegStack *AssemblySteps_AdditionalProperty_AudioArtwork_FfmpegStack `json:"ffmpeg_stack,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -70490,17 +68163,11 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// The format of the extracted thumbnail. Supported values are `"jpg"`, `"jpeg"` and `"png"`. Even if you specify the format to be `"jpeg"` the resulting thumbnails will have a `"jpg"` file extension.
-	//
 	Format *AssemblySteps_AdditionalProperty_VideoThumbs_Format `json:"format,omitempty"`
-	//
 	// The height of the thumbnail, in pixels. Defaults to the original height of the video.
-	//
 	Height *ValueStringOrStringOrInteger `json:"height,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -70508,29 +68175,21 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Specifies the input codec to use when decoding the video. This is useful for videos with special codecs that require specific decoders.
-	//
 	InputCodec *ValueStringOrString `json:"input_codec,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// An array of offsets representing seconds of the file duration, such as `[ 2, 45, 120 ]`. Millisecond durations of a file can also be used by using decimal place values. For example, an offset from 1250 milliseconds would be represented with `1.25`. Offsets can also be percentage values such as `[ "2%", "50%", "75%" ]`.
 	//
 	// This option cannot be used with the `count` parameter, and takes precedence if both are specified. Out-of-range offsets are silently ignored.
 	//
 	// When `smart` is `true`, smart selection ignores `offsets` and uses `count` to select from its own candidate timestamps. If no smart candidates can be extracted, the Robot falls back to standard extraction, where `offsets` takes precedence. Use `smart: false` to consistently extract the specified timestamps.
-	//
 	Offsets *AssemblySteps_AdditionalProperty_VideoThumbs_Offsets `json:"offsets,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -70548,17 +68207,13 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// One of the [available resize strategies](/docs/topics/resize-strategies/).
-	//
 	ResizeStrategy *AssemblySteps_AdditionalProperty_DocumentThumbs_ResizeStrategy `json:"resize_strategy,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// Set `smart: true` to select strong preview images with AI instead of taking frames only at regular intervals. The Robot scores candidate frames for clarity, brightness, composition, faces, expressions, action, and visual interest, then returns the best `count` frames in chronological order. Smart results include `file.meta.smart_score` and `file.meta.smart_reasons`. If AI scoring is unavailable, the Assembly continues with the candidate frames in fallback order and includes a warning. No AI credentials are required.
 	//
 	// ## AI pricing
@@ -70574,13 +68229,9 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	// > Even though thumbnails are extracted from videos in parallel, we sort the thumbnails before adding them to the Assembly results. So the order in which they appear there reflects the order in which they appear in the video. You can also make sure by checking the `thumb_index` meta key.
 	//
 	// For an upload-to-poster Template, SDK usage, and publication checks, see the [HTML video workflow guide](/guides/html-video-production-checklist/#html-video-production-checklist-section-6). The [video and S3 demo](/demos/file-exporting/store-encoding-and-thumbnails-on-s3/) includes a recorded input and extracted frames.
-	//
 	Robot AssemblySteps_AdditionalProperty_VideoThumbs_Robot `json:"robot"`
-	//
 	// Forces the video to be rotated by the specified degree integer. Currently, only multiples of 90 are supported. We automatically correct the orientation of many videos when the orientation is provided by the camera. This option is only useful for videos requiring rotation because it was not detected by the camera.
-	//
 	Rotate *AssemblySteps_AdditionalProperty_VideoThumbs_Rotate `json:"rotate,omitempty"`
-	//
 	// When set to `true`, enables AI-powered smart thumbnail selection. Instead of returning thumbnails at regular intervals, the Robot will analyze candidate frames and select the most visually appealing ones.
 	//
 	// The AI evaluates frames based on:
@@ -70595,51 +68246,45 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	// Smart mode generates its own regularly spaced candidate timestamps; use `smart: false` with `offsets` when you need specified timestamps. Selected smart thumbnails are returned in chronological order, not score order. Inspect `meta.thumb_offset`, `meta.smart_score`, and `meta.smart_reasons` when evaluating the selection.
 	//
 	// If AI scoring fails, the Robot selects extracted candidates in chronological order and records a fallback reason. With no candidates, it attempts standard extraction. Both fallbacks add an Assembly warning. A completed Assembly does not guarantee a representative or publication-safe poster; check that outputs exist and apply your application’s review policy.
-	//
 	Smart *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"smart,omitempty"`
-	//
 	// The maximum size of the candidate pool when `smart` is `true`. The Robot analyzes up to three candidates per requested thumbnail, capped by this value, but it will never analyze fewer candidates than the requested `count`.
 	//
 	// A higher number may yield better results but increases processing time and AI cost. With the defaults of `count: 8` and `smart_max_candidates: 20`, the Robot analyzes 20 frames and returns the best 8 in chronological order.
 	//
 	// This parameter is only used when `smart` is `true`.
-	//
 	SmartMaxCandidates *ValueStringOrStringOrInteger `json:"smart_max_candidates,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -70647,11 +68292,8 @@ type AssemblySteps_AdditionalProperty_VideoThumbs struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// The width of the thumbnail, in pixels. Defaults to the original width of the video.
-	//
 	Width *ValueStringOrStringOrInteger `json:"width,omitempty"`
 }
 
@@ -71461,9 +69103,7 @@ type AssemblySteps_AdditionalProperty_VideoThumbs_UserMeta_AdditionalProperty = 
 type AssemblySteps_AdditionalProperty_VideoThumbs_Width = ValueStringOrStringOrInteger
 
 type AssemblySteps_AdditionalProperty_VimeoImport struct {
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Vimeo access token.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// The number of files to import per page. Maximum is 100 as per Vimeo API limits.
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
@@ -71475,11 +69115,9 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -71489,21 +69127,15 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -71521,11 +69153,9 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// The page number to import from. Vimeo API uses pagination for large result sets.
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The Vimeo API path to import from. The most common paths are:
 	// - `me/videos`: Your own videos
 	// - `me/likes`: Videos you've liked
@@ -71536,7 +69166,6 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	// - `me/watchlater`: Videos in your watch later queue
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
@@ -71546,7 +69175,6 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot AssemblySteps_AdditionalProperty_VimeoImport_Robot `json:"robot"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -71554,7 +69182,6 @@ type AssemblySteps_AdditionalProperty_VimeoImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -71803,7 +69430,6 @@ type AssemblySteps_AdditionalProperty_VimeoImport_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_VimeoImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_VimeoStore struct {
-	//
 	// Controls access permissions for the video. Here are the valid values:
 	//
 	// - `"anybody"` — anyone can access the video.
@@ -71813,31 +69439,20 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	// - `"password"` — only those with the password can access the video.
 	// - `"unlisted"` — only those with the private link can access the video.
 	// - `"users"` — only Vimeo members can access the video.
-	//
 	Acl *AssemblySteps_AdditionalProperty_VimeoStore_Acl `json:"acl,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Vimeo access token.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The description of the video to be displayed on Vimeo.
-	//
 	Description ValueStringOrString `json:"description"`
-	//
 	// Whether or not the video can be downloaded from the Vimeo website.
 	//
 	// Only set this to `true` if you have unlocked this feature in your Vimeo accounting by upgrading to their "Pro" plan. If you use it while on their Freemium plan, the Vimeo API will return an `"Invalid parameter supplied"` error.
-	//
 	Downloadable *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"downloadable,omitempty"`
-	//
 	// The ID of the folder to which the video is uploaded.
 	//
 	// When visiting one of your folders, the URL is similar to `https://vimeo.com/manage/folders/xxxxxxxx`. The folder_id would be `"xxxxxxxx"`.
-	//
 	FolderId *AssemblySteps_AdditionalProperty_DocumentThumbs_PageRange `json:"folder_id,omitempty"`
-	//
 	// Deprecated. Please use `folder_id` instead. The URI of the folder to which the video is uploaded.
-	//
 	FolderUri *ValueStringOrString `json:"folder_uri,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -71847,9 +69462,7 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -71857,17 +69470,13 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -71885,17 +69494,13 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The password to access the video if `acl` is `"password"`.
-	//
 	Password *ValueStringOrString `json:"password,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// ## Getting started
 	//
 	// Since Vimeo works with OAuth, you will need to generate [Template Credentials](https://transloadit.com/c/template-credentials/) to use this <dfn>Robot</dfn>.
@@ -71906,51 +69511,43 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	// > Vimeo's API limits the number of concurrent uploads per minute based on your Vimeo account plan. To see how many videos can be uploaded at once based on your plan, click the following [link](https://developer.vimeo.com/guidelines/rate-limiting#table-1).
 	//
 	// Note that this <dfn>Robot</dfn> only accepts videos.
-	//
 	Robot AssemblySteps_AdditionalProperty_VimeoStore_Robot `json:"robot"`
-	//
 	// An array of string IDs of showcases that you want to add the video to. The IDs can be found when browsing Vimeo. For example `https://vimeo.com/manage/showcases/[SHOWCASE_ID]/info`.
-	//
 	Showcases *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant_Variant2 `json:"showcases,omitempty"`
-	//
 	// The title of the video to be displayed on Vimeo.
-	//
 	Title ValueStringOrString `json:"title"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -71958,7 +69555,6 @@ type AssemblySteps_AdditionalProperty_VimeoStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -72228,19 +69824,13 @@ type AssemblySteps_AdditionalProperty_VimeoStore_UserMeta_AdditionalProperty = A
 
 type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	Bucket *ValueStringOrString `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Wasabi bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
-	//
 	// The pagination page size. This only works when recursive is `true` for now, in order to not break backwards compatibility in non-recursive imports.
-	//
 	FilesPerPage *ValueStringOrStringOrInteger `json:"files_per_page,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -72250,12 +69840,10 @@ type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
 	// Custom name for the imported file(s). By default file names are derived from the source.
 	ForceName *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName `json:"force_name,omitempty"`
 	Host      *ValueStringOrString                                           `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -72265,22 +69853,16 @@ type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	// Setting this to `["import"]` will cause the Robot to ignore errors while importing the source file. The `"import"` phase is only available to import Robots.
 	//
 	// Setting this to `true` is equivalent to `["meta", "import", "execute"]` and will ignore errors in all three phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Setting this to `["meta"]` will still import the file on metadata extraction errors. `ignore_errors` is similar, it also ignores the error and makes sure the Robot doesn't stop, but it doesn't import the file.
-	//
 	ImportOnErrors *AssemblySteps_AdditionalProperty_TransloaditImport1_ImportOnErrors `json:"import_on_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -72298,15 +69880,11 @@ type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The pagination page number. For now, in order to not break backwards compatibility in non-recursive imports, this only works when recursive is set to `true`.
 	//
 	// When doing big imports, make sure no files are added or removed from other scripts within your path, otherwise you might get weird results with the pagination.
-	//
 	PageNumber *ValueStringOrStringOrInteger `json:"page_number,omitempty"`
-	//
 	// The path in your bucket to the specific file or directory. If the path points to a file, only this file will be imported. For example: `images/avatar.jpg`.
 	//
 	// If it points to a directory, indicated by a trailing slash (`/`), then all files that are direct descendants of this directory will be imported. For example: `images/`.
@@ -72316,26 +69894,20 @@ type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	// If you want to import all files from the root directory, please use `/` as the value here. In this case, make sure all your objects belong to a path. If you have objects in the root of your bucket that aren't prefixed with `/`, you'll receive an error: `A client error (NoSuchKey) occurred when calling the GetObject operation: The specified key does not exist.`
 	//
 	// You can also use an array of path strings here to import multiple paths in the same <dfn>Robot</dfn>'s <dfn>Step</dfn>.
-	//
 	Path AssemblySteps_AdditionalProperty_TransloaditImport1_ForceName_Variant `json:"path"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
-	//
 	// Setting this to `true` will enable importing files from subfolders and sub-subfolders, etc. of the given path.
 	//
 	// Please use the pagination parameters `page_number` and `files_per_page` wisely here.
-	//
 	Recursive *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"recursive,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// If set to `true`, the Robot will not yet import the actual files but instead return an empty file stub that includes a URL from where the file can be imported by subsequent Robots. This is useful for cases where subsequent Steps need more control over the import process, such as with 🤖/video/ondemand. This parameter should only be set if all subsequent Steps use Robots that support file stubs.
-	//
 	ReturnFileStubs *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"return_file_stubs,omitempty"`
 	// Identifier of the [robot](https://transloadit.com/docs/robots/) to execute
 	Robot  AssemblySteps_AdditionalProperty_WasabiImport_Robot `json:"robot"`
 	Secret *ValueStringOrString                                `json:"secret,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -72343,7 +69915,6 @@ type AssemblySteps_AdditionalProperty_WasabiImport struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -72530,20 +70101,14 @@ type AssemblySteps_AdditionalProperty_WasabiImport_UserMeta = AssemblySteps_Addi
 type AssemblySteps_AdditionalProperty_WasabiImport_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_WasabiStore struct {
-	//
 	// The permissions used for this file.
-	//
 	Acl    *AssemblySteps_AdditionalProperty_MegaStore_Acl `json:"acl,omitempty"`
 	Bucket *ValueStringOrString                            `json:"bucket,omitempty"`
-	//
 	// The region where the bucket is located.
-	//
 	BucketRegion *ValueStringOrString `json:"bucket_region,omitempty"`
-	//
 	// Please create your associated <dfn>Template Credentials</dfn> in your Transloadit account and use the name of your <dfn>Template Credentials</dfn> as this parameter's value. They will contain the values for your Wasabi bucket, Key, Secret and Bucket region.
 	//
 	// While we recommend to use <dfn>Template Credentials</dfn> at all times, some use cases demand dynamic credentials for which using <dfn>Template Credentials</dfn> is too unwieldy because of their static nature. If you have this requirement, feel free to use the following parameters instead: `"bucket"`, `"host"`, `"key"`, `"secret"`.
-	//
 	Credentials *ValueStringOrString `json:"credentials,omitempty"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -72553,16 +70118,12 @@ type AssemblySteps_AdditionalProperty_WasabiStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// An object containing a list of headers to be set for this file in your Wasabi bucket, such as `{ FileURL: "${file.url_name}" }`. This can also include any available [Assembly Variables](/docs/topics/assembly-instructions/#assembly-variables).
 	//
 	// Object Metadata can be specified using `x-amz-meta-*` headers. Note that these headers [do not support non-ASCII metadata values](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#UserMetadata).
-	//
 	Headers *AssemblySteps_AdditionalProperty_AudioArtwork_Ffmpeg_Object_FilterComplex_Object `json:"headers,omitempty"`
 	Host    *ValueStringOrString                                                              `json:"host,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -72570,18 +70131,14 @@ type AssemblySteps_AdditionalProperty_WasabiStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
 	Key         *ValueStringOrString                                             `json:"key,omitempty"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -72599,60 +70156,50 @@ type AssemblySteps_AdditionalProperty_WasabiStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
-	//
 	// The path at which the file is to be stored. This may include any available [Assembly variables](/docs/topics/assembly-instructions/#assembly-variables). The path must not be a directory.
-	//
 	Path *ValueStringOrString `json:"path,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// The URL to the result file will be returned in the <dfn>Assembly Status JSON</dfn>.
-	//
 	Robot  AssemblySteps_AdditionalProperty_WasabiStore_Robot `json:"robot"`
 	Secret *ValueStringOrString                               `json:"secret,omitempty"`
-	//
 	// This parameter provides signed URLs in the result JSON (in the `signed_ssl_url` property). The number that you set this parameter to is the URL expiry time in seconds. If this parameter is not used, no URL signing is done.
-	//
 	SignUrlsFor *ValueStringOrStringOrInteger `json:"sign_urls_for,omitempty"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -72660,7 +70207,6 @@ type AssemblySteps_AdditionalProperty_WasabiStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
 }
 
@@ -72822,17 +70368,11 @@ type AssemblySteps_AdditionalProperty_WasabiStore_UserMeta = AssemblySteps_Addit
 type AssemblySteps_AdditionalProperty_WasabiStore_UserMeta_AdditionalProperty = AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta_AdditionalProperty
 
 type AssemblySteps_AdditionalProperty_YoutubeStore struct {
-	//
 	// The category to which this video will be assigned.
-	//
 	Category ValueStringOrString `json:"category"`
-	//
 	// The authentication Template credentials used for your YouTube account. You can generate them on the [Template Credentials page](/c/template-credentials/). Simply add the name of your YouTube channel, and you will be redirected to a Google verification page. Accept the presented permissions and you will be good to go.
-	//
 	Credentials ValueStringOrString `json:"credentials"`
-	//
 	// The description of the video to be displayed on YouTube. This can be up to 5000 characters, including `\n` for new-lines.
-	//
 	Description ValueStringOrString `json:"description"`
 	// Force a Robot to accept a file type it would have ignored.
 	//
@@ -72842,9 +70382,7 @@ type AssemblySteps_AdditionalProperty_YoutubeStore struct {
 	//
 	// With the `force_accept` parameter set to `true`, you can force Robots to accept all files thrown at them.
 	// This will typically lead to errors and should only be used for debugging or combatting edge cases.
-	//
 	ForceAccept *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"force_accept,omitempty"`
-	//
 	// Ignore errors during specific phases of processing.
 	//
 	// Setting this to `["meta"]` will cause the Robot to ignore errors during metadata extraction.
@@ -72852,21 +70390,15 @@ type AssemblySteps_AdditionalProperty_YoutubeStore struct {
 	// Setting this to `["execute"]` will cause the Robot to ignore errors during the main execution phase.
 	//
 	// Setting this to `true` is equivalent to `["meta", "execute"]` and will ignore errors in both phases.
-	//
 	IgnoreErrors *AssemblySteps_AdditionalProperty_AudioArtwork_IgnoreErrors `json:"ignore_errors,omitempty"`
-	//
 	// Controls whether Assembly Variables are interpolated for individual instruction fields.
 	//
 	// By default, most Robot instruction fields interpolate Assembly Variables. Set this to `false` to treat every instruction field as literal text, or set an individual field path to `false` to treat only that field as literal text. For Robot-specific fields that are literal by default, set this to `true` or set that field path to `true` to opt back into interpolation.
 	//
 	// Use field names such as `path`, or dotted paths such as `ffmpeg.vf` for nested objects.
-	//
 	Interpolate *AssemblySteps_AdditionalProperty_TransloaditImport1_Interpolate `json:"interpolate,omitempty"`
-	//
 	// Tags used to describe the video, separated by commas. These tags will also be displayed on YouTube.
-	//
 	Keywords ValueStringOrString `json:"keywords"`
-	//
 	// Allows you to specify a set of metadata that is more expensive on CPU power to calculate, and thus is disabled by default to keep your Assemblies processing fast.
 	//
 	// For images, you can add `"has_transparency": true` in this object to extract if the image contains transparent parts and `"dominant_colors": true` to extract an array of hexadecimal color codes from the image.
@@ -72884,13 +70416,11 @@ type AssemblySteps_AdditionalProperty_YoutubeStore struct {
 	// For audio, you can add `"mean_volume": true` to get a single value representing the mean average volume of the audio file.
 	//
 	// You can also set this to `false` to skip metadata extraction and speed up transcoding.
-	//
 	OutputMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_OutputMeta `json:"output_meta,omitempty"`
 	// Setting the queue to 'batch', manually downgrades the priority of jobs for this step to avoid consuming Priority job slots for jobs that don't need zero queue waiting times
 	Queue *AssemblySteps_AdditionalProperty_TransloaditImport1_Queue `json:"queue,omitempty"`
 	// Whether the results of this Step should be present in the Assembly Status JSON
 	Result *AssemblySteps_AdditionalProperty_TransloaditImport1_ForceAccept `json:"result,omitempty"`
-	//
 	// ## Getting started
 	//
 	// Since YouTube works with OAuth, you will need to generate [Template Credentials](/c/template-credentials/) to use this <dfn>Robot</dfn>.
@@ -72904,59 +70434,55 @@ type AssemblySteps_AdditionalProperty_YoutubeStore struct {
 	// You can add a custom thumbnail to your video on YouTube by using our `"as"` syntax for the `"use"` parameter to supply both a video and an image to the step:
 	//
 	// ```json
-	// "exported": {
-	//   "use": [
-	//     { "name": "video_encode_step", "as": "video" },
-	//     { "name": "image_resize_step", "as": "image" },
-	//   ],
-	//   ...
-	// },
+	//
+	//	"exported": {
+	//	  "use": [
+	//	    { "name": "video_encode_step", "as": "video" },
+	//	    { "name": "image_resize_step", "as": "image" },
+	//	  ],
+	//	  ...
+	//	},
+	//
 	// ```
 	//
 	// If you encounter an error such as "The authenticated user doesn’t have permissions to upload and set custom video thumbnails", you should go to your YouTube account and try adding a custom thumbnail to one of your existing videos. You’ll be prompted to add your phone number. Once you’ve added it, the error should go away.
-	//
 	Robot AssemblySteps_AdditionalProperty_YoutubeStore_Robot `json:"robot"`
-	//
 	// The title of the video to be displayed on YouTube.
 	//
 	// Note that since the YouTube API requires titles to be within 80 characters, longer titles may be truncated.
-	//
 	Title ValueStringOrString `json:"title"`
-	//
 	// Specifies which Step(s) to use as input.
 	//
-	// - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
-	// - You can provide several Steps as input with arrays:
-	//   ```json
-	//   {
+	//   - You can pick any names for Steps except `":original"` (reserved for user uploads handled by Transloadit)
+	//   - You can provide several Steps as input with arrays:
+	//     ```json
+	//     {
 	//     "use": [
-	//       ":original",
-	//       "encoded",
-	//       "resized"
+	//     ":original",
+	//     "encoded",
+	//     "resized"
 	//     ]
-	//   }
-	//   ```
-	// - You can also tag input Steps with `as` to pass semantic intent to robots:
-	//   ```json
-	//   {
+	//     }
+	//     ```
+	//   - You can also tag input Steps with `as` to pass semantic intent to robots:
+	//     ```json
+	//     {
 	//     "use": [
-	//       {
-	//         "name": ":original",
-	//         "as": "image"
-	//       },
-	//       {
-	//         "name": ":original",
-	//         "as": "mask"
-	//       }
+	//     {
+	//     "name": ":original",
+	//     "as": "image"
+	//     },
+	//     {
+	//     "name": ":original",
+	//     "as": "mask"
+	//     }
 	//     ]
-	//   }
-	//   ```
+	//     }
+	//     ```
 	//
 	// > [!Tip]
 	// > That's likely all you need to know about `use`, but you can view [Advanced use cases](/docs/topics/use-parameter/).
-	//
 	Use *AssemblySteps_AdditionalProperty_AudioArtwork_Use `json:"use,omitempty"`
-	//
 	// Adds custom JSON metadata to each emitted file without changing its contents. Nested objects and arrays are supported.
 	//
 	// Inheritance depends on the Robot. Values merge with existing `user_meta` on the output file; the current Step replaces matching top-level keys. Assign required keys explicitly when a Robot creates fresh outputs.
@@ -72964,11 +70490,8 @@ type AssemblySteps_AdditionalProperty_YoutubeStore struct {
 	// In processing Steps, `${file.*}` refers to the first input and `${result.*}` to the emitted file. Values are evaluated per output after the Robot runs, before subsequent metadata extraction and temporary storage. On `:original`, values are evaluated per upload before metadata extraction.
 	//
 	// Downstream Steps read `${file.user_meta.key}`. See [Custom metadata](https://transloadit.com/docs/topics/assembly-variables/#user-meta) for a complete example and inheritance rules.
-	//
 	UserMeta *AssemblySteps_AdditionalProperty_TransloaditImport1_UserMeta `json:"user_meta,omitempty"`
-	//
 	// Defines the visibility of the uploaded video.
-	//
 	Visibility AssemblySteps_AdditionalProperty_YoutubeStore_Visibility `json:"visibility"`
 }
 
@@ -73116,9 +70639,7 @@ type AssemblySteps_AdditionalProperty_YoutubeStore_UserMeta_AdditionalProperty =
 // Defines the visibility of the uploaded video.
 type AssemblySteps_AdditionalProperty_YoutubeStore_Visibility struct {
 	String1 *string
-	//
 	// Defines the visibility of the uploaded video.
-	//
 	String2 *AssemblySteps_AdditionalProperty_YoutubeStore_Visibility_String2
 }
 
@@ -75694,7 +73215,7 @@ type CancelAssemblyResult_WithError struct {
 	// The URL to the Companion server that this Assembly may communicate with.
 	CompanionUrl *ValueNullOrString `json:"companion_url,omitempty"`
 	// Indicates an [error](/docs/api/response-codes/#error-codes) status. This key is only present if
-	// the Assembly failed.
+	// the Assembly failed. New error codes may be added. Handle unrecognized codes as failures and preserve their values for programmatic inspection.
 	Error         CancelAssemblyResult_WithError_Error        `json:"error"`
 	ExecutingJobs *CancelAssemblyResult_WithOk1_ExecutingJobs `json:"executing_jobs,omitempty"`
 	// The time taken by Transloadit to execute this Assembly, in seconds.
@@ -75874,19 +73395,21 @@ type CancelAssemblyResult_WithError_CompanionUrl = ValueNullOrString
 // The URL to the Companion server that this Assembly may communicate with.
 type CancelAssemblyResult_WithError_CompanionUrl_Null = AssemblyStatsParams_TemplateId_Null
 
+// Indicates an [error](/docs/api/response-codes/#error-codes) status. This key is only present if
+// the Assembly failed. New error codes may be added. Handle unrecognized codes as failures and preserve their values for programmatic inspection.
 type CancelAssemblyResult_WithError_Error string
 
 func (value CancelAssemblyResult_WithError_Error) MarshalJSON() ([]byte, error) {
-	if !(value == "ADMIN_PERMISSIONS_REQUIRED" || value == "AI_CHAT_VALIDATION" || value == "ASSEMBLY_ACCOUNT_MISMATCH" || value == "ASSEMBLY_CANNOT_BE_REPLAYED" || value == "ASSEMBLY_COULD_NOT_BE_CREATED" || value == "ASSEMBLY_CRASHED" || value == "ASSEMBLY_DISALLOWED_ROBOTS_USED" || value == "ASSEMBLY_EMPTY_STEPS" || value == "ASSEMBLY_EXECUTION_PROGRESS_NOT_ENABLED" || value == "ASSEMBLY_EXPIRED" || value == "ASSEMBLY_FILE_NOT_RESERVED" || value == "ASSEMBLY_INFINITE" || value == "ASSEMBLY_INVALID_NOTIFY_URL" || value == "ASSEMBLY_INVALID_NUM_EXPECTED_UPLOAD_FILES_PARAM" || value == "ASSEMBLY_INVALID_STEPS" || value == "ASSEMBLY_JOB_ENQUEUE_ERROR" || value == "ASSEMBLY_LIST_ERROR" || value == "ASSEMBLY_MEMORY_LIMIT_EXCEEDED" || value == "ASSEMBLY_NOTIFICATIONS_LIST_ERROR" || value == "ASSEMBLY_NOTIFICATION_LIST_ERROR" || value == "ASSEMBLY_NOTIFICATION_NOT_PERSISTED" || value == "ASSEMBLY_NOTIFICATION_NOT_REPLAYED" || value == "ASSEMBLY_NOT_CAPABLE" || value == "ASSEMBLY_NOT_FINISHED" || value == "ASSEMBLY_NOT_FOUND" || value == "ASSEMBLY_NOT_REPLAYED" || value == "ASSEMBLY_NO_CHARGEABLE_STEP" || value == "ASSEMBLY_NO_NOTIFY_URL" || value == "ASSEMBLY_NO_STEPS" || value == "ASSEMBLY_PLAN_FILE_SIZE_LIMIT_EXCEEDED" || value == "ASSEMBLY_ROBOT_MISSING" || value == "ASSEMBLY_SATURATED" || value == "ASSEMBLY_STATS_ERROR" || value == "ASSEMBLY_STATS_INVALID_TIME" || value == "ASSEMBLY_STATS_MISSING_REGION" || value == "ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED" || value == "ASSEMBLY_STATUS_NOT_FOUND" || value == "ASSEMBLY_STATUS_PARSE_ERROR" || value == "ASSEMBLY_STEP_INVALID" || value == "ASSEMBLY_STEP_INVALID_ROBOT" || value == "ASSEMBLY_STEP_INVALID_USE" || value == "ASSEMBLY_STEP_NO_ROBOT" || value == "ASSEMBLY_STEP_UNKNOWN_ROBOT" || value == "ASSEMBLY_STEP_UNKNOWN_USE" || value == "ASSEMBLY_URL_TRANSFORM_MISSING" || value == "AUDIO_ARTWORK_VALIDATION" || value == "AUDIO_CONCAT_INVALID_INPUT" || value == "AUDIO_CONCAT_VALIDATION" || value == "AUDIO_ENCODE_VALIDATION" || value == "AUDIO_LOOP_VALIDATION" || value == "AUDIO_MERGE_VALIDATION" || value == "AUDIO_SPLIT_NO_OUTPUT" || value == "AUDIO_SPLIT_VALIDATION" || value == "AUDIO_WAVEFORM_VALIDATION" || value == "AUTH_EXPIRED" || value == "AUTH_KEYS_NOT_FOUND" || value == "AUTH_KEY_SCOPES_NOT_FOUND" || value == "AUTH_SECRET_NOT_RETRIEVED" || value == "AZURE_IMPORT_ACCESS_DENIED" || value == "AZURE_IMPORT_FAILURE" || value == "AZURE_IMPORT_NOT_FOUND" || value == "AZURE_IMPORT_VALIDATION" || value == "AZURE_STORE_ACCESS_DENIED" || value == "AZURE_STORE_NOT_FOUND" || value == "AZURE_STORE_VALIDATION" || value == "BACKBLAZE_IMPORT_ACCESS_DENIED" || value == "BACKBLAZE_IMPORT_FAILURE" || value == "BACKBLAZE_IMPORT_NOT_FOUND" || value == "BACKBLAZE_IMPORT_VALIDATION" || value == "BACKBLAZE_STORE_ACCESS_DENIED" || value == "BACKBLAZE_STORE_FAILURE" || value == "BACKBLAZE_STORE_VALIDATION" || value == "BAD_PRICING" || value == "BEARER_TOKEN_AUTH_KEY_MISMATCH" || value == "BEARER_TOKEN_EXPIRED" || value == "BEARER_TOKEN_INVALID" || value == "BILL_LIMIT_EXCEEDED" || value == "BOX_IMPORT_ACCESS_DENIED" || value == "BOX_IMPORT_FAILURE" || value == "BOX_IMPORT_NOT_FOUND" || value == "BOX_IMPORT_VALIDATION" || value == "BOX_STORE_COULD_NOT_PARSE_URL" || value == "BOX_STORE_VALIDATION" || value == "CANNOT_ACCEPT_NEW_ASSEMBLIES" || value == "CDN_REQUIRED" || value == "CLOUDFILES_IMPORT_ACCESS_DENIED" || value == "CLOUDFILES_IMPORT_FAILURE" || value == "CLOUDFILES_IMPORT_NOT_FOUND" || value == "CLOUDFILES_IMPORT_VALIDATION" || value == "CLOUDFILES_STORE_ACCESS_DENIED" || value == "CLOUDFILES_STORE_ERROR" || value == "CLOUDFILES_STORE_VALIDATION" || value == "CLOUDFLARE_IMPORT_ACCESS_DENIED" || value == "CLOUDFLARE_IMPORT_FAILURE" || value == "CLOUDFLARE_IMPORT_NOT_FOUND" || value == "CLOUDFLARE_IMPORT_VALIDATION" || value == "CLOUDFLARE_STORE_ACCESS_DENIED" || value == "CLOUDFLARE_STORE_NOT_FOUND" || value == "CLOUDFLARE_STORE_URL_VERIFICATION_FAILURE" || value == "CLOUDFLARE_STORE_VALIDATION" || value == "CLOUDFLARE_STORE_WRONG_REGION" || value == "CLOUD_AI_IMAGE_VALIDATION" || value == "DAM_STORAGE_UNAVAILABLE" || value == "DIGITALOCEAN_IMPORT_ACCESS_DENIED" || value == "DIGITALOCEAN_IMPORT_FAILURE" || value == "DIGITALOCEAN_IMPORT_NOT_FOUND" || value == "DIGITALOCEAN_IMPORT_VALIDATION" || value == "DIGITALOCEAN_STORE_ACCESS_DENIED" || value == "DIGITALOCEAN_STORE_NOT_FOUND" || value == "DIGITALOCEAN_STORE_VALIDATION" || value == "DIGITALOCEAN_STORE_WRONG_REGION" || value == "DOCUMENT_AUTOROTATE_VALIDATION" || value == "DOCUMENT_CONVERT_UNSUPPORTED_CONVERSION" || value == "DOCUMENT_CONVERT_VALIDATION" || value == "DOCUMENT_EXTRACT_VALIDATION" || value == "DOCUMENT_MERGE_UNSUPPORTED_CONVERSION" || value == "DOCUMENT_MERGE_VALIDATION" || value == "DOCUMENT_OCR_VALIDATION" || value == "DOCUMENT_OPTIMIZE_UNSUPPORTED_INPUT" || value == "DOCUMENT_OPTIMIZE_VALIDATION" || value == "DOCUMENT_SPLIT_VALIDATION" || value == "DOCUMENT_THUMBS_INVALID_INPUT" || value == "DOCUMENT_THUMBS_VALIDATION" || value == "DO_NOT_REUSE_ASSEMBLY_IDS" || value == "DROPBOX_IMPORT_ACCESS_DENIED" || value == "DROPBOX_IMPORT_FAILURE" || value == "DROPBOX_IMPORT_NOT_FOUND" || value == "DROPBOX_IMPORT_VALIDATION" || value == "DROPBOX_STORE_COULD_NOT_PARSE_URL" || value == "DROPBOX_STORE_VALIDATION" || value == "FILE_COMPRESS_INVALID_INPUT" || value == "FILE_COMPRESS_VALIDATION" || value == "FILE_DECOMPRESS_INVALID_INPUT" || value == "FILE_DECOMPRESS_PASSWORD_INCORRECT" || value == "FILE_DECOMPRESS_PASSWORD_REQUIRED" || value == "FILE_DECOMPRESS_VALIDATION" || value == "FILE_DOWNLOAD_ERROR" || value == "FILE_FILTER_DECLINED_FILE" || value == "FILE_FILTER_INVALID_OPERATOR" || value == "FILE_FILTER_VALIDATION" || value == "FILE_HASH_VALIDATION" || value == "FILE_META_DATA_ERROR" || value == "FILE_PREVIEW_VALIDATION" || value == "FILE_READ_VALIDATION_ERROR" || value == "FILE_SERVE_NO_RESULT" || value == "FILE_SERVE_VALIDATION" || value == "FILE_VERIFY_INVALID_FILE" || value == "FILE_VERIFY_VALIDATION" || value == "FILE_VIRUSSCAN_DECLINED_FILE" || value == "FILE_VIRUSSCAN_INVALID_INPUT" || value == "FILE_VIRUSSCAN_VALIDATION" || value == "FTP_IMPORT_ACCESS_DENIED" || value == "FTP_IMPORT_FAILURE" || value == "FTP_IMPORT_NOT_FOUND" || value == "FTP_IMPORT_VALIDATION" || value == "FTP_STORE_VALIDATION" || value == "GET_ACCOUNT_DB_ERROR" || value == "GET_ACCOUNT_UNKNOWN_AUTH_KEY" || value == "GOOGLE_IMPORT_ACCESS_DENIED" || value == "GOOGLE_IMPORT_FAILURE" || value == "GOOGLE_IMPORT_NOT_FOUND" || value == "GOOGLE_IMPORT_VALIDATION" || value == "GOOGLE_STORE_INVALID_INPUT" || value == "GOOGLE_STORE_VALIDATION" || value == "HTML_CONVERT_VALIDATION" || value == "HTTP_IMPORT_ACCESS_DENIED" || value == "HTTP_IMPORT_FAILURE" || value == "HTTP_IMPORT_NOT_FOUND" || value == "HTTP_IMPORT_VALIDATION" || value == "HTTP_REQUEST_FAILURE" || value == "HTTP_REQUEST_VALIDATION" || value == "IMAGE_BGREMOVE_VALIDATION" || value == "IMAGE_COPYRIGHT_DETECT_DECLINED_FILE" || value == "IMAGE_COPYRIGHT_DETECT_VALIDATION" || value == "IMAGE_DESCRIBE_VALIDATION" || value == "IMAGE_ENHANCE_NO_INPUT_FILE" || value == "IMAGE_ENHANCE_VALIDATION" || value == "IMAGE_FACEDETECT_VALIDATION" || value == "IMAGE_GENERATE_VALIDATION" || value == "IMAGE_MERGE_FAILURE" || value == "IMAGE_MERGE_VALIDATION" || value == "IMAGE_OCR_VALIDATION" || value == "IMAGE_OPTIMIZE_VALIDATION" || value == "IMAGE_RESIZE_ERROR" || value == "IMAGE_RESIZE_INVALID_BLUR_REGION" || value == "IMAGE_RESIZE_INVALID_TEXT_OBJECT_VALUE" || value == "IMAGE_RESIZE_INVALID_TEXT_VALUE" || value == "IMAGE_RESIZE_INVALID_WATERMARK_OFFSET" || value == "IMAGE_RESIZE_INVALID_WATERMARK_POSITION" || value == "IMAGE_RESIZE_NO_CLUT_FILE" || value == "IMAGE_RESIZE_NO_INPUT_FILE" || value == "IMAGE_RESIZE_VALIDATION" || value == "IMAGE_UPSCALE_VALIDATION" || value == "IMPORT_FILE_ERROR" || value == "INCOMPLETE_PRICING" || value == "INSUFFICIENT_AUTH_SCOPE" || value == "INTERNAL_COMMAND_ERROR" || value == "INTERNAL_COMMAND_TIMEOUT" || value == "INVALID_ASSEMBLY_STATUS" || value == "INVALID_AUTH_EXPIRES_PARAMETER" || value == "INVALID_AUTH_KEY_PARAMETER" || value == "INVALID_AUTH_MAX_NUMBER_OF_FILES_PARAMETER" || value == "INVALID_AUTH_MAX_SIZE_PARAMETER" || value == "INVALID_AUTH_REFERER_PARAMETER" || value == "INVALID_FILE_META_DATA" || value == "INVALID_FORM_DATA" || value == "INVALID_INPUT_ERROR" || value == "INVALID_PARAMS_FIELD" || value == "INVALID_SIGNATURE" || value == "INVALID_STEP_NAME" || value == "INVALID_TEMPLATE_FIELD" || value == "INVALID_UPLOAD_HANDLE_STEP_NAME" || value == "INVALID_URL_ENCODING" || value == "MAX_NUMBER_OF_FILES_EXCEEDED" || value == "MAX_SIZE_EXCEEDED" || value == "MEGA_IMPORT_ACCESS_DENIED" || value == "MEGA_IMPORT_FAILURE" || value == "MEGA_IMPORT_NOT_FOUND" || value == "MEGA_IMPORT_VALIDATION" || value == "MEGA_STORE_ACCESS_DENIED" || value == "MEGA_STORE_NOT_FOUND" || value == "MEGA_STORE_VALIDATION" || value == "MEGA_STORE_WRONG_REGION" || value == "META_WRITE_VALIDATION" || value == "MINIO_IMPORT_ACCESS_DENIED" || value == "MINIO_IMPORT_FAILURE" || value == "MINIO_IMPORT_NOT_FOUND" || value == "MINIO_IMPORT_VALIDATION" || value == "MINIO_STORE_ACCESS_DENIED" || value == "MINIO_STORE_NOT_FOUND" || value == "MINIO_STORE_VALIDATION" || value == "MINIO_STORE_WRONG_REGION" || value == "NO_AUTH_EXPIRES_PARAMETER" || value == "NO_AUTH_KEY_PARAMETER" || value == "NO_AUTH_PARAMETER" || value == "NO_COUNTRY" || value == "NO_OBJECT_AUTH_PARAMETER" || value == "NO_OBJECT_PARAMS_FIELD" || value == "NO_PARAMS_FIELD" || value == "NO_PRICING" || value == "NO_RESULT_STEP_FOUND" || value == "NO_RPC_RESULT_FROM_IMAGE_RESIZER" || value == "NO_SIGNATURE_FIELD" || value == "NO_TEMPLATE_ID" || value == "PLAN_LIMIT_EXCEEDED" || value == "POSSIBLY_MALICIOUS_FILE_FOUND" || value == "PRIORITY_JOB_SLOTS_NOT_FOUND" || value == "PRIORITY_JOB_SLOT_STATS_ERROR" || value == "PRIORITY_JOB_SLOT_STATS_INVALID_AGGREGATION" || value == "PRIORITY_JOB_SLOT_STATS_INVALID_TIME" || value == "PRIORITY_JOB_SLOT_STATS_MISSING_REGION" || value == "RATE_LIMIT_REACHED" || value == "REFERER_MISMATCH" || value == "REQUEST_PREMATURE_CLOSED" || value == "ROBOT_VALIDATION_BASE_ERROR" || value == "S3_ACCESS_DENIED" || value == "S3_IMPORT_ACCESS_DENIED" || value == "S3_IMPORT_FAILURE" || value == "S3_IMPORT_NOT_FOUND" || value == "S3_IMPORT_VALIDATION" || value == "S3_NOT_FOUND" || value == "S3_STORE_ACCESS_DENIED" || value == "S3_STORE_FAILURE" || value == "S3_STORE_NOT_FOUND" || value == "S3_STORE_URL_VERIFICATION_FAILURE" || value == "S3_STORE_VALIDATION" || value == "S3_STORE_WRONG_REGION" || value == "S3_WRONG_REGION" || value == "SCRIPT_RUN_VALIDATION" || value == "SERVER_403" || value == "SERVER_404" || value == "SERVER_500" || value == "SFTP_IMPORT_ACCESS_DENIED" || value == "SFTP_IMPORT_FAILURE" || value == "SFTP_IMPORT_NOT_FOUND" || value == "SFTP_IMPORT_VALIDATION" || value == "SFTP_STORE_VALIDATION" || value == "SIGNATURE_REUSE_DETECTED" || value == "SPEECH_TRANSCRIBE_VALIDATION" || value == "STORAGE_GRANT_NOT_CREATED" || value == "SUPABASE_IMPORT_ACCESS_DENIED" || value == "SUPABASE_IMPORT_FAILURE" || value == "SUPABASE_IMPORT_NOT_FOUND" || value == "SUPABASE_IMPORT_VALIDATION" || value == "SUPABASE_STORE_ACCESS_DENIED" || value == "SUPABASE_STORE_NOT_FOUND" || value == "SUPABASE_STORE_VALIDATION" || value == "SUPABASE_STORE_WRONG_REGION" || value == "SWIFT_IMPORT_ACCESS_DENIED" || value == "SWIFT_IMPORT_FAILURE" || value == "SWIFT_IMPORT_NOT_FOUND" || value == "SWIFT_IMPORT_VALIDATION" || value == "SWIFT_STORE_ACCESS_DENIED" || value == "SWIFT_STORE_NOT_FOUND" || value == "SWIFT_STORE_VALIDATION" || value == "SWIFT_STORE_WRONG_REGION" || value == "TEMPLATE_CREDENTIALS_INJECTION_ERROR" || value == "TEMPLATE_DB_ERROR" || value == "TEMPLATE_DENIES_STEPS_OVERRIDE" || value == "TEMPLATE_INVALID_JSON" || value == "TEMPLATE_NOT_FOUND" || value == "TEXT_SPEAK_VALIDATION" || value == "TEXT_TRANSLATE_VALIDATION" || value == "TIGRIS_IMPORT_ACCESS_DENIED" || value == "TIGRIS_IMPORT_FAILURE" || value == "TIGRIS_IMPORT_NOT_FOUND" || value == "TIGRIS_IMPORT_VALIDATION" || value == "TIGRIS_STORE_ACCESS_DENIED" || value == "TIGRIS_STORE_NOT_FOUND" || value == "TIGRIS_STORE_VALIDATION" || value == "TIGRIS_STORE_WRONG_REGION" || value == "TMP_FILE_DOWNLOAD_ERROR" || value == "TOKEN_INVALID_CREDENTIALS" || value == "TRANSIENT_STORAGE_SERVICE_ERROR" || value == "TRANSLOADIT_IMPORT_ACCESS_DENIED" || value == "TRANSLOADIT_IMPORT_FAILURE" || value == "TRANSLOADIT_IMPORT_NOT_FOUND" || value == "TRANSLOADIT_IMPORT_VALIDATION" || value == "TRANSLOADIT_STORE_CONFLICT" || value == "TRANSLOADIT_STORE_FAILURE" || value == "TRANSLOADIT_STORE_UNAVAILABLE" || value == "TRANSLOADIT_STORE_VALIDATION" || value == "TUS_STORE_VALIDATION" || value == "USER_COMMAND_ERROR" || value == "VERIFIED_EMAIL_REQUIRED" || value == "VIDEO_ADAPTIVE_VALIDATION" || value == "VIDEO_ARTWORK_VALIDATION" || value == "VIDEO_CONCAT_INVALID_INPUT" || value == "VIDEO_CONCAT_NO_OUTPUT" || value == "VIDEO_CONCAT_VALIDATION" || value == "VIDEO_ENCODE_INVALID_VIDEO_CODEC" || value == "VIDEO_ENCODE_INVALID_WATERMARK_POSITION" || value == "VIDEO_ENCODE_VALIDATION" || value == "VIDEO_GENERATE_VALIDATION" || value == "VIDEO_MERGE_NO_IMAGE_FOUND" || value == "VIDEO_MERGE_VALIDATION" || value == "VIDEO_ONDEMAND_NOT_FOUND" || value == "VIDEO_ONDEMAND_VALIDATION" || value == "VIDEO_SPLIT_NO_OUTPUT" || value == "VIDEO_SPLIT_VALIDATION" || value == "VIDEO_SUBTITLE_VALIDATION" || value == "VIDEO_THUMBS_INVALID_COUNT_VALUE" || value == "VIDEO_THUMBS_INVALID_FORMAT" || value == "VIDEO_THUMBS_INVALID_INPUT" || value == "VIDEO_THUMBS_VALIDATION" || value == "VIMEO_IMPORT_ACCESS_DENIED" || value == "VIMEO_IMPORT_FAILURE" || value == "VIMEO_IMPORT_NOT_FOUND" || value == "VIMEO_IMPORT_VALIDATION" || value == "VIMEO_STORE_ACCESS_DENIED" || value == "VIMEO_STORE_PROBLEM_SENDING_FILE" || value == "VIMEO_STORE_VALIDATION" || value == "WASABI_IMPORT_ACCESS_DENIED" || value == "WASABI_IMPORT_FAILURE" || value == "WASABI_IMPORT_NOT_FOUND" || value == "WASABI_IMPORT_VALIDATION" || value == "WASABI_STORE_ACCESS_DENIED" || value == "WASABI_STORE_NOT_FOUND" || value == "WASABI_STORE_VALIDATION" || value == "WASABI_STORE_WRONG_REGION" || value == "WORKER_JOB_ERROR" || value == "YOUTUBE_STORE_PROBLEM_SENDING_FILE" || value == "YOUTUBE_STORE_VALIDATION") {
+	if utf8.RuneCountInString(string(value)) < 1 {
 		return nil, fmt.Errorf("invalid CancelAssemblyResult_WithError_Error")
 	}
 	return json.Marshal(string(value))
 }
 func (value *CancelAssemblyResult_WithError_Error) UnmarshalJSON(data []byte) error {
-	var parsed string
 	if err := rejectNull(data); err != nil {
 		return err
 	}
+	var parsed string
 	if err := json.Unmarshal(data, &parsed); err != nil {
 		return err
 	}
@@ -78774,7 +76297,7 @@ type CancelAssemblyResult_WithOk1 struct {
 	// The URL to the Companion server that this Assembly may communicate with.
 	CompanionUrl *ValueNullOrString `json:"companion_url,omitempty"`
 	// Indicates an [error](/docs/api/response-codes/#error-codes) status. This key is only present if
-	// the Assembly failed.
+	// the Assembly failed. New error codes may be added. Handle unrecognized codes as failures and preserve their values for programmatic inspection.
 	Error         *impossibleValue                            `json:"error,omitempty"`
 	ExecutingJobs *CancelAssemblyResult_WithOk1_ExecutingJobs `json:"executing_jobs,omitempty"`
 	// The time taken by Transloadit to execute this Assembly, in seconds.
@@ -84410,7 +81933,7 @@ type CancelAssemblyResult_WithOk2 struct {
 	// The URL to the Companion server that this Assembly may communicate with.
 	CompanionUrl *ValueNullOrString `json:"companion_url,omitempty"`
 	// Indicates an [error](/docs/api/response-codes/#error-codes) status. This key is only present if
-	// the Assembly failed.
+	// the Assembly failed. New error codes may be added. Handle unrecognized codes as failures and preserve their values for programmatic inspection.
 	Error         *impossibleValue                            `json:"error,omitempty"`
 	ExecutingJobs *CancelAssemblyResult_WithOk1_ExecutingJobs `json:"executing_jobs,omitempty"`
 	// The time taken by Transloadit to execute this Assembly, in seconds.
@@ -108379,13 +105902,29 @@ func (value *Integer) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// OAuth 2.0 client-credentials token request form.
+// OAuth 2.0 token request form for the client-credentials, authorization-code and refresh-token grants.
 type IssueBearerTokenBody struct {
-	// Optional audience value. If omitted, the deployment’s configured default is used (`api2` unless overridden).
+	// Optional audience value for `client_credentials`. If omitted, the deployment’s configured default is used (`api2` unless overridden). The other grants derive the audience from `resource`.
 	Aud *string `json:"aud,omitempty"`
-	// Requests a token using the credentials supplied through HTTP Basic authentication.
+	// A JWT signed with one of the client’s published keys (RFC 7523), from clients whose metadata allows `private_key_jwt`. Once a grant’s token request carried one, every later request for that grant must too. Its `iss` and `sub` are the client ID, its `aud` this token endpoint, and it expires within five minutes; each `jti` is accepted once.
+	ClientAssertion *string `json:"client_assertion,omitempty"`
+	// Always `urn:ietf:params:oauth:client-assertion-type:jwt-bearer` when `client_assertion` is sent.
+	ClientAssertionType *string `json:"client_assertion_type,omitempty"`
+	// The client identifier from dynamic registration or the HTTPS URL of the client’s metadata document. Required for `authorization_code` and `refresh_token`, unless a `client_assertion` names the client.
+	ClientId *string `json:"client_id,omitempty"`
+	// The one-time authorization code delivered to the client’s redirect URI after consent. Required for `authorization_code`.
+	Code *string `json:"code,omitempty"`
+	// The PKCE code verifier whose SHA-256 digest was sent as `code_challenge` when authorization started. Required for `authorization_code`.
+	CodeVerifier *string `json:"code_verifier,omitempty"`
+	// Which OAuth 2.0 grant to run. `client_credentials` exchanges the Auth Key credentials supplied through HTTP Basic authentication, `authorization_code` redeems a code issued after consent in the Console together with its PKCE verifier, and `refresh_token` rotates a refresh token. The two public-client grants send no HTTP Basic credentials.
 	GrantType IssueBearerTokenBody_GrantType `json:"grant_type"`
-	// Optional, space- or comma-separated list of scopes. If omitted, the token inherits all scopes granted to your Auth Key.
+	// The redirect URI used in the authorization request. Required for `authorization_code`.
+	RedirectUri *string `json:"redirect_uri,omitempty"`
+	// The refresh token to rotate. Required for `refresh_token`; the presented token stops working once a new pair is issued.
+	RefreshToken *string `json:"refresh_token,omitempty"`
+	// The protected resource the token is for: the hosted MCP endpoint (`aud=mcp`) or the API origin itself (`aud=api2`). When omitted, the resource the authorization code or refresh token was issued for is used; it must match otherwise.
+	Resource *string `json:"resource,omitempty"`
+	// Optional, space- or comma-separated list of scopes for `client_credentials`. If omitted, the token inherits all scopes granted to your Auth Key. The other grants keep the scopes granted at consent.
 	Scope                *string                    `json:"scope,omitempty"`
 	AdditionalProperties map[string]json.RawMessage `json:"-"`
 }
@@ -108407,7 +105946,7 @@ func (value *IssueBearerTokenBody) UnmarshalJSON(data []byte) error {
 type IssueBearerTokenBody_GrantType string
 
 func (value IssueBearerTokenBody_GrantType) MarshalJSON() ([]byte, error) {
-	if !(value == "client_credentials") {
+	if !(value == "authorization_code" || value == "client_credentials" || value == "refresh_token") {
 		return nil, fmt.Errorf("invalid IssueBearerTokenBody_GrantType")
 	}
 	return json.Marshal(string(value))
@@ -108654,6 +106193,7 @@ type IssueBearerTokenError_Variant1 struct {
 	TokenInvalidGrantType *IssueBearerTokenError_Variant1_TokenInvalidGrantType
 	// Invalid token request.
 	TokenInvalidRequest *IssueBearerTokenError_Variant1_TokenInvalidRequest
+	WithError           *IssueBearerTokenError_Variant1_WithError
 }
 
 func (value IssueBearerTokenError_Variant1) MarshalJSON() ([]byte, error) {
@@ -108681,13 +106221,20 @@ func (value IssueBearerTokenError_Variant1) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 	}
+	if value.WithError != nil {
+		count++
+		data, err = json.Marshal(value.WithError)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if count != 1 {
 		return nil, fmt.Errorf("IssueBearerTokenError_Variant1 requires exactly one choice")
 	}
 	return data, nil
 }
 func (value *IssueBearerTokenError_Variant1) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1_GetAccountUnknownAuthKey) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidGrantType) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidRequest) }}, []bool{false, false, false}, []map[string]string{{"error": "GET_ACCOUNT_UNKNOWN_AUTH_KEY"}, {"error": "TOKEN_INVALID_GRANT_TYPE"}, {"error": "TOKEN_INVALID_REQUEST"}})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant1_GetAccountUnknownAuthKey) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidGrantType) }, func() interface{} { return new(IssueBearerTokenError_Variant1_TokenInvalidRequest) }, func() interface{} { return new(IssueBearerTokenError_Variant1_WithError) }}, []bool{false, false, false, false}, []map[string]string{{"error": "GET_ACCOUNT_UNKNOWN_AUTH_KEY"}, {"error": "TOKEN_INVALID_GRANT_TYPE"}, {"error": "TOKEN_INVALID_REQUEST"}, nil})
 	if err != nil {
 		return err
 	}
@@ -108713,6 +106260,13 @@ func (value *IssueBearerTokenError_Variant1) UnmarshalJSON(data []byte) error {
 		}
 		*value = IssueBearerTokenError_Variant1{TokenInvalidRequest: candidate}
 		return nil
+	case 3:
+		candidate, ok := decoded.(*IssueBearerTokenError_Variant1_WithError)
+		if !ok {
+			return fmt.Errorf("invalid IssueBearerTokenError_Variant1 union metadata")
+		}
+		*value = IssueBearerTokenError_Variant1{WithError: candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid IssueBearerTokenError_Variant1 JSON shape")
 }
@@ -108732,41 +106286,8 @@ func (value *IssueBearerTokenError_Variant1) GetError() string {
 	if value.TokenInvalidRequest != nil {
 		return string(value.TokenInvalidRequest.Error)
 	}
-	return ""
-}
-
-// GetHttpCode returns http_code from the active variant, or its zero value when absent or null.
-// Use the variant fields directly when presence itself matters.
-func (value *IssueBearerTokenError_Variant1) GetHttpCode() float64 {
-	if value == nil {
-		return 0
-	}
-	if value.GetAccountUnknownAuthKey != nil && value.GetAccountUnknownAuthKey.HttpCode != nil {
-		return float64(*value.GetAccountUnknownAuthKey.HttpCode)
-	}
-	if value.TokenInvalidGrantType != nil && value.TokenInvalidGrantType.HttpCode != nil {
-		return float64(*value.TokenInvalidGrantType.HttpCode)
-	}
-	if value.TokenInvalidRequest != nil && value.TokenInvalidRequest.HttpCode != nil {
-		return float64(*value.TokenInvalidRequest.HttpCode)
-	}
-	return 0
-}
-
-// GetMessage returns message from the active variant, or its zero value when absent or null.
-// Use the variant fields directly when presence itself matters.
-func (value *IssueBearerTokenError_Variant1) GetMessage() string {
-	if value == nil {
-		return ""
-	}
-	if value.GetAccountUnknownAuthKey != nil && value.GetAccountUnknownAuthKey.Message != nil {
-		return string(*value.GetAccountUnknownAuthKey.Message)
-	}
-	if value.TokenInvalidGrantType != nil && value.TokenInvalidGrantType.Message != nil {
-		return string(*value.TokenInvalidGrantType.Message)
-	}
-	if value.TokenInvalidRequest != nil && value.TokenInvalidRequest.Message != nil {
-		return string(*value.TokenInvalidRequest.Message)
+	if value.WithError != nil {
+		return string(value.WithError.Error)
 	}
 	return ""
 }
@@ -108918,11 +106439,34 @@ func (value *IssueBearerTokenError_Variant1_TokenInvalidRequest_Error) Unmarshal
 
 type IssueBearerTokenError_Variant1_TokenInvalidRequest_HttpCode = AssemblyStatsError_Variant1_Variant1_AssemblyStatsInvalidTime_HttpCode
 
+type IssueBearerTokenError_Variant1_WithError struct {
+	// An RFC 6749, 7591 or 8707 error code such as `invalid_grant`.
+	Error string `json:"error"`
+	// A human-readable explanation that never names an account.
+	ErrorDescription     *string                    `json:"error_description,omitempty"`
+	AdditionalProperties map[string]json.RawMessage `json:"-"`
+}
+
+func (value IssueBearerTokenError_Variant1_WithError) MarshalJSON() ([]byte, error) {
+	type plain IssueBearerTokenError_Variant1_WithError
+	return marshalObject(plain(value))
+}
+func (value *IssueBearerTokenError_Variant1_WithError) UnmarshalJSON(data []byte) error {
+	type plain IssueBearerTokenError_Variant1_WithError
+	var next plain
+	if err := unmarshalObject(data, &next, []string{"error"}, []string{}); err != nil {
+		return err
+	}
+	*value = IssueBearerTokenError_Variant1_WithError(next)
+	return nil
+}
+
 type IssueBearerTokenError_Variant2 struct {
 	// Authorization required.
 	Server401 *IssueBearerTokenError_Variant2_Server401
 	// Invalid client credentials.
 	TokenInvalidCredentials *IssueBearerTokenError_Variant2_TokenInvalidCredentials
+	WithError               *IssueBearerTokenError_Variant1_WithError
 }
 
 func (value IssueBearerTokenError_Variant2) MarshalJSON() ([]byte, error) {
@@ -108943,13 +106487,20 @@ func (value IssueBearerTokenError_Variant2) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 	}
+	if value.WithError != nil {
+		count++
+		data, err = json.Marshal(value.WithError)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if count != 1 {
 		return nil, fmt.Errorf("IssueBearerTokenError_Variant2 requires exactly one choice")
 	}
 	return data, nil
 }
 func (value *IssueBearerTokenError_Variant2) UnmarshalJSON(data []byte) error {
-	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant2_Server401) }, func() interface{} { return new(IssueBearerTokenError_Variant2_TokenInvalidCredentials) }}, []bool{false, false}, []map[string]string{{"error": "SERVER_401"}, {"error": "TOKEN_INVALID_CREDENTIALS"}})
+	choice, decoded, err := unmarshalUnion(data, []func() interface{}{func() interface{} { return new(IssueBearerTokenError_Variant2_Server401) }, func() interface{} { return new(IssueBearerTokenError_Variant2_TokenInvalidCredentials) }, func() interface{} { return new(IssueBearerTokenError_Variant1_WithError) }}, []bool{false, false, false}, []map[string]string{{"error": "SERVER_401"}, {"error": "TOKEN_INVALID_CREDENTIALS"}, nil})
 	if err != nil {
 		return err
 	}
@@ -108968,6 +106519,13 @@ func (value *IssueBearerTokenError_Variant2) UnmarshalJSON(data []byte) error {
 		}
 		*value = IssueBearerTokenError_Variant2{TokenInvalidCredentials: candidate}
 		return nil
+	case 2:
+		candidate, ok := decoded.(*IssueBearerTokenError_Variant1_WithError)
+		if !ok {
+			return fmt.Errorf("invalid IssueBearerTokenError_Variant2 union metadata")
+		}
+		*value = IssueBearerTokenError_Variant2{WithError: candidate}
+		return nil
 	}
 	return fmt.Errorf("invalid IssueBearerTokenError_Variant2 JSON shape")
 }
@@ -108984,35 +106542,8 @@ func (value *IssueBearerTokenError_Variant2) GetError() string {
 	if value.TokenInvalidCredentials != nil {
 		return string(value.TokenInvalidCredentials.Error)
 	}
-	return ""
-}
-
-// GetHttpCode returns http_code from the active variant, or its zero value when absent or null.
-// Use the variant fields directly when presence itself matters.
-func (value *IssueBearerTokenError_Variant2) GetHttpCode() float64 {
-	if value == nil {
-		return 0
-	}
-	if value.Server401 != nil && value.Server401.HttpCode != nil {
-		return float64(*value.Server401.HttpCode)
-	}
-	if value.TokenInvalidCredentials != nil && value.TokenInvalidCredentials.HttpCode != nil {
-		return float64(*value.TokenInvalidCredentials.HttpCode)
-	}
-	return 0
-}
-
-// GetMessage returns message from the active variant, or its zero value when absent or null.
-// Use the variant fields directly when presence itself matters.
-func (value *IssueBearerTokenError_Variant2) GetMessage() string {
-	if value == nil {
-		return ""
-	}
-	if value.Server401 != nil && value.Server401.Message != nil {
-		return string(*value.Server401.Message)
-	}
-	if value.TokenInvalidCredentials != nil && value.TokenInvalidCredentials.Message != nil {
-		return string(*value.TokenInvalidCredentials.Message)
+	if value.WithError != nil {
+		return string(value.WithError.Error)
 	}
 	return ""
 }
@@ -109136,6 +106667,8 @@ func (value *IssueBearerTokenError_Variant2_TokenInvalidCredentials_Error) Unmar
 }
 
 type IssueBearerTokenError_Variant2_TokenInvalidCredentials_HttpCode = IssueBearerTokenError_Variant2_Server401_HttpCode
+
+type IssueBearerTokenError_Variant2_WithError = IssueBearerTokenError_Variant1_WithError
 
 type IssueBearerTokenError_Variant3 struct {
 	// Invalid audience.
@@ -109361,6 +106894,8 @@ type IssueBearerTokenResult struct {
 	AccessToken string `json:"access_token"`
 	// Token lifetime in seconds from issuance. Request a new token after it expires.
 	ExpiresIn Integer `json:"expires_in"`
+	// Returned by the `authorization_code` and `refresh_token` grants. Present it to `POST /token` with `grant_type=refresh_token` to obtain a new pair; every use rotates it and reuse of a rotated token revokes the whole lineage.
+	RefreshToken *string `json:"refresh_token,omitempty"`
 	// Space-separated scopes granted to this token.
 	Scope     string                           `json:"scope"`
 	TokenType IssueBearerTokenResult_TokenType `json:"token_type"`
@@ -123658,7 +121193,7 @@ func (client *Client) UpdateTemplateCredential(ctx context.Context, input Update
 // AssemblyWorkflowResult retains the complete generated status and results.
 type AssemblyWorkflowResult = GetAssemblyResult
 
-const assemblyWorkflowPolicyJSON = "{\"busyCodes\":[\"ASSEMBLY_UPLOADING\",\"ASSEMBLY_EXECUTING\",\"ASSEMBLY_REPLAYING\"],\"terminalOkCodes\":[\"ASSEMBLY_CANCELED\",\"ASSEMBLY_COMPLETED\",\"REQUEST_ABORTED\"],\"cancelableTerminalOkCodes\":[\"REQUEST_ABORTED\"],\"errorCodes\":[\"ADMIN_PERMISSIONS_REQUIRED\",\"AI_CHAT_VALIDATION\",\"ASSEMBLY_ACCOUNT_MISMATCH\",\"ASSEMBLY_CANNOT_BE_REPLAYED\",\"ASSEMBLY_COULD_NOT_BE_CREATED\",\"ASSEMBLY_CRASHED\",\"ASSEMBLY_DISALLOWED_ROBOTS_USED\",\"ASSEMBLY_EMPTY_STEPS\",\"ASSEMBLY_EXECUTION_PROGRESS_NOT_ENABLED\",\"ASSEMBLY_EXPIRED\",\"ASSEMBLY_FILE_NOT_RESERVED\",\"ASSEMBLY_INFINITE\",\"ASSEMBLY_INVALID_NOTIFY_URL\",\"ASSEMBLY_INVALID_NUM_EXPECTED_UPLOAD_FILES_PARAM\",\"ASSEMBLY_INVALID_STEPS\",\"ASSEMBLY_JOB_ENQUEUE_ERROR\",\"ASSEMBLY_LIST_ERROR\",\"ASSEMBLY_MEMORY_LIMIT_EXCEEDED\",\"ASSEMBLY_NOTIFICATIONS_LIST_ERROR\",\"ASSEMBLY_NOTIFICATION_LIST_ERROR\",\"ASSEMBLY_NOTIFICATION_NOT_PERSISTED\",\"ASSEMBLY_NOTIFICATION_NOT_REPLAYED\",\"ASSEMBLY_NOT_CAPABLE\",\"ASSEMBLY_NOT_FINISHED\",\"ASSEMBLY_NOT_FOUND\",\"ASSEMBLY_NOT_REPLAYED\",\"ASSEMBLY_NO_CHARGEABLE_STEP\",\"ASSEMBLY_NO_NOTIFY_URL\",\"ASSEMBLY_NO_STEPS\",\"ASSEMBLY_PLAN_FILE_SIZE_LIMIT_EXCEEDED\",\"ASSEMBLY_ROBOT_MISSING\",\"ASSEMBLY_SATURATED\",\"ASSEMBLY_STATS_ERROR\",\"ASSEMBLY_STATS_INVALID_TIME\",\"ASSEMBLY_STATS_MISSING_REGION\",\"ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED\",\"ASSEMBLY_STATUS_NOT_FOUND\",\"ASSEMBLY_STATUS_PARSE_ERROR\",\"ASSEMBLY_STEP_INVALID\",\"ASSEMBLY_STEP_INVALID_ROBOT\",\"ASSEMBLY_STEP_INVALID_USE\",\"ASSEMBLY_STEP_NO_ROBOT\",\"ASSEMBLY_STEP_UNKNOWN_ROBOT\",\"ASSEMBLY_STEP_UNKNOWN_USE\",\"ASSEMBLY_URL_TRANSFORM_MISSING\",\"AUDIO_ARTWORK_VALIDATION\",\"AUDIO_CONCAT_INVALID_INPUT\",\"AUDIO_CONCAT_VALIDATION\",\"AUDIO_ENCODE_VALIDATION\",\"AUDIO_LOOP_VALIDATION\",\"AUDIO_MERGE_VALIDATION\",\"AUDIO_SPLIT_NO_OUTPUT\",\"AUDIO_SPLIT_VALIDATION\",\"AUDIO_WAVEFORM_VALIDATION\",\"AUTH_EXPIRED\",\"AUTH_KEYS_NOT_FOUND\",\"AUTH_KEY_SCOPES_NOT_FOUND\",\"AUTH_SECRET_NOT_RETRIEVED\",\"AZURE_IMPORT_ACCESS_DENIED\",\"AZURE_IMPORT_FAILURE\",\"AZURE_IMPORT_NOT_FOUND\",\"AZURE_IMPORT_VALIDATION\",\"AZURE_STORE_ACCESS_DENIED\",\"AZURE_STORE_NOT_FOUND\",\"AZURE_STORE_VALIDATION\",\"BACKBLAZE_IMPORT_ACCESS_DENIED\",\"BACKBLAZE_IMPORT_FAILURE\",\"BACKBLAZE_IMPORT_NOT_FOUND\",\"BACKBLAZE_IMPORT_VALIDATION\",\"BACKBLAZE_STORE_ACCESS_DENIED\",\"BACKBLAZE_STORE_FAILURE\",\"BACKBLAZE_STORE_VALIDATION\",\"BAD_PRICING\",\"BEARER_TOKEN_AUTH_KEY_MISMATCH\",\"BEARER_TOKEN_EXPIRED\",\"BEARER_TOKEN_INVALID\",\"BILL_LIMIT_EXCEEDED\",\"BOX_IMPORT_ACCESS_DENIED\",\"BOX_IMPORT_FAILURE\",\"BOX_IMPORT_NOT_FOUND\",\"BOX_IMPORT_VALIDATION\",\"BOX_STORE_COULD_NOT_PARSE_URL\",\"BOX_STORE_VALIDATION\",\"CANNOT_ACCEPT_NEW_ASSEMBLIES\",\"CDN_REQUIRED\",\"CLOUDFILES_IMPORT_ACCESS_DENIED\",\"CLOUDFILES_IMPORT_FAILURE\",\"CLOUDFILES_IMPORT_NOT_FOUND\",\"CLOUDFILES_IMPORT_VALIDATION\",\"CLOUDFILES_STORE_ACCESS_DENIED\",\"CLOUDFILES_STORE_ERROR\",\"CLOUDFILES_STORE_VALIDATION\",\"CLOUDFLARE_IMPORT_ACCESS_DENIED\",\"CLOUDFLARE_IMPORT_FAILURE\",\"CLOUDFLARE_IMPORT_NOT_FOUND\",\"CLOUDFLARE_IMPORT_VALIDATION\",\"CLOUDFLARE_STORE_ACCESS_DENIED\",\"CLOUDFLARE_STORE_NOT_FOUND\",\"CLOUDFLARE_STORE_URL_VERIFICATION_FAILURE\",\"CLOUDFLARE_STORE_VALIDATION\",\"CLOUDFLARE_STORE_WRONG_REGION\",\"CLOUD_AI_IMAGE_VALIDATION\",\"DAM_STORAGE_UNAVAILABLE\",\"DIGITALOCEAN_IMPORT_ACCESS_DENIED\",\"DIGITALOCEAN_IMPORT_FAILURE\",\"DIGITALOCEAN_IMPORT_NOT_FOUND\",\"DIGITALOCEAN_IMPORT_VALIDATION\",\"DIGITALOCEAN_STORE_ACCESS_DENIED\",\"DIGITALOCEAN_STORE_NOT_FOUND\",\"DIGITALOCEAN_STORE_VALIDATION\",\"DIGITALOCEAN_STORE_WRONG_REGION\",\"DOCUMENT_AUTOROTATE_VALIDATION\",\"DOCUMENT_CONVERT_UNSUPPORTED_CONVERSION\",\"DOCUMENT_CONVERT_VALIDATION\",\"DOCUMENT_EXTRACT_VALIDATION\",\"DOCUMENT_MERGE_UNSUPPORTED_CONVERSION\",\"DOCUMENT_MERGE_VALIDATION\",\"DOCUMENT_OCR_VALIDATION\",\"DOCUMENT_OPTIMIZE_UNSUPPORTED_INPUT\",\"DOCUMENT_OPTIMIZE_VALIDATION\",\"DOCUMENT_SPLIT_VALIDATION\",\"DOCUMENT_THUMBS_INVALID_INPUT\",\"DOCUMENT_THUMBS_VALIDATION\",\"DO_NOT_REUSE_ASSEMBLY_IDS\",\"DROPBOX_IMPORT_ACCESS_DENIED\",\"DROPBOX_IMPORT_FAILURE\",\"DROPBOX_IMPORT_NOT_FOUND\",\"DROPBOX_IMPORT_VALIDATION\",\"DROPBOX_STORE_COULD_NOT_PARSE_URL\",\"DROPBOX_STORE_VALIDATION\",\"FILE_COMPRESS_INVALID_INPUT\",\"FILE_COMPRESS_VALIDATION\",\"FILE_DECOMPRESS_INVALID_INPUT\",\"FILE_DECOMPRESS_PASSWORD_INCORRECT\",\"FILE_DECOMPRESS_PASSWORD_REQUIRED\",\"FILE_DECOMPRESS_VALIDATION\",\"FILE_DOWNLOAD_ERROR\",\"FILE_FILTER_DECLINED_FILE\",\"FILE_FILTER_INVALID_OPERATOR\",\"FILE_FILTER_VALIDATION\",\"FILE_HASH_VALIDATION\",\"FILE_META_DATA_ERROR\",\"FILE_PREVIEW_VALIDATION\",\"FILE_READ_VALIDATION_ERROR\",\"FILE_SERVE_NO_RESULT\",\"FILE_SERVE_VALIDATION\",\"FILE_VERIFY_INVALID_FILE\",\"FILE_VERIFY_VALIDATION\",\"FILE_VIRUSSCAN_DECLINED_FILE\",\"FILE_VIRUSSCAN_INVALID_INPUT\",\"FILE_VIRUSSCAN_VALIDATION\",\"FTP_IMPORT_ACCESS_DENIED\",\"FTP_IMPORT_FAILURE\",\"FTP_IMPORT_NOT_FOUND\",\"FTP_IMPORT_VALIDATION\",\"FTP_STORE_VALIDATION\",\"GET_ACCOUNT_DB_ERROR\",\"GET_ACCOUNT_UNKNOWN_AUTH_KEY\",\"GOOGLE_IMPORT_ACCESS_DENIED\",\"GOOGLE_IMPORT_FAILURE\",\"GOOGLE_IMPORT_NOT_FOUND\",\"GOOGLE_IMPORT_VALIDATION\",\"GOOGLE_STORE_INVALID_INPUT\",\"GOOGLE_STORE_VALIDATION\",\"HTML_CONVERT_VALIDATION\",\"HTTP_IMPORT_ACCESS_DENIED\",\"HTTP_IMPORT_FAILURE\",\"HTTP_IMPORT_NOT_FOUND\",\"HTTP_IMPORT_VALIDATION\",\"HTTP_REQUEST_FAILURE\",\"HTTP_REQUEST_VALIDATION\",\"IMAGE_BGREMOVE_VALIDATION\",\"IMAGE_COPYRIGHT_DETECT_DECLINED_FILE\",\"IMAGE_COPYRIGHT_DETECT_VALIDATION\",\"IMAGE_DESCRIBE_VALIDATION\",\"IMAGE_ENHANCE_NO_INPUT_FILE\",\"IMAGE_ENHANCE_VALIDATION\",\"IMAGE_FACEDETECT_VALIDATION\",\"IMAGE_GENERATE_VALIDATION\",\"IMAGE_MERGE_FAILURE\",\"IMAGE_MERGE_VALIDATION\",\"IMAGE_OCR_VALIDATION\",\"IMAGE_OPTIMIZE_VALIDATION\",\"IMAGE_RESIZE_ERROR\",\"IMAGE_RESIZE_INVALID_BLUR_REGION\",\"IMAGE_RESIZE_INVALID_TEXT_OBJECT_VALUE\",\"IMAGE_RESIZE_INVALID_TEXT_VALUE\",\"IMAGE_RESIZE_INVALID_WATERMARK_OFFSET\",\"IMAGE_RESIZE_INVALID_WATERMARK_POSITION\",\"IMAGE_RESIZE_NO_CLUT_FILE\",\"IMAGE_RESIZE_NO_INPUT_FILE\",\"IMAGE_RESIZE_VALIDATION\",\"IMAGE_UPSCALE_VALIDATION\",\"IMPORT_FILE_ERROR\",\"INCOMPLETE_PRICING\",\"INSUFFICIENT_AUTH_SCOPE\",\"INTERNAL_COMMAND_ERROR\",\"INTERNAL_COMMAND_TIMEOUT\",\"INVALID_ASSEMBLY_STATUS\",\"INVALID_AUTH_EXPIRES_PARAMETER\",\"INVALID_AUTH_KEY_PARAMETER\",\"INVALID_AUTH_MAX_NUMBER_OF_FILES_PARAMETER\",\"INVALID_AUTH_MAX_SIZE_PARAMETER\",\"INVALID_AUTH_REFERER_PARAMETER\",\"INVALID_FILE_META_DATA\",\"INVALID_FORM_DATA\",\"INVALID_INPUT_ERROR\",\"INVALID_PARAMS_FIELD\",\"INVALID_SIGNATURE\",\"INVALID_STEP_NAME\",\"INVALID_TEMPLATE_FIELD\",\"INVALID_UPLOAD_HANDLE_STEP_NAME\",\"INVALID_URL_ENCODING\",\"MAX_NUMBER_OF_FILES_EXCEEDED\",\"MAX_SIZE_EXCEEDED\",\"MEGA_IMPORT_ACCESS_DENIED\",\"MEGA_IMPORT_FAILURE\",\"MEGA_IMPORT_NOT_FOUND\",\"MEGA_IMPORT_VALIDATION\",\"MEGA_STORE_ACCESS_DENIED\",\"MEGA_STORE_NOT_FOUND\",\"MEGA_STORE_VALIDATION\",\"MEGA_STORE_WRONG_REGION\",\"META_WRITE_VALIDATION\",\"MINIO_IMPORT_ACCESS_DENIED\",\"MINIO_IMPORT_FAILURE\",\"MINIO_IMPORT_NOT_FOUND\",\"MINIO_IMPORT_VALIDATION\",\"MINIO_STORE_ACCESS_DENIED\",\"MINIO_STORE_NOT_FOUND\",\"MINIO_STORE_VALIDATION\",\"MINIO_STORE_WRONG_REGION\",\"NO_AUTH_EXPIRES_PARAMETER\",\"NO_AUTH_KEY_PARAMETER\",\"NO_AUTH_PARAMETER\",\"NO_COUNTRY\",\"NO_OBJECT_AUTH_PARAMETER\",\"NO_OBJECT_PARAMS_FIELD\",\"NO_PARAMS_FIELD\",\"NO_PRICING\",\"NO_RESULT_STEP_FOUND\",\"NO_RPC_RESULT_FROM_IMAGE_RESIZER\",\"NO_SIGNATURE_FIELD\",\"NO_TEMPLATE_ID\",\"PLAN_LIMIT_EXCEEDED\",\"POSSIBLY_MALICIOUS_FILE_FOUND\",\"PRIORITY_JOB_SLOTS_NOT_FOUND\",\"PRIORITY_JOB_SLOT_STATS_ERROR\",\"PRIORITY_JOB_SLOT_STATS_INVALID_AGGREGATION\",\"PRIORITY_JOB_SLOT_STATS_INVALID_TIME\",\"PRIORITY_JOB_SLOT_STATS_MISSING_REGION\",\"RATE_LIMIT_REACHED\",\"REFERER_MISMATCH\",\"REQUEST_PREMATURE_CLOSED\",\"ROBOT_VALIDATION_BASE_ERROR\",\"S3_ACCESS_DENIED\",\"S3_IMPORT_ACCESS_DENIED\",\"S3_IMPORT_FAILURE\",\"S3_IMPORT_NOT_FOUND\",\"S3_IMPORT_VALIDATION\",\"S3_NOT_FOUND\",\"S3_STORE_ACCESS_DENIED\",\"S3_STORE_FAILURE\",\"S3_STORE_NOT_FOUND\",\"S3_STORE_URL_VERIFICATION_FAILURE\",\"S3_STORE_VALIDATION\",\"S3_STORE_WRONG_REGION\",\"S3_WRONG_REGION\",\"SCRIPT_RUN_VALIDATION\",\"SERVER_403\",\"SERVER_404\",\"SERVER_500\",\"SFTP_IMPORT_ACCESS_DENIED\",\"SFTP_IMPORT_FAILURE\",\"SFTP_IMPORT_NOT_FOUND\",\"SFTP_IMPORT_VALIDATION\",\"SFTP_STORE_VALIDATION\",\"SIGNATURE_REUSE_DETECTED\",\"SPEECH_TRANSCRIBE_VALIDATION\",\"STORAGE_GRANT_NOT_CREATED\",\"SUPABASE_IMPORT_ACCESS_DENIED\",\"SUPABASE_IMPORT_FAILURE\",\"SUPABASE_IMPORT_NOT_FOUND\",\"SUPABASE_IMPORT_VALIDATION\",\"SUPABASE_STORE_ACCESS_DENIED\",\"SUPABASE_STORE_NOT_FOUND\",\"SUPABASE_STORE_VALIDATION\",\"SUPABASE_STORE_WRONG_REGION\",\"SWIFT_IMPORT_ACCESS_DENIED\",\"SWIFT_IMPORT_FAILURE\",\"SWIFT_IMPORT_NOT_FOUND\",\"SWIFT_IMPORT_VALIDATION\",\"SWIFT_STORE_ACCESS_DENIED\",\"SWIFT_STORE_NOT_FOUND\",\"SWIFT_STORE_VALIDATION\",\"SWIFT_STORE_WRONG_REGION\",\"TEMPLATE_CREDENTIALS_INJECTION_ERROR\",\"TEMPLATE_DB_ERROR\",\"TEMPLATE_DENIES_STEPS_OVERRIDE\",\"TEMPLATE_INVALID_JSON\",\"TEMPLATE_NOT_FOUND\",\"TEXT_SPEAK_VALIDATION\",\"TEXT_TRANSLATE_VALIDATION\",\"TIGRIS_IMPORT_ACCESS_DENIED\",\"TIGRIS_IMPORT_FAILURE\",\"TIGRIS_IMPORT_NOT_FOUND\",\"TIGRIS_IMPORT_VALIDATION\",\"TIGRIS_STORE_ACCESS_DENIED\",\"TIGRIS_STORE_NOT_FOUND\",\"TIGRIS_STORE_VALIDATION\",\"TIGRIS_STORE_WRONG_REGION\",\"TMP_FILE_DOWNLOAD_ERROR\",\"TOKEN_INVALID_CREDENTIALS\",\"TRANSIENT_STORAGE_SERVICE_ERROR\",\"TRANSLOADIT_IMPORT_ACCESS_DENIED\",\"TRANSLOADIT_IMPORT_FAILURE\",\"TRANSLOADIT_IMPORT_NOT_FOUND\",\"TRANSLOADIT_IMPORT_VALIDATION\",\"TRANSLOADIT_STORE_CONFLICT\",\"TRANSLOADIT_STORE_FAILURE\",\"TRANSLOADIT_STORE_UNAVAILABLE\",\"TRANSLOADIT_STORE_VALIDATION\",\"TUS_STORE_VALIDATION\",\"USER_COMMAND_ERROR\",\"VERIFIED_EMAIL_REQUIRED\",\"VIDEO_ADAPTIVE_VALIDATION\",\"VIDEO_ARTWORK_VALIDATION\",\"VIDEO_CONCAT_INVALID_INPUT\",\"VIDEO_CONCAT_NO_OUTPUT\",\"VIDEO_CONCAT_VALIDATION\",\"VIDEO_ENCODE_INVALID_VIDEO_CODEC\",\"VIDEO_ENCODE_INVALID_WATERMARK_POSITION\",\"VIDEO_ENCODE_VALIDATION\",\"VIDEO_GENERATE_VALIDATION\",\"VIDEO_MERGE_NO_IMAGE_FOUND\",\"VIDEO_MERGE_VALIDATION\",\"VIDEO_ONDEMAND_NOT_FOUND\",\"VIDEO_ONDEMAND_VALIDATION\",\"VIDEO_SPLIT_NO_OUTPUT\",\"VIDEO_SPLIT_VALIDATION\",\"VIDEO_SUBTITLE_VALIDATION\",\"VIDEO_THUMBS_INVALID_COUNT_VALUE\",\"VIDEO_THUMBS_INVALID_FORMAT\",\"VIDEO_THUMBS_INVALID_INPUT\",\"VIDEO_THUMBS_VALIDATION\",\"VIMEO_IMPORT_ACCESS_DENIED\",\"VIMEO_IMPORT_FAILURE\",\"VIMEO_IMPORT_NOT_FOUND\",\"VIMEO_IMPORT_VALIDATION\",\"VIMEO_STORE_ACCESS_DENIED\",\"VIMEO_STORE_PROBLEM_SENDING_FILE\",\"VIMEO_STORE_VALIDATION\",\"WASABI_IMPORT_ACCESS_DENIED\",\"WASABI_IMPORT_FAILURE\",\"WASABI_IMPORT_NOT_FOUND\",\"WASABI_IMPORT_VALIDATION\",\"WASABI_STORE_ACCESS_DENIED\",\"WASABI_STORE_NOT_FOUND\",\"WASABI_STORE_VALIDATION\",\"WASABI_STORE_WRONG_REGION\",\"WORKER_JOB_ERROR\",\"YOUTUBE_STORE_PROBLEM_SENDING_FILE\",\"YOUTUBE_STORE_VALIDATION\"],\"publicHostPattern\":\"^api2-[a-z0-9](?:[a-z0-9-]{0,56}[a-z0-9])?\\\\.transloadit\\\\.com$\",\"rejectedHostPrefixes\":[\"api2-xn--\"],\"identityField\":\"assembly_id\",\"assemblyField\":\"assembly_ssl_url\",\"path\":\"/assemblies/{assemblyId}\",\"parameter\":\"assemblyId\",\"pattern\":\"^[a-z0-9]{32}$\"}"
+const assemblyWorkflowPolicyJSON = "{\"busyCodes\":[\"ASSEMBLY_UPLOADING\",\"ASSEMBLY_EXECUTING\",\"ASSEMBLY_REPLAYING\"],\"terminalOkCodes\":[\"ASSEMBLY_CANCELED\",\"ASSEMBLY_COMPLETED\",\"REQUEST_ABORTED\"],\"cancelableTerminalOkCodes\":[\"REQUEST_ABORTED\"],\"error\":{\"minLength\":1},\"publicHostPattern\":\"^api2-[a-z0-9](?:[a-z0-9-]{0,56}[a-z0-9])?\\\\.transloadit\\\\.com$\",\"rejectedHostPrefixes\":[\"api2-xn--\"],\"identityField\":\"assembly_id\",\"assemblyField\":\"assembly_ssl_url\",\"path\":\"/assemblies/{assemblyId}\",\"parameter\":\"assemblyId\",\"pattern\":\"^[a-z0-9]{32}$\"}"
 
 // WaitForAssembly waits on the owning uploader for any terminal status, including errors.
 // A terminal outcome does not imply successful processing or that backend work has stopped.
@@ -123682,7 +121217,7 @@ func workflowOwner(status *AssemblyWorkflowResult) string {
 	return status.GetAssemblySslUrl().GetString()
 }
 
-const tusWorkflowPolicyJSON = "{\"assembly\":{\"busyCodes\":[\"ASSEMBLY_UPLOADING\",\"ASSEMBLY_EXECUTING\",\"ASSEMBLY_REPLAYING\"],\"terminalOkCodes\":[\"ASSEMBLY_CANCELED\",\"ASSEMBLY_COMPLETED\",\"REQUEST_ABORTED\"],\"cancelableTerminalOkCodes\":[\"REQUEST_ABORTED\"],\"errorCodes\":[\"ADMIN_PERMISSIONS_REQUIRED\",\"AI_CHAT_VALIDATION\",\"ASSEMBLY_ACCOUNT_MISMATCH\",\"ASSEMBLY_CANNOT_BE_REPLAYED\",\"ASSEMBLY_COULD_NOT_BE_CREATED\",\"ASSEMBLY_CRASHED\",\"ASSEMBLY_DISALLOWED_ROBOTS_USED\",\"ASSEMBLY_EMPTY_STEPS\",\"ASSEMBLY_EXECUTION_PROGRESS_NOT_ENABLED\",\"ASSEMBLY_EXPIRED\",\"ASSEMBLY_FILE_NOT_RESERVED\",\"ASSEMBLY_INFINITE\",\"ASSEMBLY_INVALID_NOTIFY_URL\",\"ASSEMBLY_INVALID_NUM_EXPECTED_UPLOAD_FILES_PARAM\",\"ASSEMBLY_INVALID_STEPS\",\"ASSEMBLY_JOB_ENQUEUE_ERROR\",\"ASSEMBLY_LIST_ERROR\",\"ASSEMBLY_MEMORY_LIMIT_EXCEEDED\",\"ASSEMBLY_NOTIFICATIONS_LIST_ERROR\",\"ASSEMBLY_NOTIFICATION_LIST_ERROR\",\"ASSEMBLY_NOTIFICATION_NOT_PERSISTED\",\"ASSEMBLY_NOTIFICATION_NOT_REPLAYED\",\"ASSEMBLY_NOT_CAPABLE\",\"ASSEMBLY_NOT_FINISHED\",\"ASSEMBLY_NOT_FOUND\",\"ASSEMBLY_NOT_REPLAYED\",\"ASSEMBLY_NO_CHARGEABLE_STEP\",\"ASSEMBLY_NO_NOTIFY_URL\",\"ASSEMBLY_NO_STEPS\",\"ASSEMBLY_PLAN_FILE_SIZE_LIMIT_EXCEEDED\",\"ASSEMBLY_ROBOT_MISSING\",\"ASSEMBLY_SATURATED\",\"ASSEMBLY_STATS_ERROR\",\"ASSEMBLY_STATS_INVALID_TIME\",\"ASSEMBLY_STATS_MISSING_REGION\",\"ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED\",\"ASSEMBLY_STATUS_NOT_FOUND\",\"ASSEMBLY_STATUS_PARSE_ERROR\",\"ASSEMBLY_STEP_INVALID\",\"ASSEMBLY_STEP_INVALID_ROBOT\",\"ASSEMBLY_STEP_INVALID_USE\",\"ASSEMBLY_STEP_NO_ROBOT\",\"ASSEMBLY_STEP_UNKNOWN_ROBOT\",\"ASSEMBLY_STEP_UNKNOWN_USE\",\"ASSEMBLY_URL_TRANSFORM_MISSING\",\"AUDIO_ARTWORK_VALIDATION\",\"AUDIO_CONCAT_INVALID_INPUT\",\"AUDIO_CONCAT_VALIDATION\",\"AUDIO_ENCODE_VALIDATION\",\"AUDIO_LOOP_VALIDATION\",\"AUDIO_MERGE_VALIDATION\",\"AUDIO_SPLIT_NO_OUTPUT\",\"AUDIO_SPLIT_VALIDATION\",\"AUDIO_WAVEFORM_VALIDATION\",\"AUTH_EXPIRED\",\"AUTH_KEYS_NOT_FOUND\",\"AUTH_KEY_SCOPES_NOT_FOUND\",\"AUTH_SECRET_NOT_RETRIEVED\",\"AZURE_IMPORT_ACCESS_DENIED\",\"AZURE_IMPORT_FAILURE\",\"AZURE_IMPORT_NOT_FOUND\",\"AZURE_IMPORT_VALIDATION\",\"AZURE_STORE_ACCESS_DENIED\",\"AZURE_STORE_NOT_FOUND\",\"AZURE_STORE_VALIDATION\",\"BACKBLAZE_IMPORT_ACCESS_DENIED\",\"BACKBLAZE_IMPORT_FAILURE\",\"BACKBLAZE_IMPORT_NOT_FOUND\",\"BACKBLAZE_IMPORT_VALIDATION\",\"BACKBLAZE_STORE_ACCESS_DENIED\",\"BACKBLAZE_STORE_FAILURE\",\"BACKBLAZE_STORE_VALIDATION\",\"BAD_PRICING\",\"BEARER_TOKEN_AUTH_KEY_MISMATCH\",\"BEARER_TOKEN_EXPIRED\",\"BEARER_TOKEN_INVALID\",\"BILL_LIMIT_EXCEEDED\",\"BOX_IMPORT_ACCESS_DENIED\",\"BOX_IMPORT_FAILURE\",\"BOX_IMPORT_NOT_FOUND\",\"BOX_IMPORT_VALIDATION\",\"BOX_STORE_COULD_NOT_PARSE_URL\",\"BOX_STORE_VALIDATION\",\"CANNOT_ACCEPT_NEW_ASSEMBLIES\",\"CDN_REQUIRED\",\"CLOUDFILES_IMPORT_ACCESS_DENIED\",\"CLOUDFILES_IMPORT_FAILURE\",\"CLOUDFILES_IMPORT_NOT_FOUND\",\"CLOUDFILES_IMPORT_VALIDATION\",\"CLOUDFILES_STORE_ACCESS_DENIED\",\"CLOUDFILES_STORE_ERROR\",\"CLOUDFILES_STORE_VALIDATION\",\"CLOUDFLARE_IMPORT_ACCESS_DENIED\",\"CLOUDFLARE_IMPORT_FAILURE\",\"CLOUDFLARE_IMPORT_NOT_FOUND\",\"CLOUDFLARE_IMPORT_VALIDATION\",\"CLOUDFLARE_STORE_ACCESS_DENIED\",\"CLOUDFLARE_STORE_NOT_FOUND\",\"CLOUDFLARE_STORE_URL_VERIFICATION_FAILURE\",\"CLOUDFLARE_STORE_VALIDATION\",\"CLOUDFLARE_STORE_WRONG_REGION\",\"CLOUD_AI_IMAGE_VALIDATION\",\"DAM_STORAGE_UNAVAILABLE\",\"DIGITALOCEAN_IMPORT_ACCESS_DENIED\",\"DIGITALOCEAN_IMPORT_FAILURE\",\"DIGITALOCEAN_IMPORT_NOT_FOUND\",\"DIGITALOCEAN_IMPORT_VALIDATION\",\"DIGITALOCEAN_STORE_ACCESS_DENIED\",\"DIGITALOCEAN_STORE_NOT_FOUND\",\"DIGITALOCEAN_STORE_VALIDATION\",\"DIGITALOCEAN_STORE_WRONG_REGION\",\"DOCUMENT_AUTOROTATE_VALIDATION\",\"DOCUMENT_CONVERT_UNSUPPORTED_CONVERSION\",\"DOCUMENT_CONVERT_VALIDATION\",\"DOCUMENT_EXTRACT_VALIDATION\",\"DOCUMENT_MERGE_UNSUPPORTED_CONVERSION\",\"DOCUMENT_MERGE_VALIDATION\",\"DOCUMENT_OCR_VALIDATION\",\"DOCUMENT_OPTIMIZE_UNSUPPORTED_INPUT\",\"DOCUMENT_OPTIMIZE_VALIDATION\",\"DOCUMENT_SPLIT_VALIDATION\",\"DOCUMENT_THUMBS_INVALID_INPUT\",\"DOCUMENT_THUMBS_VALIDATION\",\"DO_NOT_REUSE_ASSEMBLY_IDS\",\"DROPBOX_IMPORT_ACCESS_DENIED\",\"DROPBOX_IMPORT_FAILURE\",\"DROPBOX_IMPORT_NOT_FOUND\",\"DROPBOX_IMPORT_VALIDATION\",\"DROPBOX_STORE_COULD_NOT_PARSE_URL\",\"DROPBOX_STORE_VALIDATION\",\"FILE_COMPRESS_INVALID_INPUT\",\"FILE_COMPRESS_VALIDATION\",\"FILE_DECOMPRESS_INVALID_INPUT\",\"FILE_DECOMPRESS_PASSWORD_INCORRECT\",\"FILE_DECOMPRESS_PASSWORD_REQUIRED\",\"FILE_DECOMPRESS_VALIDATION\",\"FILE_DOWNLOAD_ERROR\",\"FILE_FILTER_DECLINED_FILE\",\"FILE_FILTER_INVALID_OPERATOR\",\"FILE_FILTER_VALIDATION\",\"FILE_HASH_VALIDATION\",\"FILE_META_DATA_ERROR\",\"FILE_PREVIEW_VALIDATION\",\"FILE_READ_VALIDATION_ERROR\",\"FILE_SERVE_NO_RESULT\",\"FILE_SERVE_VALIDATION\",\"FILE_VERIFY_INVALID_FILE\",\"FILE_VERIFY_VALIDATION\",\"FILE_VIRUSSCAN_DECLINED_FILE\",\"FILE_VIRUSSCAN_INVALID_INPUT\",\"FILE_VIRUSSCAN_VALIDATION\",\"FTP_IMPORT_ACCESS_DENIED\",\"FTP_IMPORT_FAILURE\",\"FTP_IMPORT_NOT_FOUND\",\"FTP_IMPORT_VALIDATION\",\"FTP_STORE_VALIDATION\",\"GET_ACCOUNT_DB_ERROR\",\"GET_ACCOUNT_UNKNOWN_AUTH_KEY\",\"GOOGLE_IMPORT_ACCESS_DENIED\",\"GOOGLE_IMPORT_FAILURE\",\"GOOGLE_IMPORT_NOT_FOUND\",\"GOOGLE_IMPORT_VALIDATION\",\"GOOGLE_STORE_INVALID_INPUT\",\"GOOGLE_STORE_VALIDATION\",\"HTML_CONVERT_VALIDATION\",\"HTTP_IMPORT_ACCESS_DENIED\",\"HTTP_IMPORT_FAILURE\",\"HTTP_IMPORT_NOT_FOUND\",\"HTTP_IMPORT_VALIDATION\",\"HTTP_REQUEST_FAILURE\",\"HTTP_REQUEST_VALIDATION\",\"IMAGE_BGREMOVE_VALIDATION\",\"IMAGE_COPYRIGHT_DETECT_DECLINED_FILE\",\"IMAGE_COPYRIGHT_DETECT_VALIDATION\",\"IMAGE_DESCRIBE_VALIDATION\",\"IMAGE_ENHANCE_NO_INPUT_FILE\",\"IMAGE_ENHANCE_VALIDATION\",\"IMAGE_FACEDETECT_VALIDATION\",\"IMAGE_GENERATE_VALIDATION\",\"IMAGE_MERGE_FAILURE\",\"IMAGE_MERGE_VALIDATION\",\"IMAGE_OCR_VALIDATION\",\"IMAGE_OPTIMIZE_VALIDATION\",\"IMAGE_RESIZE_ERROR\",\"IMAGE_RESIZE_INVALID_BLUR_REGION\",\"IMAGE_RESIZE_INVALID_TEXT_OBJECT_VALUE\",\"IMAGE_RESIZE_INVALID_TEXT_VALUE\",\"IMAGE_RESIZE_INVALID_WATERMARK_OFFSET\",\"IMAGE_RESIZE_INVALID_WATERMARK_POSITION\",\"IMAGE_RESIZE_NO_CLUT_FILE\",\"IMAGE_RESIZE_NO_INPUT_FILE\",\"IMAGE_RESIZE_VALIDATION\",\"IMAGE_UPSCALE_VALIDATION\",\"IMPORT_FILE_ERROR\",\"INCOMPLETE_PRICING\",\"INSUFFICIENT_AUTH_SCOPE\",\"INTERNAL_COMMAND_ERROR\",\"INTERNAL_COMMAND_TIMEOUT\",\"INVALID_ASSEMBLY_STATUS\",\"INVALID_AUTH_EXPIRES_PARAMETER\",\"INVALID_AUTH_KEY_PARAMETER\",\"INVALID_AUTH_MAX_NUMBER_OF_FILES_PARAMETER\",\"INVALID_AUTH_MAX_SIZE_PARAMETER\",\"INVALID_AUTH_REFERER_PARAMETER\",\"INVALID_FILE_META_DATA\",\"INVALID_FORM_DATA\",\"INVALID_INPUT_ERROR\",\"INVALID_PARAMS_FIELD\",\"INVALID_SIGNATURE\",\"INVALID_STEP_NAME\",\"INVALID_TEMPLATE_FIELD\",\"INVALID_UPLOAD_HANDLE_STEP_NAME\",\"INVALID_URL_ENCODING\",\"MAX_NUMBER_OF_FILES_EXCEEDED\",\"MAX_SIZE_EXCEEDED\",\"MEGA_IMPORT_ACCESS_DENIED\",\"MEGA_IMPORT_FAILURE\",\"MEGA_IMPORT_NOT_FOUND\",\"MEGA_IMPORT_VALIDATION\",\"MEGA_STORE_ACCESS_DENIED\",\"MEGA_STORE_NOT_FOUND\",\"MEGA_STORE_VALIDATION\",\"MEGA_STORE_WRONG_REGION\",\"META_WRITE_VALIDATION\",\"MINIO_IMPORT_ACCESS_DENIED\",\"MINIO_IMPORT_FAILURE\",\"MINIO_IMPORT_NOT_FOUND\",\"MINIO_IMPORT_VALIDATION\",\"MINIO_STORE_ACCESS_DENIED\",\"MINIO_STORE_NOT_FOUND\",\"MINIO_STORE_VALIDATION\",\"MINIO_STORE_WRONG_REGION\",\"NO_AUTH_EXPIRES_PARAMETER\",\"NO_AUTH_KEY_PARAMETER\",\"NO_AUTH_PARAMETER\",\"NO_COUNTRY\",\"NO_OBJECT_AUTH_PARAMETER\",\"NO_OBJECT_PARAMS_FIELD\",\"NO_PARAMS_FIELD\",\"NO_PRICING\",\"NO_RESULT_STEP_FOUND\",\"NO_RPC_RESULT_FROM_IMAGE_RESIZER\",\"NO_SIGNATURE_FIELD\",\"NO_TEMPLATE_ID\",\"PLAN_LIMIT_EXCEEDED\",\"POSSIBLY_MALICIOUS_FILE_FOUND\",\"PRIORITY_JOB_SLOTS_NOT_FOUND\",\"PRIORITY_JOB_SLOT_STATS_ERROR\",\"PRIORITY_JOB_SLOT_STATS_INVALID_AGGREGATION\",\"PRIORITY_JOB_SLOT_STATS_INVALID_TIME\",\"PRIORITY_JOB_SLOT_STATS_MISSING_REGION\",\"RATE_LIMIT_REACHED\",\"REFERER_MISMATCH\",\"REQUEST_PREMATURE_CLOSED\",\"ROBOT_VALIDATION_BASE_ERROR\",\"S3_ACCESS_DENIED\",\"S3_IMPORT_ACCESS_DENIED\",\"S3_IMPORT_FAILURE\",\"S3_IMPORT_NOT_FOUND\",\"S3_IMPORT_VALIDATION\",\"S3_NOT_FOUND\",\"S3_STORE_ACCESS_DENIED\",\"S3_STORE_FAILURE\",\"S3_STORE_NOT_FOUND\",\"S3_STORE_URL_VERIFICATION_FAILURE\",\"S3_STORE_VALIDATION\",\"S3_STORE_WRONG_REGION\",\"S3_WRONG_REGION\",\"SCRIPT_RUN_VALIDATION\",\"SERVER_403\",\"SERVER_404\",\"SERVER_500\",\"SFTP_IMPORT_ACCESS_DENIED\",\"SFTP_IMPORT_FAILURE\",\"SFTP_IMPORT_NOT_FOUND\",\"SFTP_IMPORT_VALIDATION\",\"SFTP_STORE_VALIDATION\",\"SIGNATURE_REUSE_DETECTED\",\"SPEECH_TRANSCRIBE_VALIDATION\",\"STORAGE_GRANT_NOT_CREATED\",\"SUPABASE_IMPORT_ACCESS_DENIED\",\"SUPABASE_IMPORT_FAILURE\",\"SUPABASE_IMPORT_NOT_FOUND\",\"SUPABASE_IMPORT_VALIDATION\",\"SUPABASE_STORE_ACCESS_DENIED\",\"SUPABASE_STORE_NOT_FOUND\",\"SUPABASE_STORE_VALIDATION\",\"SUPABASE_STORE_WRONG_REGION\",\"SWIFT_IMPORT_ACCESS_DENIED\",\"SWIFT_IMPORT_FAILURE\",\"SWIFT_IMPORT_NOT_FOUND\",\"SWIFT_IMPORT_VALIDATION\",\"SWIFT_STORE_ACCESS_DENIED\",\"SWIFT_STORE_NOT_FOUND\",\"SWIFT_STORE_VALIDATION\",\"SWIFT_STORE_WRONG_REGION\",\"TEMPLATE_CREDENTIALS_INJECTION_ERROR\",\"TEMPLATE_DB_ERROR\",\"TEMPLATE_DENIES_STEPS_OVERRIDE\",\"TEMPLATE_INVALID_JSON\",\"TEMPLATE_NOT_FOUND\",\"TEXT_SPEAK_VALIDATION\",\"TEXT_TRANSLATE_VALIDATION\",\"TIGRIS_IMPORT_ACCESS_DENIED\",\"TIGRIS_IMPORT_FAILURE\",\"TIGRIS_IMPORT_NOT_FOUND\",\"TIGRIS_IMPORT_VALIDATION\",\"TIGRIS_STORE_ACCESS_DENIED\",\"TIGRIS_STORE_NOT_FOUND\",\"TIGRIS_STORE_VALIDATION\",\"TIGRIS_STORE_WRONG_REGION\",\"TMP_FILE_DOWNLOAD_ERROR\",\"TOKEN_INVALID_CREDENTIALS\",\"TRANSIENT_STORAGE_SERVICE_ERROR\",\"TRANSLOADIT_IMPORT_ACCESS_DENIED\",\"TRANSLOADIT_IMPORT_FAILURE\",\"TRANSLOADIT_IMPORT_NOT_FOUND\",\"TRANSLOADIT_IMPORT_VALIDATION\",\"TRANSLOADIT_STORE_CONFLICT\",\"TRANSLOADIT_STORE_FAILURE\",\"TRANSLOADIT_STORE_UNAVAILABLE\",\"TRANSLOADIT_STORE_VALIDATION\",\"TUS_STORE_VALIDATION\",\"USER_COMMAND_ERROR\",\"VERIFIED_EMAIL_REQUIRED\",\"VIDEO_ADAPTIVE_VALIDATION\",\"VIDEO_ARTWORK_VALIDATION\",\"VIDEO_CONCAT_INVALID_INPUT\",\"VIDEO_CONCAT_NO_OUTPUT\",\"VIDEO_CONCAT_VALIDATION\",\"VIDEO_ENCODE_INVALID_VIDEO_CODEC\",\"VIDEO_ENCODE_INVALID_WATERMARK_POSITION\",\"VIDEO_ENCODE_VALIDATION\",\"VIDEO_GENERATE_VALIDATION\",\"VIDEO_MERGE_NO_IMAGE_FOUND\",\"VIDEO_MERGE_VALIDATION\",\"VIDEO_ONDEMAND_NOT_FOUND\",\"VIDEO_ONDEMAND_VALIDATION\",\"VIDEO_SPLIT_NO_OUTPUT\",\"VIDEO_SPLIT_VALIDATION\",\"VIDEO_SUBTITLE_VALIDATION\",\"VIDEO_THUMBS_INVALID_COUNT_VALUE\",\"VIDEO_THUMBS_INVALID_FORMAT\",\"VIDEO_THUMBS_INVALID_INPUT\",\"VIDEO_THUMBS_VALIDATION\",\"VIMEO_IMPORT_ACCESS_DENIED\",\"VIMEO_IMPORT_FAILURE\",\"VIMEO_IMPORT_NOT_FOUND\",\"VIMEO_IMPORT_VALIDATION\",\"VIMEO_STORE_ACCESS_DENIED\",\"VIMEO_STORE_PROBLEM_SENDING_FILE\",\"VIMEO_STORE_VALIDATION\",\"WASABI_IMPORT_ACCESS_DENIED\",\"WASABI_IMPORT_FAILURE\",\"WASABI_IMPORT_NOT_FOUND\",\"WASABI_IMPORT_VALIDATION\",\"WASABI_STORE_ACCESS_DENIED\",\"WASABI_STORE_NOT_FOUND\",\"WASABI_STORE_VALIDATION\",\"WASABI_STORE_WRONG_REGION\",\"WORKER_JOB_ERROR\",\"YOUTUBE_STORE_PROBLEM_SENDING_FILE\",\"YOUTUBE_STORE_VALIDATION\"],\"publicHostPattern\":\"^api2-[a-z0-9](?:[a-z0-9-]{0,56}[a-z0-9])?\\\\.transloadit\\\\.com$\",\"rejectedHostPrefixes\":[\"api2-xn--\"],\"identityField\":\"assembly_id\",\"assemblyField\":\"assembly_ssl_url\",\"path\":\"/assemblies/{assemblyId}\",\"parameter\":\"assemblyId\",\"pattern\":\"^[a-z0-9]{32}$\"},\"wire\":{\"version\":\"1.0.0\",\"headers\":{\"resumable\":\"tus-resumable\",\"length\":\"upload-length\",\"offset\":\"upload-offset\",\"contentType\":\"content-type\",\"metadata\":\"upload-metadata\",\"location\":\"location\"},\"mediaType\":\"application/offset+octet-stream\",\"filename\":\"filename\",\"fieldname\":\"fieldname\",\"identity\":{\"keyPattern\":\"^(?:\\\\t|[^\\\\x00-\\\\x20,\\\\x7f])+$\",\"valuePattern\":\"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$\",\"encoding\":\"canonical-base64\",\"comparison\":\"decoded-bytes\",\"duplicateKeys\":\"reject\"},\"receipt\":{\"collectionField\":\"tus_uploads\",\"fields\":{\"filename\":\"filename\",\"fieldname\":\"fieldname\",\"size\":\"size\",\"offset\":\"offset\",\"finished\":\"finished\",\"url\":\"upload_url\"},\"finishedValue\":true,\"matchCount\":1}},\"collectionField\":\"tus_url\",\"metadataName\":\"assembly_url\",\"create\":{\"headers\":{\"alternatives\":[[{\"name\":\"content-type\",\"required\":false,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-concat\",\"required\":false,\"values\":[\"partial\"]},{\"name\":\"upload-length\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":true},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}],[{\"name\":\"content-type\",\"required\":false,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-concat\",\"required\":false,\"values\":[\"partial\"]},{\"name\":\"upload-defer-length\",\"required\":true,\"values\":[\"1\"]},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}],[{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"maxLength\":8192,\"name\":\"upload-concat\",\"pattern\":\"^final;(?:https?:\\\\/\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)?\\\\/resumable\\\\/files\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+(?:\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)*(?: (?:https?:\\\\/\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)?\\\\/resumable\\\\/files\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+(?:\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)*)*$\",\"required\":true},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}]]},\"kind\":\"tus-collection\",\"method\":\"POST\",\"operationId\":\"tusd.create-upload\",\"parameters\":[],\"path\":\"/resumable/files\",\"success\":201},\"head\":{\"headers\":{\"alternatives\":[[{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]}]]},\"kind\":\"tus-upload-resource\",\"method\":\"HEAD\",\"operationId\":\"tusd.get-upload-offset\",\"parameters\":[{\"minLength\":1,\"name\":\"uploadId\",\"percentDecode\":true}],\"path\":\"/resumable/files/{uploadId}\",\"success\":200},\"patch\":{\"headers\":{\"alternatives\":[[{\"name\":\"content-type\",\"required\":true,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-length\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":false},{\"name\":\"upload-offset\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":true}]]},\"kind\":\"tus-upload-resource\",\"method\":\"PATCH\",\"operationId\":\"tusd.patch-upload\",\"parameters\":[{\"minLength\":1,\"name\":\"uploadId\",\"percentDecode\":true}],\"path\":\"/resumable/files/{uploadId}\",\"success\":204}}"
+const tusWorkflowPolicyJSON = "{\"assembly\":{\"busyCodes\":[\"ASSEMBLY_UPLOADING\",\"ASSEMBLY_EXECUTING\",\"ASSEMBLY_REPLAYING\"],\"terminalOkCodes\":[\"ASSEMBLY_CANCELED\",\"ASSEMBLY_COMPLETED\",\"REQUEST_ABORTED\"],\"cancelableTerminalOkCodes\":[\"REQUEST_ABORTED\"],\"error\":{\"minLength\":1},\"publicHostPattern\":\"^api2-[a-z0-9](?:[a-z0-9-]{0,56}[a-z0-9])?\\\\.transloadit\\\\.com$\",\"rejectedHostPrefixes\":[\"api2-xn--\"],\"identityField\":\"assembly_id\",\"assemblyField\":\"assembly_ssl_url\",\"path\":\"/assemblies/{assemblyId}\",\"parameter\":\"assemblyId\",\"pattern\":\"^[a-z0-9]{32}$\"},\"wire\":{\"version\":\"1.0.0\",\"headers\":{\"resumable\":\"tus-resumable\",\"length\":\"upload-length\",\"offset\":\"upload-offset\",\"contentType\":\"content-type\",\"metadata\":\"upload-metadata\",\"location\":\"location\"},\"mediaType\":\"application/offset+octet-stream\",\"filename\":\"filename\",\"fieldname\":\"fieldname\",\"identity\":{\"keyPattern\":\"^(?:\\\\t|[^\\\\x00-\\\\x20,\\\\x7f])+$\",\"valuePattern\":\"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$\",\"encoding\":\"canonical-base64\",\"comparison\":\"decoded-bytes\",\"duplicateKeys\":\"reject\"},\"receipt\":{\"collectionField\":\"tus_uploads\",\"fields\":{\"filename\":\"filename\",\"fieldname\":\"fieldname\",\"size\":\"size\",\"offset\":\"offset\",\"finished\":\"finished\",\"url\":\"upload_url\"},\"finishedValue\":true,\"matchCount\":1}},\"collectionField\":\"tus_url\",\"metadataName\":\"assembly_url\",\"create\":{\"headers\":{\"alternatives\":[[{\"name\":\"content-type\",\"required\":false,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-concat\",\"required\":false,\"values\":[\"partial\"]},{\"name\":\"upload-length\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":true},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}],[{\"name\":\"content-type\",\"required\":false,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-concat\",\"required\":false,\"values\":[\"partial\"]},{\"name\":\"upload-defer-length\",\"required\":true,\"values\":[\"1\"]},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}],[{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"maxLength\":8192,\"name\":\"upload-concat\",\"pattern\":\"^final;(?:https?:\\\\/\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)?\\\\/resumable\\\\/files\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+(?:\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)*(?: (?:https?:\\\\/\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)?\\\\/resumable\\\\/files\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+(?:\\\\/[^/\\\\x09-\\\\x0D\\\\x20\\\\xA0                　\ufeff]+)*)*$\",\"required\":true},{\"name\":\"upload-metadata\",\"pattern\":\"^[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?(?:,[\\\\x21-\\\\x2b\\\\x2d-\\\\x7e]+(?: (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)?)*$\",\"required\":true}]]},\"kind\":\"tus-collection\",\"method\":\"POST\",\"operationId\":\"tusd.create-upload\",\"parameters\":[],\"path\":\"/resumable/files\",\"success\":201},\"head\":{\"headers\":{\"alternatives\":[[{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]}]]},\"kind\":\"tus-upload-resource\",\"method\":\"HEAD\",\"operationId\":\"tusd.get-upload-offset\",\"parameters\":[{\"minLength\":1,\"name\":\"uploadId\",\"percentDecode\":true}],\"path\":\"/resumable/files/{uploadId}\",\"success\":200},\"patch\":{\"headers\":{\"alternatives\":[[{\"name\":\"content-type\",\"required\":true,\"values\":[\"application/offset+octet-stream\"]},{\"name\":\"tus-resumable\",\"required\":true,\"values\":[\"1.0.0\"]},{\"name\":\"upload-length\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":false},{\"name\":\"upload-offset\",\"pattern\":\"^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$\",\"required\":true}]]},\"kind\":\"tus-upload-resource\",\"method\":\"PATCH\",\"operationId\":\"tusd.patch-upload\",\"parameters\":[{\"minLength\":1,\"name\":\"uploadId\",\"percentDecode\":true}],\"path\":\"/resumable/files/{uploadId}\",\"success\":204}}"
 
 // UploadAssemblyFile transfers one fixed-size file, not its Assembly's processing result.
 func (client *Client) UploadAssemblyFile(ctx context.Context, input AssemblyUploadOptions) (*AssemblyUploadSession, error) {

@@ -1,5 +1,19 @@
 # Contract workflow finality follow-up for #47
 
+October 6 reader compatibility, still draft and unmerged:
+
+- [x] Reproduce future errors failing generated decoding before the workflow can inspect them.
+- [x] Regenerate from API2 producer `98c3d25a8f` with scalar open-string codecs. Share one native
+      state reader between waiting/cancellation and tus. Exact values stay structured data;
+      stopped-upload diagnostic messages remain generic.
+- [x] Pass all 160 shared reader/mode observations, complete contract/shared workflow race
+      tests, vet and example builds. Correct the old stop-message assertion to require a generic
+      cause while retaining the exact structured code; keep the strict root fixture decoder.
+- [ ] Finish council, refreshed producer pins/runtime acceptance and exact-head CI.
+      No merge, release or new live-test budget.
+- API2's existing `docs/prompts/2026-07-09-handover-sdks-branch-restructure.md` is the canonical
+  program record; this file tracks only the native PR's validation.
+
 October 4 final confirmation correction, still draft and unmerged:
 
 - [x] Source-access-verified combined council found invalid confirmation inspection still hid

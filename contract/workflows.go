@@ -20,6 +20,7 @@ import (
 	"syscall"
 	"time"
 	"unicode"
+	"unicode/utf8"
 )
 
 // AssemblyWorkflowOptions bounds discovery, cancellation and polling as one workflow.
@@ -35,14 +36,16 @@ type assemblyWorkflowPolicy struct {
 	BusyCodes                 []string `json:"busyCodes"`
 	TerminalOkCodes           []string `json:"terminalOkCodes"`
 	CancelableTerminalOkCodes []string `json:"cancelableTerminalOkCodes"`
-	ErrorCodes                []string `json:"errorCodes"`
-	PublicHostPattern         string   `json:"publicHostPattern"`
-	RejectedHostPrefixes      []string `json:"rejectedHostPrefixes"`
-	IdentityField             string   `json:"identityField"`
-	AssemblyField             string   `json:"assemblyField"`
-	Path                      string   `json:"path"`
-	Parameter                 string   `json:"parameter"`
-	Pattern                   string   `json:"pattern"`
+	Error                     struct {
+		MinLength int `json:"minLength"`
+	} `json:"error"`
+	PublicHostPattern    string   `json:"publicHostPattern"`
+	RejectedHostPrefixes []string `json:"rejectedHostPrefixes"`
+	IdentityField        string   `json:"identityField"`
+	AssemblyField        string   `json:"assemblyField"`
+	Path                 string   `json:"path"`
+	Parameter            string   `json:"parameter"`
+	Pattern              string   `json:"pattern"`
 }
 
 // ErrAssemblyWorkflowUnconfirmed means explicit cancellation could not discover an uploader.
@@ -591,25 +594,18 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 		}
 	}
 	inspect := func(status *AssemblyWorkflowResult) (bool, error) {
-		if status == nil || workflowIdentity(status) != input.AssemblyID {
-			return false, invalidUpload()
+		state, err := inspectAssemblyState(status, input.AssemblyID, policy.Assembly)
+		if err != nil {
+			return false, err
 		}
-		if hasWorkflowCode(policy.Assembly.BusyCodes, status.GetOk()) {
+		if state.busy {
 			return true, nil
 		}
-		assemblyCode = status.GetOk()
-		known := hasWorkflowCode(policy.Assembly.TerminalOkCodes, assemblyCode)
-		if status.WithError != nil {
-			assemblyCode = string(status.WithError.Error)
-			known = hasWorkflowCode(policy.Assembly.ErrorCodes, assemblyCode)
-		}
-		if !known {
-			return false, invalidUpload()
-		}
+		assemblyCode = state.code
 		// File receipt and processing success are separate outcomes. A saved session can verify
 		// completion even after processing fails, but no stopped state authorizes another write.
 		if session == nil || workflowOwner(status) == "" || workflowCollection(status) == "" {
-			return false, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
+			return false, fmt.Errorf("Assembly is not accepting upload writes")
 		}
 		return false, nil
 	}
@@ -728,7 +724,7 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	// A completed transfer may be confirmed idempotently, but a stopped Assembly must not
 	// receive any more bytes. This is the observed state; the server still arbitrates later races.
 	if position < input.Size && !canWrite {
-		return nil, fmt.Errorf("Assembly is not accepting upload writes (%s)", assemblyCode)
+		return nil, fmt.Errorf("Assembly is not accepting upload writes")
 	}
 	for position < input.Size {
 		if err := workflowDeadline(ctx); err != nil {
@@ -803,36 +799,55 @@ func (client *Client) readWorkflowStatus(ctx context.Context, id string, interva
 	}
 }
 
-func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy, requireCancellation bool) (bool, string, error) {
-	if err := workflowDeadline(ctx); err != nil {
-		return false, "", err
-	}
-	if status == nil {
-		return false, "", invalidAssemblyWorkflow()
-	}
-	if workflowIdentity(status) != id {
-		return false, "", invalidAssemblyWorkflow()
+type assemblyReaderState struct {
+	code         string
+	busy, failed bool
+}
+
+// The generated wire schema owns error admission; known values are not an exhaustive inventory.
+func inspectAssemblyState(status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy) (assemblyReaderState, error) {
+	if status == nil || workflowIdentity(status) != id {
+		return assemblyReaderState{}, invalidAssemblyWorkflow()
 	}
 	// Generated union decoding rejects ambiguous ok+error bodies. Read its typed variant without
 	// serializing the complete files/results graph again on every poll.
 	if status.WithError != nil {
-		// The producer and generated union use a closed error enum. Open-enum evolution needs a
-		// source-owned type change, not an unchecked cast of new wire values into this snapshot.
-		if !hasWorkflowCode(policy.ErrorCodes, string(status.WithError.Error)) {
-			return false, "", invalidAssemblyWorkflow()
+		code := string(status.WithError.Error)
+		if utf8.RuneCountInString(code) < policy.Error.MinLength {
+			return assemblyReaderState{}, invalidAssemblyWorkflow()
 		}
-		return true, "", workflowDeadline(ctx)
+		return assemblyReaderState{code: code, failed: true}, nil
 	}
 	ok := status.GetOk()
-	if requireCancellation && hasWorkflowCode(policy.CancelableTerminalOkCodes, ok) {
+	if hasWorkflowCode(policy.TerminalOkCodes, ok) {
+		return assemblyReaderState{code: ok}, nil
+	}
+	if hasWorkflowCode(policy.BusyCodes, ok) {
+		return assemblyReaderState{code: ok, busy: true}, nil
+	}
+	return assemblyReaderState{}, invalidAssemblyWorkflow()
+}
+
+func inspectWorkflowStatus(ctx context.Context, status *AssemblyWorkflowResult, id string, policy assemblyWorkflowPolicy, requireCancellation bool) (bool, string, error) {
+	if err := workflowDeadline(ctx); err != nil {
+		return false, "", err
+	}
+	state, err := inspectAssemblyState(status, id, policy)
+	if err != nil {
+		return false, "", err
+	}
+	if state.failed {
+		return true, "", workflowDeadline(ctx)
+	}
+	if requireCancellation && hasWorkflowCode(policy.CancelableTerminalOkCodes, state.code) {
 		// A failed request is finite for waiters, but an explicit cancel must still reach its owner.
 		return false, workflowOwner(status), nil
 	}
-	if hasWorkflowCode(policy.TerminalOkCodes, ok) {
+	if !state.busy {
 		return true, "", workflowDeadline(ctx)
 	}
 	owner := workflowOwner(status)
-	if !hasWorkflowCode(policy.BusyCodes, ok) || owner == "" {
+	if owner == "" {
 		return false, "", invalidAssemblyWorkflow()
 	}
 	return false, owner, workflowDeadline(ctx)

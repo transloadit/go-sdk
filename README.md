@@ -89,6 +89,10 @@ completed Assembly. `CreateAssembly.Files` supports multipart uploads. The expli
 `CancelAndWaitForAssembly(ctx, options)` workflows safely follow the owning uploader and return
 only after confirming a terminal status. Check `status.GetOk() == "ASSEMBLY_COMPLETED"` for
 successful processing; cancellation and processing errors are terminal too.
+Future nonempty error strings are terminal failures too. Known codes are not exhaustive;
+`status.WithError.Error` preserves the exact value as a string-based type. Treat it as untrusted
+text when displaying or logging it. Unknown `ok` values and malformed or contradictory statuses
+remain invalid.
 
 For a resumable upload, set the top-level `CreateAssemblyInput.Fields` (not `Params.Fields`) to
 `map[string]string{"num_expected_upload_files": "1"}`, then call

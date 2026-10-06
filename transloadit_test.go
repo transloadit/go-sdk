@@ -194,12 +194,17 @@ type workflowVector struct {
 }
 
 type workflowFixture struct {
-	Format      string
-	Version     int
-	Credentials struct{ Key, Secret string }
-	AssemblyID  string
-	Admission   json.RawMessage
-	Cases       []workflowVector
+	Format              string
+	Version             int
+	Credentials         struct{ Key, Secret string }
+	AssemblyID          string
+	Admission           json.RawMessage
+	Cases               []workflowVector
+	ReaderCompatibility []struct {
+		ID                string
+		State             map[string]interface{}
+		Accepted, Emitted bool
+	}
 	TusMetadata []struct {
 		ID, Filename, Append string
 		Values               map[string]string
@@ -238,7 +243,7 @@ func sharedWorkflows(t *testing.T) workflowFixture {
 	if fixtures.Format != "transloadit-sdk-workflow-vectors" || fixtures.Version != 1 {
 		t.Fatal("unsupported shared workflow fixture version")
 	}
-	if len(fixtures.Cases) == 0 || len(fixtures.SmartCdn) == 0 {
+	if len(fixtures.Cases) == 0 || len(fixtures.SmartCdn) == 0 || len(fixtures.ReaderCompatibility) == 0 {
 		t.Fatal("shared workflow fixtures must not silently lose their cases")
 	}
 	ids := make(map[string]bool)
