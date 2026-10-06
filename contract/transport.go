@@ -27,7 +27,7 @@ import (
 	"time"
 )
 
-// Config selects signed requests or bearer authentication, never an implicit token exchange.
+// Config selects account authentication explicitly, never an implicit token exchange.
 type Config struct {
 	Origin string
 	// AssemblyOrigins contains deployment-owned origins, never values copied from API responses.
@@ -38,8 +38,9 @@ type Config struct {
 	// NoAccountCredentials explicitly selects only operations that need no account authentication.
 	NoAccountCredentials bool
 	SignatureAlgorithm   string
-	// HTTPClient.Transport also carries uploader/tus requests. The SDK does not add API
-	// credentials to these capability requests and excludes the configured cookie jar.
+	// HTTPClient.Transport is trusted application code and also carries uploader/tus requests.
+	// The SDK excludes the cookie jar for every operation whose resolved account auth is none,
+	// as well as for capability requests. Custom transports must not inject credentials.
 	HTTPClient *http.Client
 }
 

@@ -82,6 +82,8 @@ the request body. Use `contract.Config{NoAccountCredentials: true}` when you hav
 Protected operations fail locally on that client; an empty configuration remains an error.
 Each exchange makes one attempt and does not follow redirects. Login, consent, token storage
 and automatic refresh belong to your application or OAuth library, not this low-level client.
+Cookie-jar isolation applies to all operations whose resolved account authentication is `none`.
+Custom HTTP transports remain trusted application code and must not inject credentials.
 
 ```go
 api, err := contract.NewClient(contract.Config{AuthKey: key, AuthSecret: secret})
