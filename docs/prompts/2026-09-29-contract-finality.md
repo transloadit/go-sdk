@@ -9,8 +9,15 @@ October 6 reader compatibility, still draft and unmerged:
 - [x] Pass all 160 shared reader/mode observations, complete contract/shared workflow race
       tests, vet and example builds. Correct the old stop-message assertion to require a generic
       cause while retaining the exact structured code; keep the strict root fixture decoder.
-- [ ] Finish council, refreshed producer pins/runtime acceptance and exact-head CI.
+- [x] Finish the first combined council. Reproduce and repair saved custom field-name loss on
+      resume and the actual example skipping cancellation after `REQUEST_ABORTED`. The full
+      contract/example race suites pass; explicit changed field names still fail before network I/O.
+- [ ] Finish the post-fix council, refreshed producer pins/runtime acceptance and exact-head CI.
       No merge, release or new live-test budget.
+- Explicit next-slice merge blocker: main's public `authorization_code` and `refresh_token` grants
+  need no Basic credentials, but draft `IssueBearerToken` requires them and `NewClient` cannot be
+  anonymous. Model grant-specific authentication at the producer before release; do not patch the
+  generated client or forward account credentials as a workaround.
 - API2's existing `docs/prompts/2026-07-09-handover-sdks-branch-restructure.md` is the canonical
   program record; this file tracks only the native PR's validation.
 

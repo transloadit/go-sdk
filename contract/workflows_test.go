@@ -79,6 +79,37 @@ func tusFixtureInput() AssemblyUploadOptions {
 	return AssemblyUploadOptions{AssemblyID: strings.Repeat("1", 32), Reader: bytes.NewReader([]byte("test")), Size: 4, Filename: "input.txt", RetryDelay: time.Millisecond}
 }
 
+func TestTusResumeInheritsSavedFieldname(t *testing.T) {
+	client, calls := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	input.Fieldname = "avatar"
+	var saved AssemblyUploadSession
+	input.OnSession = func(session AssemblyUploadSession) error {
+		saved = session
+		return errors.New("synthetic interruption before bytes")
+	}
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || saved.Fieldname != "avatar" {
+		t.Fatalf("missing interrupted session: %+v, %v", saved, err)
+	}
+	fresh, err := NewClient(Config{Origin: client.config.Origin, BearerToken: "synthetic", HTTPClient: client.httpClient})
+	if err != nil {
+		t.Fatal(err)
+	}
+	input = tusFixtureInput()
+	input.Fieldname = "other"
+	if _, err := fresh.ResumeAssemblyFile(context.Background(), input, saved); err == nil || len(*calls) != 2 {
+		t.Fatalf("accepted explicit fieldname change: %v, %v", err, *calls)
+	}
+	input.Fieldname = ""
+	result, err := fresh.ResumeAssemblyFile(context.Background(), input, saved)
+	if err != nil || result == nil || *result != saved {
+		t.Fatalf("failed to inherit saved fieldname: %+v, %v", result, err)
+	}
+	if strings.Join(*calls, ",") != "GET,POST,GET,HEAD,PATCH" {
+		t.Fatalf("unexpected resume requests: %v", *calls)
+	}
+}
+
 func TestSharedAssemblyErrorReaders(t *testing.T) {
 	data, err := ioutil.ReadFile("workflow-vectors.json")
 	if err != nil {

@@ -107,10 +107,10 @@ func run() (err error) {
 	if err != nil {
 		return err
 	}
-	finished = true
 	if assemblyFailed(status) || status.GetOk() != "ASSEMBLY_COMPLETED" {
 		return errors.New("Assembly processing did not complete successfully")
 	}
+	finished = true
 	results := status.GetResults()
 	if results == nil || len(results.AdditionalProperties["resize"]) == 0 {
 		return errors.New("the completed Assembly has no resized image")

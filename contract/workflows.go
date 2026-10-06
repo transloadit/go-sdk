@@ -219,7 +219,8 @@ type AssemblyUploadOptions struct {
 	Reader     io.ReaderAt
 	Size       int64
 	Filename   string
-	Fieldname  string
+	// Fieldname defaults to the saved session's field name when resuming, otherwise "file".
+	Fieldname string
 	// ChunkSize defaults to 5 MiB and is limited to 64 MiB.
 	ChunkSize int64
 	// Timeout defaults to five minutes, including hashing and discovery.
@@ -503,8 +504,11 @@ func (client *Client) runTusUpload(parent context.Context, input AssemblyUploadO
 	}
 	if input.Fieldname == "" {
 		input.Fieldname = "file"
+		if resume != nil {
+			input.Fieldname = resume.Fieldname
+		}
 	}
-	if input.Filename == "" || strings.ContainsAny(input.Filename+input.Fieldname, "\r\n\x00") {
+	if input.Filename == "" || input.Fieldname == "" || strings.ContainsAny(input.Filename+input.Fieldname, "\r\n\x00") {
 		return nil, invalidUpload()
 	}
 	var policy tusWorkflowPolicy
