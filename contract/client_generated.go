@@ -1,4 +1,4 @@
-// Code generated from API2 contract 4c71aa3a66cf20aebfaea7b6f87ee8b8f3bc5c91ff4894ce115d978b2accc6b4; DO NOT EDIT.
+// Code generated from API2 contract 6a90b6e2cc6d24e5be3c0a94588583fcf7294f3abc73adca63bdd9ab88f761f1; DO NOT EDIT.
 package contract
 
 import (
@@ -120911,7 +120911,7 @@ type IssueBearerTokenInput struct{ Body IssueBearerTokenBody }
 // IssueBearerToken: Create a bearer token
 func (client *Client) IssueBearerToken(ctx context.Context, input IssueBearerTokenInput) (*IssueBearerTokenResult, error) {
 	var result IssueBearerTokenResult
-	err := client.request(ctx, operation{ID: "api2.issue-bearer-token", Method: "POST", Path: "/token", RawPathPatterns: map[string]string{}, Auth: "basic", Bearer: false, Encoding: "form", ParamsField: "", SignatureField: ""}, map[string]string{}, input.Body, nil, nil, &result)
+	err := client.request(ctx, operation{ID: "api2.issue-bearer-token", Method: "POST", Path: "/token", RawPathPatterns: map[string]string{}, Auth: "basic", AuthFormField: "grant_type", AuthFormValues: map[string]string{"authorization_code": "none", "client_credentials": "basic", "refresh_token": "none"}, Bearer: false, Encoding: "form", ParamsField: "", SignatureField: ""}, map[string]string{}, input.Body, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}

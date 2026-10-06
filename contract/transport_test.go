@@ -12,6 +12,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"net/http/httptest"
 	"net/url"
 	"runtime"
@@ -756,6 +757,157 @@ func TestBasicTokenAndTextJSON(t *testing.T) {
 	}
 	if result.AccessToken != "synthetic-token" {
 		t.Fatal("wrong decoded response")
+	}
+}
+
+func TestGrantAuthenticationMatrix(t *testing.T) {
+	data, err := ioutil.ReadFile("wire-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var vectors struct {
+		Grants []struct {
+			Grant       IssueBearerTokenBody_GrantType
+			AccountAuth string
+		} `json:"grantAuthentication"`
+	}
+	if err := json.Unmarshal(data, &vectors); err != nil {
+		t.Fatal(err)
+	}
+	if len(vectors.Grants) != 3 {
+		t.Fatal("missing shared grant matrix")
+	}
+	configs := map[string]Config{
+		"signed": {AuthKey: "synthetic-key", AuthSecret: "synthetic-secret"},
+		"bearer": {BearerToken: "synthetic-bearer"},
+		"none":   {NoAccountCredentials: true},
+	}
+	for name, config := range configs {
+		for _, vector := range vectors.Grants {
+			t.Run(name+"/"+string(vector.Grant), func(t *testing.T) {
+				calls := 0
+				server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					calls++
+					if vector.AccountAuth == "basic" {
+						key, secret, ok := r.BasicAuth()
+						if !ok || key != "synthetic-key" || secret != "synthetic-secret" {
+							t.Error("missing Basic auth")
+						}
+					} else if r.Header.Get("Authorization") != "" || r.Header.Get("Cookie") != "" {
+						t.Error("public grant received account credentials or cookies")
+					}
+					if err := r.ParseForm(); err != nil {
+						t.Error(err)
+					}
+					if r.Form.Get("grant_type") != string(vector.Grant) || r.Form.Get("client_assertion") != "opaque+proof&=" {
+						t.Error("changed form proof")
+					}
+					w.Header().Set("Content-Type", "text/plain")
+					http.SetCookie(w, &http.Cookie{Name: "response-cookie", Value: "not-account-auth"})
+					w.Write([]byte(`{"access_token":"synthetic-access","expires_in":60,"refresh_token":"synthetic-refresh","scope":"templates:read","token_type":"Bearer"}`))
+				}))
+				defer server.Close()
+				jar, err := cookiejar.New(nil)
+				if err != nil {
+					t.Fatal(err)
+				}
+				origin, err := url.Parse(server.URL)
+				if err != nil {
+					t.Fatal(err)
+				}
+				jar.SetCookies(origin, []*http.Cookie{{Name: "account-cookie", Value: "secret"}})
+				httpClient := &http.Client{Jar: jar}
+				config.Origin, config.HTTPClient = server.URL, httpClient
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				proof := "opaque+proof&="
+				result, err := client.IssueBearerToken(context.Background(), IssueBearerTokenInput{Body: IssueBearerTokenBody{GrantType: vector.Grant, ClientAssertion: &proof}})
+				if vector.AccountAuth == "basic" && name != "signed" {
+					if err == nil || calls != 0 {
+						t.Fatalf("expected local Basic credential rejection: %v, calls %d", err, calls)
+					}
+					return
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				if calls != 1 || result.AccessToken != "synthetic-access" || result.RefreshToken == nil || *result.RefreshToken != "synthetic-refresh" {
+					t.Fatal("wrong decoded result or attempt count")
+				}
+				if httpClient.Jar != jar {
+					t.Fatal("modified caller HTTP client")
+				}
+				if vector.AccountAuth == "none" && len(jar.Cookies(origin)) != 1 {
+					t.Fatal("credentialless request mutated account cookie jar")
+				}
+			})
+		}
+	}
+}
+
+func TestNoAccountAuthenticationBoundaries(t *testing.T) {
+	for _, config := range []Config{
+		{}, {AuthKey: "partial"}, {AuthSecret: "partial"},
+		{NoAccountCredentials: true, AuthKey: "key"},
+		{NoAccountCredentials: true, AuthSecret: "secret"},
+		{NoAccountCredentials: true, BearerToken: "token"},
+		{NoAccountCredentials: true, SignatureAlgorithm: "sha256"},
+	} {
+		if _, err := NewClient(config); err == nil {
+			t.Error("accepted missing or contradictory credentials")
+		}
+	}
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { calls++; w.Write([]byte("{}")) }))
+	defer server.Close()
+	client, err := NewClient(Config{Origin: server.URL, NoAccountCredentials: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := client.ListTemplates(context.Background(), ListTemplatesInput{}); err == nil {
+		t.Fatal("accepted protected operation without credentials")
+	}
+	for _, grant := range []IssueBearerTokenBody_GrantType{"", "future_grant", "constructor", "__proto__"} {
+		if _, err := client.IssueBearerToken(context.Background(), IssueBearerTokenInput{Body: IssueBearerTokenBody{GrantType: grant}}); err == nil {
+			t.Error("accepted invalid grant")
+		}
+	}
+	if calls != 0 {
+		t.Fatal("invalid requests reached transport")
+	}
+}
+
+func TestPublicGrantErrorAndRedirect(t *testing.T) {
+	for _, status := range []int{400, 307} {
+		t.Run(fmt.Sprint(status), func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				w.Header().Set("Location", "/must-not-follow")
+				w.WriteHeader(status)
+				w.Write([]byte(`{"error":"invalid_grant","error_description":"private diagnostic"}`))
+			}))
+			defer server.Close()
+			client, err := NewClient(Config{Origin: server.URL, NoAccountCredentials: true})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.IssueBearerToken(context.Background(), IssueBearerTokenInput{Body: IssueBearerTokenBody{GrantType: "refresh_token"}})
+			if err == nil || calls != 1 {
+				t.Fatalf("expected one failed attempt: %v, calls %d", err, calls)
+			}
+			if status == 400 {
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != status || !strings.Contains(string(responseError.Data), "invalid_grant") {
+					t.Fatal("lost error response")
+				}
+				if strings.Contains(err.Error(), "private diagnostic") {
+					t.Fatal("unsafe error message")
+				}
+			}
+		})
 	}
 }
 

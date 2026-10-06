@@ -31,11 +31,13 @@ import (
 type Config struct {
 	Origin string
 	// AssemblyOrigins contains deployment-owned origins, never values copied from API responses.
-	AssemblyOrigins    []string
-	AuthKey            string
-	AuthSecret         string
-	BearerToken        string
-	SignatureAlgorithm string
+	AssemblyOrigins []string
+	AuthKey         string
+	AuthSecret      string
+	BearerToken     string
+	// NoAccountCredentials explicitly selects only operations that need no account authentication.
+	NoAccountCredentials bool
+	SignatureAlgorithm   string
 	// HTTPClient.Transport also carries uploader/tus requests. The SDK does not add API
 	// credentials to these capability requests and excludes the configured cookie jar.
 	HTTPClient *http.Client
@@ -201,7 +203,10 @@ func NewClient(config Config) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	if config.BearerToken == "" && (config.AuthKey == "" || config.AuthSecret == "") {
+	if config.NoAccountCredentials && (config.AuthKey != "" || config.AuthSecret != "" || config.BearerToken != "" || config.SignatureAlgorithm != "") {
+		return nil, fmt.Errorf("choose signed, bearer or no account authentication")
+	}
+	if !config.NoAccountCredentials && config.BearerToken == "" && (config.AuthKey == "" || config.AuthSecret == "") {
 		return nil, fmt.Errorf("Auth Key credentials or bearer token required")
 	}
 	if config.BearerToken != "" && (config.AuthKey != "" || config.AuthSecret != "") {
@@ -227,6 +232,8 @@ type operation struct {
 	Path            string
 	RawPathPatterns map[string]string
 	Auth            string
+	AuthFormField   string
+	AuthFormValues  map[string]string
 	Bearer          bool
 	Encoding        string
 	ParamsField     string
@@ -574,6 +581,9 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 		})
 	}
 	defer closeFiles()
+	if operation.Auth == "api-key" && client.config.NoAccountCredentials {
+		return fmt.Errorf("this operation requires account authentication")
+	}
 	target := operation.Path
 	for name, value := range path {
 		// The generator only supplies the owner's portable ASCII path grammar here, not arbitrary
@@ -674,6 +684,22 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 			}
 		}
 	}
+	accountAuth := operation.Auth
+	if operation.AuthFormField != "" {
+		values := fields[operation.AuthFormField]
+		if operation.Auth != "basic" || operation.Encoding != "form" || len(values) != 1 {
+			return fmt.Errorf("invalid account authentication selector")
+		}
+		selected, ok := operation.AuthFormValues[values[0]]
+		if !ok || (selected != "basic" && selected != "none") {
+			return fmt.Errorf("invalid account authentication selector")
+		}
+		accountAuth = selected
+	}
+	// Reject before constructing an upload body or starting any request-owned goroutine.
+	if accountAuth == "basic" && (client.config.NoAccountCredentials || client.config.BearerToken != "") {
+		return fmt.Errorf("this operation requires Auth Key credentials")
+	}
 	uri := client.config.Origin + target
 	var body io.Reader
 	contentType := ""
@@ -729,10 +755,7 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
 	}
-	if operation.Auth == "basic" {
-		if client.config.BearerToken != "" {
-			return fmt.Errorf("this operation requires Auth Key credentials")
-		}
+	if accountAuth == "basic" {
 		req.SetBasicAuth(client.config.AuthKey, client.config.AuthSecret)
 	} else if operation.Auth == "api-key" && client.config.BearerToken != "" {
 		if !operation.Bearer {
@@ -740,7 +763,14 @@ func (client *Client) request(ctx context.Context, operation operation, path map
 		}
 		req.Header.Set("Authorization", "Bearer "+client.config.BearerToken)
 	}
-	response, err := client.httpClient.Do(req)
+	transport := client.httpClient
+	if accountAuth == "none" {
+		// A public grant must neither send ambient account cookies nor update that account's jar.
+		credentialless := *transport
+		credentialless.Jar = nil
+		transport = &credentialless
+	}
+	response, err := transport.Do(req)
 	if err != nil {
 		return &TransportError{Cause: redactRequestURL(err)}
 	}

@@ -75,8 +75,13 @@ Import `github.com/transloadit/go-sdk/contract` explicitly to use the typed low-
 Existing SDK consumers do not compile the generated package unless they import it. Existing
 APIs remain available alongside the opt-in package.
 
-Public OAuth authorization-code and refresh-token exchanges are not supported by this draft client.
-Do not supply account credentials as a workaround. Token creation with `client_credentials` is supported.
+Token exchanges follow the contract's grant-specific authentication. `client_credentials`
+requires an Auth Key and secret. Authorization-code and refresh-token exchanges send no account
+credentials or configured cookies, even on a signed/bearer client; supply the grant's proof in
+the request body. Use `contract.Config{NoAccountCredentials: true}` when you have no Auth Key.
+Protected operations fail locally on that client; an empty configuration remains an error.
+Each exchange makes one attempt and does not follow redirects. Login, consent, token storage
+and automatic refresh belong to your application or OAuth library, not this low-level client.
 
 ```go
 api, err := contract.NewClient(contract.Config{AuthKey: key, AuthSecret: secret})
