@@ -1,0 +1,1917 @@
+package contract
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/http/cookiejar"
+	"net/url"
+	"strconv"
+	"strings"
+	"syscall"
+	"testing"
+	"time"
+)
+
+func tusFixtureClient(t *testing.T, location string, overrides map[string]string, creationStatus, patchStatus int, endpoints ...string) (*Client, *[]string) {
+	t.Helper()
+	origin := "http://127.0.0.1:4000"
+	if len(endpoints) != 0 {
+		origin = endpoints[0]
+	}
+	id := strings.Repeat("1", 32)
+	metadata, position := "", 0
+	methods := []string{}
+	client, err := NewClient(Config{Origin: origin, BearerToken: "never-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Body != nil {
+			defer request.Body.Close()
+		}
+		methods = append(methods, request.Method)
+		if request.Header.Get("Authorization") != "" || request.Header.Get("Cookie") != "" {
+			t.Error("credentials forwarded")
+		}
+		header := make(http.Header)
+		header.Set("Tus-Resumable", "1.0.0")
+		status := 200
+		switch request.Method {
+		case "GET":
+			return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_UPLOADING", "assembly_ssl_url": origin + "/assemblies/" + id, "tus_url": origin + "/resumable/files/"}), nil
+		case "POST":
+			metadata = request.Header.Get("Upload-Metadata")
+			header.Set("Location", location)
+			status = creationStatus
+		case "HEAD":
+			header.Set("Upload-Length", "4")
+			header.Set("Upload-Offset", strconv.Itoa(position))
+			header.Set("Upload-Metadata", metadata)
+			for key, value := range overrides {
+				header.Set(key, value)
+			}
+		case "PATCH":
+			body, err := ioutil.ReadAll(request.Body)
+			if err != nil {
+				t.Error(err)
+			}
+			position += len(body)
+			header.Set("Upload-Offset", strconv.Itoa(position))
+			status = patchStatus
+		default:
+			t.Errorf("unexpected method %s", request.Method)
+		}
+		return &http.Response{StatusCode: status, Header: header, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return client, &methods
+}
+
+func tusFixtureInput() AssemblyUploadOptions {
+	return AssemblyUploadOptions{AssemblyID: strings.Repeat("1", 32), Reader: bytes.NewReader([]byte("test")), Size: 4, Filename: "input.txt", RetryDelay: time.Millisecond}
+}
+
+func TestTusResumeInheritsSavedFieldname(t *testing.T) {
+	client, calls := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	input.Fieldname = "avatar"
+	var saved AssemblyUploadSession
+	input.OnSession = func(_ context.Context, session AssemblyUploadSession) error {
+		saved = session
+		return errors.New("synthetic interruption before bytes")
+	}
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || saved.Fieldname != "avatar" {
+		t.Fatalf("missing interrupted session: %+v, %v", saved, err)
+	}
+	fresh, err := NewClient(Config{Origin: client.config.Origin, BearerToken: "synthetic", HTTPClient: client.httpClient})
+	if err != nil {
+		t.Fatal(err)
+	}
+	input = tusFixtureInput()
+	input.Fieldname = "other"
+	if _, err := fresh.ResumeAssemblyFile(context.Background(), input, saved); err == nil || len(*calls) != 2 {
+		t.Fatalf("accepted explicit fieldname change: %v, %v", err, *calls)
+	}
+	input.Fieldname = ""
+	result, err := fresh.ResumeAssemblyFile(context.Background(), input, saved)
+	if err != nil || result == nil || *result != saved {
+		t.Fatalf("failed to inherit saved fieldname: %+v, %v", result, err)
+	}
+	if strings.Join(*calls, ",") != "GET,POST,GET,HEAD,PATCH" {
+		t.Fatalf("unexpected resume requests: %v", *calls)
+	}
+}
+
+func TestSharedAssemblyErrorReaders(t *testing.T) {
+	data, err := ioutil.ReadFile("workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures struct {
+		AssemblyID          string
+		ReaderCompatibility []struct {
+			ID       string
+			State    map[string]interface{}
+			Accepted bool
+		}
+	}
+	if err := json.Unmarshal(data, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	if len(fixtures.ReaderCompatibility) == 0 {
+		t.Fatal("missing reader compatibility vectors")
+	}
+	origin := "http://127.0.0.1:4000"
+	owner := origin + "/assemblies/" + fixtures.AssemblyID
+	collection := origin + "/resumable/files/"
+	digest := sha256.Sum256([]byte("test"))
+	session := AssemblyUploadSession{Version: 1, AssemblyID: fixtures.AssemblyID, UploadURL: collection + "one", Size: 4, Filename: "input.txt", Fieldname: "file", SHA256: hex.EncodeToString(digest[:])}
+	for _, scenario := range fixtures.ReaderCompatibility {
+		for _, mode := range []string{"get", "wait", "cancel", "poll", "delete", "http-confirm", "transport-confirm", "fresh", "partial", "receipt"} {
+			t.Run(scenario.ID+"/"+mode, func(t *testing.T) {
+				requests := []string{}
+				immediate := mode == "get" || mode == "wait" || mode == "cancel" || mode == "fresh" || mode == "partial" || mode == "receipt"
+				client, err := NewClient(Config{Origin: origin, BearerToken: "synthetic-never-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method)
+					if request.Header.Get("Authorization") != "" || request.Header.Get("Cookie") != "" {
+						t.Fatal("forwarded credentials")
+					}
+					if len(requests) > 3 {
+						t.Fatal("unexpected request after reader observation")
+					}
+					if request.Method == "HEAD" {
+						if request.URL.String() != session.UploadURL {
+							t.Fatal("changed upload identity")
+						}
+						if mode == "receipt" {
+							return &http.Response{StatusCode: 404, Header: make(http.Header), Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+						}
+						metadata := "assembly_url " + base64.StdEncoding.EncodeToString([]byte(owner)) + ",filename aW5wdXQudHh0,fieldname ZmlsZQ=="
+						return &http.Response{StatusCode: 200, Header: http.Header{"Tus-Resumable": {"1.0.0"}, "Upload-Length": {"4"}, "Upload-Offset": {"0"}, "Upload-Metadata": {metadata}}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+					}
+					if request.URL.String() != owner {
+						t.Fatal("changed Assembly destination")
+					}
+					if request.Method != "GET" && request.Method != "DELETE" {
+						t.Fatal("stopped Assembly attempted upload write")
+					}
+					if request.Method == "DELETE" && mode == "transport-confirm" {
+						return nil, io.ErrUnexpectedEOF
+					}
+					if request.Method == "DELETE" && mode == "http-confirm" {
+						return &http.Response{StatusCode: 404, Header: make(http.Header), Body: ioutil.NopCloser(strings.NewReader("{}"))}, nil
+					}
+					body := map[string]interface{}{"assembly_id": fixtures.AssemblyID, "assembly_ssl_url": owner, "tus_url": collection, "message": "Synthetic result"}
+					if !immediate && len(requests) == 1 {
+						body["ok"] = "ASSEMBLY_EXECUTING"
+					} else {
+						for key, value := range scenario.State {
+							body[key] = value
+						}
+					}
+					body["tus_uploads"] = []interface{}{map[string]interface{}{"upload_url": session.UploadURL, "filename": session.Filename, "fieldname": session.Fieldname, "size": 4, "offset": 4, "finished": true}}
+					return workflowJSON(t, body), nil
+				})}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				options := AssemblyWorkflowOptions{AssemblyID: fixtures.AssemblyID, Timeout: time.Second, Interval: time.Millisecond}
+				input := tusFixtureInput()
+				input.AssemblyID = fixtures.AssemblyID
+				input.Timeout = time.Second
+				var result *AssemblyWorkflowResult
+				var saved *AssemblyUploadSession
+				switch mode {
+				case "get":
+					result, err = client.GetAssembly(context.Background(), GetAssemblyInput{AssemblyId: fixtures.AssemblyID})
+				case "wait", "poll":
+					result, err = client.WaitForAssembly(context.Background(), options)
+				case "cancel", "delete", "http-confirm", "transport-confirm":
+					result, err = client.CancelAndWaitForAssembly(context.Background(), options)
+				case "fresh":
+					saved, err = client.UploadAssemblyFile(context.Background(), input)
+				case "partial", "receipt":
+					saved, err = client.ResumeAssemblyFile(context.Background(), input, session)
+				default:
+					t.Fatal("unclassified reader mode")
+				}
+				upload := mode == "fresh" || mode == "partial" || mode == "receipt"
+				if scenario.Accepted && (!upload || mode == "receipt") {
+					if err != nil {
+						t.Fatal(err)
+					}
+					if upload {
+						if saved == nil || *saved != session {
+							t.Fatal("lost exact receipt")
+						}
+					} else {
+						code, ok := scenario.State["error"].(string)
+						if !ok || result == nil || result.WithError == nil || string(result.WithError.Error) != code {
+							t.Fatal("lost exact error value")
+						}
+					}
+				} else {
+					if err == nil {
+						t.Fatal("incorrectly accepted reader observation")
+					}
+					if upload {
+						var failure *AssemblyUploadError
+						if !errors.As(err, &failure) {
+							t.Fatal("missing upload error")
+						}
+						if failure.Error() != "Assembly upload stopped; remote cleanup is not confirmed" {
+							t.Fatal("unsafe upload diagnostic")
+						}
+						if scenario.Accepted {
+							code, ok := scenario.State["error"].(string)
+							if !ok || failure.AssemblyCode != code {
+								t.Fatal("lost structured stop code")
+							}
+							if failure.Cause == nil || failure.Cause.Error() != "Assembly is not accepting upload writes" || errors.Unwrap(failure.Cause) != nil {
+								t.Fatal("unsafe stopped-upload diagnostic")
+							}
+						} else if failure.AssemblyCode != "" {
+							t.Fatal("admitted malformed code")
+						}
+					}
+				}
+				expected := "GET"
+				if !immediate {
+					expected = "GET,DELETE"
+					if mode == "poll" {
+						expected = "GET,GET"
+					}
+					if strings.HasSuffix(mode, "confirm") {
+						expected = "GET,DELETE,GET"
+					}
+				}
+				if scenario.Accepted && mode == "partial" {
+					expected = "GET,HEAD"
+				}
+				if scenario.Accepted && mode == "receipt" {
+					expected = "GET,HEAD,GET"
+				}
+				if strings.Join(requests, ",") != expected {
+					t.Fatalf("incorrect requests: %v, expected %s", requests, expected)
+				}
+			})
+		}
+	}
+}
+
+func TestTusWorkflowRejectsDestinations(t *testing.T) {
+	for _, location := range []string{
+		"https://evil.example/resumable/files/one", "//evil.example/resumable/files/one",
+		"http://127.0.0.1:4000/resumable/files/../one", "http://127.0.0.1:4000/resumable/files/%2e%2e",
+		"http://127.0.0.1:4000/resumable/files/%2e%2e/files/one",
+		"http://127.0.0.1:4000/resumable/files/one?override=DELETE", "http://127.0.0.1:4000/resumable/files/one#fragment",
+		"http://127.0.0.1:4000/resumable/files/one/two", "https://user:secret@api2-uploader.transloadit.com/resumable/files/one",
+	} {
+		t.Run(location, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, location, nil, 201, 204)
+			_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+			var failure *AssemblyUploadError
+			if !errors.As(err, &failure) || len(*methods) != 2 {
+				t.Fatalf("untrusted destination was followed: %v, %v", err, *methods)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRejectsHeaders(t *testing.T) {
+	for _, headers := range []map[string]string{
+		{"Upload-Length": "5"}, {"Upload-Length": "3"}, {"Upload-Offset": "-1"}, {"Upload-Offset": "1.5"},
+		{"Upload-Offset": "5"}, {"Upload-Offset": "00"}, {"Upload-Offset": "0, 0"},
+		{"Tus-Resumable": "other"}, {"Upload-Metadata": ""},
+		{"Upload-Metadata": "assembly_url Zm9yZWlnbg==,filename aW5wdXQudHh0,fieldname ZmlsZQ=="},
+	} {
+		client, methods := tusFixtureClient(t, "/resumable/files/one", headers, 201, 204)
+		_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+		if err == nil || len(*methods) != 3 {
+			t.Fatalf("invalid headers reached PATCH: %v, %v", headers, err)
+		}
+	}
+}
+
+func TestTusWorkflowDoesNotRetryDiscoveryConflict(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	transport := client.httpClient.Transport
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		response, err := transport.RoundTrip(request)
+		if response != nil {
+			response.StatusCode = 409
+		}
+		return response, err
+	})
+	_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+	var response *ResponseError
+	if !errors.As(err, &response) || response.Status != 409 || strings.Join(*methods, ",") != "GET" {
+		t.Fatalf("retried non-tus conflict: %v, %v", err, *methods)
+	}
+}
+
+func TestSharedTusIdentityAndReceipts(t *testing.T) {
+	data, err := ioutil.ReadFile("workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures struct {
+		TusMetadata []struct {
+			ID, Filename, Append string
+			Values               map[string]string
+			ExtraHeaderValues    []string
+			Accepted             bool
+		}
+		TusReceipts []struct {
+			ID            string
+			Changes       map[string]interface{}
+			ExtraReceipts []map[string]interface{}
+			Hex           *string
+			Omit          []string
+			Count         int
+			State         map[string]string
+			Accepted      bool
+		}
+	}
+	if err := json.Unmarshal(data, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	if len(fixtures.TusMetadata) == 0 || len(fixtures.TusReceipts) == 0 {
+		t.Fatal("missing shared upload cases")
+	}
+	for _, scenario := range fixtures.TusMetadata {
+		t.Run(scenario.ID, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			input := tusFixtureInput()
+			input.Filename = scenario.Filename
+			transport := client.httpClient.Transport
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if err != nil || request.Method != "HEAD" {
+					return response, err
+				}
+				entries := strings.Split(response.Header.Get("Upload-Metadata"), ",")
+				for index, entry := range entries {
+					key := strings.SplitN(entry, " ", 2)[0]
+					if value, present := scenario.Values[key]; present {
+						entries[index] = key + " " + value
+					}
+				}
+				response.Header.Set("Upload-Metadata", strings.Join(entries, ",")+scenario.Append)
+				for _, value := range scenario.ExtraHeaderValues {
+					response.Header.Add("Upload-Metadata", value)
+				}
+				return response, nil
+			})
+			_, err := client.UploadAssemblyFile(context.Background(), input)
+			if (err == nil) != scenario.Accepted {
+				t.Fatalf("accepted=%t, error=%v", scenario.Accepted, err)
+			}
+			wanted := "GET,POST,HEAD"
+			if scenario.Accepted {
+				wanted += ",PATCH"
+			}
+			if strings.Join(*methods, ",") != wanted {
+				t.Fatalf("unexpected requests: %v", *methods)
+			}
+		})
+	}
+	for _, scenario := range fixtures.TusReceipts {
+		t.Run(scenario.ID, func(t *testing.T) {
+			origin := "http://127.0.0.1:4000"
+			input := tusFixtureInput()
+			if scenario.Hex != nil {
+				content, err := hex.DecodeString(*scenario.Hex)
+				if err != nil {
+					t.Fatal(err)
+				}
+				input.Reader = bytes.NewReader(content)
+				input.Size = int64(len(content))
+			}
+			client, methods := tusFixtureClient(t, "/resumable/files/one", map[string]string{"Upload-Length": strconv.FormatInt(input.Size, 10)}, 201, 204)
+			session, err := client.UploadAssemblyFile(context.Background(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			*methods = nil
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				*methods = append(*methods, request.Method)
+				if request.Method == "HEAD" {
+					return &http.Response{StatusCode: 404, Header: http.Header{}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+				}
+				if request.Method != "GET" {
+					t.Fatalf("unexpected write: %s", request.Method)
+				}
+				reads++
+				body := map[string]interface{}{"assembly_id": input.AssemblyID,
+					"assembly_ssl_url": origin + "/assemblies/" + input.AssemblyID, "tus_url": origin + "/resumable/files/"}
+				for key, value := range scenario.State {
+					body[key] = value
+				}
+				receipts := []interface{}{}
+				if reads > 1 {
+					for index := 0; index < scenario.Count; index++ {
+						receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
+							"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
+						for key, value := range scenario.Changes {
+							receipt[key] = value
+						}
+						for _, key := range scenario.Omit {
+							delete(receipt, key)
+						}
+						receipts = append(receipts, receipt)
+					}
+					for _, extra := range scenario.ExtraReceipts {
+						receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
+							"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
+						for key, value := range extra {
+							receipt[key] = value
+						}
+						receipts = append(receipts, receipt)
+					}
+				}
+				body["tus_uploads"] = receipts
+				return workflowJSON(t, body), nil
+			})
+			_, err = client.ResumeAssemblyFile(context.Background(), input, *session)
+			if (err == nil) != scenario.Accepted {
+				t.Fatalf("accepted=%t, error=%v", scenario.Accepted, err)
+			}
+			if strings.Join(*methods, ",") != "GET,HEAD,GET" {
+				t.Fatalf("unexpected requests: %v", *methods)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRejectsWritesToStoppedAssemblies(t *testing.T) {
+	for _, code := range []string{"ASSEMBLY_COMPLETED", "ASSEMBLY_CANCELED", "REQUEST_ABORTED", "FILE_FILTER_DECLINED_FILE"} {
+		for _, resume := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/resume=%t", code, resume), func(t *testing.T) {
+				client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+				input := tusFixtureInput()
+				var session *AssemblyUploadSession
+				if resume {
+					input.OnSession = func(_ context.Context, value AssemblyUploadSession) error {
+						session = &value
+						return errors.New("checkpoint only")
+					}
+					if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || session == nil {
+						t.Fatal("missing checkpoint")
+					}
+					input.OnSession = nil
+				}
+				*methods = (*methods)[:0]
+				transport := client.httpClient.Transport
+				client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					if request.Method != "GET" {
+						return transport.RoundTrip(request)
+					}
+					*methods = append(*methods, "GET")
+					body := map[string]string{"assembly_id": input.AssemblyID, "ok": code,
+						"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
+						"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+					if code == "FILE_FILTER_DECLINED_FILE" {
+						body = map[string]string{"assembly_id": input.AssemblyID, "error": code}
+					}
+					return workflowJSON(t, body), nil
+				})
+				_, err := client.runTusUpload(context.Background(), input, session)
+				var failure *AssemblyUploadError
+				if !errors.As(err, &failure) || failure.AssemblyCode != code || failure.Cause == nil || failure.Cause.Error() != "Assembly is not accepting upload writes" {
+					t.Fatalf("lost stopped Assembly status %s: %v", code, err)
+				}
+				for _, method := range *methods {
+					if method == "POST" || method == "PATCH" {
+						t.Fatalf("wrote to stopped Assembly: %v", *methods)
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestTusWorkflowConfirmsCompletedTransferAfterProcessingStops(t *testing.T) {
+	for _, code := range []string{"ASSEMBLY_COMPLETED", "FILE_FILTER_DECLINED_FILE", "REQUEST_ABORTED"} {
+		t.Run(code, func(t *testing.T) { testTusCompletedTransfer(t, code) })
+	}
+}
+
+func testTusCompletedTransfer(t *testing.T, code string) {
+	t.Helper()
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	session, err := client.UploadAssemblyFile(context.Background(), input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	*methods = (*methods)[:0]
+	transport := client.httpClient.Transport
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "GET" {
+			return transport.RoundTrip(request)
+		}
+		*methods = append(*methods, "GET")
+		body := map[string]string{"assembly_id": input.AssemblyID, "ok": code,
+			"assembly_ssl_url": "http://127.0.0.1:4000/assemblies/" + input.AssemblyID,
+			"tus_url":          "http://127.0.0.1:4000/resumable/files/"}
+		if code == "FILE_FILTER_DECLINED_FILE" {
+			delete(body, "ok")
+			body["error"] = code
+		}
+		return workflowJSON(t, body), nil
+	})
+	if _, err := client.ResumeAssemblyFile(context.Background(), input, *session); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,HEAD" {
+		t.Fatalf("completed resume wrote bytes: %v", *methods)
+	}
+}
+
+func TestTusWorkflowReconcilesMissingResourceOnlyWithExactReceipt(t *testing.T) {
+	for _, changed := range []string{"", "equivalent", "processing_failed", "connection_aborted", "finished", "offset", "size", "filename", "fieldname", "upload_url", "assembly_id", "missing", "duplicate"} {
+		t.Run(changed, func(t *testing.T) {
+			origin := "https://api2-owner.transloadit.com"
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204, origin)
+			input := tusFixtureInput()
+			session, err := client.UploadAssemblyFile(context.Background(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			*methods = (*methods)[:0]
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				*methods = append(*methods, request.Method)
+				if request.Method == "HEAD" {
+					return &http.Response{StatusCode: 404, Header: http.Header{}, Body: ioutil.NopCloser(strings.NewReader(""))}, nil
+				}
+				if request.Method != "GET" {
+					t.Fatalf("unexpected write: %s", request.Method)
+				}
+				reads++
+				body := map[string]interface{}{"assembly_id": input.AssemblyID, "ok": "ASSEMBLY_COMPLETED",
+					"assembly_ssl_url": origin + "/assemblies/" + input.AssemblyID,
+					"tus_url":          origin + "/resumable/files/"}
+				if changed == "processing_failed" {
+					delete(body, "ok")
+					body["error"] = "FILE_FILTER_DECLINED_FILE"
+				}
+				if changed == "connection_aborted" {
+					body["ok"] = "REQUEST_ABORTED"
+				}
+				if reads > 1 && changed != "missing" {
+					receipt := map[string]interface{}{"filename": input.Filename, "fieldname": "file", "size": input.Size,
+						"offset": input.Size, "finished": true, "upload_url": session.UploadURL}
+					switch changed {
+					case "equivalent":
+						receipt["upload_url"] = strings.Replace(session.UploadURL, origin, "https://API2-OWNER.transloadit.com:443", 1)
+					case "finished":
+						receipt[changed] = false
+					case "size", "offset":
+						receipt[changed] = input.Size - 1
+					case "filename", "fieldname", "upload_url":
+						receipt[changed] = "other"
+					case "assembly_id":
+						body[changed] = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+					}
+					body["tus_uploads"] = []interface{}{receipt}
+					if changed == "duplicate" {
+						body["tus_uploads"] = []interface{}{receipt, receipt}
+					}
+				}
+				return workflowJSON(t, body), nil
+			})
+			_, err = client.ResumeAssemblyFile(context.Background(), input, *session)
+			valid := changed == "" || changed == "equivalent" || changed == "processing_failed" || changed == "connection_aborted"
+			if valid && err != nil {
+				t.Fatal(err)
+			}
+			if !valid && err == nil {
+				t.Fatal("accepted mismatched receipt")
+			}
+			if strings.Join(*methods, ",") != "GET,HEAD,GET" {
+				t.Fatalf("wrong reconciliation requests: %v", *methods)
+			}
+		})
+	}
+}
+
+type observedTusBody struct {
+	io.Reader
+	bytes  int
+	closed bool
+	eof    bool
+}
+
+func (body *observedTusBody) Read(buffer []byte) (int, error) {
+	count, err := body.Reader.Read(buffer)
+	body.bytes += count
+	body.eof = body.eof || err == io.EOF
+	return count, err
+}
+
+func (body *observedTusBody) Close() error { body.closed = true; return nil }
+
+func TestTusWorkflowBoundsAndReadsResponseBodies(t *testing.T) {
+	for _, payload := range []string{`{"error":"INVALID_UPLOAD_METADATA"}`, "plain text error", strings.Repeat("x", 128*1024)} {
+		t.Run(fmt.Sprint(len(payload)), func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 403, 204)
+			body := &observedTusBody{Reader: strings.NewReader(payload)}
+			transport := client.httpClient.Transport
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if response != nil && request.Method == "POST" {
+					response.Body.Close()
+					response.Body = body
+				}
+				return response, err
+			})
+			_, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+			wantBytes := len(payload)
+			if wantBytes > 65537 {
+				wantBytes = 65537
+			}
+			if !body.closed || body.bytes != wantBytes {
+				t.Fatalf("response not consumed/closed: read=%d closed=%t", body.bytes, body.closed)
+			}
+			var response *ResponseError
+			if len(payload) > 65536 {
+				if err == nil || errors.As(err, &response) {
+					t.Fatalf("oversized body must not become retryable HTTP error: %v", err)
+				}
+				return
+			}
+			if !body.eof || !errors.As(err, &response) || response.Status != 403 {
+				t.Fatalf("missing drained HTTP error: %v", err)
+			}
+			if json.Valid([]byte(payload)) && string(response.Data) != payload {
+				t.Fatalf("JSON error details lost: %s", response.Data)
+			}
+			if !json.Valid([]byte(payload)) && len(response.Data) != 0 {
+				t.Fatal("invalid JSON retained")
+			}
+		})
+	}
+}
+
+func TestTusWorkflowPersistenceObservesUploadDeadline(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	parent, stop := context.WithTimeout(context.Background(), time.Second)
+	defer stop()
+	input := tusFixtureInput()
+	input.Timeout = 30 * time.Millisecond
+	var saved AssemblyUploadSession
+	input.OnSession = func(ctx context.Context, session AssemblyUploadSession) error {
+		saved = session
+		<-ctx.Done()
+		return ctx.Err()
+	}
+	_, err := client.UploadAssemblyFile(parent, input)
+	if parent.Err() != nil {
+		t.Fatal("persistence exceeded the upload deadline and consumed the parent budget")
+	}
+	var upload *AssemblyUploadError
+	if !errors.As(err, &upload) || upload.Session == nil || *upload.Session != saved || !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("missing deadline or checkpoint: %v", err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST" {
+		t.Fatalf("sent file bytes after persistence deadline: %v", *methods)
+	}
+}
+
+func TestTusWorkflowPersistenceAndChangedFile(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input := tusFixtureInput()
+	var saved AssemblyUploadSession
+	persistence := errors.New("persistence unavailable")
+	input.OnSession = func(_ context.Context, session AssemblyUploadSession) error { saved = session; return persistence }
+	_, err := client.UploadAssemblyFile(context.Background(), input)
+	digest := sha256.Sum256([]byte("test"))
+	if !errors.Is(err, persistence) || saved.SHA256 != hex.EncodeToString(digest[:]) || len(*methods) != 2 {
+		t.Fatalf("checkpoint was not persisted before bytes: %v", err)
+	}
+	fresh, calls := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	input.Reader = bytes.NewReader([]byte("xxxx"))
+	if _, err := fresh.ResumeAssemblyFile(context.Background(), input, saved); err == nil || len(*calls) != 0 {
+		t.Fatal("changed file was allowed")
+	}
+}
+
+func TestTusWorkflowRecoveryIsOffsetBasedAndBounded(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 503, 204)
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err == nil || len(*methods) != 2 {
+		t.Fatal("uncertain creation was retried")
+	}
+	client, methods = tusFixtureClient(t, "/resumable/files/one", nil, 201, 503)
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST,HEAD,PATCH,HEAD" {
+		t.Fatalf("accepted bytes were replayed: %v", *methods)
+	}
+	client, methods = tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if _, err := client.UploadAssemblyFile(ctx, tusFixtureInput()); !errors.Is(err, context.Canceled) || len(*methods) != 0 {
+		t.Fatal("aborted workflow performed requests")
+	}
+}
+
+func TestTusWorkflowOwnsEachPatchBuffer(t *testing.T) {
+	client, _ := tusFixtureClient(t, "/resumable/files/one", map[string]string{"Upload-Length": "8"}, 201, 204)
+	base := client.httpClient.Transport
+	var previous io.ReadCloser
+	defer func() {
+		if previous != nil {
+			previous.Close()
+		}
+	}()
+	patches := 0
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "PATCH" {
+			return base.RoundTrip(request)
+		}
+		patches++
+		if patches == 1 {
+			// A RoundTripper may finish consuming/closing the body after returning a response.
+			previous = request.Body
+		} else {
+			data, err := ioutil.ReadAll(previous)
+			if err != nil || string(data) != "abcd" {
+				t.Errorf("first request body overwritten before Close: %q, %v", data, err)
+			}
+			previous.Close()
+			previous = nil
+			data, err = ioutil.ReadAll(request.Body)
+			request.Body.Close()
+			if err != nil || string(data) != "efgh" {
+				t.Errorf("second body: %q, %v", data, err)
+			}
+		}
+		response := workflowJSON(t, nil)
+		response.StatusCode = 204
+		response.Header.Set("Tus-Resumable", "1.0.0")
+		response.Header.Set("Upload-Offset", strconv.Itoa(patches*4))
+		return response, nil
+	})
+	input := tusFixtureInput()
+	input.Size, input.ChunkSize, input.Reader = 8, 4, strings.NewReader("abcdefgh")
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err != nil {
+		t.Fatal(err)
+	}
+	if patches != 2 {
+		t.Fatalf("PATCH count: %d", patches)
+	}
+}
+
+func TestTusWorkflowContinuesFromPartialAcknowledgement(t *testing.T) {
+	client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	transport := client.httpClient.Transport
+	var stored []byte
+	patches := 0
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Method != "PATCH" {
+			return transport.RoundTrip(request)
+		}
+		defer request.Body.Close()
+		if request.Header.Get("Upload-Offset") != strconv.Itoa(len(stored)) {
+			t.Fatalf("wrong resumed offset: %s", request.Header.Get("Upload-Offset"))
+		}
+		body, err := ioutil.ReadAll(request.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		patches++
+		if patches == 1 {
+			body = body[:1]
+		}
+		stored = append(stored, body...)
+		response := workflowJSON(t, nil)
+		response.StatusCode = 204
+		response.Header.Set("Tus-Resumable", "1.0.0")
+		response.Header.Set("Upload-Offset", strconv.Itoa(len(stored)))
+		return response, nil
+	})
+	if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err != nil {
+		t.Fatal(err)
+	}
+	if string(stored) != "test" || patches != 2 {
+		t.Fatalf("partial acknowledgement lost bytes: %q, patches=%d", stored, patches)
+	}
+}
+
+func TestTusWorkflowRejectsInvalidPatchAcknowledgements(t *testing.T) {
+	for _, offset := range []string{"0", "-1", "3", "5", "1.5"} {
+		t.Run(offset, func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			transport := client.httpClient.Transport
+			patches := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				response, err := transport.RoundTrip(request)
+				if request.Method == "PATCH" && response != nil {
+					patches++
+					response.Header.Set("Upload-Offset", offset)
+				}
+				return response, err
+			})
+			input := tusFixtureInput()
+			input.ChunkSize = 2
+			if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || patches != 1 {
+				t.Fatalf("accepted invalid acknowledgement: err=%v patches=%d", err, patches)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRetriesDiscovery(t *testing.T) {
+	for _, resume := range []bool{false, true} {
+		t.Run(fmt.Sprint(resume), func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			var saved *AssemblyUploadSession
+			if resume {
+				var err error
+				saved, err = client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+				if err != nil {
+					t.Fatal(err)
+				}
+			}
+			base := client.httpClient.Transport
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				if request.Method == "GET" {
+					reads++
+					if reads == 1 {
+						response := workflowJSON(t, nil)
+						response.StatusCode = 503
+						return response, nil
+					}
+				}
+				return base.RoundTrip(request)
+			})
+			if _, err := client.runTusUpload(context.Background(), tusFixtureInput(), saved); err != nil {
+				t.Fatal(err)
+			}
+			if reads != 2 {
+				t.Fatalf("discovery attempts: %d", reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowDoesNotRetryPermanentTransportErrors(t *testing.T) {
+	for _, mode := range []string{"redirect", "certificate"} {
+		t.Run(mode, func(t *testing.T) {
+			client, _ := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			base := client.httpClient.Transport
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				if request.Method != "HEAD" {
+					return base.RoundTrip(request)
+				}
+				reads++
+				if mode == "certificate" {
+					return nil, x509.UnknownAuthorityError{}
+				}
+				response := workflowJSON(t, nil)
+				response.StatusCode = 307
+				response.Header.Set("Location", "https://evil.example/resumable/files/one")
+				return response, nil
+			})
+			if _, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput()); err == nil || reads != 1 {
+				t.Fatalf("permanent failure was retried: err=%v reads=%d", err, reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowBoundsDiscoveryRecovery(t *testing.T) {
+	for _, mode := range []string{"disabled", "budget", "server-delay"} {
+		t.Run(mode, func(t *testing.T) {
+			client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+			reads := 0
+			client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				reads++
+				if request.Method != "GET" {
+					t.Error("write after failed discovery")
+				}
+				response := workflowJSON(t, nil)
+				response.StatusCode = 429
+				if mode == "server-delay" {
+					response.Header.Set("Retry-After", "30")
+				}
+				return response, nil
+			})
+			input := tusFixtureInput()
+			maximum, want := 1, 2
+			if mode == "disabled" {
+				maximum, want = 0, 1
+			}
+			input.MaxRetries = &maximum
+			input.Timeout = 100 * time.Millisecond
+			_, err := client.UploadAssemblyFile(context.Background(), input)
+			if mode == "server-delay" {
+				want = 1
+				if !errors.Is(err, context.DeadlineExceeded) {
+					t.Fatalf("Retry-After ignored: %v", err)
+				}
+			}
+			if err == nil || reads != want || len(*methods) != 0 {
+				t.Fatalf("unbounded discovery: err=%v reads=%d", err, reads)
+			}
+		})
+	}
+}
+
+func TestTusWorkflowRetainsConfiguredEncodedPrefix(t *testing.T) {
+	endpoint := "https://example.com/a%20b"
+	client, methods := tusFixtureClient(t, endpoint+"/resumable/files/one", nil, 201, 204, endpoint)
+	session, err := client.UploadAssemblyFile(context.Background(), tusFixtureInput())
+	if err != nil {
+		t.Fatal(err)
+	}
+	fresh, err := NewClient(Config{Origin: endpoint, BearerToken: "unused", HTTPClient: client.httpClient})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = fresh.ResumeAssemblyFile(context.Background(), tusFixtureInput(), *session); err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(*methods, ",") != "GET,POST,HEAD,PATCH,GET,HEAD" {
+		t.Fatalf("requests: %v", *methods)
+	}
+}
+
+func TestTusWorkflowRejectsCreationVersionBeforePersistence(t *testing.T) {
+	client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+	base := client.httpClient.Transport
+	client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		response, err := base.RoundTrip(request)
+		if request.Method == "POST" {
+			response.Header.Set("Tus-Resumable", "2.0.0")
+		}
+		return response, err
+	})
+	input := tusFixtureInput()
+	input.OnSession = func(context.Context, AssemblyUploadSession) error {
+		t.Error("persisted incompatible creation")
+		return nil
+	}
+	if _, err := client.UploadAssemblyFile(context.Background(), input); err == nil || len(*methods) != 2 {
+		t.Fatalf("incompatible creation accepted: %v, %v", err, *methods)
+	}
+}
+
+func workflowJSON(t *testing.T, value interface{}) *http.Response {
+	t.Helper()
+	body, err := json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return &http.Response{StatusCode: 200, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: ioutil.NopCloser(strings.NewReader(string(body)))}
+}
+
+func TestWorkflowAdmissionVectors(t *testing.T) {
+	data, err := ioutil.ReadFile("workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures struct {
+		Admission struct {
+			AssemblyID                                              string
+			AcceptedOrigins, RejectedOrigins, RejectedAssemblyPaths []string
+		}
+	}
+	if err := json.Unmarshal(data, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	vectors := fixtures.Admission
+	if len(vectors.AcceptedOrigins) == 0 || len(vectors.RejectedOrigins) == 0 || len(vectors.RejectedAssemblyPaths) == 0 {
+		t.Fatal("missing admission vectors")
+	}
+	owner := "https://api2-owner.transloadit.com"
+	type testCase struct {
+		url      string
+		accepted bool
+	}
+	var cases []testCase
+	for _, origin := range vectors.AcceptedOrigins {
+		cases = append(cases, testCase{origin + "/assemblies/" + vectors.AssemblyID, true})
+	}
+	for _, origin := range vectors.RejectedOrigins {
+		cases = append(cases, testCase{origin + "/assemblies/" + vectors.AssemblyID, false})
+	}
+	for _, path := range vectors.RejectedAssemblyPaths {
+		cases = append(cases, testCase{owner + path, false})
+	}
+	for index, scenario := range cases {
+		t.Run(fmt.Sprint(index), func(t *testing.T) {
+			calls := 0
+			client, err := NewClient(Config{BearerToken: "must-not-forward", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls++
+				if request.Header.Get("Authorization") != "" {
+					t.Error("credential forwarded")
+				}
+				state := "ASSEMBLY_EXECUTING"
+				if calls > 1 {
+					state = "ASSEMBLY_CANCELED"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": vectors.AssemblyID, "assembly_ssl_url": scenario.url, "ok": state}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: vectors.AssemblyID, Interval: time.Millisecond})
+			if scenario.accepted {
+				if err != nil || result.GetOk() != "ASSEMBLY_CANCELED" || calls != 2 {
+					t.Fatalf("admission failed: %v calls=%d", err, calls)
+				}
+			} else if err == nil || calls != 1 {
+				t.Fatalf("followed rejected destination: err=%v calls=%d", err, calls)
+			}
+		})
+	}
+}
+
+func TestWorkflowRejectsIncompleteOrChangedStatus(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	owner := "https://api2-owner.transloadit.com/assemblies/" + id
+	for index, change := range []map[string]interface{}{
+		{"assembly_id": strings.Repeat("b", 32), "ok": "ASSEMBLY_COMPLETED"},
+		{"assembly_id": nil}, {"assembly_ssl_url": nil}, {"ok": "UNKNOWN_STATE"},
+		{"error": "FILE_FILTER_DECLINED_FILE"},
+	} {
+		t.Run(fmt.Sprint(index), func(t *testing.T) {
+			calls := 0
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+				calls++
+				status := map[string]interface{}{"assembly_id": id, "assembly_ssl_url": owner, "ok": "ASSEMBLY_EXECUTING"}
+				for key, value := range change {
+					status[key] = value
+				}
+				return workflowJSON(t, status), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err == nil || calls != 1 {
+				t.Fatalf("invalid status followed: err=%v calls=%d", err, calls)
+			}
+		})
+	}
+}
+
+func TestWorkflowDeadlinesAndNoRetry(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	owner := "https://api2-owner.transloadit.com/assemblies/" + id
+	for _, mode := range []string{"before", "late", "active-cancel", "dropped-write", "changed-owner"} {
+		t.Run(mode, func(t *testing.T) {
+			ctx, stop := context.WithCancel(context.Background())
+			defer stop()
+			if mode == "before" {
+				stop()
+			}
+			calls, deletes := 0, 0
+			dropped := errors.New("synthetic dropped write")
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls++
+				if request.Method == "DELETE" {
+					deletes++
+					if mode == "dropped-write" {
+						return nil, dropped
+					}
+				}
+				status := map[string]string{"assembly_id": id, "assembly_ssl_url": owner, "ok": "ASSEMBLY_EXECUTING"}
+				if mode == "late" {
+					time.Sleep(30 * time.Millisecond)
+					status["ok"] = "ASSEMBLY_COMPLETED"
+				}
+				if mode == "changed-owner" && calls > 1 {
+					status["assembly_ssl_url"] = "https://api2-other.transloadit.com/assemblies/" + id
+				}
+				return workflowJSON(t, status), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			timeout := 200 * time.Millisecond
+			if mode == "late" {
+				timeout = time.Millisecond
+			}
+			_, err = client.CancelAndWaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id, Timeout: timeout, Interval: time.Millisecond})
+			switch mode {
+			case "before":
+				if !errors.Is(err, context.Canceled) || calls != 0 {
+					t.Fatalf("aborted: %v calls=%d", err, calls)
+				}
+			case "late", "active-cancel":
+				if !errors.Is(err, context.DeadlineExceeded) {
+					t.Fatalf("deadline: %v", err)
+				}
+				if mode == "active-cancel" && deletes != 1 {
+					t.Fatal("cancellation was retried")
+				}
+			case "dropped-write":
+				if !errors.Is(err, dropped) || deletes != 1 {
+					t.Fatalf("retried write: %v deletes=%d", err, deletes)
+				}
+			case "changed-owner":
+				if err == nil || calls != 2 {
+					t.Fatalf("changed owner followed: %v calls=%d", err, calls)
+				}
+			}
+		})
+	}
+}
+
+func TestWorkflowDoesNotSendCookieJar(t *testing.T) {
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	id := "11111111111111111111111111111111"
+	endpoint, err := url.Parse("https://api2-owner.transloadit.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	jar.SetCookies(endpoint, []*http.Cookie{{Name: "private", Value: "must-not-forward"}})
+	client, err := NewClient(Config{Origin: endpoint.String(), BearerToken: "synthetic", HTTPClient: &http.Client{Jar: jar, Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		if request.Header.Get("Cookie") != "" || request.Header.Get("Authorization") != "" {
+			t.Error("ambient credential sent")
+		}
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_COMPLETED"}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := client.WaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); err != nil {
+		t.Fatal(err)
+	}
+	if len(jar.Cookies(endpoint)) != 1 {
+		t.Fatal("caller cookie jar changed")
+	}
+}
+
+func TestWorkflowRejectsInvalidConfiguredOrigins(t *testing.T) {
+	for _, origin := range []string{
+		"https://user:secret@[::1]", "https://[::1]?query=1", "https://[::1]#fragment",
+		"https://[::1]/proxy", "http://[2001:db8::1]",
+	} {
+		t.Run(origin, func(t *testing.T) {
+			if _, err := NewClient(Config{BearerToken: "synthetic", AssemblyOrigins: []string{origin}}); err == nil {
+				t.Fatal("invalid uploader configuration accepted")
+			}
+		})
+	}
+}
+
+func TestWorkflowNullableTerminalError(t *testing.T) {
+	for _, cancel := range []bool{false, true} {
+		t.Run(fmt.Sprint(cancel), func(t *testing.T) {
+			id := strings.Repeat("a", 32)
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+				return workflowJSON(t, map[string]interface{}{"assembly_id": id, "error": "FILE_FILTER_DECLINED_FILE", "ok": nil}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			workflow := client.WaitForAssembly
+			if cancel {
+				workflow = client.CancelAndWaitForAssembly
+			}
+			result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.WithError == nil || result.WithError.Error != "FILE_FILTER_DECLINED_FILE" {
+				t.Fatal("terminal processing error lost")
+			}
+		})
+	}
+}
+
+func TestWorkflowExplicitIPv6Owner(t *testing.T) {
+	for _, origin := range []string{"http://[::1]:8081", "https://[2001:db8::1]"} {
+		for _, trusted := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/trusted=%t", origin, trusted), func(t *testing.T) {
+				id := strings.Repeat("a", 32)
+				owner := origin + "/assemblies/" + id
+				var requests []string
+				config := Config{Origin: "https://entry.example.com", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					if request.Header.Get("Authorization") != "" {
+						t.Error("credential forwarded")
+					}
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == 3 {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner, "ok": state}), nil
+				})}}
+				if trusted {
+					config.AssemblyOrigins = []string{origin}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if !trusted {
+					if err == nil || len(requests) != 1 {
+						t.Fatalf("followed untrusted uploader: err=%v requests=%v", err, requests)
+					}
+					return
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				expected := []string{"GET https://entry.example.com/assemblies/" + id, "DELETE " + owner, "GET " + owner}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowPreservesConfiguredEndpoint(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	for _, endpoint := range []string{
+		"https://example.com/proxy", "https://example.com/a%20b",
+		"http://[::1]:8080", "http://127.0.0.2", "http://localhost.",
+	} {
+		for _, publicOwner := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/public=%t", endpoint, publicOwner), func(t *testing.T) {
+				owner := endpoint + "/assemblies/" + id
+				if publicOwner {
+					owner = "https://api2-owner.transloadit.com/assemblies/" + id
+				}
+				var requests []string
+				client, err := NewClient(Config{Origin: endpoint, BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == 3 {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner, "ok": state}), nil
+				})}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				expected := []string{"GET " + endpoint + "/assemblies/" + id, "DELETE " + owner, "GET " + owner}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowNormalizesConfiguredAuthority(t *testing.T) {
+	for _, scenario := range []struct{ entry, trusted, owner, expectedEntry string }{
+		{"https://UPLOADER.EXAMPLE:443", "", "https://uploader.example", "https://uploader.example"},
+		{"https://UPLOADER.EXAMPLE:443/proxy", "", "https://uploader.example/proxy", "https://uploader.example/proxy"},
+		{"https://entry.example", "https://UPLOADER.EXAMPLE:443", "https://uploader.example", "https://entry.example"},
+		{"http://LOCALHOST:80/proxy", "", "http://localhost/proxy", "http://localhost/proxy"},
+		{"https://[2001:DB8::1]:443/proxy", "", "https://[2001:db8::1]/proxy", "https://[2001:db8::1]/proxy"},
+		{"https://entry.example", "https://[2001:DB8::1]:443", "https://[2001:db8::1]", "https://entry.example"},
+	} {
+		for _, cancel := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/%s/cancel=%t", scenario.entry, scenario.trusted, cancel), func(t *testing.T) {
+				id := strings.Repeat("a", 32)
+				path := "/assemblies/" + id
+				var requests []string
+				terminalCall := 2
+				if cancel {
+					terminalCall = 3
+				}
+				config := Config{Origin: scenario.entry, BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					requests = append(requests, request.Method+" "+request.URL.String())
+					state := "ASSEMBLY_EXECUTING"
+					if len(requests) == terminalCall {
+						state = "ASSEMBLY_CANCELED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": scenario.owner + path, "ok": state}), nil
+				})}}
+				if scenario.trusted != "" {
+					config.AssemblyOrigins = []string{scenario.trusted}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				workflow := client.WaitForAssembly
+				expected := []string{"GET " + scenario.expectedEntry + path}
+				if cancel {
+					workflow = client.CancelAndWaitForAssembly
+					expected = append(expected, "DELETE "+scenario.owner+path)
+				}
+				expected = append(expected, "GET "+scenario.owner+path)
+				result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.GetOk() != "ASSEMBLY_CANCELED" {
+					t.Fatal("missing terminal status")
+				}
+				if strings.Join(requests, "\n") != strings.Join(expected, "\n") {
+					t.Fatalf("requests: %v; expected %v", requests, expected)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowDoesNotInferProxyPrefixes(t *testing.T) {
+	id := "11111111111111111111111111111111"
+	for _, owner := range []string{
+		"https://example.com/other/assemblies/", "https://api2-owner.transloadit.com/proxy/assemblies/",
+		"https://example.com/proxy/../proxy/assemblies/", "https://example.com/%70roxy/assemblies/",
+	} {
+		t.Run(owner, func(t *testing.T) {
+			calls := 0
+			client, err := NewClient(Config{Origin: "https://example.com/proxy", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(*http.Request) (*http.Response, error) {
+				calls++
+				return workflowJSON(t, map[string]string{"assembly_id": id, "assembly_ssl_url": owner + id, "ok": "ASSEMBLY_EXECUTING"}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); err == nil || calls != 1 {
+				t.Fatalf("followed undeclared prefix: err=%v calls=%d", err, calls)
+			}
+		})
+	}
+}
+
+func TestWorkflowConfirmsCancellationHTTPError(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, terminal := range []bool{false, true} {
+		t.Run(fmt.Sprint(terminal), func(t *testing.T) {
+			var requests []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				requests = append(requests, request.Method)
+				if request.Method == "DELETE" || (terminal && len(requests) > 1) {
+					response := workflowJSON(t, map[string]string{"assembly_id": id, "error": "ASSEMBLY_EXPIRED"})
+					if request.Method == "DELETE" {
+						response.StatusCode = 410
+					}
+					return response, nil
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if terminal {
+				if err != nil {
+					t.Fatal(err)
+				}
+				if result.WithError == nil || result.WithError.Error != "ASSEMBLY_EXPIRED" {
+					t.Fatal("missing terminal error")
+				}
+			} else {
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != 410 {
+					t.Fatalf("active status disguised cleanup: %v", err)
+				}
+			}
+			if strings.Join(requests, ",") != "GET,DELETE,GET" {
+				t.Fatalf("requests: %v", requests)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetriesRateLimitedReads(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, phase := range []string{"discovery", "poll"} {
+		t.Run(phase, func(t *testing.T) {
+			var calls []time.Time
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls = append(calls, time.Now())
+				if (phase == "discovery" && len(calls) == 1) || (phase == "poll" && len(calls) == 2) {
+					response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED"})
+					response.StatusCode = 429
+					response.Header.Set("Retry-After", "1")
+					return response, nil
+				}
+				state := "ASSEMBLY_COMPLETED"
+				if phase == "poll" && len(calls) == 1 {
+					state = "ASSEMBLY_EXECUTING"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": state, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.WaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: 5 * time.Second})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.GetOk() != "ASSEMBLY_COMPLETED" || len(calls) < 2 {
+				t.Fatal("missing completion or retry")
+			}
+			if calls[len(calls)-1].Sub(calls[len(calls)-2]) < 990*time.Millisecond {
+				t.Fatal("Retry-After ignored")
+			}
+		})
+	}
+}
+
+func TestWorkflowReturnsAbortedConnectionWithoutClaimingProcessingSuccess(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, cancel := range []bool{false, true} {
+		t.Run(fmt.Sprint(cancel), func(t *testing.T) {
+			var methods []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			workflow, want := client.WaitForAssembly, "GET"
+			if cancel {
+				workflow, want = client.CancelAndWaitForAssembly, "GET,DELETE"
+			}
+			result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if result.GetOk() != "REQUEST_ABORTED" {
+				t.Fatalf("lost aborted outcome: %v", result.GetOk())
+			}
+			if strings.Join(methods, ",") != want {
+				t.Fatalf("expected %s, got %v", want, methods)
+			}
+		})
+	}
+}
+
+func TestWaitReturnsAbortedConnectionWithoutOwner(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	calls := 0
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		calls++
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED"}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := client.WaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.GetOk() != "REQUEST_ABORTED" || calls != 1 {
+		t.Fatalf("unexpected wait result: %s, requests: %d", result.GetOk(), calls)
+	}
+}
+
+func TestCancelAfterAbortedConnectionPreservesOwnerOutcome(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, failed := range []bool{false, true} {
+		t.Run(fmt.Sprint(failed), func(t *testing.T) {
+			var methods []string
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				code := "REQUEST_ABORTED"
+				if request.Method == "DELETE" {
+					if failed {
+						response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_CANCEL_UNAVAILABLE"})
+						response.StatusCode = 503
+						return response, nil
+					}
+					code = "ASSEMBLY_CANCELED"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": code, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			want := "GET,DELETE"
+			if failed {
+				want = "GET,DELETE,GET"
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != 503 {
+					t.Fatalf("lost cancellation failure: %v", err)
+				}
+			} else if err != nil || result.GetOk() != "ASSEMBLY_CANCELED" {
+				t.Fatalf("unexpected cancellation result: %v, %v", result, err)
+			}
+			if strings.Join(methods, ",") != want {
+				t.Fatalf("expected %s, got %v", want, methods)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetainsUnconfirmedOutcomeWithoutOwner(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	calls := 0
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		calls++
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "REQUEST_ABORTED"}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id}); !errors.Is(err, ErrAssemblyWorkflowUnconfirmed) {
+		t.Fatalf("lost unconfirmed connection outcome: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("unexpected request without an owner: %d", calls)
+	}
+}
+
+func TestWorkflowRequiresExplicitAdmissionToDropProxyPrefix(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, origin := range []string{"https://proxy.example.com", "https://api2-owner.transloadit.com"} {
+		for _, explicit := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/explicit=%t", origin, explicit), func(t *testing.T) {
+				urls := []string{}
+				config := Config{Origin: origin + "/prefix", BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					urls = append(urls, request.URL.String())
+					code := "ASSEMBLY_EXECUTING"
+					if len(urls) > 1 {
+						code = "ASSEMBLY_COMPLETED"
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "ok": code, "assembly_ssl_url": origin + "/assemblies/" + id}), nil
+				})}}
+				if explicit {
+					config.AssemblyOrigins = []string{origin}
+				}
+				client, err := NewClient(config)
+				if err != nil {
+					t.Fatal(err)
+				}
+				_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+				if explicit && err != nil {
+					t.Fatal(err)
+				}
+				if !explicit && err == nil {
+					t.Fatal("dropped proxy prefix without explicit admission")
+				}
+				if urls[0] != origin+"/prefix/assemblies/"+id || (explicit && (len(urls) != 2 || urls[1] != origin+"/assemblies/"+id)) || (!explicit && len(urls) != 1) {
+					t.Fatalf("wrong proxy requests: %v", urls)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowRetriesTransientReadFailures(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, failure := range []error{io.EOF, syscall.ECONNRESET, context.DeadlineExceeded} {
+		for _, phase := range []string{"discovery", "poll"} {
+			for _, cancel := range []bool{false, true} {
+				t.Run(fmt.Sprintf("%s/%s/cancel=%t", failure, phase, cancel), func(t *testing.T) {
+					reads, deletes := 0, 0
+					client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+						state := "ASSEMBLY_EXECUTING"
+						if request.Method == "DELETE" {
+							deletes++
+						} else {
+							reads++
+							if (phase == "discovery" && reads == 1) || (phase == "poll" && reads == 2) {
+								return nil, failure
+							}
+							if reads == 3 {
+								state = "ASSEMBLY_COMPLETED"
+								if cancel {
+									state = "ASSEMBLY_CANCELED"
+								}
+							}
+						}
+						return workflowJSON(t, map[string]string{"assembly_id": id, "ok": state, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+					})}})
+					if err != nil {
+						t.Fatal(err)
+					}
+					workflow := client.WaitForAssembly
+					if cancel {
+						workflow = client.CancelAndWaitForAssembly
+					}
+					result, err := workflow(context.Background(), AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: time.Second})
+					if err != nil || result == nil || reads != 3 || (cancel && deletes != 1) || (!cancel && deletes != 0) {
+						t.Fatalf("read recovery: err=%v reads=%d deletes=%d", err, reads, deletes)
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestWorkflowBoundsReadRetries(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, mode := range []string{"deadline", "caller", "server-error", "transport"} {
+		t.Run(mode, func(t *testing.T) {
+			ctx, stop := context.WithCancel(context.Background())
+			defer stop()
+			calls := 0
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				calls++
+				if mode == "transport" {
+					return nil, io.EOF
+				}
+				response := workflowJSON(t, map[string]string{"error": "RATE_LIMIT_REACHED"})
+				response.StatusCode = 429
+				response.Header.Set("Retry-After", "999999999999999999999")
+				if mode == "caller" {
+					time.AfterFunc(10*time.Millisecond, stop)
+				}
+				if mode == "server-error" {
+					response.Header.Del("Retry-After")
+					response.StatusCode = 503
+					if calls > 1 {
+						response.StatusCode = 403
+					}
+				}
+				return response, nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.WaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id, Interval: time.Millisecond, Timeout: 200 * time.Millisecond})
+			if mode == "server-error" {
+				var responseError *ResponseError
+				if calls != 2 || !errors.As(err, &responseError) || responseError.Status != 403 {
+					t.Fatalf("server retry: %v calls=%d", err, calls)
+				}
+				return
+			}
+			want := context.DeadlineExceeded
+			if mode == "caller" {
+				want = context.Canceled
+			}
+			if !errors.Is(err, want) || (mode != "transport" && calls != 1) || (mode == "transport" && calls < 2) {
+				t.Fatalf("bounded retry: %v calls=%d", err, calls)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetryAfterMetadata(t *testing.T) {
+	now := time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+	for _, scenario := range []struct {
+		header string
+		want   time.Duration
+	}{
+		{"2", 2 * time.Second}, {now.Add(2 * time.Second).Format(http.TimeFormat), 2 * time.Second},
+		{now.Add(-time.Second).Format(http.TimeFormat), 0}, {"0.5", 0}, {"-1", 0}, {"invalid", 0},
+		{"999999999999999999999", time.Duration(1<<63 - 1)},
+	} {
+		if got := retryAfterDuration(scenario.header, now); got != scenario.want {
+			t.Errorf("%s: %v != %v", scenario.header, got, scenario.want)
+		}
+	}
+}
+
+func TestWorkflowConfirmsLostCancellationResponse(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, failure := range []error{io.EOF, context.DeadlineExceeded} {
+		for _, confirmed := range []string{"ASSEMBLY_CANCELED", "REQUEST_ABORTED", "ASSEMBLY_EXECUTING"} {
+			t.Run(fmt.Sprintf("%v/%s", failure, confirmed), func(t *testing.T) {
+				methods := []string{}
+				client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					methods = append(methods, request.Method)
+					if request.Method == "DELETE" {
+						return nil, failure
+					}
+					code := "ASSEMBLY_EXECUTING"
+					if len(methods) > 1 {
+						code = confirmed
+					}
+					return workflowJSON(t, map[string]string{"assembly_id": id, "ok": code, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+				})}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				result, err := client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+				if confirmed == "ASSEMBLY_CANCELED" {
+					if err != nil || result == nil || result.GetOk() != confirmed {
+						t.Fatalf("missing confirmed cancellation: result=%v err=%v", result, err)
+					}
+				} else if !errors.Is(err, failure) {
+					t.Fatalf("lost original failure: %v", err)
+				}
+				if strings.Join(methods, ",") != "GET,DELETE,GET" {
+					t.Fatalf("wrong cancellation requests: %v", methods)
+				}
+			})
+		}
+	}
+}
+
+func TestWorkflowRetainsCancellationAndConfirmationFailures(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, kind := range []string{"transport", "http"} {
+		t.Run(kind, func(t *testing.T) {
+			methods := []string{}
+			confirmationFailure := errors.New("synthetic confirmation body failure")
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				if request.Method == "DELETE" {
+					if kind == "transport" {
+						return nil, io.EOF
+					}
+					response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_CANCEL_UNAVAILABLE"})
+					response.StatusCode = 503
+					return response, nil
+				}
+				if len(methods) > 1 {
+					return &http.Response{StatusCode: 403, Header: http.Header{}, Body: failedBody{err: confirmationFailure}}, nil
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			if err == nil || err.Error() != "Assembly cancellation could not be confirmed" || !errors.Is(err, confirmationFailure) {
+				t.Fatalf("confirmation failure missing: %v", err)
+			}
+			if kind == "transport" && !errors.Is(err, io.EOF) {
+				t.Fatalf("cancellation transport failure missing: %v", err)
+			}
+			var combined *AssemblyCancellationConfirmationError
+			if !errors.As(err, &combined) || combined.CancellationError == nil || !errors.Is(combined.ConfirmationError, confirmationFailure) {
+				t.Fatalf("individual failure diagnostics missing: %v", err)
+			}
+			var confirmationResponse *ResponseError
+			if !errors.As(combined.ConfirmationError, &confirmationResponse) || confirmationResponse.Status != 403 {
+				t.Fatalf("confirmation HTTP diagnostics missing: %v", err)
+			}
+			var responseError *ResponseError
+			wantStatus := 403
+			if kind == "http" {
+				wantStatus = 503
+			}
+			if !errors.As(err, &responseError) || responseError.Status != wantStatus {
+				t.Fatalf("wrong primary HTTP failure: %v", err)
+			}
+			if strings.Join(methods, ",") != "GET,DELETE,GET" {
+				t.Fatalf("wrong cancellation requests: %v", methods)
+			}
+		})
+	}
+}
+
+func TestWorkflowRetainsCancellationWithInvalidConfirmation(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	for _, kind := range []string{"transport", "http"} {
+		t.Run(kind, func(t *testing.T) {
+			methods := []string{}
+			client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+				methods = append(methods, request.Method)
+				if request.Method == "DELETE" {
+					if kind == "transport" {
+						return nil, io.EOF
+					}
+					response := workflowJSON(t, map[string]string{"error": "ASSEMBLY_CANCEL_UNAVAILABLE"})
+					response.StatusCode = 503
+					return response, nil
+				}
+				responseID, code := id, "ASSEMBLY_EXECUTING"
+				if len(methods) > 1 {
+					responseID, code = strings.Repeat("b", 32), "ASSEMBLY_COMPLETED"
+				}
+				return workflowJSON(t, map[string]string{"assembly_id": responseID, "ok": code, "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+			})}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = client.CancelAndWaitForAssembly(context.Background(), AssemblyWorkflowOptions{AssemblyID: id})
+			var combined *AssemblyCancellationConfirmationError
+			if !errors.As(err, &combined) || combined.CancellationError == nil || combined.ConfirmationError == nil || combined.ConfirmationError.Error() != invalidAssemblyWorkflow().Error() {
+				t.Fatalf("cancellation or validation diagnostic missing: %v", err)
+			}
+			if kind == "transport" {
+				if !errors.Is(err, io.EOF) {
+					t.Fatalf("cancellation transport failure missing: %v", err)
+				}
+			} else {
+				var responseError *ResponseError
+				if !errors.As(err, &responseError) || responseError.Status != 503 {
+					t.Fatalf("cancellation HTTP failure missing: %v", err)
+				}
+			}
+			if strings.Join(methods, ",") != "GET,DELETE,GET" {
+				t.Fatalf("wrong cancellation requests: %v", methods)
+			}
+		})
+	}
+}
+
+func TestWorkflowPrioritizesCallerCancellationWithInvalidConfirmation(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	methods := []string{}
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		methods = append(methods, request.Method)
+		if request.Method == "DELETE" {
+			return nil, io.EOF
+		}
+		responseID := id
+		if len(methods) > 1 {
+			cancel()
+			responseID = strings.Repeat("b", 32)
+		}
+		return workflowJSON(t, map[string]string{"assembly_id": responseID, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.CancelAndWaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id})
+	if err != context.Canceled || strings.Join(methods, ",") != "GET,DELETE,GET" {
+		t.Fatalf("caller abort was masked: %v, %v", err, methods)
+	}
+}
+
+func TestWorkflowPrioritizesCallerCancellationDuringConfirmation(t *testing.T) {
+	id := strings.Repeat("a", 32)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	methods := []string{}
+	client, err := NewClient(Config{BearerToken: "synthetic", HTTPClient: &http.Client{Transport: roundTripFunction(func(request *http.Request) (*http.Response, error) {
+		methods = append(methods, request.Method)
+		if request.Method == "DELETE" {
+			return nil, io.EOF
+		}
+		if len(methods) > 1 {
+			cancel()
+			return nil, ctx.Err()
+		}
+		return workflowJSON(t, map[string]string{"assembly_id": id, "ok": "ASSEMBLY_EXECUTING", "assembly_ssl_url": "https://api2-owner.transloadit.com/assemblies/" + id}), nil
+	})}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = client.CancelAndWaitForAssembly(ctx, AssemblyWorkflowOptions{AssemblyID: id})
+	if err != context.Canceled || strings.Join(methods, ",") != "GET,DELETE,GET" {
+		t.Fatalf("caller abort was masked: %v, %v", err, methods)
+	}
+}
+
+func TestWorkflowRetainsHTTPBackoffAfterBodyFailure(t *testing.T) {
+	for _, method := range []string{"GET", "HEAD"} {
+		for _, status := range []int{403, 429, 503} {
+			t.Run(fmt.Sprintf("%s/%d", method, status), func(t *testing.T) {
+				client, methods := tusFixtureClient(t, "/resumable/files/one", nil, 201, 204)
+				transport := client.httpClient.Transport
+				client.httpClient.Transport = roundTripFunction(func(request *http.Request) (*http.Response, error) {
+					response, err := transport.RoundTrip(request)
+					if err == nil && request.Method == method {
+						response.Body.Close()
+						response.StatusCode = status
+						response.Header.Set("Retry-After", "30")
+						response.Body = failedBody{err: io.ErrUnexpectedEOF}
+					}
+					return response, err
+				})
+				input := tusFixtureInput()
+				input.Timeout = 100 * time.Millisecond
+				input.RetryDelay = time.Millisecond
+				_, err := client.UploadAssemblyFile(context.Background(), input)
+				if status == 403 {
+					var response *ResponseError
+					if !errors.As(err, &response) || response.Status != status || response.RetryAfter != 30*time.Second || len(response.Data) != 0 || !errors.Is(err, io.ErrUnexpectedEOF) {
+						t.Fatalf("lost HTTP failure metadata: %v", err)
+					}
+				} else if !errors.Is(err, context.DeadlineExceeded) {
+					t.Fatalf("lost server backoff: %v", err)
+				}
+				wanted := "GET"
+				if method == "HEAD" {
+					wanted = "GET,POST,HEAD"
+				}
+				if strings.Join(*methods, ",") != wanted {
+					t.Fatalf("repeated request despite server backoff: %v", *methods)
+				}
+			})
+		}
+	}
+}

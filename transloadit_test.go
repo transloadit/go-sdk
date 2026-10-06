@@ -1,11 +1,17 @@
 package transloadit
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"net/url"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -14,6 +20,30 @@ import (
 var ctx = context.Background()
 var templatesSetup bool
 var templateIDOptimizeResize string
+
+func TestContractImportIsOptIn(t *testing.T) {
+	goExecutable := filepath.Join(runtime.GOROOT(), "bin", "go")
+	if !filepath.IsAbs(runtime.GOROOT()) {
+		// Trimmed builds embed "go" on Go 1.15 and nothing on newer versions. Neither is a
+		// usable toolchain root; preserve the caller's PATH instead of guessing a relative binary.
+		resolved, err := exec.LookPath("go")
+		if err != nil {
+			t.Fatal(err)
+		}
+		goExecutable = resolved
+	} else if runtime.GOOS == "windows" {
+		goExecutable += ".exe"
+	}
+	output, err := exec.Command(goExecutable, "list", "-deps", ".").Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, dependency := range strings.Fields(string(output)) {
+		if dependency == "github.com/transloadit/go-sdk/contract" {
+			t.Fatal("legacy consumers must not compile the opt-in generated contract package")
+		}
+	}
+}
 
 func TestNewClient_MissingAuthKey(t *testing.T) {
 	t.Parallel()
@@ -145,5 +175,114 @@ func TestCreateSignedSmartCDNUrl(t *testing.T) {
 
 	if url != expected {
 		t.Errorf("Expected URL:\n%s\nGot:\n%s", expected, url)
+	}
+}
+
+// Workflow fixtures are produced once by API2. These tests exercise existing public SDK methods,
+// not an adapter-provided implementation of signing, waiting, retries or resumption.
+type workflowVector struct {
+	ID                     string
+	Kind                   string
+	Filename               string
+	Hex                    string
+	ChunkSize              int
+	InterruptAfterBytes    int
+	LoseResponseAfterBytes int
+	ResponseDelayMs        int
+	Responses              []struct{ Ok, Error string }
+	Expected               struct{ Ok, Error string }
+}
+
+type workflowFixture struct {
+	Format              string
+	Version             int
+	Credentials         struct{ Key, Secret string }
+	AssemblyID          string
+	Admission           json.RawMessage
+	Cases               []workflowVector
+	ReaderCompatibility []struct {
+		ID                string
+		State             map[string]interface{}
+		Accepted, Emitted bool
+	}
+	TusMetadata []struct {
+		ID, Filename, Append string
+		Values               map[string]string
+		ExtraHeaderValues    []string
+		Accepted             bool
+	}
+	TusReceipts []struct {
+		ID            string
+		Changes       map[string]interface{}
+		ExtraReceipts []map[string]interface{}
+		Hex           *string
+		Omit          []string
+		Count         int
+		State         map[string]string
+		Accepted      bool
+	}
+	SmartCdn []struct {
+		ID, Workspace, Template, Input, ExpectedURL string
+		ExpiresAt                                   int64
+		Params                                      url.Values
+	}
+}
+
+func sharedWorkflows(t *testing.T) workflowFixture {
+	t.Helper()
+	data, err := ioutil.ReadFile("contract/workflow-vectors.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures workflowFixture
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&fixtures); err != nil {
+		t.Fatal(err)
+	}
+	if fixtures.Format != "transloadit-sdk-workflow-vectors" || fixtures.Version != 1 {
+		t.Fatal("unsupported shared workflow fixture version")
+	}
+	if len(fixtures.Cases) == 0 || len(fixtures.SmartCdn) == 0 || len(fixtures.ReaderCompatibility) == 0 {
+		t.Fatal("shared workflow fixtures must not silently lose their cases")
+	}
+	ids := make(map[string]bool)
+	checkID := func(id string) {
+		if id == "" || ids[id] {
+			t.Fatalf("empty or duplicated workflow case ID %q", id)
+		}
+		ids[id] = true
+	}
+	for _, scenario := range fixtures.Cases {
+		checkID(scenario.ID)
+	}
+	for _, scenario := range fixtures.SmartCdn {
+		checkID(scenario.ID)
+	}
+	return fixtures
+}
+
+func TestSharedWorkflowSmartCDN(t *testing.T) {
+	fixtures := sharedWorkflows(t)
+	client := NewClient(Config{AuthKey: fixtures.Credentials.Key, AuthSecret: fixtures.Credentials.Secret})
+	for _, scenario := range fixtures.SmartCdn {
+		scenario := scenario
+		t.Run(scenario.ID, func(t *testing.T) {
+			before, err := json.Marshal(scenario.Params)
+			if err != nil {
+				t.Fatal(err)
+			}
+			actual := client.CreateSignedSmartCDNUrl(SignedSmartCDNUrlOptions{
+				Workspace: scenario.Workspace, Template: scenario.Template, Input: scenario.Input,
+				URLParams: scenario.Params, ExpiresAt: time.Unix(0, scenario.ExpiresAt*int64(time.Millisecond)),
+			})
+			if actual != scenario.ExpectedURL {
+				t.Errorf("shared signing vector differs:\nwant %s\n got %s", scenario.ExpectedURL, actual)
+			}
+			after, err := json.Marshal(scenario.Params)
+			if err != nil || string(before) != string(after) {
+				t.Fatal("signing mutated caller-owned query parameters")
+			}
+		})
 	}
 }

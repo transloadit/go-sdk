@@ -10,8 +10,15 @@ import (
 // If you want to end this loop prematurely, you can cancel the supplied context.
 func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInfo) (*AssemblyInfo, error) {
 	for {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
 		res, err := client.GetAssembly(ctx, assembly.AssemblySSLURL)
 		if err != nil {
+			// Keep the caller's cancellation/deadline identifiable through older HTTP error wrappers.
+			if ctx.Err() != nil {
+				return nil, ctx.Err()
+			}
 			return nil, err
 		}
 
@@ -20,8 +27,8 @@ func (client *Client) WaitForAssembly(ctx context.Context, assembly *AssemblyInf
 			return res, nil
 		}
 
-		// The polling is done if the assembly is not uploading or executing anymore.
-		if res.Ok != "ASSEMBLY_UPLOADING" && res.Ok != "ASSEMBLY_EXECUTING" {
+		// Replaying is still active; cancellation, completion and processing errors are terminal.
+		if res.Ok != "ASSEMBLY_UPLOADING" && res.Ok != "ASSEMBLY_EXECUTING" && res.Ok != "ASSEMBLY_REPLAYING" {
 			return res, nil
 		}
 

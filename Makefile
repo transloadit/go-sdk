@@ -4,7 +4,8 @@ test-examples:
 	go build ./examples/...
 
 test-package:
-	go test -v -coverprofile=coverage.out -covermode=atomic .
+	go test -v -coverprofile=coverage.out -covermode=atomic . ./contract ./examples/contract-workflow
+	env -u GOROOT go test -trimpath . -run '^TestContractImportIsOptIn$$' -count=1
 
 test: test-package test-examples
 
